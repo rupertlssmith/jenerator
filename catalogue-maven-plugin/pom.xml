@@ -20,10 +20,6 @@
 
     <packaging>maven-plugin</packaging>
 
-    <scm>
-        <connection>scm:svn:http://rupert@www.thesett.com/svn/projects/catalogue-maven-plugin</connection>
-    </scm>
-
     <properties>
         <topdir>${basedir}/..</topdir>
     </properties>

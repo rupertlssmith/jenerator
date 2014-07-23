@@ -11,10 +11,6 @@
 
     <packaging>jar</packaging>
 
-    <scm>
-        <connection>scm:svn:http://rupert@www.thesett.com/svn/projects/configurator</connection>
-    </scm>
-
     <properties>
         <topdir>${basedir}/..</topdir>
     </properties>

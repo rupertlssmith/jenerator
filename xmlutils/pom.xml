@@ -14,10 +14,6 @@
 
     <packaging>jar</packaging>
 
-    <scm>
-        <connection>scm:svn:http://rupert@www.thesett.com/svn/projects/xmlutils</connection>
-    </scm>
-
     <properties>
         <topdir>${basedir}/..</topdir>
     </properties>
