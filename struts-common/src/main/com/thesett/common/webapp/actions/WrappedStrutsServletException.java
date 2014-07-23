@@ -1,0 +1,44 @@
+/* Copyright Rupert Smith, 2005 to 2008, all rights reserved. */
+package com.thesett.common.webapp.actions;
+
+import javax.servlet.ServletException;
+
+/**
+ * A wrapped exception that appears to be a ServletException. Used to pass throwables back from struts actions (which
+ * can only legitimately pass IOException or ServletException). The {@link ErrorHandler} knows how to unwrap these
+ * exceptions.
+ *
+ * <p><table id="crc"><caption>CRC Card</caption>
+ * <tr><th> Responsibilities <th> Collaborations
+ * </table>
+ *
+ * @author Rupert Smith
+ */
+public class WrappedStrutsServletException extends ServletException
+{
+    /** The underlying exception cause that is wrapped by this exception. */
+    Throwable cause;
+
+    /**
+     * Creates a wrapped exception that is also a servlet exception.
+     *
+     * @param t The underlying throwable to be wrapped.
+     */
+    public WrappedStrutsServletException(Throwable t)
+    {
+        // Build the exception object with the message
+        super("WrappedStrutsServletException", t);
+
+        this.cause = t;
+    }
+
+    /**
+     * Gets the underlying exception cause.
+     *
+     * @return The underlying exception cause.
+     */
+    public Throwable getCause()
+    {
+        return cause;
+    }
+}

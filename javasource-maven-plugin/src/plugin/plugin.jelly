@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+
+<project xmlns:j="jelly:core" 
+         xmlns:u="jelly:util"
+         xmlns:ant="jelly:ant" 
+         xmlns:define="jelly:define"
+         xmlns:javasource="javasource"
+         xmlns:maven="jelly:maven">
+    
+    <!-- ================================================================== -->
+    <!-- javasource:prepare                                                 -->
+    <!-- Prepares directories and set up class paths.                       -->
+    <!-- ================================================================== -->
+
+    <goal name="javasource:prepare"
+          description="Make any necessary directories and set up class paths.">
+
+        <!-- This is needed to get Xalan to provide the XPath implementation. -->
+        ${systemScope.setProperty('javax.xml.xpath.XPathFactory:http://java.sun.com/jaxp/xpath/dom', 'org.apache.xpath.jaxp.XPathFactoryImpl')}
+
+        <!-- Create the source generator output directories if they do not already exist. -->
+        <ant:mkdir dir="${maven.javasource.dest}"/>
+
+        <!-- Add the generated source files to the Maven compilation path. -->
+        <ant:path id="maven.javasource.compile.src.set" location="${maven.javasource.dest}"/>
+        <maven:addPath id="maven.compile.src.set" refid="maven.javasource.compile.src.set"/>
+        
+        <!-- Set up the classpath needed to run the source generator. The dependencies are defined in project.xml -->
+        <ant:path id="maven.javasource.classpath">
+            <j:forEach var="dep" items="${plugin.getDependencies()}">
+                <ant:pathelement path="${plugin.getDependencyPath(dep.Id)}"/>
+            </j:forEach>
+        </ant:path>  
+        
+        <j:forEach var="dep" items="${plugin.getDependencies()}">
+            <echo>${plugin.getDependencyPath(dep.Id)}</echo>
+        </j:forEach>
+        
+    </goal>
+    
+    <!-- ================================================================== -->
+    <!-- javasource:generate                                                -->
+    <!-- Generates Java source code from an XML model and a template.       -->
+    <!-- Attribute 'arguments' accepted/required by this tag are:           -->
+    <!--                                                                    -->
+    <!-- templatefile Required. The template.                               -->
+    <!-- modelfile    Required. The XML model to supply data.               -->
+    <!-- package      Required. The package to output to.                   -->
+    <!--                                                                    -->
+    <!-- ================================================================== -->
+    <define:taglib uri="javasource">
+
+        <define:tag name="generate">
+
+            <!-- Get the output directory from the properties. -->
+            <j:set var="dest" value="${context.getVariable('maven.javasource.dest')}"/>
+
+            <ant:echo message="Generating Java sources for ${templatefile} and ${modelfile}, to package ${package} in directory ${dir}."/>
+
+            <!-- Run the source code generator. -->
+            <ant:java className="uk.co.thebadgerset.javasource.generator.SourceCodeGenerator" 
+                      fork="true"
+                      failonerror="true">
+
+                <!-- Pass in any defined system properties. -->
+                <u:tokenize var="listOfProperties" delim=" ">${maven.javasource.sysproperties}</u:tokenize>
+                <j:forEach var="someProperty" items="${listOfProperties}">
+                    <sysproperty key="${someProperty}" value="${context.getVariable(someProperty)}"/>
+                </j:forEach>
+
+                <!-- Pass in the location of the template to generate from. -->
+                <ant:arg value="-templatefile"/>
+                <ant:arg value="${templatefile}"/>
+
+                <!-- Pass in the location of the model to generate from. -->
+                <ant:arg value="-modelfile"/>
+                <ant:arg value="${modelfile}"/>
+
+                <!-- Pass in the location of the directory to generate to. -->
+                <ant:arg value="-dir"/>
+                <ant:arg value="${dest}"/>
+
+                <!-- Pass in the location of the package to generate to. -->
+                <ant:arg value="-package"/>
+                <ant:arg value="${package}"/>
+
+                <!-- Pass in the source code generators required classpath. -->
+                <ant:classpath refid="maven.javasource.classpath"/>
+                
+            </ant:java>
+
+        </define:tag>
+
+    </define:taglib>
+    
+</project>

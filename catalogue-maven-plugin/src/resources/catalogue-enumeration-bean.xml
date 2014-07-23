@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<tl xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="C:\Documents and Settings\Rupert\projects\javasource\src\resources\tl.xsd"
+    xmlns:cat="http://thesett.com/catalogue-def-0.2"
+    xmlns:gen="http://thesett.com/source-code-generator-0.1">
+
+<var name="package" value="cat:CatalogueDefinition/cat:Package/@name"/>
+
+<for path="cat:CatalogueDefinition/cat:EnumerationDef">
+<compilationUnit package="$package" fileName="gen:toCamelCaseUpper(concat(string(@name), '.java'))">
+package <value path="$package"/>;
+
+import java.io.Serializable;
+
+import org.apache.log4j.Logger;
+
+import com.thesett.aima.attribute.impl.EnumeratedStringAttribute;
+import com.thesett.aima.state.impl.ExtendableBeanState;
+
+/**
+ * Generated enumeration bean from catalogue model.
+ */
+public class <value path="gen:toCamelCaseUpper(string(@name))"/> extends ExtendableBeanState implements Serializable
+{
+    /** Used for logging. */
+    private static final Logger log = Logger.getLogger(<value path="gen:toCamelCaseUpper(string(@name))"/>.class);
+
+    private EnumeratedStringAttribute <value path="@name"/>;
+
+    /** No-arg constructor for serialization. */
+    public <value path="gen:toCamelCaseUpper(string(@name))"/>() {}
+
+    public <value path="gen:toCamelCaseUpper(string(@name))"/>(EnumeratedStringAttribute h) { this.<value path="@name"/> = h; }
+
+    public <value path="gen:toCamelCaseUpper(string(@name))"/>(String value)
+    {
+        EnumeratedStringAttribute.EnumeratedStringAttributeFactory factory = EnumeratedStringAttribute.getFactoryForClass("<value path="@name"/>");
+
+        <value path="@name"/> = factory.createStringAttribute(value);
+    }
+
+    private Long getId()
+    {
+        if (<value path="@name"/> != null)
+        {
+            return <value path="@name"/>.getId();
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private void setId(Long id)
+    {
+        if (<value path="@name"/> != null)
+        {
+            <value path="@name"/>.setId(id);
+        }
+    }
+
+    public EnumeratedStringAttribute get<value path="gen:toCamelCaseUpper(string(@name))"/>()
+    {
+        return <value path="@name"/>;
+    }
+
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(EnumeratedStringAttribute h)
+    {
+        <value path="@name"/> = h;
+    }
+
+    public boolean equals(Object o)
+    {
+        log.debug("public boolean equals(Object o): called");
+
+        if (o instanceof <value path="gen:toCamelCaseUpper(string(@name))"/>)
+        {
+            <value path="gen:toCamelCaseUpper(string(@name))"/> comp = (<value path="gen:toCamelCaseUpper(string(@name))"/>)o;
+
+            //log.debug("this = " + this.toString());
+            //log.debug("comp = " + comp.toString());
+            //log.debug("this.<value path="@name"/> = " + this.get<value path="gen:toCamelCaseUpper(string(@name))"/>());
+            //log.debug("comp.<value path="@name"/> = " + comp.get<value path="gen:toCamelCaseUpper(string(@name))"/>());
+
+            boolean result = this.get<value path="gen:toCamelCaseUpper(string(@name))"/>().equals(comp.get<value path="gen:toCamelCaseUpper(string(@name))"/>());
+
+            //log.debug("result = " + result);
+
+            return result;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public int hashCode()
+    {
+        return this.<value path="@name"/>.hashCode();
+    }
+
+    public String toString()
+    {
+        return <value path="@name"/>.toString();
+    }
+}
+
+</compilationUnit>
+</for>
+</tl>

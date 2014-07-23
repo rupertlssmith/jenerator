@@ -1,0 +1,134 @@
+/*
+ * Defines commonly re-used templates for java code generation from a catalogue model.
+ */
+group JavaCommon;
+
+/*
+ * Holds a mapping from kinds of catalogue types to templates for generating their java types in the context of a 
+ * component bean. 
+ */
+componentBeanTypeMap ::= [
+    "Component":"component_ref_type",
+    "Entity":"component_ref_type",
+    "Dimension":"component_ref_type",
+    "View":"component_ref_type",
+    "Fact":"component_ref_type",
+    "Hierarchy":"hierarchy_type",
+    "Enumeration":"enumeration_type",
+    "Collection":"collection_type",
+    "String":"string_type",
+    "DateOnly":"date_only_type",
+    "TimeOnly":"time_only_type",
+    "BigDecimal":"bigdecimal_type",
+    default:"basic_type"
+]
+
+/* Holds a mapping from primitive types names to their Java primitive type names. */
+primitiveTypeMap ::= [
+    "Boolean":"boolean",
+    "Char":"char",
+    "Short":"short",
+    "Int":"int",
+    "Long":"long",
+    "Float":"float",
+    "Double":"double",
+    default:key
+]
+
+objectTypeMap ::= [
+    "Boolean":"Boolean",
+    "Char":"Char",
+    "Short":"Short",
+    "Int":"Integer",
+    "Long":"Long",
+    "Float":"Float",
+    "Double":"Double",
+    default:key
+]
+
+/* Holds a mapping from kinds of collections to their interfaces in Java. */
+collectionTypeMap ::= [
+    "Set":"Set",
+    "List":"List",
+    "Bag":"Collection",
+    "Map":"Map"
+]
+
+/*
+ * Creates the package declaration for a class file in a given catalogue model.
+ */
+package(catalogue) ::= <<
+package <catalogue.modelPackage>;
+>>
+
+component_ref_type(field) ::= <<
+<field.name; format="ccu">
+>>
+
+hierarchy_type(field) ::= <<
+<field.name; format="ccu">
+>>
+
+enumeration_type(field) ::= <<
+<field.name; format="ccu">
+>>
+
+hierarchy_raw_type(field) ::= <<
+HierarchyAttribute
+>>
+
+enumeration_raw_type(field) ::= <<
+EnumeratedStringAttribute
+>>
+
+date_or_range_type(field) ::= <<
+<if(field.rangeType)>
+<field.name; format="ccu">
+<else>
+DateOnly
+<endif>
+>>
+
+time_or_range_type(field) ::= <<
+<if(field.rangeType)>
+<field.name; format="ccu">
+<else>
+TimeOnly
+<endif>
+>>
+
+date_only_type(field) ::= <<
+DateOnly
+>>
+
+time_only_type(field) ::= <<
+TimeOnly
+>>
+
+collection_type(field) ::= <<
+<if(field.map)>
+<collectionTypeMap.(field.collectionKind)><if(field.elementType)><if(field.keyType)>\<<(typeMap.(field.keyType.kind))(field=field.keyType)>, <(typeMap.(field.elementType.kind))(field=field.elementType)>\><endif><endif>
+<else>
+<collectionTypeMap.(field.collectionKind)><if(field.elementType)>\<<(typeMap.(field.elementType.kind))(field=field.elementType)>\><endif>
+<endif>
+>>
+
+string_type(field) ::= <<
+String
+>>
+
+date_type(field) ::= <<
+Date
+>>
+
+bigdecimal_type(field) ::= <<
+BigDecimal
+>>
+
+basic_type(field) ::= <<
+<primitiveTypeMap.(field.primitiveKind)>
+>>
+
+object_type(field) ::= <<
+<objectTypeMap.(field.primitiveKind)>
+>>

@@ -1,0 +1,32 @@
+/*
+ * Hibernate is an implementation of the Generator interface, that creates a Hibernate configuration for
+ * types in a catalogue model that should be persisted.
+ */
+group HibernateOnline : HibernateCommon implements Generator;
+
+/*
+ * Creates the opening section of an output file, if one is required.
+ */
+file_open(catalogue) ::= <<
+>>
+
+/*
+ * Generates the output for a bean in the specified catalogue.
+ */
+for_bean(catalogue, decorator, fields, extraFields) ::= <<
+<if(decorator.hierarchyType)>
+<hibernate_config_hierarchy_typedef(catalogue=catalogue, name=decorator.name, fields=fields)>
+<endif>
+<if(decorator.enumerationType)>
+<hibernate_config_enumeration_typedef(catalogue=catalogue, name=decorator.name, fields=fields)>
+<endif>
+>>
+
+/*
+ * Creates the closing section of an output file, if one is required.
+ */
+file_close() ::= <<
+  \<typedef class="com.thesett.catalogue.customtypes.DateOnlyUserType" name="date_only"/\>
+  \<typedef class="com.thesett.catalogue.customtypes.TimeOnlyUserType" name="time_only"/\>
+
+>>

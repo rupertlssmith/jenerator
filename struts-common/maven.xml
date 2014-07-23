@@ -1,0 +1,18 @@
+<project default="dist"
+         xmlns:m="jelly:maven"   
+         xmlns:artifact="artifact">
+
+  <goal name="dist">
+
+    <!-- Generate the tag library. -->
+    <attainGoal name="xdoclet:webdoclet"/>
+
+    <!-- Install all the custom tags and actions in the repository as a .jar -->
+    <attainGoal name="jar:install"/>
+
+    <!-- Todo: Install the the tag library in the repository too. -->
+    <!-- <artifact:install artifact="target/xdoclet/webdoclet/WEB-INF/tlds/common-struts.tld" type="tld" project="${pom}"/> -->
+
+  </goal>
+
+</project>

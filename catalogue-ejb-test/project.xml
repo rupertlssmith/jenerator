@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project>
+  <extend>${basedir}/../mavenbuild/project.xml</extend>
+  <name>catalogue-ejb-test</name>
+  <id>catalogue-ejb-test</id>
+  <currentVersion>0.3</currentVersion>
+  <shortDescription>Catalogue EJB Implementation Tests.</shortDescription>
+  <description>
+    Integration tests the EJB session bean implementation of the catalogue. Deploys it to JBoss and tests it in-container.
+  </description>
+
+  <repository>
+    <connection>scm:${scm.setup}/projects/catalogue-ejb-test</connection>
+  </repository>
+
+  <versions>
+    <version>
+      <id>0.1</id>
+      <name>0.1</name>
+      <tag>RELEASE_0_1</tag>
+    </version>
+    <version>
+      <id>0.2</id>
+      <name>0.2</name>
+      <tag>RELEASE_0_2</tag>
+    </version>
+  </versions>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>thebadgerset</groupId>
+      <artifactId>common</artifactId>
+      <version>0.3</version>
+      <properties>
+        <ejb.manifest.classpath>true</ejb.manifest.classpath>
+        <cactus.bundle>true</cactus.bundle>
+        <ear.bundle>true</ear.bundle>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>thebadgerset</groupId>
+      <artifactId>configurator</artifactId>
+      <version>0.3</version>
+      <properties>
+        <ejb.manifest.classpath>true</ejb.manifest.classpath>
+        <cactus.bundle>true</cactus.bundle>
+        <ear.bundle>true</ear.bundle>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>thebadgerset</groupId>
+      <artifactId>catalogue</artifactId>
+      <version>0.3</version>
+      <type>ejb</type>
+      <properties>
+        <ejb.manifest.classpath>true</ejb.manifest.classpath>
+        <cactus.bundle>true</cactus.bundle>
+        <ear.bundle>true</ear.bundle>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>thebadgerset</groupId>
+      <artifactId>locator</artifactId>
+      <version>0.3</version>
+      <properties>
+        <ejb.manifest.classpath>true</ejb.manifest.classpath>
+        <cactus.bundle>true</cactus.bundle>
+        <ear.bundle>true</ear.bundle>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>thebadgerset</groupId>
+      <artifactId>aima</artifactId>
+      <version>0.3</version>
+      <properties>
+        <ejb.manifest.classpath>true</ejb.manifest.classpath>
+        <cactus.bundle>true</cactus.bundle>
+        <ear.bundle>true</ear.bundle>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>thebadgerset</groupId>
+      <artifactId>index</artifactId>
+      <version>0.3</version>
+      <properties>
+        <ejb.manifest.classpath>true</ejb.manifest.classpath>
+        <cactus.bundle>true</cactus.bundle>
+        <ear.bundle>true</ear.bundle>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>thebadgerset</groupId>
+      <artifactId>index-ra-client</artifactId>
+      <version>0.3</version>
+      <properties>
+        <ejb.manifest.classpath>true</ejb.manifest.classpath>
+        <cactus.bundle>true</cactus.bundle>
+        <ear.bundle>true</ear.bundle>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>thebadgerset</groupId>
+      <artifactId>index-ra</artifactId>
+      <type>rar</type>
+      <version>0.3</version>
+      <properties>
+        <ejb.manifest.classpath>true</ejb.manifest.classpath>
+        <cactus.bundle>true</cactus.bundle>
+        <ear.bundle>true</ear.bundle>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>thebadgerset</groupId>
+      <artifactId>junit-toolkit</artifactId>
+      <version>0.3</version>
+      <properties>
+        <ejb.manifest.classpath>true</ejb.manifest.classpath>
+        <cactus.bundle>true</cactus.bundle>
+        <ear.bundle>true</ear.bundle>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>thebadgerset</groupId>
+      <artifactId>javasource-maven-plugin</artifactId>
+      <version>0.3</version>
+      <type>plugin</type>
+    </dependency>
+
+    <dependency>
+      <groupId>hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>1.8.0.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>jwsdp</groupId>
+      <artifactId>jaxb-api</artifactId>
+      <version>jwsdp.2.0</version>
+      <properties>
+        <ejb.manifest.classpath>true</ejb.manifest.classpath>
+        <cactus.bundle>true</cactus.bundle>
+        <ear.bundle>true</ear.bundle>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>jwsdp</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <version>jwsdp.2.0</version>
+      <properties>
+        <ejb.manifest.classpath>true</ejb.manifest.classpath>
+        <cactus.bundle>true</cactus.bundle>
+        <ear.bundle>true</ear.bundle>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>jwsdp</groupId>
+      <artifactId>jsr173_api</artifactId>
+      <version>jwsdp.2.0</version>
+      <properties>
+        <ejb.manifest.classpath>true</ejb.manifest.classpath>
+        <cactus.bundle>true</cactus.bundle>
+        <ear.bundle>true</ear.bundle>
+      </properties>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <resources>
+      <!-- Ensure test resources are included in the cactus deployment. -->
+      <resource>
+        <directory>src/test-resources</directory>
+      </resource>
+    </resources>
+  </build>
+
+</project>

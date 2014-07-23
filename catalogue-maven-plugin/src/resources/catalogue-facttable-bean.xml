@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<tl xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="C:\Documents and Settings\Rupert\projects\javasource\src\resources\tl.xsd"
+    xmlns:cat="http://thesett.com/catalogue-def-0.2"
+    xmlns:gen="http://thesett.com/source-code-generator-0.1">
+
+<var name="package" value="cat:CatalogueDefinition/cat:Package/@name"/>
+
+<for path="cat:CatalogueDefinition/cat:FactDef">
+<compilationUnit package="$package" fileName="gen:toCamelCaseUpper(concat(string(@name), '.java'))">
+package <value path="$package"/>;
+
+import java.util.Date;
+import java.io.Serializable;
+
+/**
+ * Generated fact table bean from catalogue model.
+ */
+public class <value path="gen:toCamelCaseUpper(string(@name))"/> implements Serializable
+{
+    public <value path="gen:toCamelCaseUpper(string(@name))"/>() {}
+
+    private long id;
+
+    private long getId()
+    {
+        return id;
+    }
+
+    private void setId(long id)
+    {
+        this.id = id;
+    }
+
+    <!-- Components need to be flattened. Views need to be catered for for conformed products. The extension mechanism
+         for adding derived/calculated and other additional fields needs to be handled. -->
+    <for path="cat:Component">
+    private <value path="gen:toCamelCaseUpper(concat(string(@type), ' '))"/> <value path="gen:toCamelCase(string(@name))"/>;
+
+    public <value path="gen:toCamelCaseUpper(string(@type))"/> get<value path="gen:toCamelCaseUpper(string(@name))"/>() { return <value path="gen:toCamelCase(string(@name))"/>; }
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(<value path="gen:toCamelCaseUpper(concat(string(@type), ' '))"/> <value path="gen:toCamelCase(string(@name))"/>) { this.<value path="gen:toCamelCase(string(@name))"/> = <value path="gen:toCamelCase(string(@name))"/>; }
+    
+    </for>
+
+    <for path="cat:String">
+    private String <value path="gen:toCamelCase(string(@name))"/>;
+
+    public String get<value path="gen:toCamelCaseUpper(string(@name))"/>() { return <value path="gen:toCamelCase(string(@name))"/>; }
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(String <value path="gen:toCamelCase(string(@name))"/>) { this.<value path="gen:toCamelCase(string(@name))"/> = <value path="gen:toCamelCase(string(@name))"/>; }
+    </for>
+
+    <for path="cat:Integer">
+    private int <value path="gen:toCamelCase(string(@name))"/>;
+
+    public int get<value path="gen:toCamelCaseUpper(string(@name))"/>() { return <value path="gen:toCamelCase(string(@name))"/>; }
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(int <value path="gen:toCamelCase(string(@name))"/>) { this.<value path="gen:toCamelCase(string(@name))"/> = <value path="gen:toCamelCase(string(@name))"/>; }
+    </for>
+
+    <for path="cat:Real">
+    private float <value path="gen:toCamelCase(string(@name))"/>;
+
+    public float get<value path="gen:toCamelCaseUpper(string(@name))"/>() { return <value path="gen:toCamelCase(string(@name))"/>; }
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(float <value path="gen:toCamelCase(string(@name))"/>) { this.<value path="gen:toCamelCase(string(@name))"/> = <value path="gen:toCamelCase(string(@name))"/>; }
+    </for>
+
+    <for path="cat:Date">
+    private Date <value path="gen:toCamelCase(string(@name))"/>;
+
+    public Date get<value path="gen:toCamelCaseUpper(string(@name))"/>() { return <value path="gen:toCamelCase(string(@name))"/>; }
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(Date <value path="gen:toCamelCase(string(@name))"/>) { this.<value path="gen:toCamelCase(string(@name))"/> = <value path="gen:toCamelCase(string(@name))"/>; }
+    </for>
+
+    <for path="cat:Time">
+    private long <value path="gen:toCamelCase(string(@name))"/>;
+
+    public long get<value path="gen:toCamelCaseUpper(string(@name))"/>() { return <value path="gen:toCamelCase(string(@name))"/>; }
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(long <value path="gen:toCamelCase(string(@name))"/>) { this.<value path="gen:toCamelCase(string(@name))"/> = <value path="gen:toCamelCase(string(@name))"/>; }
+    </for>
+
+    <for path="cat:Hierarchy">
+    <value path="gen:toCamelCaseUpper(concat(string(@type), ' '))"/> <value path="gen:toCamelCase(string(@name))"/>;
+
+    public <value path="gen:toCamelCaseUpper(string(@type))"/> get<value path="gen:toCamelCaseUpper(string(@name))"/>() { return <value path="gen:toCamelCase(string(@name))"/>; }
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(<value path="gen:toCamelCaseUpper(concat (string(@type), ' '))"/> <value path="gen:toCamelCase(string(@name))"/>){ this.<value path="gen:toCamelCase(string(@name))"/> = <value path="gen:toCamelCase(string(@name))"/>; }
+    </for>
+}
+
+</compilationUnit>
+</for>
+</tl>

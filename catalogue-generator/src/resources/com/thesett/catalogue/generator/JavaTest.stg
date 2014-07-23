@@ -1,0 +1,187 @@
+/*
+ * JavaTest is an implementation of the Generator interface, that creates JUnit tests for
+ * components defined in a catalogue model.
+ */
+group JavaTest : JavaCommon implements Generator;
+
+/*
+ * Holds a mapping from kinds of component types to the names of their implementing classes.
+ */
+componentImplNameMap ::= [
+    "Component":"<decorator.name; format=\"ccu\">",
+    "Entity":"<decorator.name; format=\"ccu\">",
+    "Dimension":"<decorator.name; format=\"ccu\">",
+    "Fact":"<decorator.name; format=\"ccu\">",
+    "View":"<decorator.name; format=\"ccu\">Impl"
+]
+
+/*
+ * Creates the opening section of an output file, if one is required.
+ */
+file_open(catalogue) ::= <<
+file_open
+>>
+
+/*
+ * Generates the output for a bean in the specified catalogue.
+ */
+for_bean(catalogue, decorator, fields, extraFields) ::= <<
+<test(catalogue=catalogue, implName=componentImplNameMap.(decorator.kind), decorator=decorator, fields=fields, extraFields=extraFields)>
+>>
+
+/*
+ * Creates the closing section of an output file, if one is required.
+ */
+file_close() ::= <<
+file_close
+>>
+
+/*
+ * Creates a unit test for a component type.
+ */
+test(catalogue, implName, decorator, fields, extraFields) ::= <<
+<package(catalogue)>
+
+import org.apache.log4j.NDC;
+
+import com.thesett.aima.state.ComponentType;
+import com.thesett.catalogue.config.ModelLoaderConfigBean;
+import com.thesett.catalogue.core.EntityInstanceBase;
+import com.thesett.catalogue.core.ModelTestBase;
+import com.thesett.catalogue.interfaces.Catalogue;
+import com.thesett.catalogue.interfaces.ExternalId;
+import com.thesett.common.config.Configurator;
+
+/**
+ * Tests the <implName> class.
+ *
+ * \<p/\>\<table id="crc"\>\<caption\>CRC Card\</caption\>
+ * \<tr\>\<th\> Responsibilities \<th\> Collaborations
+ * \<tr\>\<td\> Check that the component can be instantiated from its no-arg constructor.
+ * \<tr\>\<td\> Check that the default no-arg component can be instantiated from its type.
+ * \<tr\>\<td\> Check that a random component instance can be created from its type.
+ * \</table\>
+ *
+ * @author Generated Code
+ */
+public class <decorator.name; format="ccu">Test extends ModelTestBase
+{
+    /** Holds the resource name of the test configuration. */
+    private static final String TEST_CONFIG = "testconfig.xml";
+
+    /** Holds the catalogue under test. */
+    private Catalogue catalogue;
+
+    /**
+     * Creates a test with the specified name.
+     *
+     * @param name The name of the test to run.
+     */
+    public <decorator.name; format="ccu">Test(String name)
+    {
+        super(name);
+
+        configurator = configure(TEST_CONFIG, false);
+    }
+
+    /** Check that the component can be instantiated from its no-arg constructor. */    
+    public void testNoArg<implName>ConstructorOk() 
+    {
+        <implName> test = new <implName>();
+    }
+
+    /* Check that the default no-arg component can be instantiated from its type. */
+    public void testDefault<implName>InstanceOk()
+    {
+        ComponentType type = catalogue.getComponentType("<decorator.name>");
+        <implName> test = (<implName>)type.getDefaultInstance();
+
+        assertNotNull("The default instance must not be null.", test);
+    }
+
+    /* Check that a random component instance can be created from its type. */
+    public void testRandom<implName>InstanceOk() throws Exception
+    {
+        ComponentType type = catalogue.getComponentType("<decorator.name>");
+        <implName> test = (<implName>)type.getRandomInstance();
+
+        assertNotNull("The random instance must not be null.", test);
+    }
+
+    <if(decorator.entitySubType)>
+    /** Check that a test entity can be stored and retrieved from the online database. */
+    public void testSaveRestore<implName>OnlineOk() throws Exception
+    {
+        ComponentType type = catalogue.getComponentType("<decorator.name>");
+        <implName> test = (<implName>)type.getRandomInstance();
+
+        // Create an external id for it.
+        ExternalId id = new ExternalId("test", "test");
+        id.setResource("<implName>");
+        test.setExternalId(id);
+
+        // Check that the test dimension can be saved and restored.
+        checkSaveRestoreEntity(test, id, "<decorator.name>_Online");
+    }
+    <endif>
+
+    <if(decorator.dimension)>
+    /** Check that a test dimension can be stored and retrieved from the warehouse database. */
+    public void testSaveRestore<implName>WarehouseOk() throws Exception
+    {
+        ComponentType type = catalogue.getComponentType("<decorator.name>");
+        <implName> test = (<implName>)type.getRandomInstance();
+
+        // Create an external id for it.
+        ExternalId id = new ExternalId("test", "test");
+        id.setResource("<implName>");
+        test.setExternalId(id);
+
+        // Check that the test dimension can be saved and restored.
+        checkSaveRestoreEntity(test, id, "<decorator.name>_Warehouse");
+    }
+    <endif>
+
+    <if(decorator.dimension)>
+    /** Check that a test dimension loaded from the online database can be saved in the warehouse database. */
+    public void testOnlineToWarehouse<implName>DimensionOk() throws Exception
+    {
+        ComponentType type = catalogue.getComponentType("<decorator.name>");
+        <implName> test = (<implName>)type.getRandomInstance();
+
+        // Create an external id for it.
+        ExternalId id = new ExternalId("test", "test");
+        id.setResource("<implName>");
+        test.setExternalId(id);
+
+        // Save it in the online database and restore it from there.
+        EntityInstanceBase loaded = checkSaveRestoreEntity(test, id, "<decorator.name>_Online");
+
+        // Save the restored object in the warehouse database.
+        checkSaveRestoreEntity(loaded, null, "<decorator.name>_Warehouse");
+    }
+    <endif>
+
+    protected void setUp() throws Exception
+    {
+        // Push a client identifier onto the Nested Diagnostic Context so that Log4J will be able to identify all
+        // logging output for this tests.
+        NDC.push(getName());
+
+        super.setUp();
+
+        // Take a reference to the model loader bean to get the catalogue model from.
+        ModelLoaderConfigBean loaderBean =
+            (ModelLoaderConfigBean) configurator.getConfiguredBean(
+                "com.thesett.catalogue.config.ModelLoaderConfigBean");
+
+        // Get the catalogue to test.
+        catalogue = loaderBean.getCatalogue();
+    }
+
+    protected void tearDown() throws Exception
+    {
+        NDC.pop();
+    }
+}
+>>

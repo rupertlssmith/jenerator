@@ -1,0 +1,971 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.thesett</groupId>
+    <artifactId>catalogue_build</artifactId>
+    <name>projects</name>
+    <version>0.3-SNAPSHOT</version>
+
+    <packaging>pom</packaging>
+
+    <scm>
+        <connection>scm:${scm.setup}/projects/catalogue_build</connection>
+    </scm>
+
+    <prerequisites>
+        <maven>2.0.8</maven>
+    </prerequisites>
+
+    <mailingLists>
+    </mailingLists>
+
+    <organization>
+        <name>The Badger Sett ltd.</name>
+        <url>http://www.thebadgersett.co.uk/</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <name>Rupert Smith</name>
+            <id>rupert</id>
+            <email>rupertlssmith (contactable on g-m-a-i-l)</email>
+            <organization />
+        </developer>
+    </developers>
+
+    <properties>
+        <topdir>${basedir}/.</topdir>
+
+        <!-- Stops the dependency plugin running really slowly. -->
+        <dependency.locations.enabled>false</dependency.locations.enabled>
+
+        <checkstyle.header.file>${topdir}/etc/license/license.txt</checkstyle.header.file>
+        <checkstyle.config>${topdir}/etc/coding_standards.xml</checkstyle.config>
+        <checkstyle.suppressions>${topdir}/etc/coding_standards_suppressions.xml</checkstyle.suppressions>
+
+        <findbugs.exclude.file>${topdir}/etc/findbugs-exclude.xml</findbugs.exclude.file>
+
+        <!-- Plugin versions. Particularly for snapshots it is handy to be able to upgrade these as releases appear. -->
+        <maven.compiler.plugin.version>2.0.1</maven.compiler.plugin.version>
+        <maven.dependency.plugin.version>2.0</maven.dependency.plugin.version>
+        <maven.assembly.plugin.version>2.2-beta-1</maven.assembly.plugin.version>
+        <maven.surefire.plugin.version>2.4.3</maven.surefire.plugin.version>
+        <jalopy.maven.plugin.version>1.9.4-108</jalopy.maven.plugin.version>
+        <maven.jaxb2.plugin.version>0.7.5</maven.jaxb2.plugin.version>
+        <xdoclet.maven.plugin.version>1.0</xdoclet.maven.plugin.version>
+        <maven.run.plugin.version>0.1</maven.run.plugin.version>
+        <maven.antrun.plugin.version>1.7</maven.antrun.plugin.version>
+        <maven.idea.plugin.version>2.2</maven.idea.plugin.version>
+        <maven.war.plugin.version>2.0</maven.war.plugin.version>
+        <javacc.maven.plugin.version>2.1</javacc.maven.plugin.version>
+        <maven.dashboard.plugin.version>1.1-thesett</maven.dashboard.plugin.version>
+        <jboss.maven.plugin.version>1.3.1</jboss.maven.plugin.version>
+        <maven.pmd.plugin.version>2.4</maven.pmd.plugin.version>
+        <maven.findbugs.plugin.version>2.5.3</maven.findbugs.plugin.version>
+        <maven.javadoc.plugin.version>2.9.1</maven.javadoc.plugin.version>
+        <maven.checkstyle.plugin.version>2.2</maven.checkstyle.plugin.version>
+        <maven.jxr.plugin.version>2.1</maven.jxr.plugin.version>
+        <taglist.maven.plugin.version>2.2</taglist.maven.plugin.version>
+        <maven.surefire.report.plugin.version>2.4.3</maven.surefire.report.plugin.version>
+        <javancss.maven.plugin.version>2.0-beta-2</javancss.maven.plugin.version>
+        <simian.maven.plugin.version>1.1-thesett-SNAPSHOT</simian.maven.plugin.version>
+        <maven.build.helper.plugin.version>1.3</maven.build.helper.plugin.version>
+        <maven.ear.plugin.version>2.0</maven.ear.plugin.version> <!-- Later versions do not support resourcesDir. -->
+        <jacoco.maven.plugin.version>0.6.4.201312101107</jacoco.maven.plugin.version>
+
+        <log4j.configuration>file:${topdir}/etc/log4j.xml</log4j.configuration>
+
+        <jstl.jar.version>1.1.2</jstl.jar.version>
+
+        <pmd.ruleset.file>${topdir}/etc/pmd_rules.xml</pmd.ruleset.file>
+
+        <platform>linux</platform>
+    </properties>
+
+    <distributionManagement>
+
+        <!-- The repository for fully versioned releases. -->
+        <repository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>release-repo</id>
+            <name>The Badger Set Maven2 Repository</name>
+            <url>file://${basedir}/../releases</url>
+            <layout>default</layout>
+        </repository>
+
+        <!-- The repository for snapshot releases. -->
+        <snapshotRepository>
+            <uniqueVersion>true</uniqueVersion>
+            <id>snapshot-repo</id>
+            <name>The Badger Set Maven2 Snapshot Repository</name>
+            <url>file://${basedir}/../snapshots</url>
+            <layout>default</layout>
+        </snapshotRepository>
+
+        <!-- Set up for locally generated site. -->
+        <site>
+            <id>All_Projects_Site</id>
+            <name>All Projects Site</name>
+            <url>file:/var/www/build_reports/catalogue</url>
+        </site>
+
+    </distributionManagement>
+
+    <modules>
+        <module>catalogue-model</module>
+        <module>catalogue-generator</module>
+        <module>catalogue-maven-plugin</module>
+        <module>configurator</module>
+        <module>index</module>
+        <module>javasource</module>
+        <module>javasource-maven-plugin</module>
+        <module>xmlbeans</module>
+        <module>xmlutils</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>3.8.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>[1.2.8,)</version>
+            </dependency>
+
+            <dependency>
+                <groupId>struts</groupId>
+                <artifactId>struts</artifactId>
+                <version>1.2.7</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>1.7.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-digester</groupId>
+                <artifactId>commons-digester</artifactId>
+                <version>1.6</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.0.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-validator</groupId>
+                <artifactId>commons-validator</artifactId>
+                <version>1.1.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>oro</groupId>
+                <artifactId>oro</artifactId>
+                <version>2.0.7</version>
+            </dependency>
+
+            <!-- JAXB 2.0 RI libraries. Needed to run the XJC at build time, and JAXB at run time. Should be bundled in .ears -->
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jsr173_api</artifactId>
+                <version>1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>2.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-impl</artifactId>
+                <version>2.1.7</version>
+            </dependency>
+
+            <!-- Libraries that can be placed in .ear files and referenced from .ejb and .war manifests. -->
+            <dependency>
+                <groupId>regexp</groupId>
+                <artifactId>regexp</artifactId>
+                <version>1.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jstl</groupId>
+                <artifactId>jstl</artifactId>
+                <version>${jstl.jar.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>taglibs</groupId>
+                <artifactId>standard</artifactId>
+                <version>1.1.2</version>
+            </dependency>
+
+            <!-- Dependencies needed for running tests but that should not be bundled unless required for Cactus. -->
+            <dependency>
+                <groupId>commons-jelly</groupId>
+                <artifactId>commons-jelly-tags-threads</artifactId>
+                <version>1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>3.8.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>mockejb</groupId>
+                <artifactId>mockejb</artifactId>
+                <version>0.6-beta3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>easymock</groupId>
+                <artifactId>easymock</artifactId>
+                <version>1.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cactus</groupId>
+                <artifactId>cactus</artifactId>
+                <version>13-1.7.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.cactus</groupId>
+                <artifactId>cactus.core.framework.javaEE.13-14</artifactId>
+                <version>1.8.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.cactus</groupId>
+                <artifactId>cactus.core.framework.uberjar.javaEE.15</artifactId>
+                <version>1.8.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>aspectj</groupId>
+                <artifactId>aspectjrt</artifactId>
+                <version>1.2.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>2.0.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>httpunit</groupId>
+                <artifactId>httpunit</artifactId>
+                <version>1.6</version>
+            </dependency>
+
+            <dependency>
+                <groupId>nekohtml</groupId>
+                <artifactId>nekohtml</artifactId>
+                <version>0.9.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cargo</groupId>
+                <artifactId>cargo</artifactId>
+                <version>1.1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>rhino</groupId>
+                <artifactId>js</artifactId>
+                <version>1.5R4.1</version>
+            </dependency>
+
+            <!-- J2EE API specs which should not be bundled as the container always provide them. -->
+            <dependency>
+                <groupId>servletapi</groupId>
+                <artifactId>servletapi</artifactId>
+                <version>2.3</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>j2ee</groupId>
+                <artifactId>j2ee</artifactId>
+                <version>1.4</version>
+            </dependency>
+
+            <!-- Other compilation and run time libraries that should not be bundled in J2EE apps as supplied by container. -->
+            <!-- Review whether or not these need to be added to container lib directories. -->
+            <dependency>
+                <groupId>xml-apis</groupId>
+                <artifactId>xml-apis</artifactId>
+                <version>1.3.03</version>
+            </dependency>
+
+            <dependency>
+                <groupId>xalan</groupId>
+                <artifactId>xalan</artifactId>
+                <version>2.7.0</version>
+            </dependency>
+
+            <!-- Hibernate stuff. Not bundled as supplied with JBoss. Will need to be added to other app server lib dirs. -->
+            <!-- Also, consider adding to JBoss lib dirs to ensure complete and up-to-date version is used. -->
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-tools</artifactId>
+                <version>3.2.0.ga</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>3.5.4-Final</version>
+            </dependency>
+
+            <dependency>
+                <groupId>dom4j</groupId>
+                <artifactId>dom4j</artifactId>
+                <version>1.6.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib</artifactId>
+                <version>2.1_3</version>
+            </dependency>
+
+            <!-- Required libs for running wscompile. -->
+            <dependency>
+                <groupId>jwsdp</groupId>
+                <artifactId>jaxrpc-spi</artifactId>
+                <version>jwsdp.2.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jwsdp</groupId>
+                <artifactId>jaxrpc-impl</artifactId>
+                <version>jwsdp.2.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jwsdp</groupId>
+                <artifactId>jaxrpc-api</artifactId>
+                <version>jwsdp.2.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jwsdp</groupId>
+                <artifactId>xsdlib</artifactId>
+                <version>jwsdp.2.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jwsdp</groupId>
+                <artifactId>relaxngDatatype</artifactId>
+                <version>jwsdp.2.0</version>
+            </dependency>
+
+            <!-- Required libs for calling webservices. -->
+            <dependency>
+                <groupId>jwsdp</groupId>
+                <artifactId>saaj-impl</artifactId>
+                <version>jwsdp.2.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jwsdp</groupId>
+                <artifactId>FastInfoset</artifactId>
+                <version>jwsdp.2.0</version>
+            </dependency>
+
+            <!-- Jars needed for client application to call application servers. Bundled in EJB clients, not EARs or WARs. -->
+            <dependency>
+                <groupId>jboss</groupId>
+                <artifactId>jnp-client</artifactId>
+                <version>4.0.4.GA</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>jboss</groupId>
+                <artifactId>jboss-client</artifactId>
+                <version>4.0.4.GA</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>jboss</groupId>
+                <artifactId>jbossall-client</artifactId>
+                <version>4.0.4.GA</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>jboss</groupId>
+                <artifactId>jboss-system-client</artifactId>
+                <version>4.0.4.GA</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>jboss</groupId>
+                <artifactId>jboss-common-client</artifactId>
+                <version>4.0.4.GA</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>jboss</groupId>
+                <artifactId>jbosssx-client</artifactId>
+                <version>4.0.4.GA</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>jboss</groupId>
+                <artifactId>jboss-serialization</artifactId>
+                <version>4.0.4.GA</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>jboss</groupId>
+                <artifactId>jboss-remoting</artifactId>
+                <version>4.0.4.GA</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- JDBC Connectors for application server configurations. Should be placed into the app server lib directory. -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>5.0.4</version>
+            </dependency>
+
+            <!-- Test databases. -->
+            <dependency>
+                <groupId>hsqldb</groupId>
+                <artifactId>hsqldb</artifactId>
+                <version>1.8.0.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.derby</groupId>
+                <artifactId>derby</artifactId>
+                <version>10.4.2.0</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <sourceDirectory>src/main</sourceDirectory>
+        <testSourceDirectory>src/unittests</testSourceDirectory>
+
+        <pluginManagement>
+            <plugins>
+
+                <!-- Ensures the compiler plugin is set up for Java 1.5 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.compiler.plugin.version}</version>
+                    <configuration>
+                        <source>1.5</source>
+                        <target>1.5</target>
+                        <fork>false</fork>
+                    </configuration>
+                </plugin>
+
+                <!-- Ensure latest dependency plugin is used. -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>${maven.dependency.plugin.version}</version>
+                </plugin>
+
+                <!-- Fix the version of the assembly plugin. -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>${maven.assembly.plugin.version}</version>
+                </plugin>
+
+                <!-- Fix the version of the ear plugin. -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-ear-plugin</artifactId>
+                    <version>${maven.ear.plugin.version}</version>
+                </plugin>
+
+                <!-- Only run tests in files ending in Test.java, override the default set up. -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven.surefire.plugin.version}</version>
+                    <configuration>
+                        <argLine>${surefireArgLine}</argLine>
+                        <systemProperties>
+                            <property>
+                                <name>log4j.configuration</name>
+                                <value>${log4j.configuration}</value>
+                            </property>
+                        </systemProperties>
+                        <excludes>
+                            <exclude>**/Test*.java</exclude>
+                            <exclude>**/*TestCase.java</exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+
+                <!-- For source code beautification. -->
+                <plugin>
+                    <groupId>triemax</groupId>
+                    <artifactId>jalopy-maven</artifactId>
+                    <version>${jalopy.maven.plugin.version}</version>
+                    <configuration>
+                        <profile>default</profile>
+                        <sources>
+                            <source>${basedir}/src/main</source>
+                            <source>${basedir}/src/unittests</source>
+                        </sources>
+                    </configuration>
+                </plugin>
+
+                <!-- Used to generate beans from XML schemas. -->
+                <plugin>
+                    <groupId>org.jvnet.jaxb2.maven2</groupId>
+                    <artifactId>maven-jaxb2-plugin</artifactId>
+                    <version>${maven.jaxb2.plugin.version}</version>
+                    <configuration>
+                        <schemaDirectory>${basedir}/src/resources</schemaDirectory>
+                    </configuration>
+                </plugin>
+
+                <!-- Run XDoclet to generate taglibs and EJB interfaces. -->
+                <plugin>
+                    <groupId>com.thesett</groupId>
+                    <artifactId>xdoclet-maven-plugin</artifactId>
+                    <version>${xdoclet.maven.plugin.version}</version>
+                </plugin>
+
+                <!--
+                     Set up the run plugin to generate run scripts or invoke main methods. This configuration will generate a defaul
+                     run script called 'runj' in the target directory, that invoked java with the log4j.configuration parameter passed
+                     to it, and the projects complete runtime classpath set up.
+                -->
+                <plugin>
+                    <groupId>com.thesett</groupId>
+                    <artifactId>maven-run-plugin</artifactId>
+                    <version>${maven.run.plugin.version}</version>
+                    <configuration>
+                        <scriptOutDirectory>target</scriptOutDirectory>
+                        <systemproperties>
+                            <property>
+                                <name>log4j.configuration</name>
+                                <value>${log4j.configuration}</value>
+                            </property>
+                        </systemproperties>
+                        <commands>
+                            <runj/>
+                        </commands>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>script</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- Set up the version and dependencies of the antrun plugin. -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>${maven.antrun.plugin.version}</version>
+
+                    <dependencies>
+                        <!-- Required libs for running wscompile. -->
+                        <dependency>
+                            <groupId>jwsdp</groupId>
+                            <artifactId>jaxrpc-spi</artifactId>
+                            <version>jwsdp.2.0</version>
+                        </dependency>
+
+                        <dependency>
+                            <groupId>jwsdp</groupId>
+                            <artifactId>jaxrpc-impl</artifactId>
+                            <version>jwsdp.2.0</version>
+                        </dependency>
+
+                        <dependency>
+                            <groupId>jwsdp</groupId>
+                            <artifactId>jaxrpc-api</artifactId>
+                            <version>jwsdp.2.0</version>
+                        </dependency>
+
+                        <dependency>
+                            <groupId>jwsdp</groupId>
+                            <artifactId>xsdlib</artifactId>
+                            <version>jwsdp.2.0</version>
+                        </dependency>
+
+                        <dependency>
+                            <groupId>jwsdp</groupId>
+                            <artifactId>relaxngDatatype</artifactId>
+                            <version>jwsdp.2.0</version>
+                        </dependency>
+
+                        <!-- Required libs for running cactus tasks. -->
+                        <dependency>
+                            <groupId>org.apache.cactus</groupId>
+                            <artifactId>cactus.integration.ant</artifactId>
+                            <version>1.8.1</version>
+                        </dependency>
+
+                        <dependency>
+                            <groupId>org.apache.cactus</groupId>
+                            <artifactId>cactus.integration.shared.api</artifactId>
+                            <version>1.8.1</version>
+                        </dependency>
+
+                        <dependency>
+                            <groupId>org.apache.cactus</groupId>
+                            <artifactId>cactus.core.framework.uberjar.javaEE.15</artifactId>
+                            <version>1.8.1</version>
+                        </dependency>
+
+                        <dependency>
+                            <groupId>jaxen</groupId>
+                            <artifactId>jaxen</artifactId>
+                            <version>1.1.4</version>
+                        </dependency>
+
+                    </dependencies>
+                </plugin>
+
+                <!-- Configure idea plugin to exclude a standard set of directories under target. Prevents intellij scanning too much. -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-idea-plugin</artifactId>
+                    <version>${maven.idea.plugin.version}</version>
+                    <configuration>
+                        <jdkLevel>1.5</jdkLevel>
+                        <downloadSources>true</downloadSources>
+                        <downloadJavadocs>true</downloadJavadocs>
+                        <exclude>target/classes,target/site,target/maven-archiver,target/surefire-reports,target/test-classes,aima,amqp,catalogue,catalogue-ejb-test-war,catalogue-ejb-test,catalogue-maven-plugin,catalogue-web,catalogue-uploader,common,common-perftests,configurator,evemarkettool,index,index-ra,index-ra-client,index-ra-test-ejb,index-ra-test-war,index-ra-test,javasource,javasource-maven-plugin,jdbc-common,junit-toolkit,junit-toolkit-maven-plugin,locator,nio2,seda,sequence,servlet-security-demo,shopper,struts-tools,thecookerybook-backend,thecookerybook-web,thecookerybook-dev,thecookerybook-prod,theset-backend,theset-web,theset-dev,theset-prod,usermanager</exclude>
+                    </configuration>
+                </plugin>
+
+                <!-- Set up the war plugin version to use. -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${maven.war.plugin.version}</version>
+                </plugin>
+
+                <!-- Set up the javacc plugin version to use. -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>javacc-maven-plugin</artifactId>
+                    <version>${javacc.maven.plugin.version}</version>
+                </plugin>
+
+                <!-- Set up the build helper plugin version to use. -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>${maven.build.helper.plugin.version}</version>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+
+            <!-- Set up the columns to display in the dashboard report. -->
+            <plugin>
+                <groupId>com.xebia.mojo</groupId>
+                <artifactId>maven-dashboard-plugin</artifactId>
+                <version>${maven.dashboard.plugin.version}</version>
+                <configuration>
+                    <destinationFile>${project.reporting.outputDirectory}/maven-dashboard-report.html</destinationFile>
+                    <reports>
+                        <report>maven-surefire-report-plugin</report>
+                        <report>jacoco-maven-plugin</report>
+                        <report>maven-checkstyle-plugin</report>
+                        <report>maven-pmd-plugin</report>
+                        <report>findbugs-maven-plugin</report>
+                        <report>taglist-maven-plugin</report>
+                        <report>javancss-maven-plugin</report>
+                    </reports>
+                    <columns>
+                        <maven-surefire-report-plugin>tests,errors,failures,successrate</maven-surefire-report-plugin>
+                        <maven-checkstyle-plugin>errors,warnings</maven-checkstyle-plugin>
+                        <maven-pmd-plugin>violations</maven-pmd-plugin>
+                        <findbugs-maven-plugin>violations</findbugs-maven-plugin>
+                        <javancss-maven-plugin>classes,ncss</javancss-maven-plugin>
+                    </columns>
+                </configuration>
+            </plugin>
+
+            <!-- Set up standard locations for creating jboss configurations from. -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jboss-maven-plugin</artifactId>
+                <version>${jboss.maven.plugin.version}</version>
+                <configuration>
+                    <confDir>etc/jboss/conf</confDir>
+                    <deployDir>etc/jboss/deploy</deployDir>
+                    <jbossHome>${jboss.home}</jbossHome>
+                </configuration>
+            </plugin>
+
+            <!-- Set the version of the findbugs plugin to use. Later versions get fussy with modules with no source. -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${maven.findbugs.plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <!--
+                    <execution>
+                        <id>preclean</id>
+                        <phase>pre-clean</phase>
+                        <configuration>
+                            <tasks>
+                                <echo>Pre clean...</echo>
+                                <echo>Delete symlink and target directory on the ramdrive.</echo>
+
+                                <exec executable="${topdir}/clean_target_dir.sh">
+                                    <arg value="${basedir}"/>
+                                </exec>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>postclean</id>
+                        <phase>clean</phase>
+                        <configuration>
+                            <tasks>
+                                <echo>Post clean...</echo>
+                                <echo>Create target directory on the ramdrive and create symlink.</echo>
+
+                                <exec executable="${topdir}/create_target_dir.sh">
+                                    <arg value="${basedir}"/>
+                                </exec>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    -->
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.maven.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>pre-unit-test</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
+                            <propertyName>surefireArgLine</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.3</version>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+    <reporting>
+        <plugins>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${maven.findbugs.plugin.version}</version>
+                <configuration>
+                    <xmlOutput>true</xmlOutput>
+                    <threshold>Low</threshold>
+                    <effort>Min</effort>
+                    <visitors>FindDeadLocalStores,UnreadFields</visitors>
+                    <excludeFilterFile>${findbugs.exclude.file}</excludeFilterFile>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>${maven.pmd.plugin.version}</version>
+                <configuration>
+                    <linkXref>true</linkXref>
+                    <sourceEncoding>utf-8</sourceEncoding>
+                    <minimumTokens>50</minimumTokens>
+                    <targetJdk>1.5</targetJdk>
+                    <rulesets>
+                        <ruleset>${pmd.ruleset.file}</ruleset>
+                    </rulesets>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>pmd</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven.javadoc.plugin.version}</version>
+                <configuration>
+                    <tags>
+                        <tag>
+                            <name>todo</name>
+                            <placement>a</placement>
+                            <head>To do:</head>
+                        </tag>
+                    </tags>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven.checkstyle.plugin.version}</version>
+                <configuration>
+                    <configLocation>${checkstyle.config}</configLocation>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>${maven.jxr.plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>taglist-maven-plugin</artifactId>
+                <version>${taglist.maven.plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>${maven.surefire.report.plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>javancss-maven-plugin</artifactId>
+                <version>${javancss.maven.plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>com.xebia.mojo</groupId>
+                <artifactId>maven-dashboard-plugin</artifactId>
+                <version>${maven.dashboard.plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>simian-maven-plugin</artifactId>
+                <version>${simian.maven.plugin.version}</version>
+                <configuration>
+                    <ignoreCharacterCase>true</ignoreCharacterCase>
+                    <ignoreCurlyBraces>true</ignoreCurlyBraces>
+                    <ignoreIdentifierCase>true</ignoreIdentifierCase>
+                    <ignoreModifiers>true</ignoreModifiers>
+                    <ignoreStringCase>true</ignoreStringCase>
+                    <threshold>8</threshold>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </reporting>
+
+    <profiles>
+        <!-- Build profile to build quickly without running tests. -->
+        <profile>
+            <id>skip</id>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+            </properties>
+        </profile>
+
+        <!-- Build profile to ignore test failures. -->
+        <profile>
+            <id>ignore</id>
+            <properties>
+                <maven.test.failure.ignore>true</maven.test.failure.ignore>
+                <maven.test.error.ignore>true</maven.test.error.ignore>
+            </properties>
+        </profile>
+    </profiles>
+
+</project>

@@ -1,0 +1,16 @@
+<jboss-app>
+
+  <!-- An isolated loader is need so taht JAXB 2.0 is used instead of JAXB 1.0 integrated into JBoss. -->
+  <loader-repository> 
+    com.thesett:loader=catalogue-test-loader
+    <loader-repository-config> 
+      java2ParentDelegation=true
+    </loader-repository-config> 
+  </loader-repository>
+
+  <!-- This loads the index service. -->
+  <module>
+    <service>index-ra-ds.xml</service>
+  </module>
+
+</jboss-app>

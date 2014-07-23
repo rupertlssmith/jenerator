@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The Hypersonic embedded database JCA connection factory config -->
+
+<!-- $Id: hsqldb-ds.xml 63175 2007-05-21 16:26:06Z rrajesh $ -->
+
+<datasources>
+    <local-tx-datasource>
+
+        <jndi-name>MySqlDS</jndi-name>
+        <connection-url>jdbc:hsqldb:.</connection-url>
+        <driver-class>org.hsqldb.jdbcDriver</driver-class>
+        <user-name>sa</user-name>
+        <password></password>
+
+        <min-pool-size>5</min-pool-size>
+        <max-pool-size>20</max-pool-size>
+
+        <idle-timeout-minutes>0</idle-timeout-minutes>
+
+        <prepared-statement-cache-size>32</prepared-statement-cache-size>
+
+        <!-- corresponding type-mapping in the standardjbosscmp-jdbc.xml -->
+        <metadata>
+            <type-mapping>Hypersonic SQL</type-mapping>
+        </metadata>
+
+        <!-- When using in-process (standalone) mode -->
+        <depends>jboss:service=Hypersonic,database=localDB</depends>
+
+    </local-tx-datasource>
+
+    <!-- For hsqldb accessed from jboss only, in-process (standalone) mode -->
+    <mbean code="org.jboss.jdbc.HypersonicDatabase"
+           name="jboss:service=Hypersonic,database=localCatalogueDB">
+        <attribute name="Database">localDB</attribute>
+        <attribute name="InProcessMode">true</attribute>
+    </mbean>
+
+</datasources>

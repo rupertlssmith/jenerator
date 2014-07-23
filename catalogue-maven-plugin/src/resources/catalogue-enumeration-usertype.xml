@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<tl xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="C:\Documents and Settings\Rupert\projects\javasource\src\resources\tl.xsd"
+    xmlns:cat="http://thesett.com/catalogue-def-0.2"
+    xmlns:gen="http://thesett.com/source-code-generator-0.1">
+
+<var name="package" value="cat:CatalogueDefinition/cat:Package/@name"/>
+
+<for path="cat:CatalogueDefinition/cat:EnumerationDef">
+<compilationUnit package="$package" fileName="gen:toCamelCaseUpper(concat(string(@name), 'UserType.java'))">
+package <value path="$package"/>;
+
+import com.thesett.catalogue.customtypes.EnumeratedStringAttributeUserType;
+import com.thesett.aima.attribute.impl.EnumeratedStringAttribute;
+
+/**
+ * Generated user enumeration type from catalogue model.
+ */
+public class <value path="gen:toCamelCaseUpper(string(@name))"/>UserType extends EnumeratedStringAttributeUserType
+{
+    public String getTypeName()
+    {
+        return "<value path="@name"/>";
+    }
+}
+
+</compilationUnit>
+</for>
+</tl>

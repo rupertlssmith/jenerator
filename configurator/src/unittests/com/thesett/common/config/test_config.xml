@@ -1,0 +1,20 @@
+<configBeans xmlns="http://thesett.com/config-beans-0.1" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://thesett.com/config-beans-0.1 C:\DOCUME~1\Rupert\projects\configurator\src\resources\config-beans.xsd">
+                       
+    <jndiConfig>
+        <property name="java.naming.factory.initial" value="com.thesett.common.jndi.SimpleInitialContextFactory"/>
+    </jndiConfig>
+    
+    <beanSetup beanClassName="com.thesett.common.config.TestConfigBean" force="false">
+        <setUpProperty name="testInt" value="1"/>
+        <setUpProperty name="testByte" value="1"/>
+        <setUpProperty name="testChar" value="a"/>
+        <setUpProperty name="testLong" value="128000000000"/>
+        <setUpProperty name="testBoolean" value="true"/>
+        <setUpProperty name="testFloat" value="1.23456789"/>
+        <setUpProperty name="testDouble" value="1.23456789123456789123456789"/>
+        <setUpProperty name="testString" value="Test"/>
+    </beanSetup>
+    
+</configBeans>

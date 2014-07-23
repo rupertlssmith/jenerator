@@ -1,0 +1,19 @@
+<configBeans xmlns="http://thesett.com/config-beans-0.1"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://thesett.com/config-beans-0.1 configurator/src/resources/config-beans.xsd">
+
+  <jndiConfig>
+    <property name="java.naming.factory.initial" value="com.thesett.common.jndi.SimpleInitialContextFactory"/>
+  </jndiConfig>
+
+  <!-- Set up the Log4J config bean to use the local config file for the utility. -->
+  <beanSetup beanClassName="com.thesett.common.config.beans.Log4JConfigBean" force="false">
+    <setUpProperty name="resourceName" value="checker-log4j.xml"/>
+  </beanSetup>
+
+  <!-- Set up the loader config bean with no model file to load. The file to load must be filled in. -->
+  <beanSetup beanClassName="com.thesett.catalogue.config.ModelLoaderConfigBean">
+    <setUpProperty name="modelResource" value=""/>
+  </beanSetup>
+
+</configBeans>

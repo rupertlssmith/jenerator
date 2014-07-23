@@ -1,0 +1,13 @@
+<project default="dist"
+         xmlns:m="jelly:maven">
+
+  <!-- Runs the source code from schema generator prior to compilation. -->
+  <preGoal name="java:compile">
+    <attainGoal name="jaxb:generate"/>
+  </preGoal>
+
+  <goal name="dist">
+    <attainGoal name="jar:install"/>
+  </goal>
+
+</project>

@@ -1,0 +1,95 @@
+/*
+ * Hibernate is an implementation of the Generator interface, that creates a Hibernate user types for
+ * types in a catalogue model that require custom user types.
+ */
+group HibernateUserType : JavaCommon implements Generator;
+
+/*
+ * Creates the opening section of an output file, if one is required.
+ */
+file_open(catalogue) ::= <<
+file_open
+>>
+
+/*
+ * Generates the output for a bean in the specified catalogue.
+ */
+for_bean(catalogue, decorator, fields, extraFields) ::= <<
+<if(decorator.hierarchyType)>
+<hibernate_hierarchy_usertype(catalogue=catalogue, name=decorator.name, fields=extraFields)>
+<endif>
+<if(decorator.enumerationType)>
+<hibernate_enumeration_usertype(catalogue=catalogue, name=decorator.name)>
+<endif>
+>>
+
+/*
+ * Creates the closing section of an output file, if one is required.
+ */
+file_close() ::= <<
+file_close
+>>
+
+/*
+ * Creates a Hibernate user type, to map a hierarchy as a composite bean type.
+ */
+hibernate_hierarchy_usertype(catalogue, name, fields) ::= <<
+<hibernate_usertype(catalogue=catalogue, name=name, baseClass="HierarchyAttributeCompositeUserType", extraMethods="hibernate_hierarchy_setup_methods", extraMethodsFields=fields)>
+>>
+
+/*
+ * Creates a Hibernate user type, to map an enumeration as a single column bean type.
+ */
+hibernate_enumeration_usertype(catalogue, name) ::= <<
+<hibernate_usertype(catalogue=catalogue, name=name, baseClass="EnumeratedStringAttributeUserType")>
+>>
+
+/*
+ * Creates a custom hibernate mapping type.
+ */
+hibernate_usertype(catalogue, name, baseClass, extraMethods, extraMethodsFields) ::= <<
+<package(catalogue)>
+
+import com.thesett.catalogue.customtypes.*;
+import com.thesett.aima.attribute.impl.*;
+
+/**
+ * Generated custom hibernate type from catalogue model.
+ *
+ * @author Generated Code
+ */
+public class <name; format="ccu">UserType extends <baseClass>
+{
+    <if(extraMethods)>
+    <(extraMethods)(name=name, fields=extraMethodsFields)>
+
+    <endif>
+    /** {@inheritDoc} */
+    public String getTypeName()
+    {
+        return "<name>";
+    }
+}
+>>
+
+/*
+ * Creates extra methods for Hibernate hierarchy custom types, to ensure hierarchy level names are set up.
+ */
+hibernate_hierarchy_setup_methods(name, fields) ::= <<
+/** {@inheritDoc} */
+public String[] getPropertyNames()
+{
+    // Ensure that the hierarchy attribute type has been set up with its level names.
+    HierarchyAttribute.getFactoryForClass(getTypeName()).setLevelNames(new String[] { <fields.keys: {"<it>"}; separator=", "> });
+
+    return super.getPropertyNames();
+}
+
+/** {@inheritDoc} */
+public int getColumnCount()
+{
+    return (new String[] { <fields.keys: {"<it>"}; separator=", "> }).length;
+}
+
+>>
+

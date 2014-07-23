@@ -1,0 +1,186 @@
+<!--
+ First cut of the catalogue schema. Persistence mapping and warehousing sections may be split of into seperate schemas
+ for modularity and re-use or concurrent use of multiple definitions.
+
+ Will be parsed into beans using the beanery. Code responsible for checking attribute definitions, hierarch definitions,
+ sub-typing defs, all atts/hierachies of dimensions are defined, conformed dimensions are legal, relationships are 
+ legal and possible.
+
+ Can this be automatically cast into a hibernate xml, entity/session beans, jdo, or used by a generic entity/session bean
+ with generic BMP? Delegate choice to persistence layer. Simple answer is yes. So long as outside callers see this as
+ an interface, passing data transfer objects (simple beans), with a call to the service locator to acquire an instance
+ of the service the underlying implementation is irrelevant to the caller. I'm thinking that a Hibernate implementation
+ for persistence running under a session bean implementation of the service layer will be the first target to code. 
+ Hibernate will be a good choice because it basically provides everything that is needed already and so makes hand
+ coding of the BMP entity bean seem like doing unnecessary work. Provide generic session interface already defined, do
+ a little boiler plate code generation to add methods for specific dimension types to it so that statically typed
+ code can be used. Some work needs to be done to extract/isolate the code generation portion of the beanery for this.
+
+ Bean definitions on top of dimensions for reading/writing in chunks to be added. Default is the full dimension as a bean.
+ Should only generic beans be used or generate code for full beans with casting methods to generic beans. Should generic
+ beans not be used at all?
+ -->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:cat="http://thesett.com/catalogue/firstcut"
+           targetNamespace="http://thesett.com/catalogue/firstcut"
+           elementFormDefault="qualified">
+
+ <!-- The root element of the document, the purpose is to define a catalogue so the name is derived from this. -->
+ <xs:element name="CatalogueDefinition">
+ </xs:element>
+
+<!-- Type definitions. Attribute definitions and Hierarchy definitions. -->
+<!-- Attribute definitions. Type class, options specific to type. Enumeration, text, integer, boolean, float, real, 
+     big integer, bounded or semi-bounded range of integer or real. -->
+<!-- Sub-classed attribute definition, parent type, sub-classing options specific to type. -->
+<!-- Hierarchy definitions. Hierarchy type class, enumerate full structure of hierarchy tree. -->
+<!-- Shortened hierarchy definitions, parent hierarchy, shorten-to level. -->
+
+ <!-- An example of what it might look like: -->
+ <TypeDefinitions>
+  <EnumerationDef name="animals">
+   <EnumValue value="cat"/>
+   <EnumValue value="dog"/>
+   <EnumValue value="cow"/>
+  </EnumerationDef>
+
+  <HierarchyDef name="vehicles">
+   <Node label="all">
+    <Node label="lorries">
+     <Leaf label="articulated">
+     <Leaf label="transporter">
+    </Node>
+    <Node label="cars">
+     <Leaf label="saloon">
+     <Leaf label="hatchback">
+     <Leaf label="estate">
+    </Node>
+   </Node>
+  </HierarchyDef>
+
+  <ShortenedHierarchy name="vehicles_summary" derivedFrom="vehicles" toLevel="1"/>
+ </TypeDefinitions>
+ <!-- --------------- -->
+  
+ <xs:complexType name="TypeDefinitions">
+  <xs:choice>
+   <xs:element name="AttributeDef" type="cat:AttributeDef" minOccurs="0" maxOccurs="unbounded"/>
+   <xs:element name="HierarchyDef" type="cat:HierarchyDef" minOccurs="0" maxOccurs="unbounded"/>
+  </xs:sequence>
+ </xs:complexType>
+
+ <xs:complexType name="AttributeDef">
+  <xs:attribute name="name" type="xs:string"/>
+  <xs:attribute name="type" type="xs:string"/>
+ </xs:complexType>
+
+ <xs:complexType name="HierarchyDef">
+  <xs:attribute name="name" type="xs:string"/>
+  <xs:sequence>
+   <xs:element name="Tree" type="cat:Tree" minOccurs="1" maxOccurs="1"/>
+  <xs:sequence>
+ </xs:complexType>
+
+ <xs:complexType name="Tree">
+  <xs:attribute label="name" type="xs:string"/>
+  <xs:sequence>
+   <xs:element name="Tree" type="cat:Tree" minOccurs="0" maxOccurs="unbounded"/>
+  <xs:sequence>
+ </xs:complexType>
+
+<!-- Dimension definitions. Names of attributes and hierarchies. -->
+<!-- Name. Attribute/name. Hierarchy/name. -->
+
+  <!-- An example of what it might look like: -->
+  <Dimension name="vehicle">
+    <Hierarchy name="type" type="vehicles"/>
+    <FloatAttribute name="weight"/>
+    <IntAttribute name="num_wheels"/>
+  </Dimension>
+
+  <Dimension name="animal">
+    <Attribute name="species" type="animals"/>
+    <FloatAttribute name="weight"/>
+    <IntAttribute name="num_legs"/>
+  </Dimension>
+  <!-- ----------- -->
+
+ <xs:complexType name="Dimensions">
+  <xs:sequence>
+   <xs:element name="Dimension" type="cat:Dimension" minOccurs="1" maxOccurs="unbounded"/>
+  </xs:sequence>
+ </xs:complexType>
+
+ <xs:complexType name="Dimension">
+  <xs:sequence>
+   <xs:element name="Attribue" type="cat:Attribute" minOccurs="0" maxOccurs="unbounded"/>
+   <xs:element name="Hierarchy" type="cat:Hierarchy" minOccurs="0" maxOccurs="unbounded"/>
+  </xs:sequence>
+ </xs:complexType>
+
+ <xs:complexType name="Attribute">
+  <xs:attribute name="name" type="xs:string"/>
+  <xs:attribute name="type" type="xs:string"/>
+ </xs:complexType>
+
+ <xs:complexType name="Hierarchy">
+  <xs:attribute name="name" type="xs:string"/>
+  <xs:attribute name="type" type="xs:string"/>
+ </xs:complexType>
+
+<!-- Conformed dimensions. Names of attributes and hierarchies and dimensions conformant with. An instance of a 
+     conformed dimension element can always be extracted from any of its parent dimensions to which it conforms. -->
+<!-- Name. Conforms with names. Attribute/name. Hierarchy/name. -->
+
+<!-- Relationship definitions, or should these be seperate? Dimension related to, name of relationship, cardinality and
+     access directions required, ordered/unordered, set/bag. -->
+
+<!-- Persistence -->
+<!-- Persistence mapping. Maybe this will go in a seperate schema? -->
+<!-- Online database. Normalisation options. Table names to override defaults. Attribute/hierarchy field/table names 
+     to override defaults. -->
+<!-- Offline warehousing database. Denormalisation options if any. Table names to override defaults. Attribute/hierarchy
+     field/table names to override defaults. -->
+
+<!-- Warehousing -->
+<!-- Fact table definitions. These correspond to events. There will almost certainly need to be user filled in
+     values to create the fact table rows. Denormalisation by extraction of numeric or enumerated values from
+     dimension elements may be common. -->
+<!-- Attribute/name. -->
+<!-- Observation - Either automated exctraction formula/derived observation or stub for user supplied value. -->
+
+  <!-- An example of what it might look like: -->
+  <FactTable name="road_kills">
+    <DateAttribute name="date">
+      <AutoCurrentDate>
+    </DateAttribue>
+
+    <TimeAttribute name="time_of_day">
+      <AutoCurrentTime>
+    </TimeAttribute>
+
+    <LinkedDimension name="animal"/>
+    <LinkedDimension name="vehicle"/>
+
+    <Fact name="ratio_of_wheels_to_legs">
+      <Formula formula="vehicle.num_wheels / animal.num_legs"/>
+    </Fact>
+
+  </FactTable>
+  <!-- -------------- -->
+
+<!-- Warehousing defintions. Once events have been created any user supplied values should have been filled in.
+     Loading into the warehouse should be relatively straight forward; load from normalised db, store in denormalized
+     star schema db. Hopefully both forms can be expressed to Hibernate... -->
+<!-- Schedule, fact table, dimensions. -->
+
+  <!-- An example of what it might look like: -->
+  <Schedule>
+    <FactTable name="road_kills"/>
+    <Interval interval="daily"/>
+    <Time time="00:00"/>
+  </Schedule>
+  <!-- -------------- -->
+
+</xs:schema>

@@ -1,0 +1,119 @@
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by Rupert Smith (Liberty Bishop 1151 Ltd.) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:is="http://thesett.com/index-setup-0.1" targetNamespace="http://thesett.com/index-setup-0.1" elementFormDefault="qualified">
+    <!-- 
+     An index configuration consists of named stop words and synonyms definitions and index configurations. The 
+     named stop words and synonyms definitions can be re-used in multiple index configurations.
+     -->
+    <xs:element name="index-configurations">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="stop-words-def" type="is:stop-words-type" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="synonyms-def" type="is:synonyms-type" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="index-configuration" type="is:index-configuration-type" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <!-- 
+     An index configuration consists of stop words and synonyms definitions or references to named definitions, plus
+     a set of class mappings.
+     -->
+    <xs:complexType name="index-configuration-type">
+        <xs:sequence>
+            <xs:element name="key-base-class" type="is:class-type"/>
+            <xs:element name="record-base-class" type="is:class-type"/>
+            <xs:element name="summary-base-class" type="is:class-type"/>
+            <xs:element name="mapping" type="is:mapping-type" maxOccurs="unbounded"/>
+            <xs:element name="stop-words" type="is:stop-words-base-type" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="synonyms" type="is:synonyms-base-type" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="stop-words-ref" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:attribute name="ref-name" type="xs:string" use="required"/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="synonyms-ref" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:attribute name="ref-name" type="xs:string" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+    <!-- 
+     A class mapping consists of a record class and a summary record class definition, where the fields to extract and
+     index are specified. Multiple fields can be specified for the record class and a single field for the records rating 
+     must be specified on the summary record class.
+     -->
+    <xs:complexType name="mapping-type">
+        <xs:sequence>
+            <xs:element name="record-class">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="field" type="is:field-type" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                    <xs:attribute name="name" type="xs:string" use="required"/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="summary-class">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="rating-field" type="is:field-type"/>
+                    </xs:sequence>
+                    <xs:attribute name="name" type="xs:string" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- A field is simply the name of a field (accessed by a getter method) on a Java bean. -->
+    <xs:complexType name="field-type">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+    <!--
+     The stop words base type can specify a file name to load the words from or just list them in the element body. 
+     -->
+    <xs:complexType name="stop-words-base-type">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="file" type="xs:string" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <!--
+     A synonyms base type can specify a file name to load the synonyms from or just list them in the element body.
+     The reverse-map attribute can be set to true if all synonyms listed on a line are to be mapped to each other. When
+     set to false only the synonym at the start of the line is mapped by those that follow.
+     -->
+    <xs:complexType name="synonyms-base-type">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="file" type="xs:string" use="optional"/>
+                <xs:attribute name="reverse-map" type="xs:boolean" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <!--
+     The stop words type is the same as the base type but also specifies a reference name to which index configurations 
+     may refer.
+     -->
+    <xs:complexType name="stop-words-type">
+        <xs:simpleContent>
+            <xs:extension base="is:stop-words-base-type">
+                <xs:attribute name="ref-name" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <!--
+     The synonyms type is the same as the base type but also specified a reference name to which index configurations 
+     may refer.
+     -->
+    <xs:complexType name="synonyms-type">
+        <xs:simpleContent>
+            <xs:extension base="is:synonyms-base-type">
+                <xs:attribute name="ref-name" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <!--Used to specify a Java class by name.-->
+    <xs:complexType name="class-type">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+</xs:schema>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project>
+  <extend>${basedir}/../mavenbuild/project.xml</extend>
+  <name>catalogue-maven-plugin</name>
+  <id>catalogue-maven-plugin</id>
+  <currentVersion>0.3</currentVersion>
+  <shortDescription>Maven Plugin for The Catalogue Model Generation</shortDescription>
+  <description>Plugin to run model generation from catalogue definitions.</description>
+  <repository>
+    <connection>scm:${scm.setup}/projects/catalogue-maven-plugin</connection>
+  </repository>
+
+  <versions>
+    <version>
+      <id>0.1</id>
+      <name>0.1</name>
+      <tag>RELEASE_0_1</tag>
+    </version>
+    <version>
+      <id>0.2</id>
+      <name>0.2</name>
+      <tag>RELEASE_0_2</tag>
+    </version>
+  </versions>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>thebadgerset</groupId>
+      <artifactId>common</artifactId>
+      <version>0.3</version>
+    </dependency>
+
+    <dependency>
+      <groupId>thebadgerset</groupId>
+      <artifactId>javasource-maven-plugin</artifactId>
+      <version>0.3</version>
+      <type>plugin</type>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+
+    <!-- Plugin .jar resources. -->
+    <resources>
+      <resource>
+        <directory>${basedir}/src/plugin</directory>
+        <includes>
+          <include>**</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>${basedir}</directory>
+        <includes>
+          <include>project.xml</include>
+          <include>project.properties</include>
+        </includes>
+      </resource>
+    </resources>
+  </build>
+
+</project>

@@ -1,0 +1,9 @@
+<project default="dist">
+
+  <goal name="dist">
+    <attainGoal name="plugin:repository-install"/>
+    <attainGoal name="plugin:uninstall"/>
+    <attainGoal name="plugin:install-now"/>
+  </goal>
+
+</project>

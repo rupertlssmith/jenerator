@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<tl xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="C:\Documents and Settings\Rupert\projects\javasource\src\resources\tl.xsd"
+    xmlns:cat="http://thesett.com/catalogue-def-0.2"
+    xmlns:gen="http://thesett.com/source-code-generator-0.1">
+
+<var name="package" value="cat:CatalogueDefinition/cat:Package/@name"/>
+
+<for path="cat:CatalogueDefinition/cat:ViewDef">
+<compilationUnit package="$package" fileName="gen:toCamelCaseUpper(concat(string(@name), '.java'))">
+package <value path="$package"/>;
+
+import java.util.Date;
+import java.io.Serializable;
+
+import org.apache.log4j.Logger;
+
+import com.thesett.aima.state.ComponentType;
+import com.thesett.aima.state.OrdinalAttribute;
+import com.thesett.aima.attribute.impl.HierarchyAttribute;
+import com.thesett.aima.attribute.impl.EnumeratedStringAttribute;
+import com.thesett.catalogue.interfaces.*;
+import com.thesett.catalogue.core.*;
+import com.thesett.common.error.NotImplementedException;
+
+/**
+ * Generated view interface from catalogue model.
+ */
+public interface <value path="gen:toCamelCaseUpper(string(@name))"/> extends ViewInstance
+{
+    Long getId();
+    void setId(Long id);
+
+    <for path="cat:Integer">
+    public int get<value path="gen:toCamelCaseUpper(string(@name))"/>();
+
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(int <value path="gen:toCamelCase(string(@name))"/>);
+    </for>
+
+    <for path="cat:Real">
+    public float get<value path="gen:toCamelCaseUpper(string(@name))"/>();
+
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(float <value path="gen:toCamelCase(string(@name))"/>);
+    </for>
+
+    <for path="cat:String">
+    public String get<value path="gen:toCamelCaseUpper(string(@name))"/>();
+
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(String <value path="gen:toCamelCase(string(@name))"/>);
+    </for>
+
+    <for path="cat:Date">
+    public Date get<value path="gen:toCamelCaseUpper(string(@name))"/>();
+
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(Date <value path="gen:toCamelCase(string(@name))"/>);
+    </for>
+
+    <for path="cat:Time">
+    public long get<value path="gen:toCamelCaseUpper(string(@name))"/>();
+
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(long <value path="gen:toCamelCase(string(@name))"/>);
+    </for>
+
+    <for path="cat:Enumeration">
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(EnumeratedStringAttribute <value path="gen:toCamelCase(string(@name))"/>);
+    </for>
+
+    <for path="cat:Hierarchy">
+    public <value path="gen:toCamelCaseUpper(string(@type))"/> get<value path="gen:toCamelCaseUpper(string(@name))"/>();
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(HierarchyAttribute <value path="gen:toCamelCase(string(@name))"/>);
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(<value path="gen:toCamelCaseUpper(concat(string(@type), ' '))"/> <value path="gen:toCamelCase(string(@name))"/>);
+
+    </for>
+
+    <for path="cat:Component">
+    public <value path="gen:toCamelCaseUpper(string(@type))"/> get<value path="gen:toCamelCaseUpper(string(@name))"/>();
+
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(<value path="gen:toCamelCaseUpper(concat(string(@type), ' '))"/> <value path="gen:toCamelCase(string(@name))"/>);
+    </for>
+}
+
+</compilationUnit>
+</for>
+</tl>

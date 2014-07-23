@@ -1,0 +1,167 @@
+<!-- Defines the content catalogue for The Set website. -->
+<CatalogueDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                     xsi:schemaLocation="http://thesett.com/catalogue-def-0.2 catalogue-def.xsd"
+                     xmlns="http://thesett.com/catalogue-def-0.2">
+
+  <!-- This is the main menu hierarchy for the entire site. -->
+  <HierarchyDef name="theset_content">
+    <Level name="top">
+      <Level name="main">
+        <Level name="secondary"/>
+      </Level>
+    </Level>
+        
+    <HierarchyLabel name="all" label="">
+      <HierarchyLabel name="products" label="products"/>
+      <HierarchyLabel name="services" label="services"/>
+      <HierarchyLabel name="articles" label="articles">
+        <HierarchyLabel name="java" label="java programming"/>
+      </HierarchyLabel>
+      <HierarchyLabel name="news" label="news"/>
+      <HierarchyLabel name="about" label="about"/>
+    </HierarchyLabel>
+  </HierarchyDef>
+
+  <!-- 
+   Defines a general dimension for less structured web page content, the services and about pages will be part of this
+   dimension.
+   -->
+  <Dimension name="general">
+
+    <StringAttribute name="content_type" value="general"/>
+    <StringAttribute name="name"/>
+    <StringAttribute name="title"/>
+    <StringAttribute name="short_description"/>
+    <IntAttribute    name="hits"/>
+    <Hierarchy       name="content_category" typeref="theset_content"/>
+    <StringAttribute name="body"/>
+
+  </Dimension>
+
+  <!-- Defines the dimension for products. -->
+  <Dimension name="product">
+
+    <StringAttribute name="content_type" value="product"/>
+    <StringAttribute name="name"/>
+    <StringAttribute name="title"/>
+    <StringAttribute name="short_description"/>
+    <IntAttribute    name="hits"/>
+    <Hierarchy       name="content_category" typeref="theset_content"/>
+    <DateAttribute   name="last_released"/>
+    <StringAttribute name="version"/>
+
+  </Dimension>
+
+  <!-- Defines the dimension for articles. -->
+  <Dimension name="article">
+
+    <StringAttribute name="content_type" value="article"/>
+    <StringAttribute name="name"/>
+    <StringAttribute name="title"/>
+    <StringAttribute name="short_description"/>
+    <IntAttribute    name="hits"/>
+    <Hierarchy       name="content_category" typeref="theset_content"/>
+    <StringAttribute name="body"/>
+
+  </Dimension>
+
+  <!-- Defines the dimension for news. -->
+  <Dimension name="news">
+
+    <StringAttribute name="content_type" value="news"/>
+    <StringAttribute name="name"/>
+    <StringAttribute name="title"/>
+    <StringAttribute name="short_description"/>
+    <IntAttribute    name="hits"/>
+    <Hierarchy       name="content_category" typeref="theset_content"/>
+    <StringAttribute name="body"/>
+    <DateAttribute   name="date"/>
+
+  </Dimension>
+        
+  <!-- Defines a single conformed dimension for the common denominator attributes of all content types. -->
+  <ConformedDimension name="all_content">
+
+    <StringAttribute name="content_type"/>
+    <StringAttribute name="name"/>
+    <StringAttribute name="title"/>
+    <StringAttribute name="short_description"/>
+    <IntAttribute    name="hits"/>
+    <Hierarchy       name="content_category" typeref="theset_content"/>
+
+    <ConformsWith dimension="general"/>
+    <ConformsWith dimension="product"/>
+    <ConformsWith dimension="article"/>
+    <ConformsWith dimension="news"/>
+
+  </ConformedDimension>
+
+  <!-- Defines the referral dimension that describes where a page was linked from. -->
+  <Dimension name="referral">
+  
+    <StringAttribute name="referral_type"/> <!-- Itra Site, Remote Site, Search Engine, Corrupted, Inaplicable. -->
+    <StringAttribute name="referring_url"/>
+    <StringAttribute name="referring_site"/>
+    <StringAttribute name="referring_domain"/>
+        
+  </Dimension>
+
+  <!-- Defines the session dimension that groups all interactions under a session. -->
+  <Dimension name="session">
+  </Dimension>
+
+  <!-- 
+   Defines a content based search engine for the content of the entire site. Indexing for each of the dimension types
+   is defined.
+   -->
+  <Index name="search_all" type="proto_index">
+
+    <IndexedDimension name="general">
+      <IndexBy attribute="title"/>
+      <IndexBy attribute="body"/>
+      <Summary attribute="name"/>
+      <Summary attribute="short_decription"/>
+    </IndexedDimension>
+
+    <IndexedDimension name="product">
+      <IndexBy attribute="title"/>
+      <IndexBy attribute="short_description"/>
+      <Summary attribute="name"/>
+      <Summary attribute="content_type"/>
+      <Summary attribute="short_decription"/>
+    </IndexedDimension>
+
+    <IndexedDimension name="article">
+      <IndexBy attribute="title"/>
+      <IndexBy attribute="body"/>
+      <Summary attribute="name"/>
+      <Summary attribute="content_type"/>
+      <Summary attribute="short_decription"/>
+    </IndexedDimension>
+
+    <IndexedDimension name="news">
+      <IndexBy attribute="title"/>
+      <IndexBy attribute="short_description"/>
+      <IndexBy attribute="body"/>
+      <Summary attribute="name"/>
+      <Summary attribute="content_type"/>
+      <Summary attribute="short_decription"/>
+    </IndexedDimension>
+
+  </Index>
+
+  <!-- Defines a page event fact table for recording cumulative page hits on site content. -->
+  <FactTable name="page_events">
+
+    <IntAttribute name="cumulative_hits" formula="all_content.hits"/> 
+
+    <DateDimension name="date" auto="true"/>
+    <TimeOfDayDimension name="time" auto="true"/>
+
+    <LinkedDimension ref_name="all_content"/>
+    <LinkedDimension ref_name="referral"/>
+    <LinkedDimension ref_name="session"/>
+
+  </FactTable>
+
+</CatalogueDefinition>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by Rupert Smith (Liberty Bishop 1151 Ltd.) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <!--Schema for the code generation template language (tl).-->
+    <xs:element name="tl">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:element ref="tlroot" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="tlroot" type="tlrootType" abstract="true"/>
+    <xs:complexType name="tlrootType" mixed="true">
+        <xs:sequence>
+            <xs:element ref="tlroot" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="for" type="forType" substitutionGroup="tlroot"/>
+    <xs:complexType name="forType">
+        <xs:complexContent>
+            <xs:extension base="tlrootType">
+                <xs:attribute name="path" type="xs:string"/>
+                <xs:attribute name="var" type="xs:string"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="if" type="ifType" substitutionGroup="tlroot"/>
+    <xs:complexType name="ifType">
+        <xs:complexContent>
+            <xs:extension base="tlrootType">
+                <xs:attribute name="path" type="xs:string"/>
+                <xs:attribute name="whitespace" type="xs:string"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="java" type="javaType" substitutionGroup="tlroot"/>
+    <xs:complexType name="javaType">
+        <xs:complexContent>
+            <xs:extension base="tlrootType"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="declarations" type="declarationsType" substitutionGroup="tlroot"/>
+    <xs:complexType name="declarationsType">
+        <xs:complexContent>
+            <xs:extension base="tlrootType"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="expr" type="exprType" substitutionGroup="tlroot"/>
+    <xs:complexType name="exprType">
+        <xs:complexContent>
+            <xs:extension base="tlrootType"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="value" type="valueType" substitutionGroup="tlroot"/>
+    <xs:complexType name="valueType">
+        <xs:complexContent>
+            <xs:extension base="tlrootType">
+                <xs:attribute name="path" type="xs:string"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="empty" type="emptyType" substitutionGroup="tlroot"/>
+    <xs:complexType name="emptyType">
+        <xs:complexContent>
+            <xs:extension base="tlrootType"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="compilationUnit" type="compilationUnitType" substitutionGroup="tlroot"/>
+    <xs:complexType name="compilationUnitType">
+        <xs:complexContent>
+            <xs:extension base="tlrootType">
+                <xs:attribute name="package" type="xs:string" use="required"/>
+                <xs:attribute name="fileName" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="var" type="varType" substitutionGroup="tlroot"/>
+    <xs:complexType name="varType">
+        <xs:complexContent>
+            <xs:extension base="tlrootType">
+                <xs:attribute name="name" type="xs:string" use="required"/>
+                <xs:attribute name="value" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

@@ -1,0 +1,28 @@
+/*
+ * Hibernate is an implementation of the Generator interface, that creates a Hibernate configuration for
+ * types in a catalogue model that should be persisted.
+ */
+group HibernateOnline : HibernateCommon implements Generator;
+
+/*
+ * Creates the opening section of an output file, if one is required.
+ */
+file_open(catalogue) ::= <<
+<hibernate_config_open(catalogue=catalogue)>
+>>
+
+/*
+ * Generates the output for a bean in the specified catalogue.
+ */
+for_bean(catalogue, decorator, fields, extraFields) ::= <<
+<if(decorator.dimension)>
+<hibernate_config_class_warehouse(catalogue=catalogue, name=decorator.name, fields=fields)>
+<endif>
+>>
+
+/*
+ * Creates the closing section of an output file, if one is required.
+ */
+file_close() ::= <<
+<hibernate_config_close()>
+>>

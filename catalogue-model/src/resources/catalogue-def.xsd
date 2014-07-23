@@ -1,0 +1,472 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           xmlns:cat="http://thesett.com/catalogue-def-0.2" 
+           targetNamespace="http://thesett.com/catalogue-def-0.2" 
+           elementFormDefault="qualified">
+
+    <xs:element name="CatalogueDefinition">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="cat:Catalogue"/>
+                <xs:element ref="cat:Package"/>
+                <xs:element ref="cat:TypeDef" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="cat:Index" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+        <xs:unique name="TypeDefName">
+            <xs:selector xpath="cat:Decimal|cat:IntegerRange|cat:RealRange|cat:StringPattern|cat:DateRange|cat:TimeRange|cat:EnumerationDef|cat:HierarchyDef|cat:ComponentDef|cat:EntityDef|cat:DimensionDef|cat:FactDef|cat:ViewDef"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+        <xs:key name="DecimalTypeDef">
+            <xs:selector xpath="cat:Decimal"/>
+            <xs:field xpath="@name"/>
+        </xs:key>
+        <xs:key name="IntegerTypeDef">
+            <xs:selector xpath="cat:IntegerRange"/>
+            <xs:field xpath="@name"/>
+        </xs:key>
+        <xs:key name="RealTypeDef">
+            <xs:selector xpath="cat:RealRange"/>
+            <xs:field xpath="@name"/>
+        </xs:key>
+        <xs:key name="StringTypeDef">
+            <xs:selector xpath="cat:StringPattern"/>
+            <xs:field xpath="@name"/>
+        </xs:key>
+        <xs:key name="DateTypeDef">
+            <xs:selector xpath="cat:DateRange"/>
+            <xs:field xpath="@name"/>
+        </xs:key>
+        <xs:key name="TimeTypeDef">
+            <xs:selector xpath="cat:TimeRange"/>
+            <xs:field xpath="@name"/>
+        </xs:key>
+        <xs:key name="EnumerationTypeDef">
+            <xs:selector xpath="cat:EnumerationDef"/>
+            <xs:field xpath="@name"/>
+        </xs:key>
+        <xs:key name="HierarchyTypeDef">
+            <xs:selector xpath="cat:HierarchyDef"/>
+            <xs:field xpath="@name"/>
+        </xs:key>
+        <xs:keyref name="IntegerTypeRef" refer="cat:IntegerTypeDef">
+            <xs:selector xpath="*/cat:Integer"/>
+            <xs:field xpath="@type"/>
+        </xs:keyref>
+        <xs:keyref name="RealTypeRef" refer="cat:RealTypeDef">
+            <xs:selector xpath="*/cat:Real"/>
+            <xs:field xpath="@type"/>
+        </xs:keyref>
+        <xs:keyref name="StringTypeRef" refer="cat:StringTypeDef">
+            <xs:selector xpath="*/cat:String"/>
+            <xs:field xpath="@type"/>
+        </xs:keyref>
+        <xs:keyref name="DateTypeRef" refer="cat:DateTypeDef">
+            <xs:selector xpath="*/cat:Date"/>
+            <xs:field xpath="@type"/>
+        </xs:keyref>
+        <xs:keyref name="TimeTypeRef" refer="cat:TimeTypeDef">
+            <xs:selector xpath="*/cat:Time"/>
+            <xs:field xpath="@type"/>
+        </xs:keyref>
+        <xs:keyref name="EnumerationTypeRef" refer="cat:EnumerationTypeDef">
+            <xs:selector xpath="*/cat:Enumeration"/>
+            <xs:field xpath="@type"/>
+        </xs:keyref>
+        <xs:keyref name="HierarchyTypeRef" refer="cat:HierarchyTypeDef">
+            <xs:selector xpath="*/cat:Hierarchy"/>
+            <xs:field xpath="@type"/>
+        </xs:keyref>
+        <xs:key name="ViewTypeDef">
+            <xs:selector xpath="cat:ViewDef"/>
+            <xs:field xpath="@name"/>
+        </xs:key>
+        <xs:key name="ComponentTypeDef">
+            <xs:selector xpath="cat:ComponentDef|cat:DimensionDef|cat:EntityDef|cat:ViewDef"/>
+            <xs:field xpath="@name"/>
+        </xs:key>
+        <xs:keyref name="ViewTypeRef" refer="cat:ViewTypeDef">
+            <xs:selector xpath="*/cat:View"/>
+            <xs:field xpath="@type"/>
+        </xs:keyref>
+        <xs:keyref name="ComponentTypeRef" refer="cat:ComponentTypeDef">
+            <xs:selector xpath="*/cat:Component"/>
+            <xs:field xpath="@type"/>
+        </xs:keyref>
+        <xs:unique name="IndexUnique">
+            <xs:selector xpath="cat:Index"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+        <xs:keyref name="IndexedDimensionRef" refer="cat:ComponentTypeDef">
+            <xs:selector xpath="*/cat:IndexedComponent"/>
+            <xs:field xpath="@type"/>
+        </xs:keyref>
+        <xs:keyref name="SummaryViewRef" refer="cat:ViewTypeDef">
+            <xs:selector xpath="*/cat:SummaryView"/>
+            <xs:field xpath="@type"/>
+        </xs:keyref>
+    </xs:element>
+    <!--The catalogue name and the Java package it maps to.-->
+    <xs:element name="Catalogue">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Package">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <!--The root type of the catalogue. The catalogue knowledge level defines types.-->
+    <xs:complexType name="TypeDefType">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+    <!--The restriction types.-->
+    <xs:complexType name="DecimalType">
+        <xs:complexContent>
+            <xs:extension base="cat:TypeDefType">
+                <xs:attribute name="precision" type="xs:string" use="optional"/>
+                <xs:attribute name="scale" type="xs:int" use="optional"/>
+                <xs:attribute name="rounding" type="xs:string" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="IntegerRangeType">
+        <xs:complexContent>
+            <xs:extension base="cat:TypeDefType">
+                <xs:attribute name="from" type="xs:integer" use="optional"/>
+                <xs:attribute name="to" type="xs:integer" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="RealRangeType">
+        <xs:complexContent>
+            <xs:extension base="cat:DecimalType">
+                <xs:attribute name="from" type="xs:double" use="optional"/>
+                <xs:attribute name="to" type="xs:double" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="StringPatternType">
+        <xs:complexContent>
+            <xs:extension base="cat:TypeDefType">
+                <xs:attribute name="length" type="xs:int" use="optional"/>
+                <xs:attribute name="regexp" type="xs:string" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="DateRangeType">
+        <xs:complexContent>
+            <xs:extension base="cat:TypeDefType">
+                <xs:attribute name="from" type="xs:date" use="optional"/>
+                <xs:attribute name="to" type="xs:date" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="TimeRangeType">
+        <xs:complexContent>
+            <xs:extension base="cat:TypeDefType">
+                <xs:attribute name="from" type="xs:time" use="optional"/>
+                <xs:attribute name="to" type="xs:time" use="optional"/>
+                <xs:attribute name="step" type="xs:time" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!--The custom types.-->
+    <xs:complexType name="EnumerationDefType">
+        <xs:complexContent>
+            <xs:extension base="cat:TypeDefType">
+                <xs:sequence>
+                    <xs:element ref="cat:Finalized" minOccurs="0"/>
+                    <xs:element ref="cat:Label" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="LabelType">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="label" type="xs:string" use="optional"/>
+    </xs:complexType>
+    <xs:element name="Label" type="cat:LabelType"/>
+    <xs:complexType name="HierarchyDefType">
+        <xs:complexContent>
+            <xs:extension base="cat:TypeDefType">
+                <xs:sequence>
+                    <xs:element ref="cat:Finalized" minOccurs="0"/>
+                    <xs:element ref="cat:Level"/>
+                    <xs:element ref="cat:HierarchyLabel" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="HierarchyLabelType">
+        <xs:complexContent>
+            <xs:extension base="cat:LabelType">
+                <xs:sequence>
+                    <xs:element ref="cat:HierarchyLabel" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="HierarchyLabel" type="cat:HierarchyLabelType"/>
+    <xs:element name="Level">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="cat:Level" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Finalized"/>
+    <!--The component types.-->
+    <xs:complexType name="ComponentDefType">
+        <xs:complexContent>
+            <xs:extension base="cat:TypeDefType">
+                <xs:sequence>
+                    <xs:element ref="cat:View" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element ref="cat:ComponentPart" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="EntityDefType">
+        <xs:complexContent>
+            <xs:extension base="cat:ComponentDefType">
+                <xs:sequence>
+                    <xs:element ref="cat:ExternalId" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="DimensionDefType">
+        <xs:complexContent>
+            <xs:extension base="cat:EntityDefType"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="FactDefType">
+        <xs:complexContent>
+            <xs:extension base="cat:ComponentDefType"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="ViewDefType">
+        <xs:complexContent>
+            <xs:extension base="cat:ComponentDefType"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <!--The collection types (which are also component types).-->
+    <xs:complexType name="CollectionType">
+        <xs:complexContent>
+            <xs:extension base="cat:ComponentPartType">
+                <xs:sequence>
+                    <xs:element ref="cat:Parent" minOccurs="0"/>
+                    <xs:element ref="cat:FieldDeclrRoot" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+                <xs:attribute name="name" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="Parent">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="SetType">
+        <xs:complexContent>
+            <xs:extension base="cat:CollectionType"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="BagType">
+        <xs:complexContent>
+            <xs:extension base="cat:CollectionType"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="ListType">
+        <xs:complexContent>
+            <xs:extension base="cat:CollectionType"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="MapType">
+        <xs:complexContent>
+            <xs:extension base="cat:CollectionType">
+                <xs:sequence>
+                    <xs:element ref="cat:Key"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="Key">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="cat:FieldDeclr"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <!--The field declaration types.-->
+    <xs:complexType name="ComponentPartType"/>
+    <xs:complexType name="FieldDeclrRootType">
+        <xs:complexContent>
+            <xs:extension base="cat:ComponentPartType"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="FieldDeclrType">
+        <xs:complexContent>
+            <xs:extension base="cat:FieldDeclrRootType">
+                <xs:attribute name="name" type="xs:string" use="required"/>
+                <xs:attribute name="type" type="xs:string" use="optional"/>
+                <xs:attribute name="value" type="xs:string" use="optional"/>
+                <xs:attribute name="formula" type="xs:string" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="FieldDeclrModifierType">
+        <xs:complexContent>
+            <xs:extension base="cat:FieldDeclrRootType">
+                <xs:sequence>
+                    <xs:element ref="cat:FieldDeclr" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="IntegerType">
+        <xs:complexContent>
+            <xs:extension base="cat:FieldDeclrType"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="RealType">
+        <xs:complexContent>
+            <xs:extension base="cat:FieldDeclrType"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="StringType">
+        <xs:complexContent>
+            <xs:extension base="cat:FieldDeclrType"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="DateType">
+        <xs:complexContent>
+            <xs:extension base="cat:FieldDeclrType">
+                <xs:attribute name="auto" type="xs:boolean" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="TimeType">
+        <xs:complexContent>
+            <xs:extension base="cat:FieldDeclrType">
+                <xs:attribute name="auto" type="xs:boolean" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="HierarchyType">
+        <xs:complexContent>
+            <xs:extension base="cat:FieldDeclrType"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="EnumerationType">
+        <xs:complexContent>
+            <xs:extension base="cat:FieldDeclrType"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="ComponentType">
+        <xs:complexContent>
+            <xs:extension base="cat:FieldDeclrType"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <!--The unique/natural key demarcator type.-->
+    <xs:complexType name="UniqueType">
+        <xs:complexContent>
+            <xs:extension base="cat:FieldDeclrModifierType">
+                <xs:attribute name="natural_key" type="xs:boolean" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!--The component extension demarcator type.-->
+    <xs:complexType name="ExtendComponentType">
+        <xs:complexContent>
+            <xs:extension base="cat:FieldDeclrModifierType">
+                <xs:attribute name="name" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!--The root substitution element of the catalogue. Every element at the top level of the catalogue defines a type.-->
+    <xs:element name="TypeDef" type="cat:TypeDefType" abstract="true"/>
+    <!--The restricion type elements.-->
+    <xs:element name="Decimal" type="cat:DecimalType" substitutionGroup="cat:TypeDef"/>
+    <xs:element name="IntegerRange" type="cat:IntegerRangeType" substitutionGroup="cat:TypeDef"/>
+    <xs:element name="RealRange" type="cat:RealRangeType" substitutionGroup="cat:TypeDef"/>
+    <xs:element name="StringPattern" type="cat:StringPatternType" substitutionGroup="cat:TypeDef"/>
+    <xs:element name="DateRange" type="cat:DateRangeType" substitutionGroup="cat:TypeDef"/>
+    <xs:element name="TimeRange" type="cat:TimeRangeType" substitutionGroup="cat:TypeDef"/>
+    <!--The custom type elements.-->
+    <xs:element name="EnumerationDef" type="cat:EnumerationDefType" substitutionGroup="cat:TypeDef"/>
+    <xs:element name="HierarchyDef" type="cat:HierarchyDefType" substitutionGroup="cat:TypeDef"/>
+    <!--The component type elements.-->
+    <xs:element name="ComponentDef" type="cat:ComponentDefType" substitutionGroup="cat:TypeDef"/>
+    <xs:element name="EntityDef" type="cat:EntityDefType" substitutionGroup="cat:ComponentDef"/>
+    <xs:element name="DimensionDef" type="cat:DimensionDefType" substitutionGroup="cat:ComponentDef"/>
+    <xs:element name="FactDef" type="cat:FactDefType" substitutionGroup="cat:ComponentDef"/>
+    <xs:element name="ViewDef" type="cat:ViewDefType" substitutionGroup="cat:ComponentDef"/>
+    <!--The collection type elements.-->
+    <xs:element name="Collection" type="cat:CollectionType" abstract="true" substitutionGroup="cat:ComponentPart"/>
+    <xs:element name="Set" type="cat:SetType" substitutionGroup="cat:Collection"/>
+    <xs:element name="List" type="cat:ListType" substitutionGroup="cat:Collection"/>
+    <xs:element name="Bag" type="cat:BagType" substitutionGroup="cat:Collection"/>
+    <xs:element name="Map" type="cat:MapType" substitutionGroup="cat:Collection"/>
+
+    <!--External Id declarations. -->
+    <xs:element name="ExternalId">
+        <xs:complexType/>
+    </xs:element>
+
+    <!--View declarations.-->
+    <xs:element name="View">
+        <xs:complexType>
+            <xs:attribute name="type" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!--The field declaration elements.-->
+    <xs:element name="ComponentPart" type="cat:ComponentPartType" abstract="true"/>
+    <xs:element name="FieldDeclrRoot" type="cat:FieldDeclrRootType" abstract="true" substitutionGroup="cat:ComponentPart"/>
+    <xs:element name="FieldDeclr" type="cat:FieldDeclrType" abstract="true" substitutionGroup="cat:FieldDeclrRoot"/>
+    <xs:element name="FieldDeclrModifier" type="cat:FieldDeclrModifierType" abstract="true" substitutionGroup="cat:FieldDeclrRoot"/>
+    <xs:element name="Integer" type="cat:IntegerType" substitutionGroup="cat:FieldDeclr"/>
+    <xs:element name="Real" type="cat:RealType" substitutionGroup="cat:FieldDeclr"/>
+    <xs:element name="String" type="cat:StringType" substitutionGroup="cat:FieldDeclr"/>
+    <xs:element name="Date" type="cat:DateType" substitutionGroup="cat:FieldDeclr"/>
+    <xs:element name="Time" type="cat:TimeType" substitutionGroup="cat:FieldDeclr"/>
+    <xs:element name="Hierarchy" type="cat:HierarchyType" substitutionGroup="cat:FieldDeclr"/>
+    <xs:element name="Enumeration" type="cat:EnumerationType" substitutionGroup="cat:FieldDeclr"/>
+    <xs:element name="Component" type="cat:ComponentType" substitutionGroup="cat:FieldDeclr"/>
+    <!--The unique/natural key demarcator.-->
+    <xs:element name="Unique" type="cat:UniqueType" substitutionGroup="cat:FieldDeclrModifier"/>
+    <!--The component extension demarcator.-->
+    <xs:element name="ExtendComponent" type="cat:ExtendComponentType" substitutionGroup="cat:FieldDeclrModifier"/>
+    <!--Search indexing setup.-->
+    <xs:element name="IndexedComponent">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="cat:IndexBy" maxOccurs="unbounded"/>
+                <xs:element ref="cat:SummaryView"/>
+            </xs:sequence>
+            <xs:attribute name="type" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Index">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="cat:IndexedComponent" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute name="type" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="IndexBy">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="SummaryView">
+        <xs:complexType>
+            <xs:attribute name="type" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

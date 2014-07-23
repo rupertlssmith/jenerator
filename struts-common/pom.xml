@@ -1,0 +1,130 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.thesett</groupId>
+    <artifactId>struts-common</artifactId>
+    <name>struts-common</name>
+    <version>0.3-SNAPSHOT</version>
+
+    <description>The part of the common library that is Struts dependant. Split of from the rest of the common library as it needs to be deployed in .war files with Struts projects only.</description>
+    <url>http://www.thesett.com/struts-common</url>
+
+    <packaging>jar</packaging>
+
+    <properties>
+        <topdir>${basedir}/..</topdir>
+    </properties>
+
+    <parent>
+        <groupId>com.thesett</groupId>
+        <artifactId>catalogue_build</artifactId>
+        <version>0.3-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>common</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>struts</groupId>
+            <artifactId>struts</artifactId>
+        </dependency>
+
+        <!-- Container provided dependencies. -->
+        <dependency>
+            <groupId>servletapi</groupId>
+            <artifactId>servletapi</artifactId>
+        </dependency>
+
+        <!-- Test only dependencies. -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+        <plugins>
+            <!-- Run XDoclet to generate taglibs Struts config. -->
+            <plugin>
+                <groupId>com.thesett</groupId>
+                <artifactId>xdoclet-maven-plugin</artifactId>
+
+                <dependencies>
+                    <!--
+                         This dependency is required so that xdoclet can trace the inheritence of some of the tags back to root classes
+                         in the servlets jar.
+                    -->
+                    <dependency>
+                        <groupId>jstl</groupId>
+                        <artifactId>jstl</artifactId>
+                        <version>${jstl.jar.version}</version>
+                    </dependency>
+                </dependencies>
+
+                <executions>
+                    <execution>
+                        <id>generate-xdoclet</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>xdoclet</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <webdoclet destdir="${project.build.directory}/generated-sources/xdoclet"
+                                           excludedtags="@version,@author" verbose="true">
+
+                                    <fileset dir="src/main">
+                                        <include name="**/webapp/**/*Action.java"/>
+                                        <include name="**/webapp/**/*Tag.java"/>
+                                        <include name="**/webapp/**/*Form.java"/>
+                                    </fileset>
+
+                                    <jsptaglib destdir="${project.build.directory}" shortName="comstruts" filename="comstruts.tld"/>
+
+                                    <strutsconfigxml version="1.0"/>
+                                </webdoclet>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Upload the jsp tag libraries as secondary artifacts to the repository. -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-artifacts</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attach-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <artifacts>
+                                <artifact>
+                                    <file>target/comstruts.tld</file>
+                                    <type>tld</type>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+    </build>
+
+</project>

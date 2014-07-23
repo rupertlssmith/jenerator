@@ -1,0 +1,132 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.thesett</groupId>
+    <artifactId>catalogue-generator</artifactId>
+    <name>catalogue-generator</name>
+    <version>0.3-SNAPSHOT</version>
+
+    <description>A source code generator to transform a catalogue model into java beans with persistence.</description>
+    <url>http://www.thesett.com/catalogue-generator</url>
+
+    <packaging>jar</packaging>
+
+    <scm>
+        <connection>scm:svn:http://rupert@www.thesett.com/svn/projects/catalogue-generator</connection>
+    </scm>
+
+    <properties>
+        <topdir>${basedir}/..</topdir>
+    </properties>
+
+    <parent>
+        <groupId>com.thesett</groupId>
+        <artifactId>catalogue_build</artifactId>
+        <version>0.3-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>common</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>configurator</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+
+        <!--
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>locator</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+        -->
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>aima</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>catalogue-model</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>stringtemplate</artifactId>
+            <version>3.1-b1</version>
+        </dependency>
+
+        <!-- Libraries needed for running tests only. -->
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>junit-toolkit</artifactId>
+            <version>0.7.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <!-- Set up the run plugin to generate a script to run the generator with. -->
+            <plugin>
+                <groupId>com.thesett</groupId>
+                <artifactId>maven-run-plugin</artifactId>
+
+                <configuration>
+                    <scriptOutDirectory>target</scriptOutDirectory>
+                    <systemproperties>
+                        <property>
+                            <name>log4j.configuration</name>
+                            <value>${log4j.configuration}</value>
+                        </property>
+                    </systemproperties>
+                    <commands>
+                        <generator>com.thesett.catalogue.generator.GeneratorTool</generator>
+                    </commands>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>script</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+
+        <resources>
+
+            <!-- Make sure all resources are bundled. -->
+            <resource>
+                <directory>src/resources</directory>
+            </resource>
+
+        </resources>
+
+        <!-- Include the contents of the test-resources directory in all test classpaths. -->
+        <testResources>
+            <testResource>
+                <directory>src/test-resources</directory>
+            </testResource>
+        </testResources>
+
+    </build>
+
+</project>

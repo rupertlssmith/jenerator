@@ -1,0 +1,303 @@
+<?xml version="1.0"?>
+<tl xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="C:\Documents and Settings\Rupert\projects\javasource\src\resources\tl.xsd"
+    xmlns:cat="http://thesett.com/catalogue-def-0.2"
+    xmlns:gen="http://thesett.com/source-code-generator-0.1">
+
+<var name="package" value="cat:CatalogueDefinition/cat:Package/@name"/>
+
+<for path="cat:CatalogueDefinition/cat:ComponentDef">
+<compilationUnit package="$package" fileName="gen:toCamelCaseUpper(concat(string(@name), '.java'))">
+package <value path="$package"/>;
+
+import java.util.Date;
+import java.io.Serializable;
+
+import org.apache.log4j.Logger;
+
+import com.thesett.aima.state.ComponentType;
+import com.thesett.aima.state.OrdinalAttribute;
+import com.thesett.aima.attribute.impl.HierarchyAttribute;
+import com.thesett.aima.attribute.impl.EnumeratedStringAttribute;
+import com.thesett.catalogue.interfaces.*;
+import com.thesett.catalogue.core.*;
+import com.thesett.common.error.NotImplementedException;
+
+/**
+ * Generated component bean from catalogue model.
+ */
+public class <value path="gen:toCamelCaseUpper(string(@name))"/> extends ComponentInstanceBase implements Serializable
+{
+    /** Used for logging. */
+    private static final Logger log = Logger.getLogger(<value path="gen:toCamelCaseUpper(string(@name))"/>.class);
+
+    /** Holds the component type for this class. */
+    private static ComponentType componentType;
+
+    /** Holds the database surrogate id. */
+    private Long id;
+
+    <for path="cat:Integer">
+    private int <value path="gen:toCamelCase(string(@name))"/>;
+    </for>
+
+    <for path="cat:Real">
+    private float <value path="gen:toCamelCase(string(@name))"/>;
+    </for>
+
+    <for path="cat:String">
+    private String <value path="gen:toCamelCase(string(@name))"/>;
+    </for>
+
+    <for path="cat:Date">
+    private Date <value path="gen:toCamelCase(string(@name))"/>;
+    </for>
+
+    <for path="cat:Time">
+    private long <value path="gen:toCamelCase(string(@name))"/>;
+    </for>
+
+    <for path="cat:Enumeration">
+    private <value path="gen:toCamelCaseUpper(concat(string(@type), ' '))"/><value path="gen:toCamelCase(string(@name))"/>;
+    </for>
+
+    <for path="cat:Hierarchy">
+    private <value path="gen:toCamelCaseUpper(concat(string(@type), ' '))"/><value path="gen:toCamelCase(string(@name))"/>;
+    </for>
+
+    <for path="cat:Component">
+    private <value path="gen:toCamelCaseUpper(concat(string(@type), ' '))"/><value path="gen:toCamelCase(string(@name))"/>;
+    </for>
+
+    /**
+     * Allows the catalogue to which the class belongs to be injected.
+     *
+     * @param catalogue The catalogue to which this class belongs.
+     */
+    public static void setCatalogue(Catalogue catalogue)
+    {
+        componentType = catalogue.getComponentType("<value path="@name"/>");
+    }
+
+    /** No-arg constructor for serialization. */
+    public <value path="gen:toCamelCaseUpper(string(@name))"/>() {}
+
+    /** The full constructor to build the component from all of its elements. */
+    <if path="count(cat:Integer|cat:Real|cat:String|cat:Date|cat:Time|cat:Enumeration|cat:Hierarchy|cat:Component) != 0">
+    public <value path="gen:toCamelCaseUpper(string(@name))"/>(
+    <for path="cat:Integer|cat:Real|cat:String|cat:Date|cat:Time|cat:Enumeration|cat:Hierarchy|cat:Component">
+      <if path="name()='Integer'">int </if>
+      <if path="name()='Real'">float </if>
+      <if path="name()='String'">String </if>
+      <if path="name()='Date'">Date </if>
+      <if path="name()='Time'">long </if>
+      <if path="name()='Enumeration'"><value path="gen:toCamelCaseUpper(string(@type))"/> </if>
+      <if path="name()='Hierarchy'"><value path="gen:toCamelCaseUpper(string(@type))"/> </if>
+      <if path="name()='Component'"><value path="gen:toCamelCaseUpper(string(@type))"/> </if>
+      <value path="gen:toCamelCase(string(@name))"/>
+      <if path="gen:notLastInFor()">, </if>
+    </for>)
+    {
+        <for path="cat:Integer|cat:Real|cat:String|cat:Date|cat:Time|cat:Hierarchy|cat:Component">
+        this.<value path="gen:toCamelCase(string(@name))"/> = <value path="gen:toCamelCase(string(@name))"/>;
+        </for>
+    }
+    </if>
+
+    /**
+     * Gets the database surrogate id.
+     *
+     * @return The database surrogate id.
+     */
+    protected Long getId()
+    {
+        return id;
+    }
+
+    /**
+     * Sets the database surrogate id.
+     *
+     * @param id The database surrogate id.
+     */
+    protected void setId(Long id)
+    {
+        this.id = id;
+    }
+
+    /**
+     * Gets the component type that this component implements.
+     *
+     * @return The component type that this component implements.
+     */
+    public ComponentType getComponentType()
+    {
+        return componentType;
+    }
+
+    <for path="cat:Integer">
+    public int get<value path="gen:toCamelCaseUpper(string(@name))"/>() { return <value path="gen:toCamelCase(string(@name))"/>; }
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(int <value path="gen:toCamelCase(string(@name))"/>) { this.<value path="gen:toCamelCase(string(@name))"/> = <value path="gen:toCamelCase(string(@name))"/>; }
+    </for>
+
+    <for path="cat:Real">
+    public float get<value path="gen:toCamelCaseUpper(string(@name))"/>() { return <value path="gen:toCamelCase(string(@name))"/>; }
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(float <value path="gen:toCamelCase(string(@name))"/>) { this.<value path="gen:toCamelCase(string(@name))"/> = <value path="gen:toCamelCase(string(@name))"/>; }
+    </for>
+
+    <for path="cat:String">
+    public String get<value path="gen:toCamelCaseUpper(string(@name))"/>() { return <value path="gen:toCamelCase(string(@name))"/>; }
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(String <value path="gen:toCamelCase(string(@name))"/>) { this.<value path="gen:toCamelCase(string(@name))"/> = <value path="gen:toCamelCase(string(@name))"/>; }
+    </for>
+
+    <for path="cat:Date">
+    public Date get<value path="gen:toCamelCaseUpper(string(@name))"/>() { return <value path="gen:toCamelCase(string(@name))"/>; }
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(Date <value path="gen:toCamelCase(string(@name))"/>) { this.<value path="gen:toCamelCase(string(@name))"/> = <value path="gen:toCamelCase(string(@name))"/>; }
+    </for>
+
+    <for path="cat:Time">
+    public long get<value path="gen:toCamelCaseUpper(string(@name))"/>() { return <value path="gen:toCamelCase(string(@name))"/>; }
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(long <value path="gen:toCamelCase(string(@name))"/>) { this.<value path="gen:toCamelCase(string(@name))"/> = <value path="gen:toCamelCase(string(@name))"/>; }
+    </for>
+
+    <for path="cat:Enumeration">
+    protected <value path="gen:toCamelCaseUpper(string(@type))"/> get<value path="gen:toCamelCaseUpper(string(@name))"/>() { return <value path="gen:toCamelCase(string(@name))"/>; }
+
+    protected void set<value path="gen:toCamelCaseUpper(string(@name))"/>(<value path="gen:toCamelCaseUpper(concat(string(@type), ' '))"/> <value path="gen:toCamelCase(string(@name))"/>){ this.<value path="gen:toCamelCase(string(@name))"/> = <value path="gen:toCamelCase(string(@name))"/>; }
+
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(EnumeratedStringAttribute <value path="gen:toCamelCase(string(@name))"/>){ this.<value path="gen:toCamelCase(string(@name))"/> = new <value path="gen:toCamelCaseUpper(string(@type))"/>(<value path="gen:toCamelCase(string(@name))"/>); }
+    </for>
+
+    <for path="cat:Hierarchy">
+    protected <value path="gen:toCamelCaseUpper(string(@type))"/> get<value path="gen:toCamelCaseUpper(string(@name))"/>() { return <value path="gen:toCamelCase(string(@name))"/>; }
+
+    protected void set<value path="gen:toCamelCaseUpper(string(@name))"/>(<value path="gen:toCamelCaseUpper(concat(string(@type), ' '))"/> <value path="gen:toCamelCase(string(@name))"/>){ this.<value path="gen:toCamelCase(string(@name))"/> = <value path="gen:toCamelCase(string(@name))"/>; }
+
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(HierarchyAttribute <value path="gen:toCamelCase(string(@name))"/>){ this.<value path="gen:toCamelCase(string(@name))"/> = new <value path="gen:toCamelCaseUpper(string(@type))"/>(<value path="gen:toCamelCase(string(@name))"/>); }
+    </for>
+
+    <for path="cat:Component">
+    public <value path="gen:toCamelCaseUpper(string(@type))"/> get<value path="gen:toCamelCaseUpper(string(@name))"/>() { return <value path="gen:toCamelCase(string(@name))"/>; }
+    public void set<value path="gen:toCamelCaseUpper(string(@name))"/>(<value path="gen:toCamelCaseUpper(concat(string(@type), ' '))"/> <value path="gen:toCamelCase(string(@name))"/>){ this.<value path="gen:toCamelCase(string(@name))"/> = <value path="gen:toCamelCase(string(@name))"/>; }
+    </for>
+
+    /**
+     * Determines whether an object of this type is equal to another object. To be equal the object being compared to
+     * (the comparator) must be an instance of this class and have identical field values to this one, for either all
+     * fields, or only the fields that have been designated to form a natural key. The object being compared must also
+     * have identical surrogate database ids (or both have null ids) to be equal.
+     *
+     * @param o The object to compare to.
+     *
+     * @return True if the comparator is equal to this, false otherwise.
+     */
+    public boolean equals(Object o)
+    {
+        log.debug("public boolean equals(Object o): called");
+
+        if (o instanceof <value path="gen:toCamelCaseUpper(string(@name))"/>)
+        {
+            <value path="gen:toCamelCaseUpper(string(@name))"/> comp = (<value path="gen:toCamelCaseUpper(string(@name))"/>)o;
+
+            //log.debug("this = " + this.toString());
+            //log.debug("comp = " + comp.toString());
+
+            //log.debug("this.id == comp.id = " + (this.id == comp.id));
+            //log.debug("this.name.equals(comp.name) = " + (this.name.equals(comp.name)));
+            //log.debug("this.testHierarchy.equals(comp.testHierarchy) = " + (this.testHierarchy.equals(comp.testHierarchy)));
+
+            boolean result = ((this.id == null &amp;&amp; comp.id == null) || (this.id.equals(comp.id))) <if path="count(cat:String|cat:Integer|cat:Date|cat:Hierarchy) != 0"> &amp;&amp;
+              <for path="cat:Integer|cat:Real|cat:String|cat:Date|cat:Time|cat:Hierarchy|cat:Enumeration">
+                <if path="name()='Integer'">
+                this.<value path="gen:toCamelCase(string(@name))"/> == (comp.<value path="gen:toCamelCase(string(@name))"/>)
+                </if>
+                <if path="name()='Real'">
+                this.<value path="gen:toCamelCase(string(@name))"/> == (comp.<value path="gen:toCamelCase(string(@name))"/>)
+                </if>
+                <if path="name()='String'">
+                this.<value path="gen:toCamelCase(string(@name))"/>.equals(comp.<value path="gen:toCamelCase(string(@name))"/>)
+                </if>
+                <if path="name()='Date'">
+                this.<value path="gen:toCamelCase(string(@name))"/>.equals(comp.<value path="gen:toCamelCase(string(@name))"/>)
+                </if>
+                <if path="name()='Time'">
+                this.<value path="gen:toCamelCase(string(@name))"/> == (comp.<value path="gen:toCamelCase(string(@name))"/>)
+                </if>
+                <if path="name()='Hierarchy'">
+                this.<value path="gen:toCamelCase(string(@name))"/>.equals(comp.<value path="gen:toCamelCase(string(@name))"/>)
+                </if>
+                <if path="name()='Enumeration'">
+                this.<value path="gen:toCamelCase(string(@name))"/>.equals(comp.<value path="gen:toCamelCase(string(@name))"/>)
+                </if>
+                <if path="gen:notLastInFor()"> &amp;&amp; </if>
+              </for>
+            </if>;
+
+            //log.debug("result = " + result);
+
+            return result;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Computes a hash code for the component that conforms with its equality method, being based on the same se
+     * of fields that are used to compute equality.
+     *
+     * @return A hash code of the components equality value.
+     */
+    public int hashCode()
+    {
+        return (int)(this.id ^ (this.id >>> 32)) <if path="count(cat:String|cat:Integer|cat:Date|cat:Hierarchy) != 0"> +
+              <for path="cat:Integer|cat:Real|cat:String|cat:Date|cat:Time|cat:Hierarchy|cat:Enumeration">
+                <if path="name()='Integer'">
+                this.<value path="gen:toCamelCase(string(@name))"/>
+                </if>
+                <if path="name()='Real'">
+                Float.floatToIntBits(this.<value path="gen:toCamelCase(string(@name))"/>)
+                </if>
+                <if path="name()='String'">
+                this.<value path="gen:toCamelCase(string(@name))"/>.hashCode()
+                </if>
+                <if path="name()='Date'">
+                this.<value path="gen:toCamelCase(string(@name))"/>.hashCode()
+                </if>
+                <if path="name()='Time'">
+                (int)(this.<value path="gen:toCamelCase(string(@name))"/> ^ (this.<value path="gen:toCamelCase(string(@name))"/> >>> 32))
+                </if>
+                <if path="name()='Hierarchy'">
+                this.<value path="gen:toCamelCase(string(@name))"/>.hashCode()
+                </if>
+                <if path="name()='Enumeration'">
+                this.<value path="gen:toCamelCase(string(@name))"/>.hashCode()
+                </if>
+                <if path="gen:notLastInFor()"> + </if>
+              </for>
+            </if>;
+    }
+
+    /**
+     * Generates a print out of all of the components fields for debugging purposes.
+     *
+     * @return A print out of all of the components fields.
+     */
+    public String toString()
+    {
+        <if path="count(cat:Integer|cat:Real|cat:String|cat:Date|cat:Time|cat:Hierarchy|cat:Enumeration) != 0">
+        return "id: " + getId() +
+               <for path="cat:Integer|cat:Real|cat:String|cat:Date|cat:Time|cat:Hierarchy|cat:Enumeration">
+               ", <value path="gen:toCamelCase(string(@name))"/>: <if path="name()='Hierarchy'">[</if>" + this.<value path="gen:toCamelCase(string(@name))"/><if path="name()='Hierarchy'"> + "]"</if><if path="gen:notLastInFor()"> + </if>
+               </for>;
+        </if>
+
+        <if path="count(cat:Integer|cat:Real|cat:String|cat:Date|cat:Time|cat:Hierarchy|cat:Enumeration) = 0">
+        return "id: " + getId();
+        </if>
+    }
+}
+
+</compilationUnit>
+</for>
+</tl>

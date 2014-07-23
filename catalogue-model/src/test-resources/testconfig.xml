@@ -1,0 +1,15 @@
+<configBeans xmlns="http://thesett.com/config-beans-0.1"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://thesett.com/config-beans-0.1 config-beans.xsd">
+
+  <jndiConfig>
+    <property name="java.naming.factory.initial" value="com.thesett.common.jndi.SimpleInitialContextFactory"/>
+  </jndiConfig>
+
+  <!-- Set up the loader config bean to load the test catalogue model. -->
+  <beanSetup beanClassName="com.thesett.catalogue.config.ModelLoaderConfigBean">
+    <setUpProperty name="modelResource" value="test-catalogue.xml"/>
+    <!--<setUpProperty name="debugRawFileName" value="test_model.pl"/>-->
+  </beanSetup>
+
+</configBeans>

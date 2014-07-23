@@ -1,0 +1,112 @@
+<!--
+    This is a schema definition for Java types.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:ptype="http://thesett.com/prog-type-0.1"
+           targetNamespace="http://thesett.com/prog-type-0.1"
+           elementFormDefault="qualified">
+
+    <!-- Basic Java types for assigning values to fields. -->
+    <xs:complexType name="rootType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="name" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="stringType">
+        <xs:simpleContent>
+            <xs:extension base="ptype:rootType">
+                <xs:attribute name="value" type="xs:string" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="boolType">
+        <xs:simpleContent>
+            <xs:extension base="ptype:rootType">
+                <xs:attribute name="value" type="xs:boolean" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="shortType">
+        <xs:simpleContent>
+            <xs:extension base="ptype:rootType">
+                <xs:attribute name="value" type="xs:short" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="intType">
+        <xs:simpleContent>
+            <xs:extension base="ptype:rootType">
+                <xs:attribute name="value" type="xs:int" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="longType">
+        <xs:simpleContent>
+            <xs:extension base="ptype:rootType">
+                <xs:attribute name="value" type="xs:long" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="floatType">
+        <xs:simpleContent>
+            <xs:extension base="ptype:rootType">
+                <xs:attribute name="value" type="xs:float" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="doubleType">
+        <xs:simpleContent>
+            <xs:extension base="ptype:rootType">
+                <xs:attribute name="value" type="xs:double" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="dateType">
+        <xs:simpleContent>
+            <xs:extension base="ptype:rootType">
+                <xs:attribute name="value" type="xs:date" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:element name="assignment" type="ptype:rootType"/>
+    <xs:element name="string" type="ptype:stringType" substitutionGroup="ptype:assignment"/>
+    <xs:element name="boolean" type="ptype:boolType" substitutionGroup="ptype:assignment"/>
+    <xs:element name="short" type="ptype:shortType" substitutionGroup="ptype:assignment"/>
+    <xs:element name="int" type="ptype:intType" substitutionGroup="ptype:assignment"/>
+    <xs:element name="long" type="ptype:longType" substitutionGroup="ptype:assignment"/>
+    <xs:element name="float" type="ptype:floatType" substitutionGroup="ptype:assignment"/>
+    <xs:element name="double" type="ptype:doubleType" substitutionGroup="ptype:assignment"/>
+    <xs:element name="date" type="ptype:dateType" substitutionGroup="ptype:assignment"/>
+
+    <!-- Base Bean type for instantiating Java Beans from XML config files. -->
+    <xs:group name="beanModel">
+        <xs:sequence>
+            <xs:element ref="ptype:assignment" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:group>
+
+    <xs:complexType name="beanType">
+        <xs:group ref="ptype:beanModel"/>
+        <xs:attribute name="class" type="xs:string" use="required"/>
+        <xs:attribute name="implements" type="xs:string" use="optional"/>
+    </xs:complexType>
+
+        <!--
+        <xs:sequence>
+            <xs:element ref="ptype:assignment" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="class" type="xs:string" use="required"/>
+        -->
+
+</xs:schema>

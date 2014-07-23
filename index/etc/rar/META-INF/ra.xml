@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<connector xmlns="http://java.sun.com/xml/ns/j2ee"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+           http://java.sun.com/xml/ns/j2ee/connector_1_5.xsd"
+           version="1.5">
+
+  <description>Index Resource Adapter</description>
+  <display-name>IndexResourceAdapter</display-name>
+
+  <vendor-name>The Badger Set</vendor-name>
+  <eis-type>Search Engine</eis-type>
+  <resourceadapter-version>0.1-non_public_release</resourceadapter-version>
+
+  <resourceadapter>
+
+    <resourceadapter-class>com.thesett.index.ra.ResourceAdapterImpl</resourceadapter-class>
+
+    <outbound-resourceadapter>
+
+      <connection-definition>
+
+        <managedconnectionfactory-class>
+          com.thesett.index.ra.ManagedConnectionFactoryImpl
+        </managedconnectionfactory-class>
+
+        <connectionfactory-interface>
+          com.thesett.index.ra.IndexConnectionFactory
+        </connectionfactory-interface>
+        <connectionfactory-impl-class>
+          com.thesett.index.ra.IndexConnectionFactoryImpl
+        </connectionfactory-impl-class>
+
+        <connection-interface>
+          com.thesett.index.ra.IndexConnection
+        </connection-interface>
+        <connection-impl-class>
+          com.thesett.index.ra.IndexConnectionImpl
+        </connection-impl-class>
+
+      </connection-definition>
+
+      <transaction-support>XATransaction</transaction-support>
+      <reauthentication-support>false</reauthentication-support>
+
+    </outbound-resourceadapter>
+
+  </resourceadapter>
+
+</connector>

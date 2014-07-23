@@ -1,0 +1,80 @@
+/*
+ * JavaInterface is an implementation of the Generator interface, that creates Java interfaces for types
+ * in a catalogue model that require interfaces.
+ */
+group JavaInterface : JavaCommon implements Generator;
+
+/*
+ * Creates the opening section of an output file, if one is required.
+ */
+file_open(catalogue) ::= <<
+file_open
+>>
+
+/*
+ * Generates the output for a bean in the specified catalogue.
+ */
+for_bean(catalogue, decorator, fields, extraFields) ::= <<
+<if(decorator.view)>
+<catalogue_view_interface(catalogue=catalogue, name=decorator.name, fields=fields)>
+<endif>
+>>
+
+/*
+ * Creates the closing section of an output file, if one is required.
+ */
+file_close() ::= <<
+file_close
+>>
+
+/*
+ * Creates a view interface.
+ */
+catalogue_view_interface(catalogue, name, fields) ::= <<
+<interface(catalogue=catalogue, name=name, fields=fields, typeMap=componentBeanTypeMap)>
+>>
+
+/*
+ * Creates an interface with getters and setters for the specified fields as a bean.
+ */
+interface(catalogue, name, fields, typeMap) ::= <<
+<package(catalogue)>
+
+import java.util.*;
+
+import com.thesett.catalogue.interfaces.*;
+import com.thesett.catalogue.core.*;
+import com.thesett.aima.attribute.time.DateOnly;
+import com.thesett.aima.attribute.time.TimeOnly;
+
+/**
+ * Generated bean interface from catalogue model.
+ *
+ * @author Generated Code
+ */
+public interface <name; format="ccu">
+{
+    <if(fields)>
+    <fields.keys:getters_setters_interface(); separator="\n\n">
+    <endif>
+}
+>>
+
+/*
+ * Creates public getters and setters method interfaces for all name/type attributes.
+ */
+getters_setters_interface() ::= <<
+/**
+ * Provides the <it> property.
+ *
+ * @return The <it> property.
+ */
+public <(typeMap.(fields.(it).kind))(field=fields.(it))> get<it; format="ccu">();
+
+/**
+ * Accepts a new value for the <it> property.
+ *
+ * @param <it; format="cc"> The <it> property.
+ */
+public void set<it; format="ccu">(<(typeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">);
+>>

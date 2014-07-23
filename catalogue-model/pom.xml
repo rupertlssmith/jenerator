@@ -1,0 +1,176 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.thesett</groupId>
+    <artifactId>catalogue-model</artifactId>
+    <name>catalogue-model</name>
+    <version>0.3-SNAPSHOT</version>
+
+    <description>A catalogue which is confugurable at the knowledge level to catalogue and organise any type of data and to provide structured access to it, free text querying of it and automatic data warehousing of events relating to it.</description>
+    <url>http://www.thesett.com/catalogue-model</url>
+
+    <packaging>jar</packaging>
+
+    <scm>
+        <connection>scm:svn:http://rupert@www.thesett.com/svn/projects/catalogue-model</connection>
+    </scm>
+
+    <properties>
+        <topdir>${basedir}/..</topdir>
+    </properties>
+
+    <parent>
+        <groupId>com.thesett</groupId>
+        <artifactId>catalogue_build</artifactId>
+        <version>0.3-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>common</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>configurator</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+
+        <!--
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>locator</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+        -->
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>aima</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>prolog</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>index</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+
+        <!--
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>index-ra-client</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+        -->
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+        </dependency>
+
+        <!-- Libraries needed for running tests only. -->
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>junit-toolkit</artifactId>
+            <version>0.7.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <!-- Generates the bean model for the model setup from its schema. -->
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <configuration>
+                    <extension>true</extension>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Set up the run plugin to generate a script to run the model checker with. -->
+            <plugin>
+                <groupId>com.thesett</groupId>
+                <artifactId>maven-run-plugin</artifactId>
+
+                <configuration>
+                    <scriptOutDirectory>target</scriptOutDirectory>
+                    <systemproperties>
+                        <property>
+                            <name>log4j.configuration</name>
+                            <value>${log4j.configuration}</value>
+                        </property>
+                    </systemproperties>
+                    <commands>
+                        <checker>com.thesett.catalogue.checker.ModelChecker</checker>
+                    </commands>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>script</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Create a jar for the tests. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+
+        <resources>
+            <!-- Make sure all resources are bundled. -->
+            <resource>
+                <directory>src/resources</directory>
+            </resource>
+
+            <resource>
+                <directory>src/prolog</directory>
+            </resource>
+        </resources>
+
+        <!-- Include the contents of the test-resources directory in all test classpaths. -->
+        <testResources>
+            <testResource>
+                <directory>src/test-resources</directory>
+            </testResource>
+        </testResources>
+
+    </build>
+
+</project>

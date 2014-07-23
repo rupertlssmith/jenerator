@@ -1,0 +1,36 @@
+<DimensionalData xmlns="http://thesett.com/catalogue-content-0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://thesett.com/catalogue-content-0.1
+C:\DOCUME~1\Rupert\projects\catalogue\src\resources\catalogue-content.xsd">
+    <DimensionElement dimension="article">
+        <StringAttribute name="name" value="Resource Adapters - Article 1"/>
+        <StringAttribute name="title" value="How To Write A Resource Adapter"/>
+        <StringAttribute name="short_description">
+      In this article a resource adapter that integrates with the transaction services provided by an application server
+      is explored and a step-by-step account of how to write such an adapter is given.
+    </StringAttribute>
+        <Hierarchy name="content_category" value="all/articles/java"/>
+        <StringAttribute name="body"><![CDATA[
+ <p/>I need to write a JCA resource adapter to include a cutom built free-text search index in transactions managed
+ by an application server. I have been looking around on the internet for articles and examples that explain how to
+ write resource adapters, specifically those that integrate with managed transactions. Unfortunately, I have not been
+ able to find what I want. I have found plenty simple examples that leave transactions out but nothing that really gets
+ properly into the gorey details of local and externally managed transactions. I have decided, therefore, to document
+ and make available my own efforts to anyone who must also travel down this path.
+
+ <p/>The free-text search index accepts records for indexing that already exist in a database. It tokenizes those records
+ into a bag of words model and provides some sophisticated information retrieval functions over the model. I could have
+ used the text search capabilities of the database directly but they do not provide the functionality that I need. A
+ better solution than implementing my own index might be to purchase a more advanced database or add-on package
+ for the database that does give me what I need. Unfortunately, this doesn't fit my current budget, so I'm going with my
+ hand-rolled custom solution. On the up-side, I can tune and tweak my own search engine until I have it just the way I
+ want it.
+
+ <p/>The records to be indexed already exist in a database. When they are written to, the search index also needs to be
+ updated to reflect the change in the original record. To play nicely with other processes, I don't want to expose
+ the intermediate state that exists when the database has been updated but the index has not been. In order to do this
+ I need to be able to perform a two phase commit accross both the database and the index. This is what has led me to
+ write a JCA wrapper around my index; to integrate it properly into the J2EE transaction model.
+
+ <p/>More to follow...
+ ]]></StringAttribute>
+    </DimensionElement>
+</DimensionalData>

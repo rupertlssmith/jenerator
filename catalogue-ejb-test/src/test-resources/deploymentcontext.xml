@@ -1,0 +1,28 @@
+<deploymentContexts xmlns="http://thesett.com/deployment-context-0.1" 
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                    xsi:schemaLocation="http://thesett.com/deployment-context-0.1 C:\DOCUME~1\Rupert\projects\locator\src\resources\deployment-context.xsd">
+                                   
+    <!-- Local deployment context, for use in container from the same .ear file. -->
+    <deploymentContext name="local" type="local">
+        <!-- The catalogue service. -->
+        <jndiResourceMapping name="com.thesett.catalogue.impl.interfaces.CatalogueManagerHome" jndiname="ejb/catalogue/CatalogueManager"/>
+        <jndiResourceMapping name="com.thesett.catalogue.impl.interfaces.CatalogueManagerLocalHome" jndiname="ejb/catalogue/CatalogueManagerLocal"/>
+    </deploymentContext>
+
+    <!-- Remote deployment contexts, for use when calling out of the container or from a seperately deployed package. -->
+    <!-- Configuration for JBoss. -->
+    <deploymentContext name="remotejboss" type="remote">
+        <initialContextProperty name="java.naming.factory.initial" value="org.jnp.interfaces.NamingContextFactory"/>
+        <initialContextProperty name="java.naming.factory.url.pkgs" value="org.jboss.naming:org.jnp.interfaces"/>
+        <initialContextProperty name="java.naming.provider.url" value="localhost"/>
+        <!-- The catalogue service. -->
+        <jndiResourceMapping name="com.thesett.catalogue.impl.interfaces.CatalogueManagerHome" jndiname="ejb/catalogue/CatalogueManager"/>
+    </deploymentContext>
+
+    <!-- Configuration for Weblogic. -->
+    <deploymentContext name="remoteweblogic" type="remote">
+        <!-- The catalogue service. -->
+        <jndiResourceMapping name="com.thesett.catalogue.impl.interfaces.CatalogueManagerHome" jndiname="ejb/catalogue/CatalogueManager"/>
+    </deploymentContext>
+
+</deploymentContexts>

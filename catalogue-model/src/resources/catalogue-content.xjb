@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://java.sun.com/xml/ns/jaxb"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+          version="2.0">
+
+  <bindings schemaLocation="catalogue-content.xsd" node="/xsd:schema">          
+    <schemaBindings>
+      <package name="com.thesett.catalogue.data"/>
+    </schemaBindings> 
+  </bindings>
+
+  <bindings schemaLocation="catalogue-content.xsd"
+            node="/xsd:schema/xsd:complexType[@name='StringAttributeType']/*/*/xsd:attribute[@name='value']">
+    <property name="valueOf" />
+  </bindings>
+
+  <bindings schemaLocation="catalogue-content.xsd"
+            node="/xsd:schema/xsd:complexType[@name='IntAttributeType']/descendant::*/xsd:attribute[@name='value']">
+    <property name="valueOf" />
+  </bindings>
+
+  <bindings schemaLocation="catalogue-content.xsd"
+            node="/xsd:schema/xsd:complexType[@name='DateAttributeType']/descendant::*/xsd:attribute[@name='value']">
+    <property name="valueOf" />
+  </bindings>
+
+  <bindings schemaLocation="catalogue-content.xsd"
+            node="/xsd:schema/xsd:complexType[@name='HierarchyType']/descendant::*/xsd:attribute[@name='value']">
+    <property name="valueOf" />
+  </bindings>
+    
+</bindings>

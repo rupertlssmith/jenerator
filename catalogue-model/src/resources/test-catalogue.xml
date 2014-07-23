@@ -1,0 +1,701 @@
+<!--
+    Ultimately this file will contain complete examples of every possible usage of the catalogue definition schema.
+    Planned functionality is sketched in but commented out.
+
+- All simple types.
+- Use of restrictions on all simple types to define new sub types (validation).
+- All custom types.
+- Use of all simple and custom types.
+- Use of all collection types.
+- Use of all reference types to build relationships.
+- Use of views to create summary classes for conformed dimensions and indexes.
+- Definition of natural keys and equality based on natural key.
+- Use of tuples as anonymous dimensions.
+- Use of formulas.
+- Use of extension points.
+- Definition of free text indexes over dimensions and views.
+- Definition of data warehouses over dimensions and views.
+- Use of event captures and the event model.
+
+A type defines a set of possible value. Basic types are things like integers, reals, string etc.
+A component is a tuple of types, and is itself a type. Components can contain multiple types, including other
+components. A component is a cross product of the sets of the types that it is composed of.
+
+Class = Component + Behaviour.
+Object = State + Behaviour.
+
+An objects state is an instance of its classes type. An objects behaviour is given to it by its class but can also
+be derived externally to its class.
+
+A catalogue is a knowledge level definition of the types of classes that a domain model is composed of. It is used
+to create an online database to hold the operational state of the objects when that state needs to be persisted 
+accross many transactions. It is also used to define a warehouse database to hold historical information about the 
+state of objects that have existed at some time. 
+
+A catalogue does not define behaviour, this has to be written as java code (often as J2EE session beans). Plans
+exist to allow other ways of specifying behaviour, using logic programming.
+
+Components are the type part of a class without the behaviour. Components are not persisted directly, only when
+included in entities. Components can be instantiated as transient instances though.  Instances of components are the
+state part of an object without the behaviour.
+Entities are components but also the basic building blocks of persistent data in the online database. They are 
+persistent components.
+Dimensions are entities but that can have a dual representation in the data warehouse as denormalized tables.
+Fact tables are entities but only exist in the data warehouse as denormalized tables. They typically link together
+many dimensions in a star schema. Their columns are typically composed by combining entities or components or views
+onto these together to form a set of numeric facts.
+Views are interfaces onto components (or entities, dimensions and facts), that expose just a subset of their fields.
+Sets, Bags, Lists and Maps are also components but that are mapped onto multiple instances of the component.
+
+State Machines:
+
+Idea is to describe the lifecycle of an event driven business process. For example, completing an order;
+order is created, then finalized and payment details taken, then payment is accepted, then warehouse
+picking begins, the goods are packaged and sent, the customer signs for them and the order is completed.
+
+While the order is 'alive' it is kept in the online database. Once in its final state, it exists only in the
+warehouse as a historical record. State transitions can create events which can be used to trigger other 
+processes such as warehousing of the transitions, or execution of business rules.
+
+VFSM technology?
+
+Consider modelling just the states. Catalogue models state, behaviour is to be added later. In this case states are
+just an enumeration. 
+
+Behaviour may be specified in a seperate file to the catalogue model, in which case a state machine will refer
+to an enumeration of states in the model and specify transitions etc there.
+-->
+
+<!-- Defines the content catalogue for test dimension. -->
+<CatalogueDefinition xmlns="http://thesett.com/catalogue-def-0.2" 
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                     xsi:schemaLocation="http://thesett.com/catalogue-def-0.2 catalogue-def.xsd">
+
+    <Catalogue name="example"/>                     
+    <Package name="com.thesett.catalogue.example"/>
+
+    <!-- ================================ Restrictions on Basic Types ======================= -->
+
+    <!-- Integer ranges and specific values. -->
+    <IntegerRange name="positive" from="0"/>
+    <IntegerRange name="rating" from="1" to="10"/>
+
+    <!-- Number ranges. -->
+    <RealRange name="percent" from="0" to="100"/>
+    <RealRange name="probability" from="0" to="1" precision="double"/>
+
+    <!-- Regular expressions on strings. -->
+    <!--<StringPattern name="email" regexp="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"/>-->
+    <StringPattern name="email" regexp="emailregexp"/>
+
+    <!-- Lengths of strings. -->
+    <StringPattern name="username" length="20"/>
+
+    <!-- Date ranges. -->
+    <DateRange name="beyond_2000" from="2000-01-01"/>
+    <DateRange name="twentieth_century" from="1900-01-01" to="1999-12-31"/>
+
+    <!-- Time ranges. -->
+    <TimeRange name="working_hours" from="09:00:00" to="17:00:00"/>
+    <TimeRange name="half_hourly" step="00:30:00"/>
+
+    <!-- ISO Currency standard, money to 4 decimal places. -->
+    <Decimal name="money" precision="19" scale="4"/>
+
+    <!-- ================================ Custom Types ====================================== -->
+
+    <!-- ====== Enumerations. ====== -->
+    <!-- An enumeration of the primary colours. No new colours may be added. -->
+    <EnumerationDef name="primary_colours">
+        <Finalized/>
+        <Label name="red"/>
+        <Label name="green"/>
+        <Label name="blue"/>
+    </EnumerationDef>
+
+    <!-- An enumeration of colours. New ones may be added. -->
+    <EnumerationDef name="colours">
+        <Label name="red"/>
+        <Label name="orange"/>
+        <Label name="green"/>
+        <Label name="pink"/>
+    </EnumerationDef>
+
+    <!-- A definition of different distance measurement units. -->
+    <EnumerationDef name="units">
+        <Finalized/>
+        <Label name="meters"/>
+        <Label name="feet"/>
+    </EnumerationDef>
+
+    <!-- A definition of the states of an order. -->
+    <EnumerationDef name="order_state">
+        <Finalized/>
+        <Label name="creating"/>
+        <Label name="submitted"/>
+        <Label name="picking"/>
+        <Label name="billed"/>
+        <Label name="dispatched"/>
+        <Label name="failed"/>
+    </EnumerationDef>
+
+    <!-- ====== Hierarchies. ====== -->
+    <!-- A classification hierarchy. Finalized so no new classifications may be added. -->
+    <HierarchyDef name="taxonomy">
+        <Finalized/>
+
+        <Level name="top">
+            <Level name="supertype">
+                <Level name="subtype"/>
+            </Level>
+        </Level>
+
+        <HierarchyLabel name="all life" label="">
+            <HierarchyLabel name="plant" label="plant"/>
+            <HierarchyLabel name="bacteria" label="bacteria"/>
+            <HierarchyLabel name="animal" label="animal">
+                <HierarchyLabel name="mamal" label="mamal"/>
+            </HierarchyLabel>
+            <HierarchyLabel name="virus" label="virus"/>
+        </HierarchyLabel>
+    </HierarchyDef>
+
+    <!-- A three level hierarchy, initially empty. -->
+    <HierarchyDef name="three_levels">
+        <Level name="top">
+            <Level name="main">
+                <Level name="secondary"/>
+            </Level>
+        </Level>
+    </HierarchyDef>
+
+    <!-- ====== Trees. ====== -->
+
+    <!-- =================== Simple Examples of all the Component Types ======================= -->
+
+    <ViewDef name="simple_view">
+        <String name="test_string"/>
+    </ViewDef>
+
+    <ComponentDef name="simple_component">
+        <String name="test_string"/>
+    </ComponentDef>
+
+    <EntityDef name="simple_entity">
+        <String name="test_string"/>
+    </EntityDef>
+
+    <DimensionDef name="simple_dimension">
+        <String name="test_string"/>
+    </DimensionDef>
+
+    <FactDef name="simple_fact">
+        <String name="test_string"/>
+    </FactDef>
+
+    <!-- ================================ Components. ========================================= -->
+
+    <!-- Units paired with a quantity to form a measurement component. -->
+    <ComponentDef name="measurement">
+        <Real name="quantity"/>
+        <Enumeration name="units" type="units"/>
+    </ComponentDef>
+
+    <!-- Measurement paired with a dimension to form a measurement of a specific dimension type. -->
+    <ComponentDef name="measurement_of_b">
+        <Component name="amount" type="measurement"/>
+        <Component name="ref_to_b" type="b"/>
+    </ComponentDef>
+
+    <!-- An address component. -->
+    <ComponentDef name="address">
+        <String name="house"/>
+        <String name="street"/>
+        <String name="town"/>
+        <String name="country"/>
+        <String name="postcode"/>
+    </ComponentDef>
+
+    <!-- Credit card billing details component. -->
+    <ComponentDef name="billing_details">
+        <String name="card_number"/>
+    </ComponentDef>
+
+    <!-- ================================ Basic and Custom Type Examples. =================== -->
+    
+    <!-- Examples of all the basic types. -->
+    <EntityDef name="basic_type_entity">
+        <ExternalId/>
+        <Integer name="integer"/>
+        <Real name="real"/>
+        <String name="string"/>
+        <Date name="date"/>
+        <Time name="time"/>
+    </EntityDef>
+
+    <DimensionDef name="basic_type_dimension">
+        <ExternalId/>
+        <Integer name="integer"/>
+        <Real name="real"/>
+        <String name="string"/>
+        <Date name="date"/>
+        <Time name="time"/>
+    </DimensionDef>
+
+    <!-- Examples of all the restricted types. -->
+    <DimensionDef name="restricted_type_dimension">
+        <Integer name="restricted_integer" type="positive"/>
+        <Real name="restricted_real" type="percent"/>
+        <String name="restricted_string" type="email"/>
+        <Date name="restricted_date" type="beyond_2000"/>
+        <Time name="restricted_time" type="working_hours"/>
+    </DimensionDef>
+
+    <!-- Example of big decimal types. -->
+    <DimensionDef name="decimal_dimension">
+        <Real name="amount" type="money"/>
+    </DimensionDef>
+
+    <!-- A taxonmy dimension. -->
+    <DimensionDef name="taxonomy_dimension">
+        <ExternalId/>
+        <View type="name_view"/>
+        <String name="name"/>
+        <Hierarchy name="taxonomy" type="taxonomy"/>
+    </DimensionDef>
+
+    <!-- Examples of all the custom types. -->
+    <DimensionDef name="custom_type_dimension">
+        <Enumeration name="colour" type="colours"/>
+        <Hierarchy name="taxonomy" type="taxonomy"/>
+    </DimensionDef>
+
+    <!-- A customer with an address and billing details. -->
+    <DimensionDef name="customer">
+        <String name="name"/>
+        <Component name="address" type="address"/>
+    </DimensionDef>
+
+    <!-- ================================ View Definition Examples. ========================= -->
+
+    <!-- This is a summary class that contains just the name. -->
+    <ViewDef name="name_view">
+        <String name="name"/>
+    </ViewDef>
+
+    <!-- This is a dimension with a name field that supports the name summary class. -->
+    <DimensionDef name="viewable_dimension">
+        <ExternalId/>
+        <View type="name_view"/>
+        <String name="name"/>
+        <String name="etc"/>
+        <Real name="relevance"/>
+    </DimensionDef>
+
+    <!-- ========================== Free Text Searchable Entity Examples. =================== -->
+
+    <!-- This is a summary class that contains just the name and ranking. -->
+    <ViewDef name="summary_name_view">
+        <String name="name"/>
+        <Real name="ranking"/>
+    </ViewDef>
+
+    <!-- This is a dimension with a name field that supports the name summary class. -->
+    <EntityDef name="searchable_entity">
+        <ExternalId/>
+        <View type="summary_name_view"/>
+        <String name="name"/>
+        <String name="etc"/>
+        <Real name="ranking"/>
+    </EntityDef>
+
+    <!-- ================================ Definition of natural keys. ======================= -->
+
+    <!-- This is a summary view on data with a name/type tuple. -->
+    <ViewDef name="summary_view">
+        <String name="name"/>
+        <String name="type"/>
+    </ViewDef>
+
+    <!-- This is a dimenion with a natural name/type key, with equality based on that key. -->
+    <DimensionDef name="natural_dimension">
+        <View type="summary_view"/>
+
+        <Unique natural_key="true">
+            <String name="name"/>
+            <String name="type"/>
+        </Unique>
+
+        <String name="etc"/>
+    </DimensionDef>
+
+    <!-- This is the same dimension without the natural key, equality is based on value of all fields. -->
+    <DimensionDef name="value_dimension">
+        <View type="summary_view"/>
+
+        <String name="name"/>
+        <String name="type"/>
+
+        <String name="etc"/>
+    </DimensionDef>
+
+    <!-- ================================ Collection Examples. ============================== -->
+
+    <!-- Simple usage of all the collection types. -->
+    <DimensionDef name="collection_dimension">
+
+        <!-- Set of things. -->
+        <Set name="set_of_things">
+            <String name="thing"/>
+        </Set>
+
+        <!-- Bag of things. -->
+        <Bag name="bag_of_things">
+            <String name="thing"/>
+        </Bag>
+
+        <!-- List of things. -->
+        <List name="list_of_things">
+            <String name="thing"/>
+        </List>
+
+        <!-- Map of things. -->
+        <Map name="map_of_things">      
+            <String name="thing"/>
+            <Key><String name="key"/></Key>
+        </Map>
+
+    </DimensionDef>
+
+    <!-- ================================ Relationship Examples. ============================ -->
+
+    <!-- Defines a test dimension A with various relationships to dimensions B, C and D. -->
+    <DimensionDef name="a">
+
+        <!-- ====== Unidirectional relationships. ====== -->
+
+        <!-- One to one from A to B, unidirectional. -->
+        <Unique>
+            <Component name="unique_ref_to_b" type="b"/>
+        </Unique>
+
+        <!-- Many to one from A to B, unidirectional. -->
+        <Component name="ref_to_b" type="b"/>
+
+        <!-- One to many from A to B, unidirectional. -->
+        <Set name="set_unique_of_b">
+            <Unique>
+                <Component name="ref_to_b" type="b"/>
+            </Unique>
+        </Set>
+
+        <!-- Many to many from A to B, unidirectional. -->
+        <Set name="set_of_b">
+            <Component name="ref_to_b" type="b"/>
+        </Set>
+
+        <!-- Many to many from A to B, unidirectional, relationship supports multiple instances. -->
+        <Bag name="bag_of_b">
+            <Component name="ref_to_b" type="b"/>
+        </Bag>
+
+        <!-- Many to many from A to B, unidirectional, relationship is ordered. -->
+        <List name="list_of_b">
+            <Component name="ref_to_b" type="b"/>
+        </List>
+
+        <!-- Many to many from A to B, unidirectional, relationship is keyed. -->
+        <Map name="map_of_b">
+            <Component name="value" type="b"/>
+            <Key><String name="key"/></Key>
+        </Map>
+
+        <!-- ====== Bidirectional relationships. ====== -->
+
+        <!-- One to one from A to C, bidirectional, C has a single ref back to A. -->
+        <Component name="ref_to_c" type="c"/>
+
+        <!-- Many to one from A to D, bidirectional, D has a set of refs back to A. -->
+        <Component name="ref_to_d" type="d"/>
+
+        <!-- One to many from A to C, bidirectional, C has a single ref back to A.. -->
+        <Set name="set_of_c">
+            <Component name="ref_to_c" type="c"/>
+        </Set>
+
+        <!-- Many to many from A to D, bidirectional, D has a set of refs back to A. -->
+        <Set name="set_of_d">
+            <Component name="ref_to_d" type="d"/>
+        </Set>
+
+        <!-- ====== Parent/Child relationships. ====== -->
+
+        <!-- Set of things with a reference back to the parent. -->
+        <Set name="set_of_things_ref_back">
+            <Parent name="ref_to_parent"/>
+        </Set>
+
+        <!-- List of things with a reference back to the parent. -->
+        <List name="list_of_things_ref_back">
+            <Parent name="ref_to_parent"/>
+        </List>
+
+        <!-- Bag of things with a reference back to the parent. -->
+        <Bag name="bag_of_things_ref_back">
+            <Parent name="ref_to_parent"/>
+        </Bag>
+
+        <!-- Map of things with a reference back to the parent. -->
+        <Map name="map_of_things_ref_back">
+            <Parent name="ref_to_parent"/>
+            <Key><String name="key"/></Key>
+        </Map>
+
+        <!-- ====== Association class relationships. ====== -->
+
+        <!-- Many to many from A to (quantity * B) tuple, association class is anonymous. -->
+        <Set name="list_of_amount_of_b">
+            <Integer name="quantity"/>
+            <Component name="ref_to_b" type="b"/>
+        </Set>
+
+        <!-- Many to many from A to (measurement * B), association class is anonymous. -->
+        <Set name="list_of_measurement_of_b">
+            <Component name="amount" type="measurement"/>
+            <Component name="ref_to_b" type="b"/>
+        </Set>
+
+        <!-- Many to many from A to (measurement * B), relationship is ordered, association class is named. -->
+        <Set name="list_of_ref_to_measurement_of_b">
+            <Component name="measurement_of_b" type="measurement_of_b"/>
+        </Set>
+
+    </DimensionDef>
+
+    <!-- Dimension with no references back to A, for unidirectional relationships. -->
+    <DimensionDef name="b">
+    </DimensionDef>
+
+    <!-- Dimension with single reference back to A, for one-to-x bidirectional relationships. -->
+    <DimensionDef name="c">
+        <Component name="ref_to_a" type="a"/>
+    </DimensionDef>
+
+    <!-- Dimension with many references back to A, for many-to-x bidirectional relationships. -->
+    <DimensionDef name="d">
+        <Set name="set_of_a">
+            <Component name="ref_to_a" type="a"/>
+        </Set>
+    </DimensionDef>
+
+    <!-- ================================ More Examples ===================================== -->
+
+    <!-- A store dimension. -->
+    <DimensionDef name="store">
+        <Component name="address" type="address"/>
+    </DimensionDef>
+
+    <!-- A product hierarchy. -->
+    <HierarchyDef name="product_hierarchy">
+        <Level name="all_products">
+            <Level name="category">
+                <Level name="subcategory"/>
+            </Level>
+        </Level>
+    </HierarchyDef>
+    
+    <!-- A product that customers buy. -->
+    <DimensionDef name="example_product">
+        <View type="brand"/>
+
+        <String name="product_description"/>
+        <Unique natural_key="true">
+            <Integer name="sku"/>
+        </Unique>
+        <String name="brand_description"/>
+        <Hierarchy name="product_hierarchy" type="product_hierarchy"/>
+        <!-- And lots more fields... -->
+    </DimensionDef>
+
+    <!-- A brand view onto the product dimension. -->
+    <ViewDef name="brand">
+        <String name="brand_description"/>
+        <Hierarchy name="product_hierarchy" type="product_hierarchy"/>
+    </ViewDef>
+
+    <!-- Defines a purchase order. -->
+    <!--
+        The purchase order is a construct that is passed down a pruchasing pipeline, the stages of which are defined
+        by its state enumeration. It is stored between transactions that operate on different parts of the pipeline,
+        so it is an entity.
+    -->
+    <EntityDef name="purchase_order">
+        <View type="completed_purchase_order"/>
+        <Component name="customer" type="customer"/>
+
+        <Bag name="line_item">
+            <Component name="product" type="example_product"/>
+            <Integer name="quantity"/>
+        </Bag>
+
+        <Enumeration name="state" type="order_state"/>
+        <Component name="billing" type="billing_details"/>
+    </EntityDef>
+
+    <!-- Defines a view onto completed purchase orders. The processing state has been dropped. -->
+    <ViewDef name="completed_purchase_order">
+        <Component name="customer" type="customer"/>
+
+        <Bag name="line_item">
+            <Component name="product" type="example_product"/>
+            <Integer name="quantity"/>
+        </Bag>
+    </ViewDef>
+
+    <!-- A retail sales component. -->
+    <!--
+        The retail sale is a construct that is generated every time a customer purchases some goods in a shop. It is an
+        instantaneous transaction that is not persisted to the online database, so it is a component. As a component
+        it can be used to construct a fact table for warehousing purchases. The customer reference may be obtained
+        if the customers identity can be known from a store card or credit card, otherwise the customer may be
+        mapped onto an anonymous customer (but not a null key).
+    -->
+    <ComponentDef name="retail_sale">
+        <Component name="customer" type="customer"/>    
+        <Component name="store" type="store"/>
+
+        <Bag name="line_item">
+            <Component name="product" type="example_product"/>
+            <Integer name="quantity"/>
+        </Bag>
+    </ComponentDef>
+
+    <!-- ================================ Data Warehouse Definition Examples. =============== -->
+    
+    <!-- Give an example of purchase orders or retail sales.
+         In a simpler example with no pipeline where purchase events do not require any sort of process
+         the purchase fact may not need to exist in the online database at all. For example, retail sales
+         where purchases are made at a till can be thought of as instantaneous transactions, the actual
+         order does not need to be created in a database and transactionally managed, can just store the
+         facts of the purchase straight away. The purchase order is a component in this case and its fact
+         tables are built on top of that component.
+
+In a more complex example with a pipeline, the purchase order must exist in the online database as
+it goes down the pipeline. This is because the purchase is now a longer process with intermediate 
+states and these must be kept throughout. The purchase order is an entity in this case and its fact 
+tables are built on top of that.
+
+Set up warehousing for transaction facts. Each transaction the order is involved in is warehoused. 
+This will correspond with its state changes.
+
+Set up snapshot fact warehousing for taking periodic spanshots of the order pipeline.
+
+Set up accumulation fact warehousing for warehouing the order as it progresses.
+
+The most useful facts are numeric and additive.
+The most useful dimension fields are textual and discrete (enumerations and hierarchies).
+
+Fact tables will often be defined on views onto dimensions, that expose the dimensions textual fields, and use
+formula's that pull the numeric values into the fact table. Need a way of specifiying use of a view onto a
+dimension. Dimension must still be declared for the formula to refer to so cannot just name a view.
+
+Fact tables need to be able to specify how to use the components/views they are built to form the fact table.
+This is equivalent to specifying the ETL process. Dimensions linked to fact tables may be transformed using
+views. Components that fact tables are built from may be extended with extra fields to hold additional facts,
+these field may also be automatially populated using formualas.
+    -->
+
+    <!-- Defines a retail sales fact table directly. -->
+    <FactDef name="pos_sale1">
+        <Component name="customer" type="customer"/>
+        <Component name="store" type="store"/>
+
+        <Bag name="line_item">
+            <Component name="product" type="example_product"/>
+            <Integer name="quantity"/>
+        </Bag>
+    </FactDef>
+
+    <!-- Defines a retail sales fact table, built from the retail sale component. -->
+    <FactDef name="pos_sale2">
+        <Component name="retail_sale" type="retail_sale"/>
+    </FactDef>
+
+    <!-- A retail sales fact table, built from a component, enhanced with extra fields. -->
+    <FactDef name="pos_sale3">
+        <Component name="retail_sale" type="retail_sale"/>
+
+        <Real name="cost"/>
+        <Real name="profit"/>
+    </FactDef>
+
+    <!-- Defines a purchase order fact table, built from the purchase order entity. -->
+    <FactDef name="order1">
+        <Component name="purchase_order" type="purchase_order"/>
+    </FactDef>
+
+    <!-- Defines a purchase order fact table, showing how to add time and date pseudo-dimensions and other fields. -->
+    <FactDef name="order2">
+        <Component name="purchase_order" type="purchase_order"/>
+        
+        <Date name="date" auto="true"/>
+        <Time name="time" auto="true"/>
+    </FactDef>
+
+    <!-- An example accumulating fact table. -->
+    <!-- Use of formulas and component extensions to populate fields of the fact from linked dimensions. -->
+    <FactDef name="order3">
+        <Component name="purchase_order" type="purchase_order"/>
+
+        <!--<ExtendComponent name="purchase_order.line_item">-->
+        <Real name="price" formula="example_product.price"/>
+        <!--</ExtendComponent>-->
+
+        <Real name="total_order_price" formula="sum(purchase_order.line_item.price)"/>
+
+        <Date name="date" auto="true"/>
+        <Time name="time" auto="true"/>
+    </FactDef>
+
+    <!-- An example transaction fact table. An order transaction fact table, just contains completed orders. -->
+    <FactDef name="order_transaction">
+        <Component name="completed_purchase_order" type="completed_purchase_order"/>
+
+        <ExtendComponent name="completed_purchase_order.line_item">
+            <Real name="price" formula="example_product.price"/>
+        </ExtendComponent>
+
+        <Real name="total_order_price" formula="sum(completed_purchase_order.line_item.price)"/>
+
+        <Date name="date" auto="true"/>
+        <Time name="time" auto="true"/>
+    </FactDef>
+
+    <!-- An example snapshot fact table. A market basket fact table, specified directly using pairs of products. -->
+    <FactDef name="market_basket">
+        <Component name="customer" type="customer"/>
+        <Component name="store" type="store"/>
+
+        <Component name="product_a" type="example_product"/>
+        <Component name="product_b" type="example_product"/>
+
+        <Integer name="basket_count"/>
+        <Integer name="quantity_a"/>
+        <Integer name="quantity_b"/>
+
+        <Real name="price_a" formula="product_a.price"/>
+        <Real name="price_b" formula="product_b.price"/>
+    </FactDef>
+
+    <!-- ================================ Index Definition Examples. ======================== -->
+
+    <!-- Defines a content based search engine for the searchable entity. -->
+    <Index name="test_index" type="protoIndex">
+        <IndexedComponent type="searchable_entity">
+            <IndexBy name="name"/>
+            <SummaryView type="summary_name_view"/>
+            <RelevanceValue name="ranking"/>
+        </IndexedComponent>
+    </Index>
+
+</CatalogueDefinition>

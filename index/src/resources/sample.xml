@@ -1,0 +1,42 @@
+<index-configurations xmlns="http://thesett.com/index-setup-0.1" 
+                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                      xsi:schemaLocation="http://thesett.com/index-setup-0.1 index-setup.xsd">
+
+  <stop-words-def ref-name="sw1">
+   and so on
+  </stop-words-def>
+    
+  <stop-words-def file="stopWords" ref-name="sw2"/>
+    
+  <synonyms-def  ref-name="syn1">
+    courgette zuchini
+    zuchine courgette
+  </synonyms-def>
+    
+  <synonyms-def reverse-map="true" ref-name="syn2">
+    courgette zuchini
+  </synonyms-def>
+    
+  <synonyms-def file="synonyms" ref-name="syn3"/>
+    
+  <index-configuration name="test">
+    <key-base-class name="java.lang.Long"/>
+    <record-base-class name="com.thesett.index.TestRecord"/>
+    <summary-base-class name="com.thesett.index.TestRecord.TestRecordSummary"/>
+    
+    <mapping>
+      <record-class name="com.thesett.index.TestRecord">
+        <field name="title"/>
+        <field name="text"/>
+      </record-class>
+
+      <summary-class name="com.thesett.index.TestRecord.TestRecordSummary">
+        <rating-field name="rating"/>
+      </summary-class>
+    </mapping>
+
+    <stop-words-ref ref-name="sw1"/>
+    <synonyms-ref ref-name="syn2"/>
+  </index-configuration>
+
+</index-configurations>

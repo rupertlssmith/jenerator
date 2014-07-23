@@ -1,0 +1,55 @@
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by Rupert Smith (Liberty Bishop 1151 Ltd.) -->
+<!--
+ Defines the schema for XML files that contain a 'config beans' configuration set up. This consists of a series of 
+ elements, one for each bean, that specifies a config bean and its set up parameters. 
+
+ Typically these beans are loaded at application start up time (but this does not have to be the case, config beans are
+ also designed to be re-configurable on the fly). The beans are loaded, their set up parameters are set and their
+ doConfigure methods are called.
+ -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cb="http://thesett.com/config-beans-0.1" targetNamespace="http://thesett.com/config-beans-0.1" elementFormDefault="qualified">
+    <!-- The configBeans root element must have at least one config bean definition. -->
+    <xs:element name="configBeans">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="cb:jndiConfig"/>
+                <xs:element ref="cb:beanSetup" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <!--
+  A beanSetup definition must specify the class name of the config bean and optionally any set up parameters that are
+  to be set on the bean.
+  -->
+    <xs:element name="beanSetup">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="cb:setUpProperty" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="beanClassName" type="xs:string" use="required"/>
+            <xs:attribute name="force" type="xs:boolean"/>
+        </xs:complexType>
+    </xs:element>
+    <!-- A setUpProperty specifies the name and value pair of a config beans property. The values are strings but
+      these will be parsed into the correct type by using introspection on the bean to determine what the correct
+      type is. Configuration should fail if the data cannot be converted from the string to the correct type. -->
+    <xs:element name="setUpProperty">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string"/>
+            <xs:attribute name="value" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="jndiConfig">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="cb:property" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="property">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute name="value" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

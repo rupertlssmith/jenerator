@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by Rupert Smith (Liberty Bishop 1151 Ltd.) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+            xmlns:cat="http://thesett.com/catalogue-content-0.1" 
+            targetNamespace="http://thesett.com/catalogue-content-0.1" 
+            elementFormDefault="qualified">
+
+    <xsd:element name="DimensionalData">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="cat:Delete" minOccurs="0"/>
+                <xsd:element ref="cat:Replace" minOccurs="0"/>
+                <xsd:element ref="cat:DimensionElement"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="Delete"/>
+    <xsd:element name="Replace"/>
+    <xsd:element name="DimensionElement">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="cat:Identifier" minOccurs="0"/>
+                <xsd:element ref="cat:FieldAssignment" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="dimension" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="Identifier">
+        <xsd:complexType>
+            <xsd:attribute name="value" type="xsd:long" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:complexType name="FieldAssignmentType">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:complexType name="StringAttributeType">
+        <xsd:simpleContent>
+            <xsd:extension base="cat:FieldAssignmentType">
+                <xsd:attribute name="value" type="xsd:string" use="optional"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:complexType name="IntAttributeType">
+        <xsd:simpleContent>
+            <xsd:extension base="cat:FieldAssignmentType">
+                <xsd:attribute name="value" type="xsd:int" use="required"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:complexType name="DateAttributeType">
+        <xsd:simpleContent>
+            <xsd:extension base="cat:FieldAssignmentType">
+                <xsd:attribute name="value" type="xsd:date" use="required"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:complexType name="HierarchyType">
+        <xsd:simpleContent>
+            <xsd:extension base="cat:FieldAssignmentType">
+                <xsd:attribute name="value" type="xsd:string" use="required"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:element name="FieldAssignment" type="cat:FieldAssignmentType"/>
+    <xsd:element name="StringAttribute" type="cat:StringAttributeType" substitutionGroup="cat:FieldAssignment"/>
+    <xsd:element name="IntAttribute" type="cat:IntAttributeType" substitutionGroup="cat:FieldAssignment"/>
+    <xsd:element name="DateAttribute" type="cat:DateAttributeType" substitutionGroup="cat:FieldAssignment"/>
+    <xsd:element name="Hierarchy" type="cat:HierarchyType" substitutionGroup="cat:FieldAssignment"/>
+</xsd:schema>

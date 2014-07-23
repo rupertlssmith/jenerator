@@ -1,0 +1,45 @@
+<configBeans xmlns="http://thesett.com/config-beans-0.1"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://thesett.com/config-beans-0.1 C:\DOCUME~1\Rupert\projects\configurator\src\resources\config-beans.xsd">
+
+  <!-- Use JBoss JNDI to deposit the config beans into. -->
+  <jndiConfig>
+    <property name="java.naming.factory.initial" value="org.jnp.interfaces.NamingContextFactory"/>
+    <property name="java.naming.factory.url.pkgs" value="org.jboss.naming:org.jnp.interfaces"/>
+    <property name="java.naming.provider.url" value="localhost"/>
+  </jndiConfig>
+
+  <!-- Set up the service locator config bean so that EJB services can be found. -->
+  <beanSetup beanClassName="com.thesett.common.locator.ServiceLocatorConfigBean">
+    <setUpProperty name="contextName" value="local"/>
+  </beanSetup>
+
+  <!-- Set up the mode config bean to use development mode. -->
+  <beanSetup beanClassName="com.thesett.catalogue.config.ModeConfigBean">
+    <setUpProperty name="devMode" value="true"/>
+  </beanSetup>
+
+  <!-- Set up the loader config bean to load the test catalogue model. -->
+  <beanSetup beanClassName="com.thesett.catalogue.config.ModelLoaderConfigBean">
+    <setUpProperty name="modelResource" value="test-catalogue.xml"/>
+  </beanSetup>
+
+  <!-- Set up the hibernate config bean to configure hibernate on the generated mapping for the model. -->
+  <beanSetup beanClassName="com.thesett.catalogue.config.HibernateConfigBean">
+    <setUpProperty name="mappingResource" value="test-catalogue.hbm.xml"/>
+    <!-- CMT bound session factory is used for the catalogue service, non CMT for the configurator code. -->
+    <setUpProperty name="propertiesResource" value="catalogue-ejb-test-hibernate.properties"/>
+    <setUpProperty name="secondaryPropertiesResource" value="catalogue-ejb-test-hibernate-non-cmt.properties"/>
+  </beanSetup>
+
+  <!-- Set up the index config bean to prepare the index for handling the test model. -->
+  <beanSetup beanClassName="com.thesett.index.config.IndexStoreConfigBean">
+    <setUpProperty name="resourceName" value="test-index-config.xml"/>
+  </beanSetup>
+
+  <!-- Set up the catalogue config bean to prepare the catalogue and check the model against the database. -->
+  <beanSetup beanClassName="com.thesett.catalogue.config.CatalogueConfigBeanImpl">
+    <setUpProperty name="modelPackage" value="com.thesett.catalogue.example"/>
+  </beanSetup>
+
+</configBeans>

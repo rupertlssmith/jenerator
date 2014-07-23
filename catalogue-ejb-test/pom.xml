@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.thesett</groupId>
+    <artifactId>catalogue-ejb-test</artifactId>
+    <name>catalogue-ejb-test</name>
+    <version>0.3-SNAPSHOT</version>
+
+    <description>In container tests for the index resource adapter.</description>
+    <url>http://www.thesett.com/catalogue-ejb-test</url>
+
+    <packaging>ear</packaging>
+
+    <properties>
+        <topdir>${basedir}/..</topdir>
+    </properties>
+
+    <parent>
+        <groupId>com.thesett</groupId>
+        <artifactId>catalogue_build</artifactId>
+        <version>0.3-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>common</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>configurator</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>locator</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>index</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>index-ra-client</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>catalogue</artifactId>
+            <version>0.3-SNAPSHOT</version>
+            <type>ejb</type>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>catalogue</artifactId>
+            <version>0.3-SNAPSHOT</version>
+            <classifier>tests</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>catalogue-model</artifactId>
+            <version>0.3-SNAPSHOT</version>
+            <classifier>tests</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>index-ra</artifactId>
+            <version>0.3-SNAPSHOT</version>
+            <type>rar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+
+        <!--
+             Dependencies not bundled in the .ear file. The catalogue-ejb-test-war is modified by the cactus tasks so must not be
+             included directly in the .ear.
+             This dependency is marked as having 'provided' scope to stop it being bundled.
+        -->
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>catalogue-ejb-test-war</artifactId>
+            <version>0.3-SNAPSHOT</version>
+            <type>war</type>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Container provided dependencies. -->
+        <dependency>
+            <groupId>j2ee</groupId>
+            <artifactId>j2ee</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Test only dependencies. -->
+        <dependency>
+            <groupId>org.apache.cactus</groupId>
+            <artifactId>cactus.core.framework.uberjar.javaEE.15</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <sourceDirectory>src/test-cactus</sourceDirectory>
+
+        <plugins>
+
+            <!--
+                 The catalogue-ejb-test-war dependency is copied into the target directory, so that the cactus tasks can be run on it.
+                 The catalogue-ejb-test-war dependency is unpacked and tests in it are copied into target/test-classes so that surefire
+                 can run them.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.thesett</groupId>
+                                    <artifactId>catalogue-ejb-test-war</artifactId>
+                                    <type>war</type>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.directory}/</outputDirectory>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>unpack-dependencies</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.thesett</groupId>
+                                    <artifactId>catalogue-ejb-test-war</artifactId>
+                                    <type>war</type>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.directory}/catalogue-ejb-test-war</outputDirectory>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--
+                 Use ant to copy and generate resources from templates, its is important the name in the index-ra-ds.xml descriptor
+                 match the .ear file and .rar file names. When running under clover the ${final.classifier} is used to ensure tha
+                 the '-clover' classifier is appened onto these file names. This is done in the 'compile' phase.
+
+                 Cactus is run on the .ear file, again using the '-clover' classifier where necessary. Cargo insists on automatically
+                 deploying the main build artifact of this project, so the output cactified .ear file must be the main build artifact.
+                 For this reason the .ear created by the ear plugin is copied to a temporary file, then cactified back to the original
+                 file name. This is done in the 'pre-integration-test' phase.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+
+                <executions>
+                    <!-- Tranform the template files into files ready for deployment. -->
+                    <execution>
+                        <id>templates</id>
+                        <phase>compile</phase>
+                        <configuration>
+                            <tasks>
+                                <echo>Transforming .template files...</echo>
+
+                                <mkdir dir="${project.build.directory}/resources"/>
+
+                                <!-- Copy the templates into xml files substituting in the required properties. -->
+                                <copy todir="${project.build.directory}/resources" overwrite="true">
+                                    <fileset dir="src/resources">
+                                        <include name="*.template"/>
+                                    </fileset>
+                                    <mapper type="glob" from="*.template" to="*.xml"/>
+                                    <filterset>
+                                        <filter token="EAR_FILE" value="${project.build.finalName}${final.classifier}.ear"/>
+                                    </filterset>
+                                    <filterset>
+                                        <filter token="INDEX_RA_VERSION" value="${version}${final.classifier}"/>
+                                    </filterset>
+                                </copy>
+
+                                <!-- Copy all the non-transformed resources too. -->
+                                <copy todir="${project.build.directory}/resources" overwrite="true">
+                                    <fileset dir="src/resources"/>
+                                    <fileset dir="src/test-resources"/>
+                                </copy>
+
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>cactus</id>
+                        <phase>pre-integration-test</phase>
+                        <configuration>
+                            <tasks>
+
+                                <!-- Cactify the .ear file ready for test deployment. -->
+                                <echo>Cactifying the .ear file...</echo>
+
+                                <property name="plugin_classpath" refid="maven.plugin.classpath"/>
+                                <taskdef resource="cactus.tasks" classpathref="maven.plugin.classpath"/>
+
+                                <copy file="${project.build.directory}/${project.build.finalName}${final.classifier}.ear"
+                                      tofile="${project.build.directory}/temp.ear"/>
+
+                                <!-- Cactify the .ear file. -->
+                                <cactifyear srcfile="${project.build.directory}/temp.ear"
+                                            destfile="${project.build.directory}/${project.build.finalName}${final.classifier}.ear">
+                                    <cactuswar srcfile="${project.build.directory}/catalogue-ejb-test-war.war"
+                                               mergewebxml="etc/cactus/web.xml"
+                                               context="catalogue-ejb-test"/>
+                                </cactifyear>
+
+                                <!-- Copy the cactus tests under test-classes. -->
+                                <copy todir="${project.build.directory}/test-classes">
+                                    <fileset dir="${project.build.directory}/catalogue-ejb-test-war/WEB-INF/classes"/>
+                                </copy>
+
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+
+                </executions>
+            </plugin>
+
+            <!--
+                Tell the ear plugin where to find the generated resources to include. When running under clover the build directory
+                location is different so must be obtained through ${project.build.directory}.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <configuration>
+                    <modules>
+                        <ejbModule>
+                            <groupId>com.thesett</groupId>
+                            <artifactId>catalogue</artifactId>
+                        </ejbModule>
+                    </modules>
+                    <resourcesDir>${project.build.directory}/resources</resourcesDir>
+                </configuration>
+            </plugin>
+
+            <!--
+                 The jboss plugin is used to create the jboss configuration from the default jboss configuration plus changes
+                 under the 'etc/jboss' directories. The container configuration used by cargo is then taken from this.
+            -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jboss-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>start-container</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>configure</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--
+                 Sets up cargo to start/stop jboss, pre and post the integration tests being run. The jboss configuration is taken
+                 from the one generated by the jboss plugin. Unfortunately cargo is expecting a path relative the jboss installation
+                 to this configuration, so a path to the root directory from there is used, with the projects build output directory
+                 appended to it.
+            -->
+            <plugin>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven2-plugin</artifactId>
+                <version>1.1.0</version>
+
+                <executions>
+                    <execution>
+                        <id>start-container</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>stop-container</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <wait>false</wait>
+                    <container>
+                        <containerId>jboss4x</containerId>
+                        <home>${jboss.home}</home>
+                        <timeout>60000</timeout>
+                    </container>
+
+                    <configuration>
+                        <type>existing</type>
+                        <home>${project.build.directory}/jboss/default</home>
+                        <properties>
+                            <cargo.jboss.configuration>${jboss.path.from.servers.to.root}/${project.build.directory}/jboss/default</cargo.jboss.configuration>
+                            <cargo.servlet.port>${jboss.http.port}</cargo.servlet.port>
+                            <cargo.rmi.port>${jboss.rmi.port}</cargo.rmi.port>
+                        </properties>
+
+                    </configuration>
+
+                </configuration>
+            </plugin>
+
+            <!--
+                Runs the cactus integration tests with surefire. When running under clover the results would by default be placed
+                under 'target/clover/surefire-reports' and would not be included in the surefire report as a result. For this reason
+                they are forced to be placed under 'target/surefire-reports' always.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>surefire-it</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <skip>false</skip>
+                            <reportsDirectory>target/surefire-reports</reportsDirectory>
+                            <systemProperties>
+                                <property>
+                                    <name>cactus.contextURL</name>
+                                    <value>http://localhost:8010/catalogue-ejb-test/</value>
+                                </property>
+                            </systemProperties>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+
+        <resources>
+            <!-- Make sure all resources are bundled. -->
+            <resource>
+                <directory>src/resources</directory>
+            </resource>
+
+            <!-- Make sure generated resources are included too. -->
+            <resource>
+                <directory>target/resources</directory>
+            </resource>
+        </resources>
+
+        <!-- Include the contents of the test-resources diretory in all test classpaths. -->
+        <testResources>
+            <testResource>
+                <directory>src/test-resources</directory>
+            </testResource>
+        </testResources>
+
+    </build>
+
+</project>

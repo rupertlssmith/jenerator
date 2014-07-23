@@ -1,0 +1,274 @@
+default namespace = "http://thebadgerset.co.uk/catalogue-def-0.1"
+
+start =
+  Key
+  | (notAllowed | anonymous28)
+  | (notAllowed | anonymous6)
+  | (notAllowed | anonymous3)
+  | (notAllowed | anonymous16)
+  | (notAllowed | anonymous33)
+  | (notAllowed | anonymous26)
+  | (notAllowed | anonymous5)
+  | Label
+  | Package
+  | (notAllowed | anonymous14)
+  | SummaryView
+  | (notAllowed | anonymous20)
+  | (notAllowed | anonymous27)
+  | (notAllowed | anonymous31)
+  | TypeDef
+  | FieldDeclrRoot
+  | (notAllowed | anonymous25)
+  | (anonymous12 | anonymous15)
+  | (notAllowed | anonymous19)
+  | (notAllowed | anonymous24)
+  | Index
+  | (notAllowed
+     | element CatalogueDefinition {
+         Catalogue, Package, TypeDef*, Index*
+       })
+  | (notAllowed | anonymous30)
+  | (notAllowed | anonymous4)
+  | IndexBy
+  | (notAllowed | anonymous7)
+  | ComponentPart
+  | FieldDeclr
+  | (notAllowed | anonymous32)
+  | (notAllowed | anonymous9)
+  | (notAllowed | anonymous12)
+  | View
+  | (notAllowed | anonymous35)
+  | IndexedComponent
+  | (notAllowed | anonymous15)
+  | HierarchyLabel
+  | (anonymous6 | anonymous14 | anonymous20 | anonymous19)
+  | Parent
+  | (notAllowed | anonymous17)
+  | ((anonymous16 | anonymous5 | anonymous31 | anonymous4)
+     | anonymous23)
+  | (notAllowed | anonymous11)
+  | (notAllowed | anonymous22)
+  | Finalized
+  | Level
+  | Catalogue
+anonymous0 =
+  anonymous1,
+  Parent?,
+  FieldDeclrRoot*,
+  attribute name { xsd:string }
+anonymous1 = empty
+anonymous2 =
+  anonymous10,
+  attribute name { xsd:string },
+  attribute type { xsd:string }?,
+  attribute value { xsd:string }?,
+  attribute formula { xsd:string }?
+Index =
+  notAllowed
+  | element Index {
+      attribute type { xsd:string },
+      attribute name { xsd:string },
+      IndexedComponent+
+    }
+anonymous3 = element EnumerationDef { anonymous8, Finalized?, Label+ }
+anonymous4 = element ViewDef { anonymous34 }
+anonymous5 = element EntityDef { anonymous34 }
+anonymous6 = element List { anonymous0 }
+Label =
+  notAllowed
+  | element Label { anonymous13 }
+anonymous7 =
+  element IntegerRange {
+    anonymous8,
+    attribute from { xsd:integer }?,
+    attribute to { xsd:integer }?
+  }
+anonymous8 = attribute name { xsd:string }
+Package =
+  notAllowed
+  | element Package {
+      attribute name { xsd:string }
+    }
+TypeDef =
+  anonymous3
+  | anonymous16
+  | anonymous5
+  | anonymous27
+  | anonymous31
+  | anonymous25
+  | anonymous4
+  | anonymous7
+  | anonymous32
+  | anonymous9
+  | anonymous17
+  | anonymous23
+HierarchyLabel =
+  notAllowed
+  | element HierarchyLabel { anonymous13, HierarchyLabel* }
+anonymous9 =
+  element DateRange {
+    anonymous8,
+    attribute from { xsd:date }?,
+    attribute to { xsd:date }?
+  }
+IndexBy =
+  notAllowed
+  | element IndexBy {
+      attribute name { xsd:string }
+    }
+anonymous10 = anonymous1
+element9 =
+  element * {
+    mixed {
+      (attribute * { text }
+       | element9)*
+    }
+  }
+anonymous11 = element Hierarchy { anonymous2 }
+anonymous12 =
+  element ExtendComponent {
+    anonymous29,
+    attribute name { xsd:string }
+  }
+anonymous13 =
+  attribute label { xsd:string }?,
+  attribute name { xsd:string }
+Key =
+  notAllowed
+  | element Key { FieldDeclr }
+View =
+  notAllowed
+  | element View {
+      attribute type { xsd:string }
+    }
+ComponentPart =
+  anonymous28
+  | anonymous6
+  | anonymous33
+  | anonymous26
+  | anonymous14
+  | anonymous20
+  | element FieldDeclrRoot { anonymous10 }
+  | anonymous18
+  | anonymous19
+  | anonymous24
+  | anonymous30
+  | anonymous21
+  | anonymous12
+  | anonymous35
+  | anonymous15
+  | element Collection { anonymous0 }
+  | anonymous11
+  | anonymous22
+anonymous14 = element Bag { anonymous0 }
+anonymous15 =
+  element Unique {
+    anonymous29,
+    attribute natural_key { xsd:boolean }?
+  }
+anonymous16 = element DimensionDef { anonymous34 }
+IndexedComponent =
+  notAllowed
+  | element IndexedComponent {
+      attribute type { xsd:string },
+      IndexBy+,
+      SummaryView
+    }
+anonymous17 =
+  element RealRange {
+    anonymous8,
+    attribute from { xsd:double }?,
+    attribute to { xsd:double }?,
+    attribute precision { xsd:string }?
+  }
+Catalogue =
+  notAllowed
+  | element Catalogue {
+      attribute name { xsd:string }
+    }
+anonymous18 = element FieldDeclrModifier { anonymous29 }
+anonymous19 = element Set { anonymous0 }
+FieldDeclr =
+  anonymous28
+  | anonymous33
+  | anonymous26
+  | anonymous24
+  | anonymous30
+  | anonymous35
+  | anonymous11
+  | anonymous22
+Parent =
+  notAllowed
+  | element Parent {
+      attribute name { xsd:string }
+    }
+anonymous20 = element Map { anonymous0, Key }
+Level =
+  notAllowed
+  | element Level {
+      attribute name { xsd:string },
+      Level?
+    }
+anonymous21 = element FieldDeclr { anonymous2 }
+FieldDeclrRoot =
+  anonymous28
+  | anonymous33
+  | anonymous26
+  | anonymous18
+  | anonymous24
+  | anonymous30
+  | anonymous21
+  | anonymous12
+  | anonymous35
+  | anonymous15
+  | anonymous11
+  | anonymous22
+anonymous22 = element Real { anonymous2 }
+anonymous23 = element ComponentDef { anonymous34 }
+anonymous24 = element String { anonymous2 }
+Finalized =
+  notAllowed
+  | element Finalized {
+      mixed {
+        (attribute * { text }
+         | element9)*
+      }
+    }
+anonymous25 =
+  element TimeRange {
+    anonymous8,
+    attribute from { xsd:time }?,
+    attribute to { xsd:time }?,
+    attribute step { xsd:time }?
+  }
+SummaryView =
+  notAllowed
+  | element SummaryView {
+      attribute type { xsd:string }
+    }
+anonymous26 = element Component { anonymous2 }
+anonymous27 =
+  element HierarchyDef {
+    anonymous8, Finalized?, Level, HierarchyLabel?
+  }
+anonymous28 =
+  element Time {
+    anonymous2,
+    attribute auto { xsd:boolean }?
+  }
+anonymous29 = anonymous10, FieldDeclr+
+anonymous31 = element FactDef { anonymous34 }
+anonymous30 = element Enumeration { anonymous2 }
+anonymous32 =
+  element StringPattern {
+    anonymous8,
+    attribute length { xsd:integer }?,
+    attribute regexp { xsd:string }?
+  }
+anonymous33 =
+  element Date {
+    anonymous2,
+    attribute auto { xsd:boolean }?
+  }
+anonymous34 = anonymous8, View*, ComponentPart*
+anonymous35 = element Integer { anonymous2 }

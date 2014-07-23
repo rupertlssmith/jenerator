@@ -1,0 +1,13 @@
+<web-app>
+
+  <servlet>
+    <servlet-name>configservlet</servlet-name>
+    <servlet-class>com.thesett.common.webapp.servlets.ConfigServlet</servlet-class> 
+    <init-param>
+      <param-name>configResource</param-name>
+      <param-value>catalogue-ejb-test-config.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+</web-app>

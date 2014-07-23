@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<tl xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+     xsi:noNamespaceSchemaLocation="C:\Documents and Settings\Rupert\projects\javasource\src\resources\tl.xsd">
+
+<!--<compilationUnit package="com.thesett.javasource.example.test" fileName="SimpleTest.java">-->
+
+/**
+ * Test generated class.
+ */
+public class TestGen
+{
+    public void main(String[] args)
+    {
+        <for path="/model/item">
+        System.out.println("<value path="@test"/>");
+        </for>
+    }
+}
+
+<!--</compilationUnit>-->
+</tl>

@@ -1,0 +1,17 @@
+<!-- Template for generating the index-ra-ds.xml file. -->
+<!DOCTYPE connection-factories PUBLIC
+          "-//JBoss//DTD JBOSS JCA Config 1.5//EN"
+          "http://www.jboss.org/j2ee/dtd/jboss-ds_1_5.dtd">
+
+<!-- Non-transactional Index resource adaptor service configuration. -->
+<connection-factories>
+  <tx-connection-factory>
+    <adapter-display-name>IndexResourceAdapter</adapter-display-name>
+    <jndi-name>index_connection_factory</jndi-name>
+    <local-transaction/>
+    <rar-name>@EAR_FILE@#index-ra-@INDEX_RA_VERSION@.rar</rar-name>
+    <connection-definition>
+      com.thesett.index.ra.IndexConnectionFactory
+    </connection-definition>
+  </tx-connection-factory>
+</connection-factories>

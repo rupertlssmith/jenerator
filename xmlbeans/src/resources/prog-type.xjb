@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://java.sun.com/xml/ns/jaxb"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+          xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+          version="2.0">
+
+    <bindings schemaLocation="prog-type.xsd" node="/xsd:schema">
+
+        <globalBindings>
+            <xjc:serializable/>
+        </globalBindings>
+
+        <schemaBindings>
+            <package name="com.thesett.xmlbeans.types"/>
+        </schemaBindings> 
+
+    </bindings>
+
+    <bindings schemaLocation="prog-type.xsd"
+              node="/xsd:schema/xsd:complexType[@name='stringType']/descendant::*/xsd:attribute[@name='value']">
+        <property name="valueOf" />
+    </bindings>
+
+    <bindings schemaLocation="prog-type.xsd"
+              node="/xsd:schema/xsd:complexType[@name='boolType']/descendant::*/xsd:attribute[@name='value']">
+        <property name="valueOf" />
+    </bindings>
+
+    <bindings schemaLocation="prog-type.xsd"
+              node="/xsd:schema/xsd:complexType[@name='shortType']/descendant::*/xsd:attribute[@name='value']">
+        <property name="valueOf" />
+    </bindings>
+
+    <bindings schemaLocation="prog-type.xsd"
+              node="/xsd:schema/xsd:complexType[@name='intType']/descendant::*/xsd:attribute[@name='value']">
+        <property name="valueOf" />
+    </bindings>
+
+    <bindings schemaLocation="prog-type.xsd"
+              node="/xsd:schema/xsd:complexType[@name='longType']/descendant::*/xsd:attribute[@name='value']">
+        <property name="valueOf" />
+    </bindings>
+
+    <bindings schemaLocation="prog-type.xsd"
+              node="/xsd:schema/xsd:complexType[@name='floatType']/descendant::*/xsd:attribute[@name='value']">
+        <property name="valueOf" />
+    </bindings>
+
+    <bindings schemaLocation="prog-type.xsd"
+              node="/xsd:schema/xsd:complexType[@name='doubleType']/descendant::*/xsd:attribute[@name='value']">
+        <property name="valueOf" />
+    </bindings>
+
+    <bindings schemaLocation="prog-type.xsd"
+              node="/xsd:schema/xsd:complexType[@name='dateType']/descendant::*/xsd:attribute[@name='value']">
+        <property name="valueOf" />
+    </bindings>
+
+    <bindings schemaLocation="prog-type.xsd"
+              node="/xsd:schema/xsd:complexType[@name='beanType']/xsd:attribute[@name='class']">
+        <property name="implClass" />
+    </bindings>
+
+</bindings>
