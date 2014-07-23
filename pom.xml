@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.thesett</groupId>
-    <artifactId>catalogue_build</artifactId>
+    <artifactId>jenerator_build</artifactId>
     <name>projects</name>
     <version>0.3-SNAPSHOT</version>
 

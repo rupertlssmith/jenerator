@@ -20,7 +20,7 @@
 
     <parent>
         <groupId>com.thesett</groupId>
-        <artifactId>catalogue_build</artifactId>
+        <artifactId>jenerator_build</artifactId>
         <version>0.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
