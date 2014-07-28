@@ -4,7 +4,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>xmlbeans</artifactId>
     <name>xmlbeans</name>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.3-SNAPSHOT</version><!-- jenerator.version -->
 
     <description>Library for easy mapping between Java Beans and XML.</description>
     <url>http://www.thesett.com/</url>

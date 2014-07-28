@@ -40,6 +40,8 @@
     <properties>
         <topdir>${basedir}/.</topdir>
 
+        <base.version>0.3-SNAPSHOT</base.version><!-- base.version -->
+        
         <!-- Stops the dependency plugin running really slowly. -->
         <dependency.locations.enabled>false</dependency.locations.enabled>
 
@@ -57,7 +59,7 @@
         <jalopy.maven.plugin.version>1.9.4-108</jalopy.maven.plugin.version>
         <maven.jaxb2.plugin.version>0.7.5</maven.jaxb2.plugin.version>
         <xdoclet.maven.plugin.version>1.0</xdoclet.maven.plugin.version>
-        <maven.run.plugin.version>0.1</maven.run.plugin.version>
+        <maven.run.plugin.version>${base.version}</maven.run.plugin.version>        
         <maven.antrun.plugin.version>1.7</maven.antrun.plugin.version>
         <maven.idea.plugin.version>2.2</maven.idea.plugin.version>
         <maven.war.plugin.version>2.0</maven.war.plugin.version>
