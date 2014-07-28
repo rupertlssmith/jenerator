@@ -7,7 +7,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>jenerator_build</artifactId>
     <name>projects</name>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.3-SNAPSHOT</version><!-- jenerator.version -->
 
     <packaging>pom</packaging>
 
