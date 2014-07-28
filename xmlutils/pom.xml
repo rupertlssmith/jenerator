@@ -7,7 +7,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>xmlutils</artifactId>
     <name>xmlutils</name>
-    <version>0.3-SNAPSHOT</version><!-- jenerator.version -->
+    <version>0.9-SNAPSHOT</version><!-- jenerator.version -->
 
     <description>My xmlutils library, a mixed bag of re-usable utility code.</description>
     <url>http://www.thesett.com/xmlutils</url>
@@ -21,7 +21,7 @@
     <parent>
         <groupId>com.thesett</groupId>
         <artifactId>jenerator_build</artifactId>
-        <version>0.3-SNAPSHOT</version><!-- jenerator.version -->
+        <version>0.9-SNAPSHOT</version><!-- jenerator.version -->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>common</artifactId>
-            <version>0.3-SNAPSHOT</version><!-- jenerator.version -->
+            <version>0.9-SNAPSHOT</version><!-- jenerator.version -->
         </dependency>
 
         <dependency>
