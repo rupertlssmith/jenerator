@@ -68,7 +68,7 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>junit-toolkit</artifactId>
-            <version>0.7.1-SNAPSHOT</version>
+            <version>0.9-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
