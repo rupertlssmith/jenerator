@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.javasource.generator;
 
@@ -16,9 +21,9 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
- * SourceCodeWriter is a writer that writes to source files in a package structure that grows from a root directory.
- * As different packages and compilation unit file names are written to, they are automatically created, but most of
- * the calling code can just work with this as any other writer.
+ * SourceCodeWriter is a writer that writes to source files in a package structure that grows from a root directory. As
+ * different packages and compilation unit file names are written to, they are automatically created, but most of the
+ * calling code can just work with this as any other writer.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
@@ -50,9 +55,9 @@ public class SourceCodeWriter extends Writer
     /**
      * Write a portion of an array of characters. Delegates to the underlying writer.
      *
-     * @param cbuf Array of characters.
-     * @param off  Offset from which to start writing characters.
-     * @param len  Number of characters to write.
+     * @param  cbuf Array of characters.
+     * @param  off  Offset from which to start writing characters.
+     * @param  len  Number of characters to write.
      *
      * @throws IOException If the underlying writer causes an i/o exception.
      */
@@ -91,15 +96,15 @@ public class SourceCodeWriter extends Writer
     }
 
     /**
-     * Sets up the package and output file as the current compilation unit to write to. The necessary directories
-     * and files will be created and set up as the current location where the output of this writer is directed.
-     * Any previous compilation unit currently open will be flushed and closed.
+     * Sets up the package and output file as the current compilation unit to write to. The necessary directories and
+     * files will be created and set up as the current location where the output of this writer is directed. Any
+     * previous compilation unit currently open will be flushed and closed.
      *
-     * @param packageName The package name to write to.
-     * @param fileName    The file name to write to.
+     * @param  packageName The package name to write to.
+     * @param  fileName    The file name to write to.
      *
-     * @throws IOException If any i/o exceptions occur on the underlying writers or whilst performing directory
-     *                     or file operations on the file system.
+     * @throws IOException If any i/o exceptions occur on the underlying writers or whilst performing directory or file
+     *                     operations on the file system.
      */
     public void setCompilationUnit(String packageName, String fileName) throws IOException
     {
@@ -123,7 +128,7 @@ public class SourceCodeWriter extends Writer
     /**
      * Converts a package name to a relative direcory name by converting all '.' characters to '/' characters.
      *
-     * @param packageName The package name.
+     * @param  packageName The package name.
      *
      * @return The relative directory for the package name.
      */

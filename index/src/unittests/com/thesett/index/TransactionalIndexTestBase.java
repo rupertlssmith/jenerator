@@ -1,4 +1,18 @@
-/* Copyright Rupert Smith, 2005 to 2008, all rights reserved. */
+/*
+ * Copyright The Sett Ltd, 2005 to 2014.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.thesett.index;
 
 import java.util.Map;
@@ -16,14 +30,14 @@ import com.thesett.junit.concurrency.ThreadTestCoordinator;
 
 /**
  * TransactionalIndexTestBase is a pure unit test base class for deriving test classes for implementations of the
- * {@link TransactionalIndex} interface. The class name deliberately does not end in Test so that it will not be run
- * as a unit test by default. There is no suitable constructor for building and calling objects of this class from
- * JUnit. It is designed to be called explicitly from sub-classes that implement unit tests for specific transactional
- * index implementations that re-use the tests defined here.
+ * {@link TransactionalIndex} interface. The class name deliberately does not end in Test so that it will not be run as
+ * a unit test by default. There is no suitable constructor for building and calling objects of this class from JUnit.
+ * It is designed to be called explicitly from sub-classes that implement unit tests for specific transactional index
+ * implementations that re-use the tests defined here.
  *
- * <p/>It is up to the caller of the transaction isolation testing methods to set the desired isolation level to
- * be tested on the index passed to this class before running the test. Only some of these tests are appropriate
- * in some of the isolation levels, only all of them are appropriate to the highest level 'serializable'.
+ * <p/>It is up to the caller of the transaction isolation testing methods to set the desired isolation level to be
+ * tested on the index passed to this class before running the test. Only some of these tests are appropriate in some of
+ * the isolation levels, only all of them are appropriate to the highest level 'serializable'.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
@@ -52,7 +66,7 @@ public class TransactionalIndexTestBase extends TestCase
     /** Sequence numbers used to make data unique accross many threads running the tests at the same time. */
     static AtomicLong sequence = new AtomicLong();
 
-    /** The {@link TransactionalIndex} to test.*/
+    /** The {@link TransactionalIndex} to test. */
     TransactionalIndex testIndex;
 
     /** The indexes setup instance to configure it with. */
@@ -68,7 +82,7 @@ public class TransactionalIndexTestBase extends TestCase
      * Builds the tests to be run on a supplied transactional index implementation. This allows the tests in this class
      * to be applied to arbitrary index implementations in sub-classes of this test class.
      *
-     * @param testName The name of the unit test.
+     * @param testName  The name of the unit test.
      * @param testIndex The {@link TransactionalIndex} to test.
      */
     public TransactionalIndexTestBase(String testName, TransactionalIndex testIndex, IndexSetup setup)
@@ -765,9 +779,7 @@ public class TransactionalIndexTestBase extends TestCase
             "".equals(errorMessage));
     }
 
-    /**
-     * @throws Exception Any exceptions fall through this method and fail the test.
-     */
+    /** @throws Exception Any exceptions fall through this method and fail the test. */
     protected void setUp() throws Exception
     {
         // Create a transaction to clear the index in.
@@ -783,9 +795,7 @@ public class TransactionalIndexTestBase extends TestCase
         NDC.push(getName());
     }
 
-    /**
-     * @throws Exception Any exceptions fall through this method and fail the test.
-     */
+    /** @throws Exception Any exceptions fall through this method and fail the test. */
     protected void tearDown() throws Exception
     {
         NDC.pop();
@@ -814,12 +824,12 @@ public class TransactionalIndexTestBase extends TestCase
     }
 
     /**
-     * Helper method that verifies whether or not the specified record can be found in the specified index.
-     * It is assumed that the test records title has been indexed and is a unique term to search for the record on
-     * in that index. The test record should be the first and only result returned by the search.
+     * Helper method that verifies whether or not the specified record can be found in the specified index. It is
+     * assumed that the test records title has been indexed and is a unique term to search for the record on in that
+     * index. The test record should be the first and only result returned by the search.
      *
-     * @param tr The TestRecord to search for.
-     * @param i  The index to search in.
+     * @param  tr The TestRecord to search for.
+     * @param  i  The index to search in.
      *
      * @return <tt>true</tt> if the test record is the first and only result returned by the search on its title.
      */

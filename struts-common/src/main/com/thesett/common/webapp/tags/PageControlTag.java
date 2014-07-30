@@ -1,4 +1,18 @@
-/* Copyright Rupert Smith, 2005 to 2008, all rights reserved. */
+/*
+ * Copyright The Sett Ltd, 2005 to 2014.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.thesett.common.webapp.tags;
 
 import java.net.MalformedURLException;
@@ -12,28 +26,36 @@ import org.apache.struts.taglib.TagUtils;
 import com.thesett.common.util.PagedList;
 
 /**
- * PageControlTag renders a paging control for navigating amongst multiple pages. The information to be split into
- * pages should be held in a {@link com.thesett.common.util.PagedList} which is stored in a web session
- * scope variable (it has to be session or application scope to persist over multiple pages/requests). There is some
- * flexibility in the way that the paging control is rendered.
+ * PageControlTag renders a paging control for navigating amongst multiple pages. The information to be split into pages
+ * should be held in a {@link com.thesett.common.util.PagedList} which is stored in a web session scope variable (it has
+ * to be session or application scope to persist over multiple pages/requests). There is some flexibility in the way
+ * that the paging control is rendered.
  *
- * <p/>It is possible to specify a maximum number of pages to display at once. If there are more pages than this then
- * a more button will be rendered to go to the next group of pages. The more button passes an index parameter to the
- * page action to tell it to update the index of the {@link com.thesett.common.util.PagedList}.
+ * <p/>It is possible to specify a maximum number of pages to display at once. If there are more pages than this then a
+ * more button will be rendered to go to the next group of pages. The more button passes an index parameter to the page
+ * action to tell it to update the index of the {@link com.thesett.common.util.PagedList}.
  *
- * <p/>The forward and back buttons will only be rendered if the forward and back parameters are set to true. The forward
- * and back buttons will also pass an index parameter to the paging control action if the maximum number of pages is
- * specified and if the forward or back button points to a page outside of those currently rendered. This will adjust
- * the current index similarly to the more button.
+ * <p/>The forward and back buttons will only be rendered if the forward and back parameters are set to true. The
+ * forward and back buttons will also pass an index parameter to the paging control action if the maximum number of
+ * pages is specified and if the forward or back button points to a page outside of those currently rendered. This will
+ * adjust the current index similarly to the more button.
  *
- * <p/><table id="crc"><caption>CRC Card</caption>
- * <tr><th> Responsibilities <th> Collaborations
- * <tr><td> Render a paging control <td> {@link com.thesett.common.util.PagedList}
+ * <p/>
+ * <table id="crc">
+ * <caption>CRC Card</caption>
+ * <tr>
+ * <th>Responsibilities
+ * <th>Collaborations
+ *
+ * <tr>
+ * <td>Render a paging control
+ * <td> {@link com.thesett.common.util.PagedList}
  * </table>
  *
- * @jsp.tag name="pageControl"
- *
  * @author Rupert Smith
+ *
+ * @jsp.tag
+ *      name = "pageControl"
  */
 public class PageControlTag extends TagSupport
 {
@@ -92,8 +114,8 @@ public class PageControlTag extends TagSupport
     private String property;
 
     /**
-     * Used to hold the URL of the {@link com.thesett.common.webapp.actions.PageAction} action to process the
-     * paging events.
+     * Used to hold the URL of the {@link com.thesett.common.webapp.actions.PageAction} action to process the paging
+     * events.
      */
     private String action;
 
@@ -154,7 +176,7 @@ public class PageControlTag extends TagSupport
     /**
      * Sets the name of the variable to get the pages list from.
      *
-     * @param name The name of the variable to get the pages list from.
+     * @param         name The name of the variable to get the pages list from.
      *
      * @jsp:attribute required="true" rtexprvalue="true" type="java.lang.String"
      */
@@ -166,7 +188,7 @@ public class PageControlTag extends TagSupport
     /**
      * Sets the scope of the variable to get the paged list from.
      *
-     * @param scope The scope of the variable to get the paged list from.
+     * @param         scope The scope of the variable to get the paged list from.
      *
      * @jsp:attribute required="true" rtexprvalue="true" type="java.lang.String"
      */
@@ -178,7 +200,7 @@ public class PageControlTag extends TagSupport
     /**
      * Sets the (optional) property of the variable to get the paged list from.
      *
-     * @param property The property of the variable to get the paged list from.
+     * @param         property The property of the variable to get the paged list from.
      *
      * @jsp:attribute required="false" rtexprvalue="true" type="java.lang.String"
      */
@@ -190,7 +212,7 @@ public class PageControlTag extends TagSupport
     /**
      * Sets the name of the action to handle the paging requests.
      *
-     * @param action The name of the action to handle the paging requests.
+     * @param         action The name of the action to handle the paging requests.
      *
      * @jsp:attribute required="true" rtexprvalue="true" type="java.lang.String"
      */
@@ -202,7 +224,7 @@ public class PageControlTag extends TagSupport
     /**
      * Setst the maximum number of pages to render in the control.
      *
-     * @param maxPages The maximum number of pages to render in the control.
+     * @param         maxPages The maximum number of pages to render in the control.
      *
      * @jsp:attribute required="true" rtexprvalue="true" type="java.lang.String"
      */
@@ -214,7 +236,7 @@ public class PageControlTag extends TagSupport
     /**
      * Determines whether of not to render the first button.
      *
-     * @param renderFirst Determines whether of not to render the first button.
+     * @param         renderFirst Determines whether of not to render the first button.
      *
      * @jsp:attribute required="false" rtexprvalue="true" type="boolean"
      */
@@ -226,7 +248,7 @@ public class PageControlTag extends TagSupport
     /**
      * Determines whether of not to render the back button.
      *
-     * @param renderBack Determines whether of not to render the back button.
+     * @param         renderBack Determines whether of not to render the back button.
      *
      * @jsp:attribute required="false" rtexprvalue="true" type="boolean"
      */
@@ -238,7 +260,7 @@ public class PageControlTag extends TagSupport
     /**
      * Determines whether of not to render the forward button.
      *
-     * @param renderForward Determines whether of not to render the forward button.
+     * @param         renderForward Determines whether of not to render the forward button.
      *
      * @jsp:attribute required="false" rtexprvalue="true" type="boolean"
      */
@@ -250,7 +272,7 @@ public class PageControlTag extends TagSupport
     /**
      * Determines whether of not to render the last button.
      *
-     * @param renderLast Determines whether of not to render the last button.
+     * @param         renderLast Determines whether of not to render the last button.
      *
      * @jsp:attribute required="false" rtexprvalue="true" type="boolean"
      */
@@ -262,7 +284,7 @@ public class PageControlTag extends TagSupport
     /**
      * Sets the optional openining delimeter for the first button.
      *
-     * @param openDelimFirst The optional openining delimeter for the first button.
+     * @param         openDelimFirst The optional openining delimeter for the first button.
      *
      * @jsp:attribute required="false" rtexprvalue="true" type="java.lang.String"
      */
@@ -274,7 +296,7 @@ public class PageControlTag extends TagSupport
     /**
      * Sets the optional openining delimeter for the forward button.
      *
-     * @param openDelimForward The optional openining delimeter for the forward button.
+     * @param         openDelimForward The optional openining delimeter for the forward button.
      *
      * @jsp:attribute required="false" rtexprvalue="true" type="java.lang.String"
      */
@@ -286,7 +308,7 @@ public class PageControlTag extends TagSupport
     /**
      * Sets the optional openining delimeter for the number button.
      *
-     * @param openDelimNumber The optional openining delimeter for the number button.
+     * @param         openDelimNumber The optional openining delimeter for the number button.
      *
      * @jsp:attribute required="false" rtexprvalue="true" type="java.lang.String"
      */
@@ -298,7 +320,7 @@ public class PageControlTag extends TagSupport
     /**
      * Sets the optional openining delimeter for the current button.
      *
-     * @param openDelimCurrent The optional openining delimeter for the current button.
+     * @param         openDelimCurrent The optional openining delimeter for the current button.
      *
      * @jsp:attribute required="false" rtexprvalue="true" type="java.lang.String"
      */
@@ -310,7 +332,7 @@ public class PageControlTag extends TagSupport
     /**
      * Sets the optional openining delimeter for the more button.
      *
-     * @param openDelimMore The optional openining delimeter for the more button.
+     * @param         openDelimMore The optional openining delimeter for the more button.
      *
      * @jsp:attribute required="false" rtexprvalue="true" type="java.lang.String"
      */
@@ -322,7 +344,7 @@ public class PageControlTag extends TagSupport
     /**
      * Sets the optional openining delimeter for the back button.
      *
-     * @param openDelimBack The optional openining delimeter for the back button.
+     * @param         openDelimBack The optional openining delimeter for the back button.
      *
      * @jsp:attribute required="false" rtexprvalue="true" type="java.lang.String"
      */
@@ -334,7 +356,7 @@ public class PageControlTag extends TagSupport
     /**
      * Sets the optional openining delimeter for the last button.
      *
-     * @param openDelimLast The optional openining delimeter for the last button.
+     * @param         openDelimLast The optional openining delimeter for the last button.
      *
      * @jsp:attribute required="false" rtexprvalue="true" type="java.lang.String"
      */
@@ -346,7 +368,7 @@ public class PageControlTag extends TagSupport
     /**
      * Sets the optional closing delimeter.
      *
-     * @param closeDelim The optional closing delimeter.
+     * @param         closeDelim The optional closing delimeter.
      *
      * @jsp:attribute required="false" rtexprvalue="true" type="java.lang.String"
      */
@@ -358,7 +380,7 @@ public class PageControlTag extends TagSupport
     /**
      * Sets the optional text for the first button.
      *
-     * @param firstText The optional text for the first button.
+     * @param         firstText The optional text for the first button.
      *
      * @jsp:attribute required="false" rtexprvalue="true" type="java.lang.String"
      */
@@ -370,7 +392,7 @@ public class PageControlTag extends TagSupport
     /**
      * Sets the optional text for the back button.
      *
-     * @param backText The optional text for the back button.
+     * @param         backText The optional text for the back button.
      *
      * @jsp:attribute required="false" rtexprvalue="true" type="java.lang.String"
      */
@@ -382,7 +404,7 @@ public class PageControlTag extends TagSupport
     /**
      * Sets the optional text for the more button.
      *
-     * @param moreText The optional text for the more button.
+     * @param         moreText The optional text for the more button.
      *
      * @jsp:attribute required="false" rtexprvalue="true" type="java.lang.String"
      */
@@ -394,7 +416,7 @@ public class PageControlTag extends TagSupport
     /**
      * Sets the optional text for the forward button.
      *
-     * @param forwardText The optional text for the forward button.
+     * @param         forwardText The optional text for the forward button.
      *
      * @jsp:attribute required="false" rtexprvalue="true" type="java.lang.String"
      */
@@ -406,7 +428,7 @@ public class PageControlTag extends TagSupport
     /**
      * Sets the optional text for the last button.
      *
-     * @param lastText The optional text for the last button.
+     * @param         lastText The optional text for the last button.
      *
      * @jsp:attribute required="false" rtexprvalue="true" type="java.lang.String"
      */
@@ -486,13 +508,13 @@ public class PageControlTag extends TagSupport
     /**
      * Renders a button control as a hyperlink for the page control.
      *
-     * @param render    Whether or not to render the control.
-     * @param page      The page number that the control links to.
-     * @param index     The page secondary index that the control links to.
-     * @param openDelim The opening delimeter to put around the control. (A snippet of HTML).
-     * @param url       The url of the page action handler.
-     * @param text      The text to render the control.
-     * @param active    Whether or not the control should be made active.
+     * @param  render    Whether or not to render the control.
+     * @param  page      The page number that the control links to.
+     * @param  index     The page secondary index that the control links to.
+     * @param  openDelim The opening delimeter to put around the control. (A snippet of HTML).
+     * @param  url       The url of the page action handler.
+     * @param  text      The text to render the control.
+     * @param  active    Whether or not the control should be made active.
      *
      * @throws JspException If an error occurs whilst writing out the response.
      */

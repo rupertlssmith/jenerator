@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.javasource.maven;
 
@@ -26,10 +31,9 @@ import com.thesett.javasource.generator.SourceCodeGenerator;
  * <tr><td> Call the source code generator with arguments passed from the pom.
  * </table></pre>
  *
- * @author Rupert Smith
- *
- * @goal generate
- * @phase generate-sources
+ * @author                       Rupert Smith
+ * @goal                         generate
+ * @phase                        generate-sources
  * @requiresDependencyResolution compile
  */
 public class JavaSourceMojo extends AbstractMojo
@@ -71,9 +75,7 @@ public class JavaSourceMojo extends AbstractMojo
      */
     private String jpackage;
 
-    /**
-     * Implementation of the "generate" goal.
-     */
+    /** Implementation of the "generate" goal. */
     public void execute()
     {
         for (String template : templates)

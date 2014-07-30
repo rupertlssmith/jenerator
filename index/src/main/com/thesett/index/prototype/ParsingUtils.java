@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.index.prototype;
 
@@ -27,10 +32,10 @@ import org.apache.log4j.Logger;
  * <tr><td> Transform a text into a bag-of-words model, dropping any specified stop words. Still to be implemented.
  * </table></pre>
  *
- * @todo Make this class more flexible by requiring it to be instantiated with specification of how to treat punctuation
- *       and whitespace and so on. Could also make stemming or other transformations configurable here too.
- *
  * @author Rupert Smith
+ * @todo   Make this class more flexible by requiring it to be instantiated with specification of how to treat
+ *         punctuation and whitespace and so on. Could also make stemming or other transformations configurable here
+ *         too.
  */
 public class ParsingUtils
 {
@@ -40,8 +45,8 @@ public class ParsingUtils
     /**
      * Parses a text into a set-of-words model.
      *
-     * @param text      The text to reduce to a set of words.
-     * @param stopWords The stop words to ignore in the text.
+     * @param  text      The text to reduce to a set of words.
+     * @param  stopWords The stop words to ignore in the text.
      *
      * @return The text as a set of words.
      */

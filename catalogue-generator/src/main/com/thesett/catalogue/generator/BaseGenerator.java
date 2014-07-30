@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.catalogue.generator;
 
@@ -33,20 +38,19 @@ import com.thesett.common.util.StringUtils;
  * template is defined in 'Generator.sti'. The generation process consists of setting up a catalogue, a type, a type
  * decorator and a set of fields of the type, on a template and writing the output of the template to a file.
  *
- * <p/>The generation process is driven by querying the catalogue model for all top-level types defined in it, and
- * then applying this as a type visitor to those types. The default type visitor method is implemented by this base
- * class to do nothing. Concrete implementations can override the default type visitor method, or more specific type
- * visitor methods to selectively generate code for the top-level catalogue types that they need to generate code from.
+ * <p/>The generation process is driven by querying the catalogue model for all top-level types defined in it, and then
+ * applying this as a type visitor to those types. The default type visitor method is implemented by this base class to
+ * do nothing. Concrete implementations can override the default type visitor method, or more specific type visitor
+ * methods to selectively generate code for the top-level catalogue types that they need to generate code from.
  *
- * <p/>This generator base class implements optional pre and post processing on the entire generation process, and on
- * a per-type basis. The {@link #preApply(Catalogue)}, {@link #postApply(Catalogue)}, {@link #getPreVisitor()} and
+ * <p/>This generator base class implements optional pre and post processing on the entire generation process, and on a
+ * per-type basis. The {@link #preApply(Catalogue)}, {@link #postApply(Catalogue)}, {@link #getPreVisitor()} and
  * {@link #getPostVisitor()} methods can be overridden by concrete implementation to provide pre and post processing
- * when it is required. As the {@link #getPreVisitor()} and {@link #getPostVisitor()} methods supply visitors over
- * types they can be made to select just some subset of types to apply processing to. The pre and post type processing
- * is applied to all types in a single step before and after the main processing, rather than doing pre, main and post
- * on each type in turn. This means that pre-methods can be used to gether information about all types, ahead of
- * the main processing, or output for all types after the main processing, if some sort of multiple phase processing
- * is required.
+ * when it is required. As the {@link #getPreVisitor()} and {@link #getPostVisitor()} methods supply visitors over types
+ * they can be made to select just some subset of types to apply processing to. The pre and post type processing is
+ * applied to all types in a single step before and after the main processing, rather than doing pre, main and post on
+ * each type in turn. This means that pre-methods can be used to gether information about all types, ahead of the main
+ * processing, or output for all types after the main processing, if some sort of multiple phase processing is required.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
@@ -91,7 +95,7 @@ public abstract class BaseGenerator implements Generator, TypeVisitor
     /**
      * Creates a stringtemplate generator to output to the specified directory root.
      *
-     * @param outputDirName   The root directory to generate output to.
+     * @param outputDirName The root directory to generate output to.
      */
     protected BaseGenerator(String outputDirName)
     {
@@ -155,8 +159,8 @@ public abstract class BaseGenerator implements Generator, TypeVisitor
     }
 
     /**
-     * Sub-classes can override this to return non-null, if they want to apply a pre generation method to every
-     * type generated from, or <tt>null</tt> if they do not require a pre method.
+     * Sub-classes can override this to return non-null, if they want to apply a pre generation method to every type
+     * generated from, or <tt>null</tt> if they do not require a pre method.
      *
      * @return A type visitor to apply pre-generating from a type.
      */
@@ -166,8 +170,8 @@ public abstract class BaseGenerator implements Generator, TypeVisitor
     }
 
     /**
-     * Sub-classes can override this to return non-null, if they want to apply a post generation method to every
-     * type generated from, or <tt>null</tt> if they do not require a post method.
+     * Sub-classes can override this to return non-null, if they want to apply a post generation method to every type
+     * generated from, or <tt>null</tt> if they do not require a post method.
      *
      * @return A type visitor to apply post-generating from a type.
      */
@@ -231,9 +235,9 @@ public abstract class BaseGenerator implements Generator, TypeVisitor
      * model package relative to the generation output directory and returns the result as the full path name of the
      * file to output to, for Java code generation.
      *
-     * @param prefix  The prefix to add to the java file name.
-     * @param name    The name to convert to camel case as the main part of the java file name.
-     * @param postfix The postfix to add to the java file name.
+     * @param  prefix  The prefix to add to the java file name.
+     * @param  name    The name to convert to camel case as the main part of the java file name.
+     * @param  postfix The postfix to add to the java file name.
      *
      * @return The full path to the java source file to output to.
      */

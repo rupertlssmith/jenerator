@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.catalogue.generator;
 
@@ -21,8 +26,8 @@ import com.thesett.common.util.CommandLineParser;
 
 /**
  * Generator creates source code for the operational level implementation of a catalogue from its knowledge level
- * representation. The knowledge level describes the types of data in the catalogue and declares how this data
- * should be stored, the operational level implements this as Java beans with a mapping to a persistence layer.
+ * representation. The knowledge level describes the types of data in the catalogue and declares how this data should be
+ * stored, the operational level implements this as Java beans with a mapping to a persistence layer.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
@@ -114,8 +119,8 @@ public class GeneratorTool
     }
 
     /**
-     * Generates a set of Java bean classes and a Hibernate mapping file for those that require persisting, from
-     * a catalogue model.
+     * Generates a set of Java bean classes and a Hibernate mapping file for those that require persisting, from a
+     * catalogue model.
      *
      * @param model                    The model to generate from.
      * @param outDirName               The directory to write the output to.

@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.catalogue.generator;
 
@@ -37,10 +42,10 @@ import com.thesett.common.util.FileUtils;
  * HibernateGenerator is a {@link Generator} that outputs Hibernate configuration XML and custom user types from a
  * catalogue model.
  *
- * <p/>The hibernate configuration file needs to have its elements speicified in a certain order. In particular
- * user defined type mappings must come earlier in the file than class mappings. For this reason, the hibernate
- * generator uses a customized template output handler, that retains the output for all of the fragments of
- * configuration XML, and then outputs all of the fragments in the correct order during the post-processing step.
+ * <p/>The hibernate configuration file needs to have its elements speicified in a certain order. In particular user
+ * defined type mappings must come earlier in the file than class mappings. For this reason, the hibernate generator
+ * uses a customized template output handler, that retains the output for all of the fragments of configuration XML, and
+ * then outputs all of the fragments in the correct order during the post-processing step.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
@@ -87,8 +92,8 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     private ProcessedTemplateHandler warehouseMappingHandler = new BufferingTemplateHandler();
 
     /**
-     * Creates a generator for hibernate configuration XML and custom user types to output to the specified
-     * directory root.
+     * Creates a generator for hibernate configuration XML and custom user types to output to the specified directory
+     * root.
      *
      * @param outputDirName   The directory root to generate to.
      * @param mappingFileName The name of the file to output the hibernate mapping to.
@@ -112,9 +117,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
         hibernateWarehouseTemplates.registerRenderer(String.class, new CamelCaseRenderer());
     }
 
-    /**
-     * Creates the opening section of a hibernate configuration file.
-     */
+    /** Creates the opening section of a hibernate configuration file. */
     public void generateHibernateConfigOpening()
     {
         String outputFileName = nameToFileNameInRootGenerationDir(mappingFileName);
@@ -126,9 +129,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
         FileUtils.writeObjectToFile(outputFileName, stringTemplate, false);
     }
 
-    /**
-     * Creates the closing section of a hibnerate configuration file.
-     */
+    /** Creates the closing section of a hibnerate configuration file. */
     public void generateHibernateConfigClosing()
     {
         String outputFileName = nameToFileNameInRootGenerationDir(mappingFileName);
@@ -322,10 +323,10 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     }
 
     /**
-     * Converts a name to the name of a file in the root output directory for the generation, and ensures that
-     * that directory exists if it has not already been created.
+     * Converts a name to the name of a file in the root output directory for the generation, and ensures that that
+     * directory exists if it has not already been created.
      *
-     * @param name The name to convert to a path to a file in the root generator output directory.
+     * @param  name The name to convert to a path to a file in the root generator output directory.
      *
      * @return The full path to the file to output to.
      */
@@ -345,8 +346,8 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
 
     /**
      * BufferingTemplateHandler is a processed template handler, that retains the output fragments from all processed
-     * templates that it recieves in a buffer, so that the contents of the buffer may be output in a correct sequence
-     * at a later time.
+     * templates that it recieves in a buffer, so that the contents of the buffer may be output in a correct sequence at
+     * a later time.
      *
      * <pre><p/><table id="crc"><caption>CRC Card</caption>
      * <tr><th> Responsibilities <th> Collaborations

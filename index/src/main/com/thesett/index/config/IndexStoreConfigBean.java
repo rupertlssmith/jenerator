@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.index.config;
 
@@ -46,9 +51,9 @@ import com.thesett.index.setup.SynonymsType;
 
 /**
  * IndexStoreConfigBean is a {@link com.thesett.common.config.ConfigBean} for setting up a pre-built
- * {@link com.thesett.index.IndexStore} that contains indexes setup from a configuration XML file.
- * The configuration XML file specifies the stop-words, synonyms and type mappings for a set of indexes that
- * are made available in the index store.
+ * {@link com.thesett.index.IndexStore} that contains indexes setup from a configuration XML file. The configuration XML
+ * file specifies the stop-words, synonyms and type mappings for a set of indexes that are made available in the index
+ * store.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
@@ -56,11 +61,10 @@ import com.thesett.index.setup.SynonymsType;
  * <tr><td> Perform configuration of the index store from a parsed configuration file.
  * </table></pre>
  *
- * @todo This only supports {@link com.thesett.index.prototype.ProtoIndex} and
- *       {@link com.thesett.index.prototype.ProtoIndexStore} at the moment. Different implementations to be
- *       added, either by passing a parameter to this config bean or in the configuration file itself.
- *
  * @author Rupert Smith
+ * @todo   This only supports {@link com.thesett.index.prototype.ProtoIndex} and
+ *         {@link com.thesett.index.prototype.ProtoIndexStore} at the moment. Different implementations to be added,
+ *         either by passing a parameter to this config bean or in the configuration file itself.
  */
 public class IndexStoreConfigBean implements ConfigBean, Serializable
 {
@@ -80,14 +84,14 @@ public class IndexStoreConfigBean implements ConfigBean, Serializable
     private boolean configured = false;
 
     /**
-    * Tells the bean to perform whatever configuration it is intended to do.
-    *
-    * @param force        Setting this to true tells the config bean to re-run its configuration action even if it has
-    *                     already been run.
-    * @param configBeanContext A reference to the configurator that is managing the whole configuration process.
-    *
-    * @throws ConfigException If some error occurs that means that the configuration cannot be succesfully completed.
-    */
+     * Tells the bean to perform whatever configuration it is intended to do.
+     *
+     * @param  force             Setting this to true tells the config bean to re-run its configuration action even if
+     *                           it has already been run.
+     * @param  configBeanContext A reference to the configurator that is managing the whole configuration process.
+     *
+     * @throws ConfigException If some error occurs that means that the configuration cannot be succesfully completed.
+     */
     public void doConfigure(boolean force, ConfigBeanContext configBeanContext) throws ConfigException
     {
         log.debug("public void doConfigure(boolean force) throws ConfigException");
@@ -298,7 +302,7 @@ public class IndexStoreConfigBean implements ConfigBean, Serializable
     /**
      * Validates the index configurations, returning any error messages in a string.
      *
-     * @param configurations The configurations to validate.
+     * @param  configurations The configurations to validate.
      *
      * @return Any error messages, empty string or null if there are none.
      */
@@ -419,7 +423,7 @@ public class IndexStoreConfigBean implements ConfigBean, Serializable
      * Performs external resource validation of a stop-words definition. If the stop-words definition references an
      * external file, checks that that file is available as a resource on the classpath.
      *
-     * @param stopWords The stop-words definition to validate.
+     * @param  stopWords The stop-words definition to validate.
      *
      * @return Any error messages, empty string or null if there are none.
      */
@@ -437,10 +441,10 @@ public class IndexStoreConfigBean implements ConfigBean, Serializable
     }
 
     /**
-     * Performs external resource validation of a synonyms definition. If the synonyms definition references an
-     * external file, checks that that file is available as a resource on the classpath.
+     * Performs external resource validation of a synonyms definition. If the synonyms definition references an external
+     * file, checks that that file is available as a resource on the classpath.
      *
-     * @param synonyms The synonyms definition to validate.
+     * @param  synonyms The synonyms definition to validate.
      *
      * @return Any error messages, empty string or null if there are none.
      */
@@ -458,10 +462,10 @@ public class IndexStoreConfigBean implements ConfigBean, Serializable
     }
 
     /**
-     * Checks that the named resource can be found using the resource loading capabilities of the class loader
-     * on the current class path.
+     * Checks that the named resource can be found using the resource loading capabilities of the class loader on the
+     * current class path.
      *
-     * @param resourceName The name of the resource file.
+     * @param  resourceName The name of the resource file.
      *
      * @return <tt>true</tt> if the named resource exists, <tt>flase</tt> otherwise.
      */

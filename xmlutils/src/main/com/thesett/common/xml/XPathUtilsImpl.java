@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.common.xml;
 
@@ -27,8 +32,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * XPathUtilsImpl provides an implementation of the {@link XPathUtils} xpath context interface that is built
- * using the default JAXP XPath evaluator set by the system property "javax.xml.xpath.XPathFactory".
+ * XPathUtilsImpl provides an implementation of the {@link XPathUtils} xpath context interface that is built using the
+ * default JAXP XPath evaluator set by the system property "javax.xml.xpath.XPathFactory".
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
@@ -59,9 +64,7 @@ public class XPathUtilsImpl implements XPathUtils, XPathVariableResolver
     /** Holds a reference to the function library. */
     XPathFunctionResolver functionResolver = null;
 
-    /**
-     * Create a new XPath context.
-     */
+    /** Create a new XPath context. */
     public XPathUtilsImpl()
     {
         // Set this as the variable resolver on the XPath factory.
@@ -71,7 +74,7 @@ public class XPathUtilsImpl implements XPathUtils, XPathVariableResolver
     /**
      * Evaluates an XPath query that expects to find a long as its result.
      *
-     * @param path The XPath.
+     * @param  path The XPath.
      *
      * @return The long value found at the XPath location.
      */
@@ -83,7 +86,7 @@ public class XPathUtilsImpl implements XPathUtils, XPathVariableResolver
     /**
      * Evaluates an XPath query that expects to find a int as its result.
      *
-     * @param path The XPath.
+     * @param  path The XPath.
      *
      * @return The int value found at the XPath location.
      */
@@ -95,7 +98,7 @@ public class XPathUtilsImpl implements XPathUtils, XPathVariableResolver
     /**
      * Evaluates an XPath query that expects to find a double as its result.
      *
-     * @param path The XPath.
+     * @param  path The XPath.
      *
      * @return The double value found at the XPath location.
      */
@@ -107,7 +110,7 @@ public class XPathUtilsImpl implements XPathUtils, XPathVariableResolver
     /**
      * Evaluates an XPath query that expects to find a boolean as its result.
      *
-     * @param path The XPath.
+     * @param  path The XPath.
      *
      * @return The boolean value found at the XPath location.
      */
@@ -119,7 +122,7 @@ public class XPathUtilsImpl implements XPathUtils, XPathVariableResolver
     /**
      * Evaluates an XPath query that expects to find a string as its result.
      *
-     * @param path The XPath.
+     * @param  path The XPath.
      *
      * @return The string value found at the XPath location.
      *
@@ -143,12 +146,12 @@ public class XPathUtilsImpl implements XPathUtils, XPathVariableResolver
     /**
      * Evaluates an XPath query that expects to find a node list as its result.
      *
-     * @param path The XPath.
+     * @param  path The XPath.
      *
      * @return The node list found at the XPath location.
      *
-     * @throws IllegalArgumentException If the value at the XPath location is not a node list or the XPath expression
-     *                                  is invalid.
+     * @throws IllegalArgumentException If the value at the XPath location is not a node list or the XPath expression is
+     *                                  invalid.
      */
     public NodeList evalNodeList(String path) throws IllegalArgumentException
     {
@@ -167,12 +170,12 @@ public class XPathUtilsImpl implements XPathUtils, XPathVariableResolver
     /**
      * Evaluates an XPath query that expects to find a node list as its result.
      *
-     * @param path The XPath.
+     * @param  path The XPath.
      *
      * @return The node list found at the XPath location.
      *
-     * @throws IllegalArgumentException If the value at the XPath location is not a node list or the XPath expression
-     *                                  is invalid.
+     * @throws IllegalArgumentException If the value at the XPath location is not a node list or the XPath expression is
+     *                                  invalid.
      */
     public Node evalNode(String path) throws IllegalArgumentException
     {
@@ -225,7 +228,7 @@ public class XPathUtilsImpl implements XPathUtils, XPathVariableResolver
     /**
      * Provides the call back for the query evaluator to access the variables.
      *
-     * @param name The name of the variable to get.
+     * @param  name The name of the variable to get.
      *
      * @return The variable from the variable set, or null if no matching name exists.
      */

@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.xmlbeans.reflect;
 
@@ -46,10 +51,9 @@ import com.thesett.xmlbeans.types.StringType;
  * <tr><td> Get list of all fields.
  * </table></pre>
  *
- * @todo Make this so that it can capture/restore from both beans and BeanTypes. Then it can be used universally to
- *       serialize/deserialize beans from xml.
- *
  * @author Rupert Smith
+ * @todo   Make this so that it can capture/restore from both beans and BeanTypes. Then it can be used universally to
+ *         serialize/deserialize beans from xml.
  */
 public class XmlBeanMemento implements Memento
 {
@@ -130,7 +134,7 @@ public class XmlBeanMemento implements Memento
     /**
      * Restores the properties currently in this memento to the specified object.
      *
-     * @param ob The object to which the values from this memento should be restored.
+     * @param  ob The object to which the values from this memento should be restored.
      *
      * @throws NoSuchFieldException If a setter method could not be found for a property.
      */
@@ -142,8 +146,8 @@ public class XmlBeanMemento implements Memento
     /**
      * Gets the value of the named property of the specified class.
      *
-     * @param cls      The class in which the property to get is declared.
-     * @param property The name of the property.
+     * @param  cls      The class in which the property to get is declared.
+     * @param  property The name of the property.
      *
      * @return The object value of the property.
      *
@@ -181,7 +185,7 @@ public class XmlBeanMemento implements Memento
     /**
      * Generates a list of all the fields of the object that this memento maps for a given class.
      *
-     * @param cls The class to get all field names for.
+     * @param  cls The class to get all field names for.
      *
      * @return A collection of the field names or null if the specified class is not part of the objects class hierarchy
      *         chain.

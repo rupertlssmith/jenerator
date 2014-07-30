@@ -1,4 +1,18 @@
-/* Copyright Rupert Smith, 2005 to 2008, all rights reserved. */
+/*
+ * Copyright The Sett Ltd, 2005 to 2014.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.thesett.common.webapp.forms;
 
 import org.apache.struts.action.ActionForm;
@@ -7,16 +21,15 @@ import org.apache.struts.action.ActionForm;
  * Struts form used to pass information about web variables to be sorted by a
  * {@link com.thesett.common.webapp.actions.SortAction}.
  *
- * @todo Replace this with a DynaActionForm.
- *
- * @struts.form name="sortForm"
- *
- * <p><table id="crc"><caption>CRC Card</caption>
- * <tr><th> Responsibilities <th> Collaborations
- * <tr><td> Hold names of variables to locate a list to be sorted and the comparator to sort it by.
- * </table>
- *
  * @author Rupert Smith
+ * @todo   Replace this with a DynaActionForm.
+ *
+ * @struts.form
+ *         name = "sortForm"
+ *                <pid = "crc"
+ *                <tr><th> Responsibilities <th> Collaborations
+ *                <tr><td> Hold names of variables to locate a list to be sorted and the comparator to sort it by.
+ *        </table>
  */
 public class SortForm extends ActionForm
 {

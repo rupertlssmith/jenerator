@@ -1,4 +1,18 @@
-/* Copyright Rupert Smith, 2005 to 2008, all rights reserved. */
+/*
+ * Copyright The Sett Ltd, 2005 to 2014.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.thesett.common.webapp.actions;
 
 import java.io.FilterWriter;
@@ -15,14 +29,23 @@ import org.apache.struts.action.ActionErrors;
 import com.thesett.common.error.UserReadableError;
 
 /**
- * ErrorHandler is a top-level error handler for struts based web applications. It defines a single static method for handling exceptions, logging them
- * as errors and translating them into Struts ActionErrors. This is defined here rather than in {@link BaseAction} because the error handling code may
- * also be called directly from a JSP page and not just from Struts actions.
+ * ErrorHandler is a top-level error handler for struts based web applications. It defines a single static method for
+ * handling exceptions, logging them as errors and translating them into Struts ActionErrors. This is defined here
+ * rather than in {@link BaseAction} because the error handling code may also be called directly from a JSP page and not
+ * just from Struts actions.
  *
- * <p><table id="crc"><caption>CRC Card</caption>
- * <tr><th> Responsibilities <th> Collaborations
- * <tr><td> Log all top-level exceptions as errors.
- * <tr><td> Translate exceptions into errors.
+ * <p>
+ * <table id="crc">
+ * <caption>CRC Card</caption>
+ * <tr>
+ * <th>Responsibilities
+ * <th>Collaborations
+ *
+ * <tr>
+ * <td>Log all top-level exceptions as errors.
+ *
+ * <tr>
+ * <td>Translate exceptions into errors.
  * </table>
  *
  * @author Rupert Smith
@@ -33,16 +56,16 @@ public class ErrorHandler
     private static final Logger log = Logger.getLogger(ErrorHandler.class);
 
     /**
-     * Converts an exception into struts action errors. The exception stack trace is stored under the 'exception' message
-     * key. The message resource 'error.internalerror' is stored under the message key 'generalerror'. The stack trace is
-     * pretty printed in HTML.
-     *
-     * @todo This method can be modified to check if the exception is a user readable exception and to insert the user
-     *       readable message under the 'generalerror' message key. Currently it does not handle user readable errors
-     *       like this.
+     * Converts an exception into struts action errors. The exception stack trace is stored under the 'exception'
+     * message key. The message resource 'error.internalerror' is stored under the message key 'generalerror'. The stack
+     * trace is pretty printed in HTML.
      *
      * @param exception The exception to be converted into struts action errors.
      * @param errors    The struts action errors object into which the action errors should be placed.
+     *
+     * @todo  This method can be modified to check if the exception is a user readable exception and to insert the user
+     *        readable message under the 'generalerror' message key. Currently it does not handle user readable errors
+     *        like this.
      */
     public static void handleErrors(Throwable exception, ActionErrors errors)
     {
@@ -105,14 +128,19 @@ public class ErrorHandler
 /**
  * Filter writer that converts from text to HTML. This filter replaces newline characters '\n' with html line breaks.
  *
- * <p><table id="crc"><caption>CRC Card</caption>
- * <tr><th> Responsibilities <th> Collaborations
- * <tr><td> Filter new lines into HTML line breaks.
+ * <p>
+ * <table id="crc">
+ * <caption>CRC Card</caption>
+ * <tr>
+ * <th>Responsibilities
+ * <th>Collaborations
+ *
+ * <tr>
+ * <td>Filter new lines into HTML line breaks.
  * </table>
  *
- * @todo Add more HTML filtering to this.
- *
  * @author Rupert Smith
+ * @todo   Add more HTML filtering to this.
  */
 class HTMLFilter extends FilterWriter
 {
@@ -129,7 +157,7 @@ class HTMLFilter extends FilterWriter
     /**
      * Writed a single character to the filtered writer. No filtering is done for this method.
      *
-     * @param c The character to write.
+     * @param  c The character to write.
      *
      * @throws IOException If the writer won't accept the character.
      */
@@ -141,9 +169,9 @@ class HTMLFilter extends FilterWriter
     /**
      * Writes an array of characters to the filtered writer. No filtering is done for this method.
      *
-     * @param cbuf The character array to write.
-     * @param off The offset into the array to begin writing from.
-     * @param len The number of characters to write.
+     * @param  cbuf The character array to write.
+     * @param  off  The offset into the array to begin writing from.
+     * @param  len  The number of characters to write.
      *
      * @throws IOException If the writer won't accept the character.
      */
@@ -154,11 +182,12 @@ class HTMLFilter extends FilterWriter
 
     /**
      * Writes a string of characters to the filtered writer. Any newline characters '\n' are replaced with an HTML break
-     * tag "<br>".
+     * tag "<br>
+     * ".
      *
-     * @param str The character array to write.
-     * @param off The offset into the array to begin writing from.
-     * @param len The number of characters to write.
+     * @param  str The character array to write.
+     * @param  off The offset into the array to begin writing from.
+     * @param  len The number of characters to write.
      *
      * @throws IOException If the writer won't accept the string.
      */

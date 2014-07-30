@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.catalogue.interfaces;
 
@@ -29,8 +34,8 @@ import com.thesett.aima.state.ComponentType;
  * <p/>The browse operations are worth mentioning. They take a mapping of property names and attribute values to be
  * matched. The use of a map allows multiple properties to be specified in a single call. The values to be matched are
  * specified as attributes and the query to fetch elements matching the specified values is built from this. It is
- * possible to use attributes that specify ranges of values, to retrieve entities matching the range. The browse
- * method {@link #browse(EntityType, java.util.Map, String)} takes the type of entity to be retrieved, and restricts its
+ * possible to use attributes that specify ranges of values, to retrieve entities matching the range. The browse method
+ * {@link #browse(EntityType, java.util.Map, String)} takes the type of entity to be retrieved, and restricts its
  * results to just that entity type, the other browse method {@link #browse(java.util.Map, String)} does not restrict to
  * a type, so can retrieve multiple types of entity in a single query.
  *
@@ -71,11 +76,11 @@ public interface CatalogueManagerService
     public void deleteHierarchyInstance(HierarchyType type, InternalId id);
 
     /**
-     * Given an instance of a hierarchy, queries the database to see if that instance exists in it, and optionally
-     * if any child instances of it exist too. The resulting hierarchy instances are all returned in a list.
+     * Given an instance of a hierarchy, queries the database to see if that instance exists in it, and optionally if
+     * any child instances of it exist too. The resulting hierarchy instances are all returned in a list.
      *
-     * @param hierarchy     The hierarchy instance to query against.
-     * @param queryChildren <tt>true</tt> to also query against children of the instance.
+     * @param  hierarchy     The hierarchy instance to query against.
+     * @param  queryChildren <tt>true</tt> to also query against children of the instance.
      *
      * @return A list matching hierarchy instances, or an empty list if none are found.
      */
@@ -91,8 +96,8 @@ public interface CatalogueManagerService
     /**
      * Fetches an entity of the specified type by its internal id.
      *
-     * @param entityType The type of the entity to fetch.
-     * @param id         The id of the element to fetch.
+     * @param  entityType The type of the entity to fetch.
+     * @param  id         The id of the element to fetch.
      *
      * @return The entity matching the entity type and id, or <tt>null</tt> if no match can be found.
      */
@@ -101,7 +106,7 @@ public interface CatalogueManagerService
     /**
      * Looks up an external id and resolves it into the entity with that id.
      *
-     * @param id The external id to look up.
+     * @param  id The external id to look up.
      *
      * @return An entity with matching external id, or <tt>null</tt> if no match can be found.
      */
@@ -123,31 +128,31 @@ public interface CatalogueManagerService
     public void deleteEntityInstance(EntityType entityType, InternalId id);
 
     /**
-     * Provides a listing by entity type of views of entities matching a set of named attributes. The attributes do
-     * not have to be fully specified, range and wild-card attributes are accepted. Any attribute that is a member
-     * of an entity, and is not specified at all in the query will match any value of that attribute in the returned
-     * entities. A view type is passed to specify the view onto the entity that is to be returned by the browse
-     * operation, allowing a subset of the entities fields to be retrieved in order to provide a browsable summary
-     * of the available entities. Only entities that conform to the specified view will be returned.
+     * Provides a listing by entity type of views of entities matching a set of named attributes. The attributes do not
+     * have to be fully specified, range and wild-card attributes are accepted. Any attribute that is a member of an
+     * entity, and is not specified at all in the query will match any value of that attribute in the returned entities.
+     * A view type is passed to specify the view onto the entity that is to be returned by the browse operation,
+     * allowing a subset of the entities fields to be retrieved in order to provide a browsable summary of the available
+     * entities. Only entities that conform to the specified view will be returned.
      *
-     * @param matchings    The attributes to match.
-     * @param viewTypeName The name of the view type to match and return.
+     * @param  matchings    The attributes to match.
+     * @param  viewTypeName The name of the view type to match and return.
      *
      * @return A map from entity types to matching entities.
      */
     public Map<EntityType, List<ViewInstance>> browse(Map<String, Attribute> matchings, String viewTypeName);
 
     /**
-     * Provides a listing by entity type of views of entities matching a set of named attributes. The attributes do
-     * not have to be fully specified, range and wild-card attributes are accepted. Any attribute that is a member
-     * of an entity, and is not specified at all in the query will match any value of that attribute in the returned
-     * entities. A view type is passed to specify the view onto the entity that is to be returned by the browse
-     * operation, allowing a subset of the entities fields to be retrieved in order to provide a browsable summary
-     * of the available entities. Only entities that conform to the specified view will be returned.
+     * Provides a listing by entity type of views of entities matching a set of named attributes. The attributes do not
+     * have to be fully specified, range and wild-card attributes are accepted. Any attribute that is a member of an
+     * entity, and is not specified at all in the query will match any value of that attribute in the returned entities.
+     * A view type is passed to specify the view onto the entity that is to be returned by the browse operation,
+     * allowing a subset of the entities fields to be retrieved in order to provide a browsable summary of the available
+     * entities. Only entities that conform to the specified view will be returned.
      *
-     * @param entityType   The type of entity to restrict the results to.
-     * @param matchings    The attributes to match.
-     * @param viewTypeName The name of the view type to match and return.
+     * @param  entityType   The type of entity to restrict the results to.
+     * @param  matchings    The attributes to match.
+     * @param  viewTypeName The name of the view type to match and return.
      *
      * @return A map from entity types to matching entities.
      */
@@ -157,9 +162,9 @@ public interface CatalogueManagerService
      * Performs a free text search over indexed entities, returning views onto all entities that conform to the
      * specified view type.
      *
-     * @param indexName The name of the index to query.
-     * @param query     The free text query.
-     * @param view      The type of the summary view to search over.
+     * @param  indexName The name of the index to query.
+     * @param  query     The free text query.
+     * @param  view      The type of the summary view to search over.
      *
      * @return A list of views onto all matching entities that conform to the specified view type.
      */
@@ -169,9 +174,9 @@ public interface CatalogueManagerService
      * Performs a free text search over indexed entities, returning views onto all entities that conform to the
      * specified view type, grouped by entity type.
      *
-     * @param indexName The name of the index to query.
-     * @param query     The free text query.
-     * @param view      The type of the summary view to search over.
+     * @param  indexName The name of the index to query.
+     * @param  query     The free text query.
+     * @param  view      The type of the summary view to search over.
      *
      * @return A map of views onto all matching entities that conform to the specified view type, grouped by entity
      *         type.
@@ -180,26 +185,24 @@ public interface CatalogueManagerService
         ViewType view);
 
     /**
-     * Executes a query specified in parts and returns the results in pages. The query to execute consists of an
-     * entity name to query on, optional criterion to apply to that entity, and optional joined entity names and
-     * criterion to restrict by. This is built into two criteria to be exceuted against the current session; one
-     * to count how many rows the result will contain and one to fetch a single page of those results.
+     * Executes a query specified in parts and returns the results in pages. The query to execute consists of an entity
+     * name to query on, optional criterion to apply to that entity, and optional joined entity names and criterion to
+     * restrict by. This is built into two criteria to be exceuted against the current session; one to count how many
+     * rows the result will contain and one to fetch a single page of those results.
      *
-     * @param from               The index to get from (the start of the page).
-     * @param number             The number of results to return (the size of the page).
-     * @param databaseEntityName The database entity to query.
-     * @param entityTypeName     The type name of the entity to query.
-     * @param viewTypeName       The view type to project the results onto.
-     * @param criterion          The optional criterion to apply to the entity.
-     * @param joins              A map of related entities and criterion to restrict the query by.
+     * @param  from               The index to get from (the start of the page).
+     * @param  number             The number of results to return (the size of the page).
+     * @param  databaseEntityName The database entity to query.
+     * @param  entityTypeName     The type name of the entity to query.
+     * @param  viewTypeName       The view type to project the results onto.
+     * @param  criterion          The optional criterion to apply to the entity.
+     * @param  joins              A map of related entities and criterion to restrict the query by.
      *
      * @return A list of dimension element summaries.
      */
     public PagingResult executePagedQuery(int from, int number, String databaseEntityName, String entityTypeName,
         String viewTypeName, Criterion criterion, Map<String, Criterion> joins);
 
-    /**
-     * Causes all indexes in the catalogue to be brough up-to-date with their entity data.
-     */
+    /** Causes all indexes in the catalogue to be brough up-to-date with their entity data. */
     public void rebuildIndexes();
 }

@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.index.tx;
 
@@ -17,24 +22,24 @@ import javax.transaction.xa.Xid;
 
 /**
  * IndexTxManager is a helper class for setting up local transaction ids on the current thread to assist in calling
- * {@link com.thesett.index.TransactionalIndex}es. When running in a transactional mode, a transactional index
- * expects to have its methods called with a valid transaction id attached to the current thread as a thread local
- * variable. Passing variables as thread locals means that the index methods do not have to be polluted with extra
- * parameters for transaction id passing, so transactional indexes can have exactly the same interface as
- * non-transactional ones. This class provides methods to create, assign and remove transaction ids to threads.
+ * {@link com.thesett.index.TransactionalIndex}es. When running in a transactional mode, a transactional index expects
+ * to have its methods called with a valid transaction id attached to the current thread as a thread local variable.
+ * Passing variables as thread locals means that the index methods do not have to be polluted with extra parameters for
+ * transaction id passing, so transactional indexes can have exactly the same interface as non-transactional ones. This
+ * class provides methods to create, assign and remove transaction ids to threads.
  *
  * <p/>Transactions may be coordinated by an external transaction manager which creates its own unique transaction
- * identifiers. This class provides a method {@link #assignTxIdToThread(Xid)} that maps such an external id onto
- * the internal one, creating a new internal one if one does not already exist for that external id. Subsequent calls
- * to this method for the same external id will result in the same internal id being reattached to the thread, unless
- * the mapping has been invalidated, in which case a new local id will be assigned.
+ * identifiers. This class provides a method {@link #assignTxIdToThread(Xid)} that maps such an external id onto the
+ * internal one, creating a new internal one if one does not already exist for that external id. Subsequent calls to
+ * this method for the same external id will result in the same internal id being reattached to the thread, unless the
+ * mapping has been invalidated, in which case a new local id will be assigned.
  *
  * <p/>Local transactions not involiving an external transaction manager should use the {@link #createTxIdToThread}
  * method to create and assign local ids to the current thread.
  *
- * <p/>When a transaction id is invalidated because a transaction has been completed, the transaction id will
- * call back the {@link #invalidateTxId} method to notify this class of the invalidation. The response is to remove
- * any mapping from external transaction ids to local ones for the invalidated local id.
+ * <p/>When a transaction id is invalidated because a transaction has been completed, the transaction id will call back
+ * the {@link #invalidateTxId} method to notify this class of the invalidation. The response is to remove any mapping
+ * from external transaction ids to local ones for the invalidated local id.
  *
  * <p/>The current transaction id may be removed from the current thread and re-attached at will using the
  * {@link #removeTxIdFromThread}, {@link #assignTxIdToThread(IndexTxId)} and {@link #assignTxIdToThread(Xid)} methods.
@@ -75,10 +80,10 @@ public class IndexTxManager
         };
 
     /**
-     * Finds an existing mapping from external transaction id to local, or creates a new local transaction id for
-     * the external one.
+     * Finds an existing mapping from external transaction id to local, or creates a new local transaction id for the
+     * external one.
      *
-     * @param xid The external transaction id to map to a local id.
+     * @param  xid The external transaction id to map to a local id.
      *
      * @return The mapped local transaction id.
      */
@@ -113,8 +118,8 @@ public class IndexTxManager
     }
 
     /**
-     * Find an existing mapping from external transaction id to local, or creates a new local transaction id for
-     * the external one. The local id is assigned to the current thread.
+     * Find an existing mapping from external transaction id to local, or creates a new local transaction id for the
+     * external one. The local id is assigned to the current thread.
      *
      * @param xid The external transaction id to map to a local id.
      */

@@ -1,4 +1,18 @@
-/* Copyright Rupert Smith, 2005 to 2008, all rights reserved. */
+/*
+ * Copyright The Sett Ltd, 2005 to 2014.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.thesett.index;
 
 import java.util.Random;
@@ -14,9 +28,9 @@ import com.thesett.junit.concurrency.ThreadTestCoordinator;
 import com.thesett.junit.extensions.AsymptoticTestCase;
 
 /**
- * Does performance and stress testing on transactional indexes. Performance testing is designed around typical
- * usage of an index; lots of reads and occasional single updates to ratings. Stress testing is based around concurrent
- * reads, updates and uploads all mixed together and not modeled on typical usage.
+ * Does performance and stress testing on transactional indexes. Performance testing is designed around typical usage of
+ * an index; lots of reads and occasional single updates to ratings. Stress testing is based around concurrent reads,
+ * updates and uploads all mixed together and not modeled on typical usage.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
@@ -52,7 +66,7 @@ public class TransactionalIndexPerfTestBase extends AsymptoticTestCase
     /** Holds the test records. */
     TestRecord[] records = new TestRecord[INDEX_SIZE];
 
-    /** The {@link TransactionalIndex} to test.*/
+    /** The {@link TransactionalIndex} to test. */
     TransactionalIndex testIndex;
 
     /** The test indexes setup instance. */
@@ -531,7 +545,7 @@ public class TransactionalIndexPerfTestBase extends AsymptoticTestCase
      * Builds the tests to be run on a supplied transactional index implementation. This allows the tests in this class
      * to be applied to arbitrary index implementations in sub-classes of this test class.
      *
-     * @param testName The name of the unit test.
+     * @param testName  The name of the unit test.
      * @param testIndex The {@link TransactionalIndex} to test.
      */
     public TransactionalIndexPerfTestBase(String testName, TransactionalIndex testIndex, IndexSetup setup)
@@ -852,17 +866,13 @@ public class TransactionalIndexPerfTestBase extends AsymptoticTestCase
             "".equals(errorMessage));
     }
 
-    /**
-     * @throws Exception Any exceptions fall through this method and fail the test.
-     */
+    /** @throws Exception Any exceptions fall through this method and fail the test. */
     protected void setUp() throws Exception
     {
         NDC.push(getName());
     }
 
-    /**
-     * @throws Exception Any exceptions fall through this method and fail the test.
-     */
+    /** @throws Exception Any exceptions fall through this method and fail the test. */
     protected void tearDown() throws Exception
     {
         NDC.pop();

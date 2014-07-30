@@ -1,17 +1,39 @@
-/* Copyright Rupert Smith, 2005 to 2008, all rights reserved. */
+/*
+ * Copyright The Sett Ltd, 2005 to 2014.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.thesett.common.webapp.tags;
 
 import javax.servlet.jsp.PageContext;
 
 /**
- * ScopeHelper sets up an interface on top of web variable scopes, abstracting them as simply 'get' and 'put'.
- * By specifying a scope name, 'page', 'request', 'session' or 'application' and a refering page context, this
- * abstraction is set up.
+ * ScopeHelper sets up an interface on top of web variable scopes, abstracting them as simply 'get' and 'put'. By
+ * specifying a scope name, 'page', 'request', 'session' or 'application' and a refering page context, this abstraction
+ * is set up.
  *
- * <p/><table id="crc"><caption>CRC Card</caption>
- * <tr><th> Responsibilities <th> Collaborations
- * <tr><td> Read from web scopes.
- * <tr><td> Write to web scopes.
+ * <p/>
+ * <table id="crc">
+ * <caption>CRC Card</caption>
+ * <tr>
+ * <th>Responsibilities
+ * <th>Collaborations
+ *
+ * <tr>
+ * <td>Read from web scopes.
+ *
+ * <tr>
+ * <td>Write to web scopes.
  * </table>
  *
  * @author Rupert Smith
@@ -72,7 +94,7 @@ public class ScopeHelper
     /**
      * Retrieves an object from the scope, or null if it cannot be found.
      *
-     * @param name The name of the variable to fetch.
+     * @param  name The name of the variable to fetch.
      *
      * @return The variables value from the scope, or null if it cannot be found.
      */

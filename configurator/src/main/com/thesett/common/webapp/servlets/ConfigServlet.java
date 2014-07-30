@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.common.webapp.servlets;
 
@@ -19,14 +24,15 @@ import com.thesett.common.config.ConfigException;
 import com.thesett.common.config.Configurator;
 
 /**
- * ConfigServlet loads and configures config beans at application startup time. Its service method is not implemented
- * as it is not intented to be used as a normal servlet but merely as a convenient place to load config beans. It
- * should normally be set to load on startup and be the first servlet loaded.
+ * ConfigServlet loads and configures config beans at application startup time. Its service method is not implemented as
+ * it is not intented to be used as a normal servlet but merely as a convenient place to load config beans. It should
+ * normally be set to load on startup and be the first servlet loaded.
  *
  * <p/>Here is an example of how to set it up in the web.xml. This assumes that the configuration file has been placed
  * in a file called 'config.xml' which can be found in the root of the classpath of the WAR file.
  *
- * <p/><pre>
+ * <p/>
+ * <pre>
  * &lt;servlet&gt;
  *   &lt;servlet-name&gt;configservlet&lt;/servlet-name&gt;
  *   &lt;servlet-class&gt;com.thesett.common.webapp.servlets.ConfigServlet&lt;/servlet-class&gt;
@@ -47,9 +53,9 @@ import com.thesett.common.config.Configurator;
  * <tr><td> Run the configurator using the specified configuration resource.
  * </table></pre>
  *
- * @todo Could make this servlet return some status information about the config beans if its service method is called.
- *
  * @author Rupert Smith
+ * @todo   Could make this servlet return some status information about the config beans if its service method is
+ *         called.
  */
 public class ConfigServlet extends HttpServlet
 {
@@ -89,9 +95,7 @@ public class ConfigServlet extends HttpServlet
         }
     }
 
-    /**
-     * Tells the configurator to remove all its config beans from the JNDI context in which they are registered.
-     */
+    /** Tells the configurator to remove all its config beans from the JNDI context in which they are registered. */
     public void destroy()
     {
         // Let the super class do its clean up work if it needs to.

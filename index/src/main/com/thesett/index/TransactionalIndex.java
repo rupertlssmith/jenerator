@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.index;
 
@@ -29,29 +34,27 @@ package com.thesett.index;
  * <tr><td> Rollback transactional changes to an index.
  * </table></pre>
  *
- * @todo The transactional mode stuff needs a bit of a rethink. Can't do it quite so simply. Must support multiple
- *       transactions making changes at the same time. Need to keep track of which transaction has made which changes
- *       and only commit those relevant to the particular transaction that commits. Need to think also about the isolation
- *       level. I think implement the simplest level that will do (or maybe consider how different levels can be supported
- *       under different configurations and just implement the one that is needed for now, leaving the others for later
- *       completion). Consider: T1 begins, T2 begins and updates index and commits, T1 reads index, can it see T2's
- *       changes? If so reads are not repeatable. Can T1 see T2's changes before T2 commits? If so reads are dirty. If T2
- *       creates new items in the index will T1 see them? not repeatable. Before T2 commits? phantom reads. I think T1
- *       should not see T2's changes until T2 commits but that non-repeatable reads will be acceptable. After all once T2
- *       commits then the data should be there so any further attempts to access it should be ok (provided of course that
- *       its isolation level is read commited too, if its serializable it won't be visible yet). That is to say that, read
- *       committed level should suffice.  An implementation will need to create a seperate data structure to hold the
- *       workings of a transaction in and on commit to merge that into the committed index.
- *
- * @todo How do methods know which transaction is running? Is this obtained from the current thread, a transaction manager
- *       or is it passed explicitly? The workings of this need to be understood and adjustments made to the method
- *       signatures if needed. An implementation will need to create a seperate data structure to hold the workings of
- *       a transaction in and on commit to merge that into the committed index.
- *
- * @todo Rename this as Transactional and make TransactionlIndex an extension of it an Index. Transactional is a
- *       re-usable concept.
- *
  * @author Rupert Smith
+ * @todo   The transactional mode stuff needs a bit of a rethink. Can't do it quite so simply. Must support multiple
+ *         transactions making changes at the same time. Need to keep track of which transaction has made which changes
+ *         and only commit those relevant to the particular transaction that commits. Need to think also about the
+ *         isolation level. I think implement the simplest level that will do (or maybe consider how different levels
+ *         can be supported under different configurations and just implement the one that is needed for now, leaving
+ *         the others for later completion). Consider: T1 begins, T2 begins and updates index and commits, T1 reads
+ *         index, can it see T2's changes? If so reads are not repeatable. Can T1 see T2's changes before T2 commits? If
+ *         so reads are dirty. If T2 creates new items in the index will T1 see them? not repeatable. Before T2 commits?
+ *         phantom reads. I think T1 should not see T2's changes until T2 commits but that non-repeatable reads will be
+ *         acceptable. After all once T2 commits then the data should be there so any further attempts to access it
+ *         should be ok (provided of course that its isolation level is read commited too, if its serializable it won't
+ *         be visible yet). That is to say that, read committed level should suffice. An implementation will need to
+ *         create a seperate data structure to hold the workings of a transaction in and on commit to merge that into
+ *         the committed index.
+ * @todo   How do methods know which transaction is running? Is this obtained from the current thread, a transaction
+ *         manager or is it passed explicitly? The workings of this need to be understood and adjustments made to the
+ *         method signatures if needed. An implementation will need to create a seperate data structure to hold the
+ *         workings of a transaction in and on commit to merge that into the committed index.
+ * @todo   Rename this as Transactional and make TransactionlIndex an extension of it an Index. Transactional is a
+ *         re-usable concept.
  */
 public interface TransactionalIndex<K, D, E> extends Index<K, D, E>
 {
@@ -89,8 +92,8 @@ public interface TransactionalIndex<K, D, E> extends Index<K, D, E>
     public IsolationLevel getTransationalMode();
 
     /**
-     * When operating in transactional mode causes any changes since the last commit to be made visible to the
-     * search method.
+     * When operating in transactional mode causes any changes since the last commit to be made visible to the search
+     * method.
      */
     public void commit();
 

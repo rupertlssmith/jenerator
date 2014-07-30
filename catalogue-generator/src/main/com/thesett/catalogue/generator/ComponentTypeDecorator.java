@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.catalogue.generator;
 
@@ -19,8 +24,8 @@ import com.thesett.aima.state.State;
 import com.thesett.aima.state.Type;
 
 /**
- * ComponentTypeDecorator is a {@link TypeDecorator} for {@link ComponentType}s. It automatically decorates the types
- * of any fields of the component that are accessed through it.
+ * ComponentTypeDecorator is a {@link TypeDecorator} for {@link ComponentType}s. It automatically decorates the types of
+ * any fields of the component that are accessed through it.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
@@ -33,8 +38,8 @@ import com.thesett.aima.state.Type;
 public class ComponentTypeDecorator extends TypeDecorator implements ComponentType
 {
     /**
-     * Creates a type decorator for a component type, that returns decorated types for all reachable child types on
-     * all of the fields of the component.
+     * Creates a type decorator for a component type, that returns decorated types for all reachable child types on all
+     * of the fields of the component.
      *
      * @param type The component type to decorate.
      */

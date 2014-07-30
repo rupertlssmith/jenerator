@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.common.config.beans;
 
@@ -41,9 +46,7 @@ public class Log4JConfigBean implements ConfigBean
     /** Flag to represent configuration status of this configure bean. */
     private boolean configured = false;
 
-    /**
-     * Creates a new Log4JConfigBean object.
-     */
+    /** Creates a new Log4JConfigBean object. */
     public Log4JConfigBean()
     {
     }
@@ -82,9 +85,9 @@ public class Log4JConfigBean implements ConfigBean
     /**
      * Loads the log4j config file and class the log4j DOM configurator with it.
      *
-     * @param force Setting this to true tells the config bean to re-run its configuration action even if it has
-     *              already been run.
-     * @param configBeanContext A reference to the configurator that is managing the whole configuration process.
+     * @param  force             Setting this to true tells the config bean to re-run its configuration action even if
+     *                           it has already been run.
+     * @param  configBeanContext A reference to the configurator that is managing the whole configuration process.
      *
      * @throws ConfigException If some error occurs that means that the configuration cannot be succesfully completed.
      */

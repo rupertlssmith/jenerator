@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.common.xml;
 
@@ -17,9 +22,9 @@ import java.util.PriorityQueue;
 import com.thesett.common.error.UserReadableRuntimeException;
 
 /**
- * XmlUtilsException is used to represent a wide variety of XML related exceptions. For example parsing errors,
- * parser unsupported feature errors, validation errors, malformed xml errors and so on. Generally speaking methods
- * in the {@link XmlUtils} class throw this as a convenience exception to capture non-recoverable error conditions.
+ * XmlUtilsException is used to represent a wide variety of XML related exceptions. For example parsing errors, parser
+ * unsupported feature errors, validation errors, malformed xml errors and so on. Generally speaking methods in the
+ * {@link XmlUtils} class throw this as a convenience exception to capture non-recoverable error conditions.
  *
  * <p/>Recoverable conditions have more specific exception types to represent them.
  *
@@ -82,8 +87,8 @@ public class XmlUtilsException extends UserReadableRuntimeException
         /**
          * Compares two parsing errors by line number.
          *
-         * @param e1 The first parsing error.
-         * @param e2 The second parsing error.
+         * @param  e1 The first parsing error.
+         * @param  e2 The second parsing error.
          *
          * @return A negative integer, zero, or a positive integer as the first argument is less than, equal to, or
          *         greater than the second.
@@ -99,7 +104,7 @@ public class XmlUtilsException extends UserReadableRuntimeException
         /**
          * Checks if another comparator is the same as this one.
          *
-         * @param o The object to compare to.
+         * @param  o The object to compare to.
          *
          * @return <tt>true</tt> only if the specified object is also a comparator and it imposes the same ordering as
          *         this comparator.

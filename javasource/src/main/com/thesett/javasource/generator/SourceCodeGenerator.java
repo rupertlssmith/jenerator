@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.javasource.generator;
 
@@ -57,20 +62,20 @@ import com.thesett.javasource.generator.model.ValueType;
 import com.thesett.javasource.generator.model.VarType;
 
 /**
- * SourceCodeGenerator transforms XML template files that conform to the template language schema (tl.xsd) into
- * Java source code. The template contains fragments of java code intermixed with control statements and expressions
- * over a model. The model must be expressed in XML and the control statements are given in terms of XPaths over that
- * model. The result of combining a model and a template is a text file, usually Java source code, but not necessarily.
+ * SourceCodeGenerator transforms XML template files that conform to the template language schema (tl.xsd) into Java
+ * source code. The template contains fragments of java code intermixed with control statements and expressions over a
+ * model. The model must be expressed in XML and the control statements are given in terms of XPaths over that model.
+ * The result of combining a model and a template is a text file, usually Java source code, but not necessarily.
  *
- * <p/>The generation process works by using two nested loops. The outer loop is over the model and the inner loop
- * is over the template. At the start, the root element of the model is taken as the outer loop (a loop of one element)
- * and the first level of nodes in the template as the inner loop. Control statements in the template may contain
- * child nodes and some constructs (such as for loops) can select multiple nodes from the model to loop over and
- * perform a repetitive generation from the template. In this sense, the model drives the generation process, supplying
- * the template with sequences of elements to transform into source code. This can be illustrated with a trivial
- * example:
+ * <p/>The generation process works by using two nested loops. The outer loop is over the model and the inner loop is
+ * over the template. At the start, the root element of the model is taken as the outer loop (a loop of one element) and
+ * the first level of nodes in the template as the inner loop. Control statements in the template may contain child
+ * nodes and some constructs (such as for loops) can select multiple nodes from the model to loop over and perform a
+ * repetitive generation from the template. In this sense, the model drives the generation process, supplying the
+ * template with sequences of elements to transform into source code. This can be illustrated with a trivial example:
  *
  * <p/>The model file:
+ *
  * <pre>
  * &lt;model&gt;
  *  &lt;item test="hello"/&gt;
@@ -80,6 +85,7 @@ import com.thesett.javasource.generator.model.VarType;
  * </pre>
  *
  * <p/>The template file:
+ *
  * <pre>
  * public class Test {
  *     public void main(String[] args)
@@ -91,8 +97,8 @@ import com.thesett.javasource.generator.model.VarType;
  * }
  * </pre>
  *
- * <p/>The for loop selects a sequence of items from the model. The outer loop iterates over these, repeatedly processing
- * the template for each one.
+ * <p/>The for loop selects a sequence of items from the model. The outer loop iterates over these, repeatedly
+ * processing the template for each one.
  *
  * <p/>The elements in the template language are:
  *
@@ -252,20 +258,20 @@ public class SourceCodeGenerator
     /**
      * Performs source code generation from a template and an XML document model.
      *
-     * <p/>This implementation of the generation process has been written with an explicit stack and an iterative
-     * style, rather than using recursive calls, because the Java stack is limited in size and the language is
-     * not ideally designed for recursion.
+     * <p/>This implementation of the generation process has been written with an explicit stack and an iterative style,
+     * rather than using recursive calls, because the Java stack is limited in size and the language is not ideally
+     * designed for recursion.
      *
      * <p/>There are two nested loops as explained in the class comment. The stack loop forms a third outer loop to
-     * these. Whenever a template element with child nodes is encountered a new stack frame is generated, the
-     * current context is saved on the stack, the new stack frame is also placed on the stack, the two nested
-     * loops are suspended, processing breaks to the outer loop which pops the new context from the stack and
-     * processes it. Generation continues until the stack is empty.
+     * these. Whenever a template element with child nodes is encountered a new stack frame is generated, the current
+     * context is saved on the stack, the new stack frame is also placed on the stack, the two nested loops are
+     * suspended, processing breaks to the outer loop which pops the new context from the stack and processes it.
+     * Generation continues until the stack is empty.
      *
-     * @param template  The source code template.
-     * @param model     The XML model data source to generate from.
-     * @param out       The writer to send the generated file to.
-     * @param variables The variables to pass to the generation process.
+     * @param  template  The source code template.
+     * @param  model     The XML model data source to generate from.
+     * @param  out       The writer to send the generated file to.
+     * @param  variables The variables to pass to the generation process.
      *
      * @throws IOException If there is an i/o exception on the writer whilst writing the source code out.
      */
@@ -516,9 +522,9 @@ public class SourceCodeGenerator
     }
 
     /**
-     * Helper method for non-looping template elements with child nodes. Saves the current generation context onto
-     * the stack and establishes a new context for the child template nodes and the current model node, also placed
-     * onto the stack.
+     * Helper method for non-looping template elements with child nodes. Saves the current generation context onto the
+     * stack and establishes a new context for the child template nodes and the current model node, also placed onto the
+     * stack.
      *
      * @param modelNode      The current model node to establish the new context with.
      * @param element        The non-looping element, the child nodes of which to create a new context for.
@@ -552,16 +558,16 @@ public class SourceCodeGenerator
     }
 
     /**
-     * Holds the current source code generation context. A new context is generated every time an element in the
-     * source code template is encountered that contains sub-nodes. Sometimes a sub-context in the template will
-     * also have a sub-context in the model associated with it. This happens where a control statement in the template
-     * selects a context path within the model; this model context is passed down to all child nodes in the template.
-     * If no sub-context in the model is selected then the parent one is used.
+     * Holds the current source code generation context. A new context is generated every time an element in the source
+     * code template is encountered that contains sub-nodes. Sometimes a sub-context in the template will also have a
+     * sub-context in the model associated with it. This happens where a control statement in the template selects a
+     * context path within the model; this model context is passed down to all child nodes in the template. If no
+     * sub-context in the model is selected then the parent one is used.
      *
      * <p/>The context maintains two indexes, one into the template context and one into the model context. As items
      * from these contexts are processed, the indexes must be incremented. When a context is suspended onto the stack
-     * for later continuation, the indexes are preserved so that processing can continue where it was left off once
-     * the context is restored.
+     * for later continuation, the indexes are preserved so that processing can continue where it was left off once the
+     * context is restored.
      */
     public static class GenerationContext
     {
@@ -611,7 +617,8 @@ public class SourceCodeGenerator
     }
 
     /**
-     * Provides a library of additional functions that can form part of the XPath expressions used in the code templates.
+     * Provides a library of additional functions that can form part of the XPath expressions used in the code
+     * templates.
      */
     public class GenerationFunctions implements XPathFunctionResolver
     {
@@ -624,9 +631,7 @@ public class SourceCodeGenerator
         /** Holds the function library by name. */
         private Map<String, XPathFunction> functions = new HashMap<String, XPathFunction>();
 
-        /**
-         * Builds the library of generator functions.
-         */
+        /** Builds the library of generator functions. */
         public GenerationFunctions()
         {
             // Create the function library.
@@ -638,8 +643,8 @@ public class SourceCodeGenerator
         /**
          * Returns generator functions from this libraries namespace.
          *
-         * @param functionName The name of the function to get.
-         * @param arity        The number of arguments it takes.
+         * @param  functionName The name of the function to get.
+         * @param  arity        The number of arguments it takes.
          *
          * @return <tt>null</tt> if no matching function is found, otherwise the matching function.
          */
@@ -658,11 +663,11 @@ public class SourceCodeGenerator
         }
 
         /**
-         * This function examines the {@link SourceCodeGenerator#lastInFor} flag, exposed on the generator class,
-         * to check if a currently executing for loop over the model is on its last iteration. This is usefull when
+         * This function examines the {@link SourceCodeGenerator#lastInFor} flag, exposed on the generator class, to
+         * check if a currently executing for loop over the model is on its last iteration. This is usefull when
          * outputing delimeters (such as commas) between elements in a sequence, where no delimiter is to be output
-         * after the last element in a sequence. The function takes no arguments, and can only be true within
-         * a for loop.
+         * after the last element in a sequence. The function takes no arguments, and can only be true within a for
+         * loop.
          */
         public class NotLastInFor implements XPathFunction
         {
@@ -672,7 +677,7 @@ public class SourceCodeGenerator
             /**
              * Determines whether or not the model context is currently looping over the final node of a sequence.
              *
-             * @param args Does not accept any arguments, ignored.
+             * @param  args Does not accept any arguments, ignored.
              *
              * @return True only if the model context is currently looping over the final node of a sequence.
              */
@@ -687,20 +692,20 @@ public class SourceCodeGenerator
 
     /**
      * This function translates arbitrary names into Java class names. The first letter is capitalized, any '_'
-     * characters are removed and the character immediately after them is capitalized to translate the name into
-     * camel case.
+     * characters are removed and the character immediately after them is capitalized to translate the name into camel
+     * case.
      */
     public static class ToCamelCaseUpper implements XPathFunction
     {
         /**
          * Turns an arbitrary name into a Java class name.
          *
-         * @param args Accepts one string argument.
+         * @param  args Accepts one string argument.
          *
          * @return The argument translated into a Java class name.
          *
-         * @throws XPathFunctionException If the argument is not a string, or if it cannot be translated into
-         *                                a legal Java class name.
+         * @throws XPathFunctionException If the argument is not a string, or if it cannot be translated into a legal
+         *                                Java class name.
          */
         public Object evaluate(List args) throws XPathFunctionException
         {
@@ -718,12 +723,12 @@ public class SourceCodeGenerator
         /**
          * Turns an arbitrary name into a Java class name.
          *
-         * @param args Accepts one string argument.
+         * @param  args Accepts one string argument.
          *
          * @return The argument translated into a Java class name.
          *
-         * @throws XPathFunctionException If the argument is not a string, or if it cannot be translated into
-         *                                a legal Java class name.
+         * @throws XPathFunctionException If the argument is not a string, or if it cannot be translated into a legal
+         *                                Java class name.
          */
         public Object evaluate(List args) throws XPathFunctionException
         {
@@ -740,10 +745,8 @@ public class SourceCodeGenerator
     public static class ModelNamespace implements NamespaceContext
     {
         /**
-         * Get Namespace URI bound to a prefix in the current scope.
-         *
-         * When requesting a Namespace URI by prefix, the following table describes the returned Namespace URI value
-         * for all possible prefix values:
+         * Get Namespace URI bound to a prefix in the current scope. When requesting a Namespace URI by prefix, the
+         * following table describes the returned Namespace URI value for all possible prefix values:
          *
          * <pre><p/><table><caption>getNamespaceURI(prefix) return value for specified prefixes</caption>
          * <tr><th> prefix parameter <th> Namespace URI return value
@@ -759,7 +762,7 @@ public class SourceCodeGenerator
          * <tr><td> null <td> IllegalArgumentException is thrown
          * </table></pre>
          *
-         * @param prefix The namespace prefix to get the URI for.
+         * @param  prefix The namespace prefix to get the URI for.
          *
          * @return The URI for the prefix as specified in the table above.
          */
@@ -799,10 +802,8 @@ public class SourceCodeGenerator
         }
 
         /**
-         * Get prefix bound to Namespace URI in the current scope.
-         *
-         * When requesting a prefix by Namespace URI, the following table describes the returned prefix value for all
-         * Namespace URI values:
+         * Get prefix bound to Namespace URI in the current scope. When requesting a prefix by Namespace URI, the
+         * following table describes the returned prefix value for all Namespace URI values:
          *
          * <pre><p/><table><caption>getPrefix(namespaceURI) return value for specified Namespace URIs</caption>
          * <tr><th> Namespace URI parameter <th> prefix value returned
@@ -819,7 +820,7 @@ public class SourceCodeGenerator
          * <tr><td> null <td> IllegalArgumentException is thrown
          * </table></pre>
          *
-         * @param namespaceURI The URI to get a prefix for.
+         * @param  namespaceURI The URI to get a prefix for.
          *
          * @return The prefix.
          */
@@ -862,7 +863,7 @@ public class SourceCodeGenerator
         /**
          * Get all prefixes bound to a Namespace URI in the current scope.
          *
-         * @param namespaceURI The URI to get prefixes for.
+         * @param  namespaceURI The URI to get prefixes for.
          *
          * @return An iterator over all prefixes for the URI.
          */

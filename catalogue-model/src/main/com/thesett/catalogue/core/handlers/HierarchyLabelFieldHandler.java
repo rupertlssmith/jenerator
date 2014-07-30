@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.catalogue.core.handlers;
 
@@ -17,8 +22,8 @@ import com.thesett.catalogue.setup.HierarchyLabelType;
 import com.thesett.catalogue.setup.Level;
 
 /**
- * HierarchyLabelFieldHandler transforms 'hierarchyLabel' fields into a labels/1 functors with a list of one
- * hierarchy label as its argument.
+ * HierarchyLabelFieldHandler transforms 'hierarchyLabel' fields into a labels/1 functors with a list of one hierarchy
+ * label as its argument.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
@@ -74,7 +79,6 @@ public class HierarchyLabelFieldHandler implements FieldHandler
      * Recursively walks down the lists of nested hierarchy labels, transforming them into a nested functor.
      *
      * @param labels The labels to transform into a functor.
-     *
      * @param result A string describing the recursive functor made up of the labels.
      */
     private void decomposeLabels(List<HierarchyLabelType> labels, StringBuffer result)
@@ -106,7 +110,6 @@ public class HierarchyLabelFieldHandler implements FieldHandler
      * Recursively walks down a list of hierarchy levels, transforming them into a list.
      *
      * @param level  The level to walk down.
-     *
      * @param result A string describing the levels as a list of levels from top to bottom.
      */
     private void decomposeLevels(Level level, StringBuffer result)

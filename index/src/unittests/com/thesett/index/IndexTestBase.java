@@ -1,4 +1,18 @@
-/* Copyright Rupert Smith, 2005 to 2008, all rights reserved. */
+/*
+ * Copyright The Sett Ltd, 2005 to 2014.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.thesett.index;
 
 import java.util.Arrays;
@@ -15,11 +29,11 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.NDC;
 
 /**
- * IndexTestBase is a pure unit test base class for deriving test classes for implementations of the
- * {@link Index} interface. The class name deliberately does not end in Test so that it will not be run
- * as a unit test by default. There is no suitable constructor for building and calling objects of this class from
- * JUnit. It is designed to be called explicitly from sub-classes that implement unit tests for specific index
- * implementations that re-use the tests defined here.
+ * IndexTestBase is a pure unit test base class for deriving test classes for implementations of the {@link Index}
+ * interface. The class name deliberately does not end in Test so that it will not be run as a unit test by default.
+ * There is no suitable constructor for building and calling objects of this class from JUnit. It is designed to be
+ * called explicitly from sub-classes that implement unit tests for specific index implementations that re-use the tests
+ * defined here.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
@@ -50,15 +64,15 @@ public class IndexTestBase extends TestCase
     /** Used for logging. */
     private static final Logger log = Logger.getLogger(IndexTestBase.class);
 
-    /** The {@link Index} to test.*/
+    /** The {@link Index} to test. */
     Index testIndex;
 
     /** The test indexes setup instance. */
     IndexSetup testIndexSetup;
 
     /**
-     * Builds the tests to be run on a supplied index implementation. This allows the tests in this class to
-     * be applied to arbitrary index implementations in sub-classes of this test class.
+     * Builds the tests to be run on a supplied index implementation. This allows the tests in this class to be applied
+     * to arbitrary index implementations in sub-classes of this test class.
      *
      * @param testName  The name of the unit test.
      * @param testIndex The {@link Index} to test.
@@ -150,8 +164,8 @@ public class IndexTestBase extends TestCase
     }
 
     /**
-     * Check that the indexed fields are read from test records for all class mappings that the record is an
-     * instance of.
+     * Check that the indexed fields are read from test records for all class mappings that the record is an instance
+     * of.
      *
      * @throws Exception All test exceptions are allowed to fall through.
      */

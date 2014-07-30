@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.catalogue.generator;
 
@@ -14,10 +19,8 @@ import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.Set;
 
-import com.thesett.aima.attribute.impl.DateRangeType;
 import com.thesett.aima.attribute.impl.EnumeratedStringAttribute;
 import com.thesett.aima.attribute.impl.HierarchyType;
-import com.thesett.aima.attribute.impl.TimeRangeType;
 import com.thesett.aima.attribute.time.DateOnly;
 import com.thesett.aima.attribute.time.TimeOnly;
 import com.thesett.aima.state.ComponentType;
@@ -32,8 +35,8 @@ import com.thesett.catalogue.interfaces.FactType;
 import com.thesett.catalogue.interfaces.ViewType;
 
 /**
- * TypeDecorators are used to decorate {@link com.thesett.aima.state.Type}s with additional derived flags, which
- * can be easily tested to determine properties of types that are relevant to the catalogue generators.
+ * TypeDecorators are used to decorate {@link com.thesett.aima.state.Type}s with additional derived flags, which can be
+ * easily tested to determine properties of types that are relevant to the catalogue generators.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
@@ -44,9 +47,7 @@ import com.thesett.catalogue.interfaces.ViewType;
  */
 public class TypeDecorator<T> implements Type<T>
 {
-    /**
-     * Enumerates all of the different kinds of types that can appear in the catalogue.
-     */
+    /** Enumerates all of the different kinds of types that can appear in the catalogue. */
     public enum Kind
     {
         /** The type is a component. */
@@ -92,9 +93,7 @@ public class TypeDecorator<T> implements Type<T>
         Basic
     }
 
-    /**
-     * Enumerates all of the different kinds of primitives that can appear in the catalogue.
-     */
+    /** Enumerates all of the different kinds of primitives that can appear in the catalogue. */
     public enum PrimitiveKind
     {
         /** The type is a boolean. */

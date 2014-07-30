@@ -1,9 +1,23 @@
-/* Copyright Rupert Smith, 2005 to 2008, all rights reserved. */
+/*
+ * Copyright The Sett Ltd, 2005 to 2014.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.thesett.common.config;
 
 /**
- * TestConfigBean is a dummy config bean that exists for the purpose of testing the config bean configurator and has been
- * suitably instrumented for this purpose.
+ * TestConfigBean is a dummy config bean that exists for the purpose of testing the config bean configurator and has
+ * been suitably instrumented for this purpose.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
@@ -65,8 +79,8 @@ public class TestConfigBean implements ConfigBean
     }
 
     /**
-     * Tells all config beans of this class to throw test config exceptions whenever the {@link #doConfigure} method
-     * is called.
+     * Tells all config beans of this class to throw test config exceptions whenever the {@link #doConfigure} method is
+     * called.
      *
      * @param throwFlag Set to true to cause exceptions to be thrown, false to turn them off.
      */
@@ -78,9 +92,9 @@ public class TestConfigBean implements ConfigBean
     /**
      * Tells the bean to perform whatever configuration it is intended to do.
      *
-     * @param force Setting this to true tells the config bean to re-run its configuration action even if it has
-     *              already been run.
-     * @param configBeanContext A reference to the configurator that is managing the whole configuration process.
+     * @param  force             Setting this to true tells the config bean to re-run its configuration action even if
+     *                           it has already been run.
+     * @param  configBeanContext A reference to the configurator that is managing the whole configuration process.
      *
      * @throws ConfigException If some error occurs that means that the configuration cannot be succesfully completed.
      */

@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.index.prototype;
 
@@ -34,9 +39,7 @@ public class ProtoIndexStore implements IndexStore, Serializable
     /** Holds references to the named indexes. */
     private static Map<String, ProtoIndex> indexStore = new HashMap<String, ProtoIndex>();
 
-    /**
-     * Private constructor to ensure that only singleton is ever created.
-     */
+    /** Private constructor to ensure that only singleton is ever created. */
     public ProtoIndexStore()
     {
     }
@@ -60,7 +63,7 @@ public class ProtoIndexStore implements IndexStore, Serializable
      * Retrieves a handle to the named index. If an index with this name does not already exist then a new one is
      * created.
      *
-     * @param indexName The name of the index to retrieve.
+     * @param  indexName The name of the index to retrieve.
      *
      * @return The named index.
      */
@@ -79,7 +82,7 @@ public class ProtoIndexStore implements IndexStore, Serializable
     /**
      * Retrieves the named indexes setup instance.
      *
-     * @param indexName The name of the index to get the setup instance for.
+     * @param  indexName The name of the index to get the setup instance for.
      *
      * @return The indexes setup instance.
      */

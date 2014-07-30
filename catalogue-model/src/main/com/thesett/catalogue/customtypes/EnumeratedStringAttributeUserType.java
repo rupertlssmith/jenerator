@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.catalogue.customtypes;
 
@@ -71,8 +76,8 @@ public abstract class EnumeratedStringAttributeUserType implements UserType
     /**
      * Implements a comparator for enumerated attribute types.
      *
-     * @param x The first object to compare.
-     * @param y The second object to compare.
+     * @param  x The first object to compare.
+     * @param  y The second object to compare.
      *
      * @return <tt>true</tt>If the two objects are identical, or identical enumerated attributes.
      */
@@ -91,7 +96,7 @@ public abstract class EnumeratedStringAttributeUserType implements UserType
     /**
      * Implements a delegator to the enumerated attributes hash code.
      *
-     * @param o The enumerated attribute to get the hash code for.
+     * @param  o The enumerated attribute to get the hash code for.
      *
      * @return The hash code of the enumerated attribute.
      */
@@ -105,9 +110,9 @@ public abstract class EnumeratedStringAttributeUserType implements UserType
     /**
      * Extracts a enumerated attribute from a result set.
      *
-     * @param resultSet The result set.
-     * @param names     The column names to extract fields from.
-     * @param owner     The owner of the object.
+     * @param  resultSet The result set.
+     * @param  names     The column names to extract fields from.
+     * @param  owner     The owner of the object.
      *
      * @return An enumerated attribute.
      *
@@ -136,9 +141,9 @@ public abstract class EnumeratedStringAttributeUserType implements UserType
     /**
      * Sets the component field of an enumerated attribute in a prepared statement ready for writing to the database.
      *
-     * @param statement The prepared statement to write the enumerated attribute into.
-     * @param value     The enumerated attribute to write.
-     * @param index     The index to start inserting into the prepared statement at.
+     * @param  statement The prepared statement to write the enumerated attribute into.
+     * @param  value     The enumerated attribute to write.
+     * @param  index     The index to start inserting into the prepared statement at.
      *
      * @throws SQLException If there is an underlying SQLException it is allowed to fall through.
      */
@@ -169,11 +174,11 @@ public abstract class EnumeratedStringAttributeUserType implements UserType
     /**
      * Creates a deep copy of an enuermated attribute.
      *
-     * @param value The enumerated attribute to copy.
+     * @param  value The enumerated attribute to copy.
      *
      * @return An independant copy of the enumerated attribute.
      *
-     * @todo Consider providing this clone method as a convenience method on enumerated attribute itself.
+     * @todo   Consider providing this clone method as a convenience method on enumerated attribute itself.
      */
     public Object deepCopy(Object value)
     {
@@ -214,8 +219,8 @@ public abstract class EnumeratedStringAttributeUserType implements UserType
      * Provides additional operations to perform during deserialization. Does nothing and just returns the deserialized
      * object untouched.
      *
-     * @param cached  The serializable object.
-     * @param owner   The owner of the object.
+     * @param  cached The serializable object.
+     * @param  owner  The owner of the object.
      *
      * @return The untouched serializable object.
      */
@@ -225,10 +230,10 @@ public abstract class EnumeratedStringAttributeUserType implements UserType
     }
 
     /**
-     * Provides additional operations to perform during serialization. Does nothing and just returns the object
-     * as a serializable object.
+     * Provides additional operations to perform during serialization. Does nothing and just returns the object as a
+     * serializable object.
      *
-     * @param value   The object to convert into a serializable.
+     * @param  value The object to convert into a serializable.
      *
      * @return The object to serialize as a serializable object.
      */
@@ -240,16 +245,16 @@ public abstract class EnumeratedStringAttributeUserType implements UserType
     /**
      * During merge, replace the existing (target) value in the entity we are merging to with a new (original) value
      * from the detached entity we are merging. For immutable objects, or null values, it is safe to simply return the
-     * first parameter. For mutable objects, it is safe to return a copy of the first parameter. However, since
-     * user types can define component values, it might make sense to recursively replace component values in the target
+     * first parameter. For mutable objects, it is safe to return a copy of the first parameter. However, since user
+     * types can define component values, it might make sense to recursively replace component values in the target
      * object.
      *
-     * <p/>EnumeratedStringAttribute types are mutable just not declared to be to hibernate. For this reason a deep
-     * copy of the original is returned.
+     * <p/>EnumeratedStringAttribute types are mutable just not declared to be to hibernate. For this reason a deep copy
+     * of the original is returned.
      *
-     * @param original The original object to merge into the target.
-     * @param target   The target object to merge into.
-     * @param owner    The owner of the object.
+     * @param  original The original object to merge into the target.
+     * @param  target   The target object to merge into.
+     * @param  owner    The owner of the object.
      *
      * @return A deep copy of the original.
      */

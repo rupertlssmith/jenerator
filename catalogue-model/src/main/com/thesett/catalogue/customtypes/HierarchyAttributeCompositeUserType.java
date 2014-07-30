@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.catalogue.customtypes;
 
@@ -26,11 +31,11 @@ import com.thesett.aima.attribute.impl.HierarchyAttribute;
 import com.thesett.aima.attribute.impl.HierarchyAttributeFactory;
 
 /**
- * Implements a hibernate custom type mapping for hierarchy attributes, exposing their fields as a composite type
- * so that they can be mapped to individual database columns. This class is abstract because the number of fields
- * depends on the number of levels in the hierarchy, so implementations of it should be provided for every
- * hierarchy attribute type, declaring the appropriate fields by implementing the {@link #getPropertyNames} method and
- * the hierarchy attribute type through the {@link #getTypeName()} method.
+ * Implements a hibernate custom type mapping for hierarchy attributes, exposing their fields as a composite type so
+ * that they can be mapped to individual database columns. This class is abstract because the number of fields depends
+ * on the number of levels in the hierarchy, so implementations of it should be provided for every hierarchy attribute
+ * type, declaring the appropriate fields by implementing the {@link #getPropertyNames} method and the hierarchy
+ * attribute type through the {@link #getTypeName()} method.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
@@ -87,8 +92,8 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
     /**
      * Implements a comparator for hierarchy attribute types.
      *
-     * @param x The first object to compare.
-     * @param y The second object to compare.
+     * @param  x The first object to compare.
+     * @param  y The second object to compare.
      *
      * @return <tt>true</tt>If the two objects are identical, or identical hierarchy attributes.
      */
@@ -107,7 +112,7 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
     /**
      * Implements a delegator to the hierarchy attributes hash code.
      *
-     * @param o The hierarchy attribute to get the hash code for.
+     * @param  o The hierarchy attribute to get the hash code for.
      *
      * @return The hash code of the hierarchy attribute.
      */
@@ -121,7 +126,7 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
     /**
      * Creates a deep copy of a hierarchy attribute.
      *
-     * @param value The hierarchy attribute to copy.
+     * @param  value The hierarchy attribute to copy.
      *
      * @return An independant copy of the hierarchy attribute.
      */
@@ -161,13 +166,13 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
     }
 
     /**
-     * Extracts a hierarchy attribute from a result set. Any trailing nulls are removed before trying to create
-     * the hierarchy attribute from the label path.
+     * Extracts a hierarchy attribute from a result set. Any trailing nulls are removed before trying to create the
+     * hierarchy attribute from the label path.
      *
-     * @param resultSet The result set.
-     * @param names     The column names to extract fields from.
-     * @param session   The hibernate session.
-     * @param owner     The owner of the object.
+     * @param  resultSet The result set.
+     * @param  names     The column names to extract fields from.
+     * @param  session   The hibernate session.
+     * @param  owner     The owner of the object.
      *
      * @return A hierarchy attribute.
      *
@@ -221,10 +226,10 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
     /**
      * Sets the component fields of a hierarchy attribute in a prepared statement ready for writing to the database.
      *
-     * @param statement The prepared statement to write the hierarchy attribute into.
-     * @param value     The hierarchy attribute to write.
-     * @param index     The index to start inserting into the prepared statement at.
-     * @param session   The hibernate session.
+     * @param  statement The prepared statement to write the hierarchy attribute into.
+     * @param  value     The hierarchy attribute to write.
+     * @param  index     The index to start inserting into the prepared statement at.
+     * @param  session   The hibernate session.
      *
      * @throws SQLException If there is an underlying SQLException it is allowed to fall through.
      */
@@ -287,8 +292,8 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
     /**
      * Extracts an indexed field from a hierarchy attribute.
      *
-     * @param component The hierarchy attribute to extract an indexed field from.
-     * @param property  The index of the field to extract.
+     * @param  component The hierarchy attribute to extract an indexed field from.
+     * @param  property  The index of the field to extract.
      *
      * @return The indexed field of the hierarchy attribute.
      */
@@ -302,8 +307,8 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
     }
 
     /**
-     * Tries to set an indexed field of a hierarchy attribute. This operation is not supported as piece-wise
-     * assignment to hierarchy attributes is not supported.
+     * Tries to set an indexed field of a hierarchy attribute. This operation is not supported as piece-wise assignment
+     * to hierarchy attributes is not supported.
      *
      * @param component The hierarchy attribute to set an indexed field of.
      * @param property  The index of the field to set.
@@ -319,9 +324,9 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
      * Provides additional operations to perform during deserialization. Does nothing and just returns the deserialized
      * object untouched.
      *
-     * @param cached  The serializable object.
-     * @param session The hibernate session.
-     * @param owner   The owner of the object.
+     * @param  cached  The serializable object.
+     * @param  session The hibernate session.
+     * @param  owner   The owner of the object.
      *
      * @return The untouched serializable object.
      */
@@ -331,11 +336,11 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
     }
 
     /**
-     * Provides additional operations to perform during serialization. Does nothing and just returns the object
-     * as a serializable object.
+     * Provides additional operations to perform during serialization. Does nothing and just returns the object as a
+     * serializable object.
      *
-     * @param value   The object to convert into a serializable.
-     * @param session The hibernate session.
+     * @param  value   The object to convert into a serializable.
+     * @param  session The hibernate session.
      *
      * @return The object to serialize as a serializable object.
      */
@@ -351,13 +356,13 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
      * composite user types often define component values, it might make sense to recursively replace component values
      * in the target object.
      *
-     * <p/>HierarchyAttribute types are mutable just not declared to be to hibernate. For this reason a deep copy of
-     * the original is returned.
+     * <p/>HierarchyAttribute types are mutable just not declared to be to hibernate. For this reason a deep copy of the
+     * original is returned.
      *
-     * @param original The original object to merge into the target.
-     * @param target   The target object to merge into.
-     * @param session  The hibernate session.
-     * @param owner    The owner of the object.
+     * @param  original The original object to merge into the target.
+     * @param  target   The target object to merge into.
+     * @param  session  The hibernate session.
+     * @param  owner    The owner of the object.
      *
      * @return A deep copy of the original.
      */

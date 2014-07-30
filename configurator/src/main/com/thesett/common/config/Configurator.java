@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.common.config;
 
@@ -39,8 +44,8 @@ import com.thesett.common.reflect.Memento;
 import com.thesett.common.util.TypeConverter;
 
 /**
- * The Configurator is responsible for reading a config beans set up definition file, creating the beans described in the
- * file and applying all start up properties to them and triggering the configuration of all the loaded beans.
+ * The Configurator is responsible for reading a config beans set up definition file, creating the beans described in
+ * the file and applying all start up properties to them and triggering the configuration of all the loaded beans.
  *
  * <p/>Configurator is typically used at application start up time to configure an application. This does not have to be
  * the case though, it can be used at any time.
@@ -80,9 +85,7 @@ public class Configurator implements Serializable, ConfigBeanContext
     /** Holds the loaded beans that are awaiting configuration. */
     private Map<String, ConfigBean> loadedBeans = null;
 
-    /**
-     * Creates a new configurator that loads the config beans definition from the default resource location.
-     */
+    /** Creates a new configurator that loads the config beans definition from the default resource location. */
     public Configurator()
     {
     }
@@ -120,8 +123,8 @@ public class Configurator implements Serializable, ConfigBeanContext
     /**
      * Creates the config beans by parsing the beans config definition file.
      *
-     * @throws ConfigException If any of the underlying beans throws a connfig exception or there is a problem
-     *                         loading or parsing the configuration file.
+     * @throws ConfigException If any of the underlying beans throws a connfig exception or there is a problem loading
+     *                         or parsing the configuration file.
      */
     public void loadConfigBeans() throws ConfigException
     {
@@ -279,9 +282,7 @@ public class Configurator implements Serializable, ConfigBeanContext
         doConfigAll(true);
     }
 
-    /**
-     * Removes all the configured beans from the JNDI context.
-     */
+    /** Removes all the configured beans from the JNDI context. */
     public void removeAll()
     {
         // log.debug("public void removeAll(): called");
@@ -351,7 +352,7 @@ public class Configurator implements Serializable, ConfigBeanContext
     /**
      * Gets a loaded config bean by name, or returns null if none with a matching name can be found.
      *
-     * @param name The class name of the bean to fetch.
+     * @param  name The class name of the bean to fetch.
      *
      * @return The loaded config bean, or null if none with a matching name can be found.
      */
@@ -363,7 +364,7 @@ public class Configurator implements Serializable, ConfigBeanContext
     /**
      * Calls doConfigure on all loaded config beans with the specified value of the force flag.
      *
-     * @param force The force flag.
+     * @param  force The force flag.
      *
      * @throws ConfigException If any bean throws a config exception or there were problems storing the configured beans
      *                         in the JNDI context.

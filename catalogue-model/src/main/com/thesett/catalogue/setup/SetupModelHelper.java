@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.catalogue.setup;
 
@@ -42,7 +47,7 @@ public class SetupModelHelper
     /**
      * Extracts the namespace of the catalogue.
      *
-     * @param definition The catalogue raw definition.
+     * @param  definition The catalogue raw definition.
      *
      * @return The namespace of the catalogue.
      */
@@ -54,9 +59,9 @@ public class SetupModelHelper
     /**
      * Extracts all the top level type definitions from a catalogue definition matching a specified class.
      *
-     * @param <T>          The type of the type definitions to extract.
-     * @param typeDefClass The class of the type definitions to extract.
-     * @param definition   The catalogue definition.
+     * @param  <T>          The type of the type definitions to extract.
+     * @param  typeDefClass The class of the type definitions to extract.
+     * @param  definition   The catalogue definition.
      *
      * @return All type defs.
      */
@@ -81,7 +86,7 @@ public class SetupModelHelper
     /**
      * Extracts all the typedefs from a catalogue definition.
      *
-     * @param definition The catalogue definition.
+     * @param  definition The catalogue definition.
      *
      * @return All typedefs.
      */
@@ -93,7 +98,7 @@ public class SetupModelHelper
     /**
      * Extracts all the componentdefs from a catalogue definition.
      *
-     * @param definition The catalogue definition.
+     * @param  definition The catalogue definition.
      *
      * @return All componentdefs.
      */
@@ -105,7 +110,7 @@ public class SetupModelHelper
     /**
      * Extracts all the dimensionDefs from a catalogue definition.
      *
-     * @param definition The catalogue definition.
+     * @param  definition The catalogue definition.
      *
      * @return All dimensionDefs.
      */
@@ -117,7 +122,7 @@ public class SetupModelHelper
     /**
      * Extracts all the entityDefs from a catalogue definition.
      *
-     * @param definition The catalogue definition.
+     * @param  definition The catalogue definition.
      *
      * @return All entityDefs.
      */
@@ -129,7 +134,7 @@ public class SetupModelHelper
     /**
      * Extracts all the factDefs from a catalogue definition.
      *
-     * @param definition The catalogue definition.
+     * @param  definition The catalogue definition.
      *
      * @return All factDefs.
      */
@@ -141,7 +146,7 @@ public class SetupModelHelper
     /**
      * Extracts all the viewDefs from a catalogue definition.
      *
-     * @param definition The catalogue definition.
+     * @param  definition The catalogue definition.
      *
      * @return All viewDefs.
      */
@@ -153,7 +158,7 @@ public class SetupModelHelper
     /**
      * Extracts all the integerRanges from a catalogue definition.
      *
-     * @param definition The catalogue definition.
+     * @param  definition The catalogue definition.
      *
      * @return All integerRanges.
      */
@@ -165,7 +170,7 @@ public class SetupModelHelper
     /**
      * Extracts all the RealRanges from a catalogue definition.
      *
-     * @param definition The catalogue definition.
+     * @param  definition The catalogue definition.
      *
      * @return All RealRanges.
      */
@@ -177,7 +182,7 @@ public class SetupModelHelper
     /**
      * Extracts all the stringPatterns from a catalogue definition.
      *
-     * @param definition The catalogue definition.
+     * @param  definition The catalogue definition.
      *
      * @return All stringPatterns.
      */
@@ -189,7 +194,7 @@ public class SetupModelHelper
     /**
      * Extracts all the dateRanges from a catalogue definition.
      *
-     * @param definition The catalogue definition.
+     * @param  definition The catalogue definition.
      *
      * @return All dateRanges.
      */
@@ -201,7 +206,7 @@ public class SetupModelHelper
     /**
      * Extracts all the timeRanges from a catalogue definition.
      *
-     * @param definition The catalogue definition.
+     * @param  definition The catalogue definition.
      *
      * @return All timeRanges.
      */
@@ -213,7 +218,7 @@ public class SetupModelHelper
     /**
      * Extracts all the enumerationDefs from a catalogue definition.
      *
-     * @param definition The catalogue definition.
+     * @param  definition The catalogue definition.
      *
      * @return All enumerationDefs.
      */
@@ -225,7 +230,7 @@ public class SetupModelHelper
     /**
      * Extracts all the hierarchyDefs from a catalogue definition.
      *
-     * @param definition The catalogue definition.
+     * @param  definition The catalogue definition.
      *
      * @return All hierarchyDefs.
      */
@@ -237,10 +242,10 @@ public class SetupModelHelper
     /**
      * Gets a named type def from the model, or null if none matching the name is found.
      *
-     * @param <T>          The type of the type def to fetch.
-     * @param typeDefClass The class of the type def to fetch.
-     * @param definition   The catalogue model.
-     * @param name         The type def name to get.
+     * @param  <T>          The type of the type def to fetch.
+     * @param  typeDefClass The class of the type def to fetch.
+     * @param  definition   The catalogue model.
+     * @param  name         The type def name to get.
      *
      * @return A named type def from the model, or null if none matching the name is found.
      */
@@ -263,8 +268,8 @@ public class SetupModelHelper
     /**
      * Gets a named typedef from the model, or null if none matching the name is found.
      *
-     * @param definition The catalogue model.
-     * @param name       The typedef name to get.
+     * @param  definition The catalogue model.
+     * @param  name       The typedef name to get.
      *
      * @return A named typedef from the model, or null if none matching the name is found.
      */
@@ -276,8 +281,8 @@ public class SetupModelHelper
     /**
      * Gets a named componentDef from the model, or null if none matching the name is found.
      *
-     * @param definition The catalogue model.
-     * @param name       The componentDef name to get.
+     * @param  definition The catalogue model.
+     * @param  name       The componentDef name to get.
      *
      * @return A named componentDef from the model, or null if none matching the name is found.
      */
@@ -289,8 +294,8 @@ public class SetupModelHelper
     /**
      * Gets a named dimensionDef from the model, or null if none matching the name is found.
      *
-     * @param definition The catalogue model.
-     * @param name       The dimensionDef name to get.
+     * @param  definition The catalogue model.
+     * @param  name       The dimensionDef name to get.
      *
      * @return A named dimensionDef from the model, or null if none matching the name is found.
      */
@@ -302,8 +307,8 @@ public class SetupModelHelper
     /**
      * Gets a named entityDef from the model, or null if none matching the name is found.
      *
-     * @param definition The catalogue model.
-     * @param name       The entityDef name to get.
+     * @param  definition The catalogue model.
+     * @param  name       The entityDef name to get.
      *
      * @return A named entityDef from the model, or null if none matching the name is found.
      */
@@ -315,8 +320,8 @@ public class SetupModelHelper
     /**
      * Gets a named factDef from the model, or null if none matching the name is found.
      *
-     * @param definition The catalogue model.
-     * @param name       The factDef name to get.
+     * @param  definition The catalogue model.
+     * @param  name       The factDef name to get.
      *
      * @return A named factDef from the model, or null if none matching the name is found.
      */
@@ -328,8 +333,8 @@ public class SetupModelHelper
     /**
      * Gets a named viewDef from the model, or null if none matching the name is found.
      *
-     * @param definition The catalogue model.
-     * @param name       The viewDef name to get.
+     * @param  definition The catalogue model.
+     * @param  name       The viewDef name to get.
      *
      * @return A named viewDef from the model, or null if none matching the name is found.
      */
@@ -341,8 +346,8 @@ public class SetupModelHelper
     /**
      * Gets a named integerRange from the model, or null if none matching the name is found.
      *
-     * @param definition The catalogue model.
-     * @param name       The integerRange name to get.
+     * @param  definition The catalogue model.
+     * @param  name       The integerRange name to get.
      *
      * @return A named integerRange from the model, or null if none matching the name is found.
      */
@@ -354,8 +359,8 @@ public class SetupModelHelper
     /**
      * Gets a named realRange from the model, or null if none matching the name is found.
      *
-     * @param definition The catalogue model.
-     * @param name       The realRange name to get.
+     * @param  definition The catalogue model.
+     * @param  name       The realRange name to get.
      *
      * @return A named realRange from the model, or null if none matching the name is found.
      */
@@ -367,8 +372,8 @@ public class SetupModelHelper
     /**
      * Gets a named stringPattern from the model, or null if none matching the name is found.
      *
-     * @param definition The catalogue model.
-     * @param name       The stringPattern name to get.
+     * @param  definition The catalogue model.
+     * @param  name       The stringPattern name to get.
      *
      * @return A named stringPattern from the model, or null if none matching the name is found.
      */
@@ -380,8 +385,8 @@ public class SetupModelHelper
     /**
      * Gets a named dateRange from the model, or null if none matching the name is found.
      *
-     * @param definition The catalogue model.
-     * @param name       The dateRange name to get.
+     * @param  definition The catalogue model.
+     * @param  name       The dateRange name to get.
      *
      * @return A named dateRange from the model, or null if none matching the name is found.
      */
@@ -393,8 +398,8 @@ public class SetupModelHelper
     /**
      * Gets a named timeRange from the model, or null if none matching the name is found.
      *
-     * @param definition The catalogue model.
-     * @param name       The timeRange name to get.
+     * @param  definition The catalogue model.
+     * @param  name       The timeRange name to get.
      *
      * @return A named timeRange from the model, or null if none matching the name is found.
      */
@@ -406,8 +411,8 @@ public class SetupModelHelper
     /**
      * Gets a named enumerationDef from the model, or null if none matching the name is found.
      *
-     * @param definition The catalogue model.
-     * @param name       The enumerationDef name to get.
+     * @param  definition The catalogue model.
+     * @param  name       The enumerationDef name to get.
      *
      * @return A named enumerationDef from the model, or null if none matching the name is found.
      */
@@ -419,8 +424,8 @@ public class SetupModelHelper
     /**
      * Gets a named hierarchyDef from the model, or null if none matching the name is found.
      *
-     * @param definition The catalogue model.
-     * @param name       The hierarchyDef name to get.
+     * @param  definition The catalogue model.
+     * @param  name       The hierarchyDef name to get.
      *
      * @return A named hierarchyDef from the model, or null if none matching the name is found.
      */
@@ -432,9 +437,9 @@ public class SetupModelHelper
     /**
      * Extracts all the field declarations from a dimension definition that are of a specific type.
      *
-     * @param <T>            The type of the component part to extract.
-     * @param attributeClass The class of the type of the component part to extract.
-     * @param componentDef   The component definition.
+     * @param  <T>            The type of the component part to extract.
+     * @param  attributeClass The class of the type of the component part to extract.
+     * @param  componentDef   The component definition.
      *
      * @return A list of all int attribute declarations in the dimension definition.
      */
@@ -458,7 +463,7 @@ public class SetupModelHelper
     /**
      * Extracts all the integer field declarations from a dimension definition.
      *
-     * @param componentDef The dimension definition.
+     * @param  componentDef The dimension definition.
      *
      * @return A list of all integer attribute declarations in the dimension definition.
      */
@@ -470,7 +475,7 @@ public class SetupModelHelper
     /**
      * Extracts all the real field declarations from a dimension definition.
      *
-     * @param componentDef The dimension definition.
+     * @param  componentDef The dimension definition.
      *
      * @return A list of all real attribute declarations in the dimension definition.
      */
@@ -482,7 +487,7 @@ public class SetupModelHelper
     /**
      * Extracts all the string field declarations from a dimension definition.
      *
-     * @param componentDef The dimension definition.
+     * @param  componentDef The dimension definition.
      *
      * @return A list of all string attribute declarations in the dimension definition.
      */
@@ -494,7 +499,7 @@ public class SetupModelHelper
     /**
      * Extracts all the date field declarations from a dimension definition.
      *
-     * @param componentDef The dimension definition.
+     * @param  componentDef The dimension definition.
      *
      * @return A list of all date attribute declarations in the dimension definition.
      */
@@ -506,7 +511,7 @@ public class SetupModelHelper
     /**
      * Extracts all the time field declarations from a dimension definition.
      *
-     * @param componentDef The dimension definition.
+     * @param  componentDef The dimension definition.
      *
      * @return A list of all time attribute declarations in the dimension definition.
      */
@@ -518,7 +523,7 @@ public class SetupModelHelper
     /**
      * Extracts all the enumeration field declarations from a dimension definition.
      *
-     * @param componentDef The dimension definition.
+     * @param  componentDef The dimension definition.
      *
      * @return A list of all enumeration attribute declarations in the dimension definition.
      */
@@ -530,7 +535,7 @@ public class SetupModelHelper
     /**
      * Extracts all the hierarchy field declarations from a dimension definition.
      *
-     * @param componentDef The dimension definition.
+     * @param  componentDef The dimension definition.
      *
      * @return A list of all hierarchy attribute declarations in the dimension definition.
      */
@@ -542,10 +547,10 @@ public class SetupModelHelper
     /**
      * Finds a int attribute by name from a dimension definition.
      *
-     * @param <T>            The type of the attribute to find.
-     * @param attributeClass The class of the attribute to find.
-     * @param componentDef   The dimension definition.
-     * @param name           The name of the intattribute attribute to find.
+     * @param  <T>            The type of the attribute to find.
+     * @param  attributeClass The class of the attribute to find.
+     * @param  componentDef   The dimension definition.
+     * @param  name           The name of the intattribute attribute to find.
      *
      * @return The matching intattribute or null if none is found.
      */
@@ -585,8 +590,8 @@ public class SetupModelHelper
     /**
      * Finds a integer attribute by name from a dimension definition.
      *
-     * @param componentDef The dimension definition.
-     * @param name         The name of the integer attribute to find.
+     * @param  componentDef The dimension definition.
+     * @param  name         The name of the integer attribute to find.
      *
      * @return The matching integer attribute or null if none is found.
      */
@@ -598,8 +603,8 @@ public class SetupModelHelper
     /**
      * Finds a real attribute by name from a dimension definition.
      *
-     * @param componentDef The dimension definition.
-     * @param name         The name of the real attribute to find.
+     * @param  componentDef The dimension definition.
+     * @param  name         The name of the real attribute to find.
      *
      * @return The matching real attribute or null if none is found.
      */
@@ -611,8 +616,8 @@ public class SetupModelHelper
     /**
      * Finds a string attribute by name from a dimension definition.
      *
-     * @param componentDef The dimension definition.
-     * @param name         The name of the string attribute to find.
+     * @param  componentDef The dimension definition.
+     * @param  name         The name of the string attribute to find.
      *
      * @return The matching string attribute or null if none is found.
      */
@@ -624,8 +629,8 @@ public class SetupModelHelper
     /**
      * Finds a date attribute by name from a dimension definition.
      *
-     * @param componentDef The dimension definition.
-     * @param name         The name of the date attribute to find.
+     * @param  componentDef The dimension definition.
+     * @param  name         The name of the date attribute to find.
      *
      * @return The matching date attribute or null if none is found.
      */
@@ -637,8 +642,8 @@ public class SetupModelHelper
     /**
      * Finds a time attribute by name from a dimension definition.
      *
-     * @param componentDef The dimension definition.
-     * @param name         The name of the time attribute to find.
+     * @param  componentDef The dimension definition.
+     * @param  name         The name of the time attribute to find.
      *
      * @return The matching time attribute or null if none is found.
      */
@@ -650,8 +655,8 @@ public class SetupModelHelper
     /**
      * Finds a enumeration attribute by name from a dimension definition.
      *
-     * @param componentDef The dimension definition.
-     * @param name         The name of the enumeration attribute to find.
+     * @param  componentDef The dimension definition.
+     * @param  name         The name of the enumeration attribute to find.
      *
      * @return The matching enumeration attribute or null if none is found.
      */
@@ -663,8 +668,8 @@ public class SetupModelHelper
     /**
      * Finds a hierarchy attribute by name from a dimension definition.
      *
-     * @param componentDef The dimension definition.
-     * @param name         The name of the hierarchy attribute to find.
+     * @param  componentDef The dimension definition.
+     * @param  name         The name of the hierarchy attribute to find.
      *
      * @return The matching hierarchy attribute or null if none is found.
      */
@@ -676,7 +681,7 @@ public class SetupModelHelper
     /**
      * Extracts all the level names from a hierarchy type definition.
      *
-     * @param hierarchyDef A hierarchy type definition.
+     * @param  hierarchyDef A hierarchy type definition.
      *
      * @return A list of the level names.
      */
@@ -698,7 +703,7 @@ public class SetupModelHelper
     /**
      * Extract all the allowable label paths from a hierarchy type definition.
      *
-     * @param hierarchyDef The hierarchy type definition.
+     * @param  hierarchyDef The hierarchy type definition.
      *
      * @return All the allowable label paths from the hierarchy type definition.
      */
@@ -754,10 +759,10 @@ public class SetupModelHelper
     }
 
     /**
-     * Models the state of a search over a tree of hierarchy label elements for allowable hierarchy attributes.
-     * Each state consists of a hierarchy label within a tree, and a path from the root to that label that contains
-     * all the labels encountered on the way. Goal states are labels that are leafs (should be allowable). Possible
-     * transtions to new states exist for each child label of a label.
+     * Models the state of a search over a tree of hierarchy label elements for allowable hierarchy attributes. Each
+     * state consists of a hierarchy label within a tree, and a path from the root to that label that contains all the
+     * labels encountered on the way. Goal states are labels that are leafs (should be allowable). Possible transtions
+     * to new states exist for each child label of a label.
      *
      * @todo Change the goal state so that all allowable labels are goal states, not just the leafs.
      */
@@ -816,9 +821,9 @@ public class SetupModelHelper
         /**
          * Gets the names of all the child hierarchy label elements of this one.
          *
-         * @param reverse When set, indicates that the successors should be presented in reverse order. This is only
-         *                necessary if the traversal cares about the ordering of the successor states, and is used
-         *                to generate intuitive, left-to-right goal checking in depth first search based searches.
+         * @param  reverse When set, indicates that the successors should be presented in reverse order. This is only
+         *                 necessary if the traversal cares about the ordering of the successor states, and is used to
+         *                 generate intuitive, left-to-right goal checking in depth first search based searches.
          *
          * @return The names of all the child hierarchy label elements of this one.
          */
@@ -842,7 +847,7 @@ public class SetupModelHelper
         /**
          * Returns the search state associated with the named hierarchy label element that is a child of this one.
          *
-         * @param operator The child hierarchy label element to get the search state for.
+         * @param  operator The child hierarchy label element to get the search state for.
          *
          * @return The search state associated with the named hierarchy label element that is a child of this one.
          */
@@ -872,7 +877,7 @@ public class SetupModelHelper
         /**
          * Returns the cost of the operation. Always 1.0 as not important to this search anyway.
          *
-         * @param operator The operator to get the cost for.
+         * @param  operator The operator to get the cost for.
          *
          * @return 1.0.
          */

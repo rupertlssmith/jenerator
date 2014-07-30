@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.index;
 
@@ -36,8 +41,8 @@ public class IndexMapping implements Serializable
     private String ratingFieldName;
 
     /**
-     * Creates an index mapping for the specifeid class, the names of the fields that are to be extracted and indexed and
-     * the name of the field that the indexed records rating is to be extracted from.
+     * Creates an index mapping for the specifeid class, the names of the fields that are to be extracted and indexed
+     * and the name of the field that the indexed records rating is to be extracted from.
      *
      * @param fieldNames      The names of the fields to extract.
      * @param ratingFieldName The name of the field to extract the rating from.

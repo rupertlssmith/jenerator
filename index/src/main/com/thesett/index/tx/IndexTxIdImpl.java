@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.index.tx;
 
@@ -57,9 +62,7 @@ public class IndexTxIdImpl implements IndexTxId
         return id;
     }
 
-    /**
-     * Invalidates the transaction id.
-     */
+    /** Invalidates the transaction id. */
     public void invalidate()
     {
         // Remove this from the set of live transactions.
@@ -83,7 +86,7 @@ public class IndexTxIdImpl implements IndexTxId
     /**
      * Checks if this index transaction id is the same as another one.
      *
-     * @param o The object to compare to.
+     * @param  o The object to compare to.
      *
      * @return <tt>true</tt>If the comparator is also an index tx id the same as this one, <tt>false</tt> otherwise.
      */

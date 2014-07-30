@@ -1,4 +1,18 @@
-/* Copyright Rupert Smith, 2005 to 2008, all rights reserved. */
+/*
+ * Copyright The Sett Ltd, 2005 to 2014.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.thesett.common.webapp.actions;
 
 import java.io.IOException;
@@ -18,19 +32,28 @@ import org.apache.struts.action.ActionMapping;
 import com.thesett.common.error.NotImplementedException;
 
 /**
- * ActionBase is an abstract class which provides some useful com.jpmorgan.grc behaviour for Struts action classes to use.
- * It provides a com.jpmorgan.grc error handling mechanism for all actions to use. This takes an exception as its input
- * and generates an appropriate error depending on the type of exception.
+ * ActionBase is an abstract class which provides some useful com.jpmorgan.grc behaviour for Struts action classes to
+ * use. It provides a com.jpmorgan.grc error handling mechanism for all actions to use. This takes an exception as its
+ * input and generates an appropriate error depending on the type of exception.
  *
  * <p>The user readable error message is interpreted as being a key for an error message in the properties file.
  *
- * <p>The error handling code has been moved to {@link ErrorHandler}. This class simply defines a useful method
- * that action classes can call locally.
+ * <p>The error handling code has been moved to {@link ErrorHandler}. This class simply defines a useful method that
+ * action classes can call locally.
  *
- * <p><table id="crc"><caption>CRC Card</caption>
- * <tr><th> Responsibilities <th> Collaborations
- * <tr><td> Provide default error handler for all Java Throwables
- * <tr><td> Translate exception into struts ActionErrors <td> {@link ErrorHandler}
+ * <p>
+ * <table id="crc">
+ * <caption>CRC Card</caption>
+ * <tr>
+ * <th>Responsibilities
+ * <th>Collaborations
+ *
+ * <tr>
+ * <td>Provide default error handler for all Java Throwables
+ *
+ * <tr>
+ * <td>Translate exception into struts ActionErrors
+ * <td> {@link ErrorHandler}
  * </table>
  *
  * @author Rupert Smith
@@ -44,14 +67,14 @@ public abstract class BaseAction extends Action
      * Processes the action providing default error handling. Implementation should override this method to provide
      * their own error handling if the default is not to be used.
      *
-     * @param mapping  The ActionMapping used to select this instance
-     * @param form     The optional ActionForm bean for this request (if any)
-     * @param request  The HTTP request.
-     * @param response The HTTP response.
+     * @param     mapping  The ActionMapping used to select this instance
+     * @param     form     The optional ActionForm bean for this request (if any)
+     * @param     request  The HTTP request.
+     * @param     response The HTTP response.
      *
-     * @return A struts forward to tell struts where to go after this action.
+     * @return    A struts forward to tell struts where to go after this action.
      *
-     * @exception IOException If an input/output error occurs.
+     * @exception IOException      If an input/output error occurs.
      * @exception ServletException If a servlet exception occurs.
      */
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -97,17 +120,17 @@ public abstract class BaseAction extends Action
     }
 
     /**
-     * This perform method is the same as the normal perform method but it is called from inside an error wrapper
-     * that catches all throwables. The wrapper automatically generates Struts error messages for any Java throwable that
-     * may fall through this message.
+     * This perform method is the same as the normal perform method but it is called from inside an error wrapper that
+     * catches all throwables. The wrapper automatically generates Struts error messages for any Java throwable that may
+     * fall through this message.
      *
      * <p/>Implementations should override this method to use the default error handling.
      *
-     * @param mapping  The ActionMapping used to select this instance
-     * @param form     The optional ActionForm bean for this request (if any)
-     * @param request  The HTTP request.
-     * @param response The HTTP response.
-     * @param errors   A struts errors object to write any error messages to.
+     * @param  mapping  The ActionMapping used to select this instance
+     * @param  form     The optional ActionForm bean for this request (if any)
+     * @param  request  The HTTP request.
+     * @param  response The HTTP response.
+     * @param  errors   A struts errors object to write any error messages to.
      *
      * @return A struts forward to tell struts where to go after this action.
      *

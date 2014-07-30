@@ -1,12 +1,17 @@
 /*
- * © Copyright Rupert Smith, 2005 to 2013.
+ * Copyright The Sett Ltd, 2005 to 2014.
  *
- * ALL RIGHTS RESERVED. Any unauthorized reproduction or use of this
- * material is prohibited. No part of this work may be reproduced or
- * transmitted in any form or by any means, electronic or mechanical,
- * including photocopying, recording, or by any information storage
- * and retrieval system without express written permission from the
- * author.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.thesett.index.prototype;
 
@@ -38,19 +43,20 @@ import com.thesett.index.tx.IndexTxId;
 import com.thesett.index.tx.IndexTxManager;
 
 /**
- * ProtoIndex is a prototype implementation of a free text search index. It does not provide fuzzy matching and makes
- * no attempt to optimize the data structures used. This implementation uses a hash map into which the indexed terms are
- * placed along with references to the summary records that they match. Searching the index simply looks up all the query
- * terms in the hashmap, computes the intersection of the results for each term, and returns that as the list of results.
+ * ProtoIndex is a prototype implementation of a free text search index. It does not provide fuzzy matching and makes no
+ * attempt to optimize the data structures used. This implementation uses a hash map into which the indexed terms are
+ * placed along with references to the summary records that they match. Searching the index simply looks up all the
+ * query terms in the hashmap, computes the intersection of the results for each term, and returns that as the list of
+ * results.
  *
- * <p/> The deadlock prevention strategy used by this implementation is intended to best fit the way in which indexes
- * are used. An index will normally be fairly static, servicing many read only requests as quickly and as concurrently
- * as possible. Occasionly a large amount of data will be uploaded into an index all at once, as new data is uploaded.
+ * <p/>The deadlock prevention strategy used by this implementation is intended to best fit the way in which indexes are
+ * used. An index will normally be fairly static, servicing many read only requests as quickly and as concurrently as
+ * possible. Occasionly a large amount of data will be uploaded into an index all at once, as new data is uploaded.
  * Slightly more frequently, but still much less frequently than the read operations, individual records will be udpated
- * as their ratings change. Other parts of the software are expected to try and reduce the frequency of ratings alterations
- * as much as possible. Write operations are expected to need only very low concurrency. Read deadlocks are prevented by
- * not requiring read locks to be mutually exclusive. Write deadlocks are prevented by having a single write lock,
- * effectively forcing the locking of all needed resources in a single step.
+ * as their ratings change. Other parts of the software are expected to try and reduce the frequency of ratings
+ * alterations as much as possible. Write operations are expected to need only very low concurrency. Read deadlocks are
+ * prevented by not requiring read locks to be mutually exclusive. Write deadlocks are prevented by having a single
+ * write lock, effectively forcing the locking of all needed resources in a single step.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
@@ -106,9 +112,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
     /** Holds the write-behind cache of changes made by transactions. */
     private Map<IndexTxId, List<RecordAlteration>> txWrites = new HashMap<IndexTxId, List<RecordAlteration>>();
 
-    /**
-     * Creates a prototype index.
-     */
+    /** Creates a prototype index. */
     public ProtoIndex()
     {
     }
@@ -146,10 +150,10 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
     /**
      * Sets the synonyms that matching query terms should be expanded into prior to searching the index. The synonym
      * dictionary is a map from words to sets of words with the same meaning. This mapping must be given in every
-     * direction in which it is to be used. For example if 'large' also means 'big' and 'big' means 'large' then
-     * both mappings must be specified. However, if 'massive' means 'big' but 'big' does not mean 'massive' then
-     * only the mapping from 'massive' to 'big' should be specified. The query term 'massive' will be expanded into
-     * 'massive big' but 'big' will not be expanded.
+     * direction in which it is to be used. For example if 'large' also means 'big' and 'big' means 'large' then both
+     * mappings must be specified. However, if 'massive' means 'big' but 'big' does not mean 'massive' then only the
+     * mapping from 'massive' to 'big' should be specified. The query term 'massive' will be expanded into 'massive big'
+     * but 'big' will not be expanded.
      *
      * @param synonyms The map of synonyms.
      */
@@ -162,8 +166,8 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
     }
 
     /**
-     * Sets the degree of fuzzy matching to limit searches to. Fuzzy matching limit usually means the edit distance
-     * but can be interpreted differently by different implementations.
+     * Sets the degree of fuzzy matching to limit searches to. Fuzzy matching limit usually means the edit distance but
+     * can be interpreted differently by different implementations.
      *
      * @param limit The maximum fuzzy matching limit.
      */
@@ -182,13 +186,13 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
      * @param fullRecord The full data record to build the index from, fields will be extracted from this record.
      * @param indexEntry The data record to add to the index, this is the record that searches will return.
      *
-     * @todo Note that when extracting the rating field the first matching type mapping (against the full records type)
-     *       is taken as specifying the field name of the rating field to extract. This algorithm should probably
-     *       be changed to extract the narrowest fitting match, that is, the one that most specifically matches
-     *       the record type. So if there is a mapping on Object and one one MyClass and there is a rating field
-     *       match for both types on a record of type MyClass, the MyClass match is the most specific so it should
-     *       be taken. The first match algorithm means that it cannot be determined which match will be taken as
-     *       the mappings are not iterated over in a controlled order.
+     * @todo  Note that when extracting the rating field the first matching type mapping (against the full records type)
+     *        is taken as specifying the field name of the rating field to extract. This algorithm should probably be
+     *        changed to extract the narrowest fitting match, that is, the one that most specifically matches the record
+     *        type. So if there is a mapping on Object and one one MyClass and there is a rating field match for both
+     *        types on a record of type MyClass, the MyClass match is the most specific so it should be taken. The first
+     *        match algorithm means that it cannot be determined which match will be taken as the mappings are not
+     *        iterated over in a controlled order.
      */
     public void add(K key, D fullRecord, E indexEntry)
     {
@@ -239,12 +243,12 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
     }
 
     /**
-     * Updates a record in the index. Its indexed fields are extracted from the full record again and the new index entry
-     * replaces any existing entry for the specified key.
+     * Updates a record in the index. Its indexed fields are extracted from the full record again and the new index
+     * entry replaces any existing entry for the specified key.
      *
-     * @param key        A key that uniquely identifies the record to update.
-     * @param fullRecord The full data record to build the index from, fields will be extracted from this record.
-     * @param indexEntry The data record to add to the index, this is the record that searches will return.
+     * @param  key        A key that uniquely identifies the record to update.
+     * @param  fullRecord The full data record to build the index from, fields will be extracted from this record.
+     * @param  indexEntry The data record to add to the index, this is the record that searches will return.
      *
      * @throws IndexUnknownKeyException When the key is not already in the index, or has been removed from it.
      */
@@ -278,11 +282,11 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
 
     /**
      * Updates a record in the index without re-indexing it. Only the key of the record to index an the entry to be
-     * returned on matching searches are updated. Fields are not extracted from the full record and the indexing is
-     * not changed.
+     * returned on matching searches are updated. Fields are not extracted from the full record and the indexing is not
+     * changed.
      *
-     * @param key        A key that uniquely identifies the record to update.
-     * @param indexEntry The data record to add to the index, this is the record that searches will return.
+     * @param  key        A key that uniquely identifies the record to update.
+     * @param  indexEntry The data record to add to the index, this is the record that searches will return.
      *
      * @throws IndexUnknownKeyException When the key is not already in the index, or has been removed from it.
      */
@@ -339,7 +343,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
     /**
      * Removes a record from the search index.
      *
-     * @param key A key that uniquely identifies the record to remove.
+     * @param  key A key that uniquely identifies the record to remove.
      *
      * @throws IndexUnknownKeyException When the key is not already in the index, or has been removed from it.
      */
@@ -390,9 +394,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
         }
     }
 
-    /**
-     * Removes all records from the index to produce a completely empty index.
-     */
+    /** Removes all records from the index to produce a completely empty index. */
     public void clear()
     {
         // log.debug("public void clear(): called");
@@ -432,9 +434,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
         }
     }
 
-    /**
-     * Resets the index, removing all mappings, stop words and synonym mappings from it.
-     */
+    /** Resets the index, removing all mappings, stop words and synonym mappings from it. */
     public void reset()
     {
         mappings.clear();
@@ -443,9 +443,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
         synonyms.clear();
     }
 
-    /**
-     * Scans through every term in the index and sweeps out any deleted records.
-     */
+    /** Scans through every term in the index and sweeps out any deleted records. */
     public void cleanup()
     {
         // log.debug("public void cleanup(): called");
@@ -465,7 +463,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
      * and be parsed into words seperated by white space (spaces, new lines and tabs). Any stop words will be removed
      * from the query, any synonym matches will be expanded into the query.
      *
-     * @param query The search string to match against.
+     * @param  query The search string to match against.
      *
      * @return A list of matching data records in order of relevance.
      */
@@ -619,8 +617,8 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
     }
 
     /**
-     * When operating in transactional mode causes any changes since the last commit to be made visible to the
-     * search method.
+     * When operating in transactional mode causes any changes since the last commit to be made visible to the search
+     * method.
      */
     public void commit()
     {
@@ -711,9 +709,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
         }
     }
 
-    /**
-     * Releases the global write lock from being assigned to a transaction.
-     */
+    /** Releases the global write lock from being assigned to a transaction. */
     public void releaseGlobalWriteLock()
     {
         // Get the global write lock to ensure only one thread at a time can execute this code.
@@ -736,9 +732,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
         }
     }
 
-    /**
-     * Releases the global write lock from being assigned to a transaction.
-     */
+    /** Releases the global write lock from being assigned to a transaction. */
     public void releaseGlobalReadLock()
     {
         // Get the global write lock to ensure only one thread at a time can execute this code.
@@ -813,15 +807,15 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
     }
 
     /**
-     * Extracts the rating from the summary record depending on the rating field name specified for the mapping
-     * for the full record type.
+     * Extracts the rating from the summary record depending on the rating field name specified for the mapping for the
+     * full record type.
      *
-     * @param indexEntry The summary record to extract the rating field from.
+     * @param  indexEntry The summary record to extract the rating field from.
      *
      * @return The summary records rating.
      *
-     * @throws IndexMappingException If no type mapping is found for the full record type, or the rating field
-     *                               is not a float, or the rating field does not exist on the summary record.
+     * @throws IndexMappingException If no type mapping is found for the full record type, or the rating field is not a
+     *                               float, or the rating field does not exist on the summary record.
      */
     private float extractRating(E indexEntry) throws IndexMappingException
     {
@@ -895,13 +889,13 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
     /**
      * Extracts the mapped fields from a record and concatenates them together into a String.
      *
-     * @param fullRecord The record to extract the fields from.
+     * @param  fullRecord The record to extract the fields from.
      *
      * @return All the mapped fields of the record concatenated toghether as Strings.
      *
-     * @throws IndexMappingException If some of the mapped fields cannot be found on the specified record for the
-     *                               type mappings given to this class, or if at least one matching type mapping
-     *                               is not found for the records type.
+     * @throws IndexMappingException If some of the mapped fields cannot be found on the specified record for the type
+     *                               mappings given to this class, or if at least one matching type mapping is not found
+     *                               for the records type.
      */
     private String extractIndexableText(D fullRecord) throws IndexMappingException
     {
@@ -1008,9 +1002,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
         // + ", from records by key, invalidated it and added it to invalidated records.");
     }
 
-    /**
-     * Clears all records from the index and resets all mappings, stop words and synonyms.
-     */
+    /** Clears all records from the index and resets all mappings, stop words and synonyms. */
     private void clearAllRecords()
     {
         // log.debug("private void clearAllRecords(): called");
@@ -1022,12 +1014,11 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
     }
 
     /**
-     * Queries the index for a term. The index maps terms onto keys, and the keys matched must be looked up in
-     * the look up map from keys to index records. If records have been deleted they will have been removed
-     * from the look up map, so they are not returned by this method. Any dangling keys detected by this method
-     * are cleaned out of the index.
+     * Queries the index for a term. The index maps terms onto keys, and the keys matched must be looked up in the look
+     * up map from keys to index records. If records have been deleted they will have been removed from the look up map,
+     * so they are not returned by this method. Any dangling keys detected by this method are cleaned out of the index.
      *
-     * @param term The term to search for.
+     * @param  term The term to search for.
      *
      * @return A set of matching index records.
      */
@@ -1073,7 +1064,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
     /**
      * Waits until the global write lock can be acquired by the specified transaction.
      *
-     * @param txId The transaction id to acquite the global write lock for.
+     * @param  txId The transaction id to acquite the global write lock for.
      *
      * @throws InterruptedException If interrupted whilst waiting for the global write lock.
      */
@@ -1117,12 +1108,12 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
     }
 
     /**
-     * InvalidateableKey is a key wrapper class that allows a key to be marked as invalid, once it is removed
-     * from the index. Terms link to this structure, from which the key to look up an index record can be
-     * obtained. Whenever a key that has been marked as invalid is encountered it is swept out of the index.
+     * InvalidateableKey is a key wrapper class that allows a key to be marked as invalid, once it is removed from the
+     * index. Terms link to this structure, from which the key to look up an index record can be obtained. Whenever a
+     * key that has been marked as invalid is encountered it is swept out of the index.
      *
-     * <p/>Terms link to sets of keys. Whenever a new key is inserted against a term any existing invalidateable
-     * key is removed and replaced with the fresh not invalidated key.
+     * <p/>Terms link to sets of keys. Whenever a new key is inserted against a term any existing invalidateable key is
+     * removed and replaced with the fresh not invalidated key.
      *
      * <p/>InvalidateableKeys are identified by their underlying keys. The equality and hashCode methods are based on
      * the key only.
@@ -1148,7 +1139,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
         /**
          * Checks if two invalidateable keys are equal by their keys.
          *
-         * @param o The object to compare this one with.
+         * @param  o The object to compare this one with.
          *
          * @return <tt>true</tt> if this object has the same key as the comparator, <tt>false</tt> otherwise.
          */
@@ -1196,8 +1187,8 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
     }
 
     /**
-     * This IndexRecord structure is used to encapsulate the index record key and summary record together so that
-     * they may be refered to together by the index.
+     * This IndexRecord structure is used to encapsulate the index record key and summary record together so that they
+     * may be refered to together by the index.
      *
      * <p/>IndexRecords are identified by their keys. The equality and hashCode methods are based on the key only.
      */
@@ -1218,7 +1209,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
         /**
          * Checks if two index records are equal by their keys.
          *
-         * @param o The object to compare this one with.
+         * @param  o The object to compare this one with.
          *
          * @return <tt>true</tt> if this object has the same key as the comparator, <tt>false</tt> otherwise.
          */
@@ -1261,15 +1252,13 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
     }
 
     /**
-     * Insertions, deletions and changes to index records are not applied to the index immediately in transactional
-     * mode but are stored in a write-behind cache and applied upon transaction commit only. This class records
-     * the different types of alterations that are to be made to the index record set.
+     * Insertions, deletions and changes to index records are not applied to the index immediately in transactional mode
+     * but are stored in a write-behind cache and applied upon transaction commit only. This class records the different
+     * types of alterations that are to be made to the index record set.
      */
     private abstract class RecordAlteration
     {
-        /**
-         * Applies the write-behind cached operation to the index.
-         */
+        /** Applies the write-behind cached operation to the index. */
         public abstract void execute();
     }
 
@@ -1304,9 +1293,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
             this.rating = rating;
         }
 
-        /**
-         * Applies the cached write-behind operation to the index, updating the record.
-         */
+        /** Applies the cached write-behind operation to the index, updating the record. */
         public void execute()
         {
             // log.debug("public void execute(): called");
@@ -1335,9 +1322,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
             this.key = key;
         }
 
-        /**
-         * Executes the cached write behind operation, removing the record from the index.
-         */
+        /** Executes the cached write behind operation, removing the record from the index. */
         public void execute()
         {
             // log.debug("public void execute(): called");
@@ -1353,16 +1338,12 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
         /** Used for logging. */
         //private final Logger log = Logger.getLogger(ClearAllRecords.class);
 
-        /**
-         * Creates the cached write behind operation.
-         */
+        /** Creates the cached write behind operation. */
         public ClearAllRecords()
         {
         }
 
-        /**
-         * Exceutes the clearing of the whole index.
-         */
+        /** Exceutes the clearing of the whole index. */
         public void execute()
         {
             // log.debug("public void execute(): called");
@@ -1406,9 +1387,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
             this.setOfWords = setOfWords;
         }
 
-        /**
-         * Executes the cached transaction write-behind operation, adding a new record to the index.
-         */
+        /** Executes the cached transaction write-behind operation, adding a new record to the index. */
         public void execute()
         {
             // log.debug("public void execute(): called");
@@ -1417,20 +1396,20 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
     }
 
     /**
-     * This comparator is used to compare index records by their ratings to facilitate the ordering of search
-     * results by their ratings.
+     * This comparator is used to compare index records by their ratings to facilitate the ordering of search results by
+     * their ratings.
      */
     private class RatingComparator implements Comparator<IndexRecord>
     {
         /**
-         * Compares two ratings. This is a reversed comparator because the results list should be returned in
-         * order of the highest ratings first.
+         * Compares two ratings. This is a reversed comparator because the results list should be returned in order of
+         * the highest ratings first.
          *
-         * @param record1 The first index record to compare by rating.
-         * @param record2 The second index record to compare by rating.
+         * @param  record1 The first index record to compare by rating.
+         * @param  record2 The second index record to compare by rating.
          *
-         * @return -1 if record1 has a higher rating score, 0 if they have the same rating score and, 1 if
-         *         record1 has a lower rating score.
+         * @return -1 if record1 has a higher rating score, 0 if they have the same rating score and, 1 if record1 has a
+         *         lower rating score.
          */
         public int compare(IndexRecord record1, IndexRecord record2)
         {
