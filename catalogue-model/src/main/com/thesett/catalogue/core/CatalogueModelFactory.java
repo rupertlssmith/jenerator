@@ -403,6 +403,7 @@ public class CatalogueModelFactory
      * Extracts the natural key fields for a named component type in the catalogue model. Not all components have
      * natural key fields, in which case the resulting set of fields will be empty.
      *
+     *
      * @param  name The name of the component type to get the natural key fields of.
      *
      * @return The natural key fields of a named component type.
@@ -1507,6 +1508,11 @@ public class CatalogueModelFactory
         /** {@inheritDoc} */
         public Set<String> getAllPropertyNames()
         {
+            return null;
+        }
+
+        /** {@inheritDoc} */
+        public Set<String> getNaturalKeyFieldNames() {
             return null;
         }
 

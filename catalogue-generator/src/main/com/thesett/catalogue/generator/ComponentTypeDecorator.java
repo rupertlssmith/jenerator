@@ -87,6 +87,11 @@ public class ComponentTypeDecorator extends TypeDecorator implements ComponentTy
     }
 
     /** {@inheritDoc} */
+    public Set<String> getNaturalKeyFieldNames() {
+        return ((ComponentType) type).getNaturalKeyFieldNames();
+    }
+
+    /** {@inheritDoc} */
     public Set<ComponentType> getImmediateAncestors()
     {
         return ((ComponentType) type).getImmediateAncestors();
