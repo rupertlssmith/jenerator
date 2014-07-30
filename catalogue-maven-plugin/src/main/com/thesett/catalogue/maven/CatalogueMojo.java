@@ -98,6 +98,13 @@ public class CatalogueMojo extends AbstractMojo
     public String model;
 
     /**
+     * The optional template override dir, to load custom templates from.
+     *
+     * @parameter property="templateDir"
+     */
+    public String templateDir;
+
+    /**
      * The output java package name.
      *
      * @parameter property="jpackage"
@@ -151,7 +158,7 @@ public class CatalogueMojo extends AbstractMojo
             Catalogue catalogue = modelBean.getCatalogue();
 
             GeneratorTool.generate(catalogue, generatedSourcesDirectory, generatedTestSourcesDirectory,
-                hibernateMappingFilename);
+                hibernateMappingFilename, templateDir);
         }
         catch (ConfigException e)
         {

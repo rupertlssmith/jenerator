@@ -18,7 +18,6 @@ package com.thesett.catalogue.generator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.antlr.stringtemplate.CommonGroupLoader;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 import com.thesett.aima.attribute.impl.EnumeratedStringAttribute;
@@ -69,13 +68,13 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
      * Creates a Java generator to output to the specified directory root.
      *
      * @param outputDirName The root directory to generate output to.
+     * @param templateDir   An alternative directory to load templates from, may be <tt>null</tt> to use defaults.
      */
-    public JavaBeanGenerator(String outputDirName)
+    public JavaBeanGenerator(String outputDirName, String templateDir)
     {
         super(outputDirName);
 
-        CommonGroupLoader groupLoader = new CommonGroupLoader(DEFAULT_TEMPLATE_PATH, new DummyErrorHandler());
-        StringTemplateGroup.registerGroupLoader(groupLoader);
+        registerTemplateLoader(templateDir);
 
         javaBeanTemplates = StringTemplateGroup.loadGroup(JAVA_BEAN_TEMPLATES_GROUP);
         javaBeanTemplates.registerRenderer(String.class, new CamelCaseRenderer());

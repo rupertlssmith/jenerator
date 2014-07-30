@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.antlr.stringtemplate.CommonGroupLoader;
+import org.antlr.stringtemplate.PathGroupLoader;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.antlr.stringtemplate.StringTemplateGroupLoader;
@@ -257,6 +258,35 @@ public abstract class BaseGenerator implements Generator, TypeVisitor
 
         // Build the full path to the output file.
         return fullOutputDirName + File.separatorChar + prefix + StringUtils.toCamelCaseUpper(name) + postfix + ".java";
+    }
+
+    /**
+     * Registers a StringTemplate group loader for templates. This will either be the default set of templates, when no
+     * override is specified, or a set of custom templates when one is.
+     *
+     * @param templateDir The path of a directory holding customer templates, or <tt>null</tt> to use the defaults.
+     */
+    protected void registerTemplateLoader(String templateDir)
+    {
+        StringTemplateGroupLoader groupLoader;
+
+        if ((templateDir == null) || "".equals(templateDir))
+        {
+            groupLoader = new CommonGroupLoader(DEFAULT_TEMPLATE_PATH, new DummyErrorHandler());
+        }
+        else
+        {
+            File f = new File(templateDir);
+
+            if (!f.exists() || !f.isDirectory())
+            {
+                throw new RuntimeException("'templateDir' must be a valid path to a directory containing templates.");
+            }
+
+            groupLoader = new PathGroupLoader(templateDir, new DummyErrorHandler());
+        }
+
+        StringTemplateGroup.registerGroupLoader(groupLoader);
     }
 
     /**

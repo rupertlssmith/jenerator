@@ -110,7 +110,7 @@ public class GeneratorTool
             // Get the loaded catalogue model from its config bean.
             final Catalogue model = modelBean.getCatalogue();
 
-            generate(model, outDirName, testOutDirName, hibernateMappingFileName);
+            generate(model, outDirName, testOutDirName, hibernateMappingFileName, null);
         }
         catch (ConfigException e)
         {
@@ -126,16 +126,18 @@ public class GeneratorTool
      * @param outDirName               The directory to write the output to.
      * @param testOutDirName           The directory to write the generated test output to.
      * @param hibernateMappingFileName The name of the hibernate mapping file to write to.
+     * @param templateDir              An alternative directory to load templates from, may be <tt>null</tt> to use
+     *                                 defaults.
      */
     public static void generate(Catalogue model, final String outDirName, final String testOutDirName,
-        final String hibernateMappingFileName)
+        final String hibernateMappingFileName, final String templateDir)
     {
         // Generate from the loaded model for Java with a Hibernate persistence layer.
         Generator generator = new ChainedGenerator(new LinkedList<Generator>()
             {
                 {
-                    add(new JavaBeanGenerator(outDirName));
-                    add(new HibernateGenerator(outDirName, hibernateMappingFileName));
+                    add(new JavaBeanGenerator(outDirName, templateDir));
+                    add(new HibernateGenerator(outDirName, hibernateMappingFileName, templateDir));
                     /*add(new JavaTestGenerator(testOutDirName));*/
                 }
             });

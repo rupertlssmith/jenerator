@@ -97,15 +97,15 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
      *
      * @param outputDirName   The directory root to generate to.
      * @param mappingFileName The name of the file to output the hibernate mapping to.
+     * @param templateDir     An alternative directory to load templates from, may be <tt>null</tt> to use defaults.
      */
-    public HibernateGenerator(String outputDirName, String mappingFileName)
+    public HibernateGenerator(String outputDirName, String mappingFileName, String templateDir)
     {
         super(outputDirName);
 
         this.mappingFileName = mappingFileName;
 
-        CommonGroupLoader groupLoader = new CommonGroupLoader(DEFAULT_TEMPLATE_PATH, new DummyErrorHandler());
-        StringTemplateGroup.registerGroupLoader(groupLoader);
+        registerTemplateLoader(templateDir);
 
         hibernateOnlineTemplates = StringTemplateGroup.loadGroup(HIBERNATE_ONLINE_TEMPLATES_GROUP);
         hibernateOnlineTemplates.registerRenderer(String.class, new CamelCaseRenderer());
