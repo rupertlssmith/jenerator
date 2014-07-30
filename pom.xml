@@ -7,7 +7,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>jenerator_build</artifactId>
     <name>projects</name>
-    <version>0.8-M1</version><!-- jenerator.version -->
+    <version>0.8-M2</version><!-- jenerator.version -->
 
     <packaging>pom</packaging>
 
@@ -40,7 +40,7 @@
     <properties>
         <topdir>${basedir}/.</topdir>
 
-        <base.version>0.8-M1</base.version><!-- base.version -->
+        <base.version>0.8-M2</base.version><!-- base.version -->
         
         <!-- Stops the dependency plugin running really slowly. -->
         <dependency.locations.enabled>false</dependency.locations.enabled>
