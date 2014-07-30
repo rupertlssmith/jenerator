@@ -70,7 +70,7 @@ public class CatalogueMojo extends AbstractMojo
     /**
      * The maven project model.
      *
-     * @parameter expression="${project}"
+     * @parameter property="project"
      * @required
      * @readonly
      */
@@ -79,28 +79,28 @@ public class CatalogueMojo extends AbstractMojo
     /**
      * The directory containing generated sources.
      *
-     * @parameter expression="${project.build.directory}/generated-sources/javasource"
+     * @parameter property="project.build.directory/generated-sources/javasource"
      */
     public String generatedSourcesDirectory;
 
     /**
      * The directory containing generated test sources.
      *
-     * @parameter expression="${project.build.directory}/generated-sources/javasourcetest"
+     * @parameter property="project.build.directory/generated-sources/javasourcetest"
      */
     public String generatedTestSourcesDirectory;
 
     /**
      * The model file, to generate from.
      *
-     * @parameter expression="${model}"
+     * @parameter property="model"
      */
     public String model;
 
     /**
      * The output java package name.
      *
-     * @parameter expression="${jpackage}"
+     * @parameter property="jpackage"
      */
     public String jpackage;
 
