@@ -13,6 +13,8 @@ package com.thesett.catalogue.generator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.antlr.stringtemplate.CommonGroupLoader;
+import org.antlr.stringtemplate.PathGroupLoader;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 import com.thesett.aima.attribute.impl.DateRangeType;
@@ -71,6 +73,9 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
     public JavaBeanGenerator(String outputDirName)
     {
         super(outputDirName);
+
+        CommonGroupLoader groupLoader = new CommonGroupLoader(DEFAULT_TEMPLATE_PATH, new DummyErrorHandler());
+        StringTemplateGroup.registerGroupLoader(groupLoader);
 
         javaBeanTemplates = StringTemplateGroup.loadGroup(JAVA_BEAN_TEMPLATES_GROUP);
         javaBeanTemplates.registerRenderer(String.class, new CamelCaseRenderer());

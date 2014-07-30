@@ -64,6 +64,9 @@ public abstract class BaseGenerator implements Generator, TypeVisitor
     /** Used for debugging purposes. */
     public static final Logger log = Logger.getLogger(BaseGenerator.class);
 
+    /** The default path to load templates from. */
+    public static final String DEFAULT_TEMPLATE_PATH = "com/thesett/catalogue/generator/defaulttemplates";
+
     /** Defines the name of the template to create the opening section of output files. */
     protected static final String FILE_OPEN_TEMPLATE = "file_open";
 

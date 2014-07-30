@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.antlr.stringtemplate.CommonGroupLoader;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
@@ -97,6 +98,9 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
         super(outputDirName);
 
         this.mappingFileName = mappingFileName;
+
+        CommonGroupLoader groupLoader = new CommonGroupLoader(DEFAULT_TEMPLATE_PATH, new DummyErrorHandler());
+        StringTemplateGroup.registerGroupLoader(groupLoader);
 
         hibernateOnlineTemplates = StringTemplateGroup.loadGroup(HIBERNATE_ONLINE_TEMPLATES_GROUP);
         hibernateOnlineTemplates.registerRenderer(String.class, new CamelCaseRenderer());
