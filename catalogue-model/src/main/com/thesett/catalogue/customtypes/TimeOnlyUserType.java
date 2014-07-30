@@ -23,6 +23,7 @@ import java.sql.Types;
 
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.UserType;
 
 import com.thesett.aima.attribute.time.TimeOnly;
@@ -81,7 +82,8 @@ public class TimeOnlyUserType implements UserType
     }
 
     /** {@inheritDoc} */
-    public Object nullSafeGet(ResultSet rs, String[] names, Object owner) throws HibernateException, SQLException
+    public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor sessionImplementor, Object owner)
+        throws HibernateException, SQLException
     {
         log.debug("public Object nullSafeGet(ResultSet resultSet, String[] names, Object owner): called");
         log.debug("resultSet = " + rs);
@@ -96,7 +98,8 @@ public class TimeOnlyUserType implements UserType
     }
 
     /** {@inheritDoc} */
-    public void nullSafeSet(PreparedStatement st, Object value, int index) throws HibernateException, SQLException
+    public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor sessionImplementor)
+        throws HibernateException, SQLException
     {
         log.debug("public void nullSafeSet(PreparedStatement statement, Object value, int index): called");
         log.debug("value = " + value);

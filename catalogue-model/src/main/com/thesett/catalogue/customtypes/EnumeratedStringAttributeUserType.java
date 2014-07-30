@@ -22,6 +22,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 
 import org.apache.log4j.Logger;
+import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.UserType;
 
 import com.thesett.aima.attribute.impl.EnumeratedStringAttribute;
@@ -118,7 +119,8 @@ public abstract class EnumeratedStringAttributeUserType implements UserType
      *
      * @throws SQLException If there is an underlying SQLException it is allowed to fall through.
      */
-    public Object nullSafeGet(ResultSet resultSet, String[] names, Object owner) throws SQLException
+    public Object nullSafeGet(ResultSet resultSet, String[] names, SessionImplementor sessionImplementor, Object owner)
+        throws SQLException
     {
         log.debug("public Object nullSafeGet(ResultSet resultSet, String[] names, Object owner): called");
         log.debug("resultSet = " + resultSet);
@@ -147,7 +149,8 @@ public abstract class EnumeratedStringAttributeUserType implements UserType
      *
      * @throws SQLException If there is an underlying SQLException it is allowed to fall through.
      */
-    public void nullSafeSet(PreparedStatement statement, Object value, int index) throws SQLException
+    public void nullSafeSet(PreparedStatement statement, Object value, int index, SessionImplementor sessionImplementor)
+        throws SQLException
     {
         log.debug("public void nullSafeSet(PreparedStatement statement, Object value, int index): called");
         log.debug("value = " + value);

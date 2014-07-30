@@ -22,8 +22,8 @@ import java.sql.SQLException;
 import java.sql.Types;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Hibernate;
-import org.hibernate.engine.SessionImplementor;
+import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.type.StringType;
 import org.hibernate.type.Type;
 import org.hibernate.usertype.CompositeUserType;
 
@@ -178,7 +178,7 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
      *
      * @throws SQLException If there is an underlying SQLException it is allowed to fall through.
      */
-    public Object nullSafeGet(ResultSet resultSet, String[] names, SessionImplementor session, Object owner)
+    public Object xnullSafeGet(ResultSet resultSet, String[] names, SessionImplementor session, Object owner)
         throws SQLException
     {
         log.debug(
@@ -283,7 +283,7 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
 
         for (int i = 0; i < result.length; i++)
         {
-            result[i] = Hibernate.STRING;
+            result[i] = StringType.INSTANCE;
         }
 
         return result;
