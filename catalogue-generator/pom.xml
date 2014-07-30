@@ -72,7 +72,7 @@
             <!-- Set up the run plugin to generate a script to run the generator with. -->
             <plugin>
                 <groupId>com.thesett</groupId>
-                <artifactId>maven-run-plugin</artifactId>
+                <artifactId>run-maven-plugin</artifactId>
 
                 <configuration>
                     <scriptOutDirectory>target</scriptOutDirectory>
