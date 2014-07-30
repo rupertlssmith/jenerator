@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -393,6 +394,36 @@ public class CatalogueModelFactory
                     results.put(fieldName, new CollectionTypeImpl(elementType, ArrayList.class, collectionKind));
                 }
             }
+        }
+
+        return results;
+    }
+
+    /**
+     * Extracts the natural key fields for a named component type in the catalogue model. Not all components have
+     * natural key fields, in which case the resulting set of fields will be empty.
+     *
+     * @param  name The name of the component type to get the natural key fields of.
+     *
+     * @return The natural key fields of a named component type.
+     */
+    private Set<String> getNaturalKeyFields(String name)
+    {
+        String queryString =
+            "?-product_type(_PT), normal_type(_PT, " + name +
+            ", class, _MP), member(unique_fields(key, _FS), _MP), member(F, _FS).";
+        Iterable<Map<String, Variable>> uniqueFieldsIterable = runQuery(queryString);
+
+        final Set<String> results = new LinkedHashSet<String>();
+
+        for (Map<String, Variable> variables : uniqueFieldsIterable)
+        {
+            Variable var = variables.get("F");
+            Functor fieldFunctor = (Functor) var.getValue();
+
+            String fieldName = engine.getFunctorName(fieldFunctor);
+
+            results.add(fieldName);
         }
 
         return results;
@@ -913,24 +944,25 @@ public class CatalogueModelFactory
             for (String componentName : componentNamesEntry.getValue())
             {
                 Map<String, Type> componentFields = getComponentFields(catalogueTypes, componentName);
+                Set<String> naturalKeyFields = getNaturalKeyFields(componentName);
                 Set<ComponentType> ancestors = getComponentAncestors(catalogueTypes, componentName);
 
                 if ("component_type".equals(componentType))
                 {
                     catalogueTypes.put(componentName,
-                        new ComponentTypeImpl(componentName, componentFields,
+                        new ComponentTypeImpl(componentName, componentFields, naturalKeyFields,
                             packageName + "." + StringUtils.toCamelCaseUpper(componentName), ancestors));
                 }
                 else if ("view_type".equals(componentType))
                 {
                     catalogueTypes.put(componentName,
-                        new ViewTypeImpl(componentName, componentFields,
+                        new ViewTypeImpl(componentName, componentFields, naturalKeyFields,
                             packageName + "." + StringUtils.toCamelCaseUpper(componentName) + "Impl", ancestors));
                 }
                 else if ("entity_type".equals(componentType))
                 {
                     EntityTypeImpl entityType =
-                        new EntityTypeImpl(componentName, componentFields,
+                        new EntityTypeImpl(componentName, componentFields, naturalKeyFields,
                             packageName + "." + StringUtils.toCamelCaseUpper(componentName), ancestors);
 
                     if (supportsExternalId(componentName))
@@ -943,7 +975,7 @@ public class CatalogueModelFactory
                 else if ("dimension_type".equals(componentType))
                 {
                     DimensionTypeImpl dimensionType =
-                        new DimensionTypeImpl(componentName, componentFields,
+                        new DimensionTypeImpl(componentName, componentFields, naturalKeyFields,
                             packageName + "." + StringUtils.toCamelCaseUpper(componentName), ancestors);
 
                     if (supportsExternalId(componentName))

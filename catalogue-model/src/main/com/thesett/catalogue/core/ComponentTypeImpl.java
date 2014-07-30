@@ -57,6 +57,9 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
     /** Holds a map from names to the property types of the component type. */
     private Map<String, Type> properties;
 
+    /** Holds the names of the fields forming the natural key of the component. */
+    private Set<String> naturalKeyFields;
+
     /** Holds the ancestor types of this component. */
     private Set<ComponentType> immediateAncestors;
 
@@ -65,13 +68,15 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
      *
      * @param name                 The name of the component type.
      * @param attributes           The attributes of the component type.
+     * @param naturalKeyFields     The set of fields forming the natural key of the component.
      * @param operationalClassName The fully qualified name of the class that this component type describes.
      * @param immediateAncestors   The immediate ancestors of this component type.
      */
-    public ComponentTypeImpl(String name, Map<String, Type> attributes, String operationalClassName,
-        Set<ComponentType> immediateAncestors)
+    public ComponentTypeImpl(String name, Map<String, Type> attributes, Set<String> naturalKeyFields,
+        String operationalClassName, Set<ComponentType> immediateAncestors)
     {
         this.properties = attributes;
+        this.naturalKeyFields = naturalKeyFields;
         this.name = name;
         this.operationalClassName = operationalClassName;
         this.immediateAncestors = immediateAncestors;
@@ -99,6 +104,12 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
     public Set<String> getAllPropertyNames()
     {
         return properties.keySet();
+    }
+
+    /** {@inheritDoc} */
+    public Set<String> getNaturalKeyFieldNames()
+    {
+        return naturalKeyFields;
     }
 
     /** {@inheritDoc} */

@@ -15,6 +15,7 @@
  */
 package com.thesett.catalogue.core;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -49,6 +50,6 @@ public class FactTypeImpl extends EntityTypeImpl implements FactType
     public FactTypeImpl(String name, Map<String, Type> attributes, String operationalClassName,
         Set<ComponentType> immediateAncestors)
     {
-        super(name, attributes, operationalClassName, immediateAncestors);
+        super(name, attributes, new HashSet<String>(), operationalClassName, immediateAncestors);
     }
 }
