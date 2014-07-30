@@ -112,6 +112,13 @@ public class CatalogueMojo extends AbstractMojo
     public String jpackage;
 
     /**
+     * The debug functors file name.
+     *
+     * @parameter property="debugModelFilename"
+     */
+    public String debugModelFilename;
+
+    /**
      * The output filename for the hibernate mapping.
      *
      * @parameter
@@ -150,6 +157,11 @@ public class CatalogueMojo extends AbstractMojo
                 (ModelLoaderConfigBean) configurator.getLoadedBean(
                     "com.thesett.catalogue.config.ModelLoaderConfigBean");
             modelBean.setModelFile(model);
+
+            if ((debugModelFilename != null) && !"".equals(debugModelFilename))
+            {
+                modelBean.setDebugRawFileName(debugModelFilename);
+            }
 
             // Run the configuration.
             configurator.configureAll();
