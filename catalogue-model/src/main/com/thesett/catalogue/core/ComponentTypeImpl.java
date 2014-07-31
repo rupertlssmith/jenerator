@@ -17,6 +17,7 @@ package com.thesett.catalogue.core;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -110,6 +111,19 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
     public Set<String> getNaturalKeyFieldNames()
     {
         return naturalKeyFields;
+    }
+
+    /** {@inheritDoc} */
+    public Map<String, Type> getNaturalKeyFieldTypes()
+    {
+        Map<String, Type> result = new LinkedHashMap<String, Type>();
+
+        for (String propName : naturalKeyFields)
+        {
+            result.put(propName, properties.get(propName));
+        }
+
+        return result;
     }
 
     /** {@inheritDoc} */

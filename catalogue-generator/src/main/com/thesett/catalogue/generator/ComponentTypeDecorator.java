@@ -92,6 +92,11 @@ public class ComponentTypeDecorator extends TypeDecorator implements ComponentTy
     }
 
     /** {@inheritDoc} */
+    public Map<String, Type> getNaturalKeyFieldTypes() {
+        return ((ComponentType) type).getNaturalKeyFieldTypes();
+    }
+
+    /** {@inheritDoc} */
     public Set<ComponentType> getImmediateAncestors()
     {
         return ((ComponentType) type).getImmediateAncestors();
