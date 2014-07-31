@@ -19,7 +19,6 @@ import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.antlr.stringtemplate.CommonGroupLoader;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
@@ -76,6 +75,9 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     /** Holds the string template group to generate Hibernate warehouse configurations from. */
     private StringTemplateGroup hibernateWarehouseTemplates;
 
+    /** The name of the directory to output hibernate mappings to. */
+    private final String mappingDirName;
+
     /** Holds the name of the file to output the hibernate mapping to. */
     private String mappingFileName;
 
@@ -95,14 +97,13 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
      * Creates a generator for hibernate configuration XML and custom user types to output to the specified directory
      * root.
      *
-     * @param outputDirName   The directory root to generate to.
+     * @param mappingDirName  The directory root to generate mappings to.
      * @param mappingFileName The name of the file to output the hibernate mapping to.
      * @param templateDir     An alternative directory to load templates from, may be <tt>null</tt> to use defaults.
      */
-    public HibernateGenerator(String outputDirName, String mappingFileName, String templateDir)
+    public HibernateGenerator(String mappingDirName, String mappingFileName, String templateDir)
     {
-        super(outputDirName);
-
+        this.mappingDirName = mappingDirName;
         this.mappingFileName = mappingFileName;
 
         registerTemplateLoader(templateDir);
@@ -333,15 +334,15 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     protected String nameToFileNameInRootGenerationDir(String name)
     {
         // Ensure that the output directory exists for the location, if it has not already been created.
-        if (!createdOutputDirectories.contains(outputDirName))
+        if (!createdOutputDirectories.contains(mappingDirName))
         {
-            File dir = new File(outputDirName);
+            File dir = new File(mappingDirName);
             dir.mkdirs();
-            createdOutputDirectories.add(outputDirName);
+            createdOutputDirectories.add(mappingDirName);
         }
 
         // Build the full path to the output file.
-        return outputDirName + File.separatorChar + name;
+        return mappingDirName + File.separatorChar + name;
     }
 
     /**

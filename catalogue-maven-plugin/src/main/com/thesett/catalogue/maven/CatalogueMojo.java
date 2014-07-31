@@ -105,11 +105,39 @@ public class CatalogueMojo extends AbstractMojo
     public String templateDir;
 
     /**
-     * The output java package name.
+     * The output java package name for the model.
      *
-     * @parameter property="jpackage"
+     * @parameter property="modelPackage"
      */
-    public String jpackage;
+    public String modelPackage;
+
+    /**
+     * The output java package name for the DAO utilities.
+     *
+     * @parameter property="daoPackage"
+     */
+    public String daoPackage;
+
+    /**
+     * The model output base directory.
+     *
+     * @parameter property="modelOutputDir"
+     */
+    public String modelOutputDir;
+
+    /**
+     * The DAO utilities output base directory.
+     *
+     * @parameter property="daoOutputDir"
+     */
+    public String daoOutputDir;
+
+    /**
+     * The output directory for mapping files.
+     *
+     * @parameter property="mappingOutputDir"
+     */
+    public String mappingOutputDir;
 
     /**
      * The debug functors file name.
@@ -163,14 +191,30 @@ public class CatalogueMojo extends AbstractMojo
                 modelBean.setDebugRawFileName(debugModelFilename);
             }
 
+            // Set up default directories to output to, if no overrides were given.
+            if (modelOutputDir == null)
+            {
+                modelOutputDir = generatedSourcesDirectory;
+            }
+
+            if (daoOutputDir == null)
+            {
+                daoOutputDir = generatedSourcesDirectory;
+            }
+
+            if (mappingOutputDir == null)
+            {
+                mappingOutputDir = generatedSourcesDirectory;
+            }
+
             // Run the configuration.
             configurator.configureAll();
 
             // Generate from the loaded model.
             Catalogue catalogue = modelBean.getCatalogue();
 
-            GeneratorTool.generate(catalogue, generatedSourcesDirectory, generatedTestSourcesDirectory,
-                hibernateMappingFilename, templateDir);
+            GeneratorTool.generate(catalogue, modelOutputDir, daoOutputDir, mappingOutputDir, hibernateMappingFilename,
+                templateDir);
         }
         catch (ConfigException e)
         {
@@ -182,7 +226,7 @@ public class CatalogueMojo extends AbstractMojo
 
         // Set up parameters to pass to all of the XSLT transforms.
         HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("package", jpackage);
+        parameters.put("package", modelPackage);
 
         // Generate the index mapping files.
         transformModel(model, INDEX_MAPPING_TRANSFORM,

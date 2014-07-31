@@ -64,15 +64,23 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
     protected FileOutputProcessedTemplateHandler fileOutputProcessedTemplateHandler =
         new FileOutputProcessedTemplateHandler(false);
 
+    /** The directory to output the model to. */
+    private final String modelDirName;
+
+    /** The directory to output the DAO code to. */
+    private final String daoDirName;
+
     /**
      * Creates a Java generator to output to the specified directory root.
      *
-     * @param outputDirName The root directory to generate output to.
-     * @param templateDir   An alternative directory to load templates from, may be <tt>null</tt> to use defaults.
+     * @param modelDirName The root directory to generate model output to.
+     * @param daoDirName   The root directory to generator DAO output to.
+     * @param templateDir  An alternative directory to load templates from, may be <tt>null</tt> to use defaults.
      */
-    public JavaBeanGenerator(String outputDirName, String templateDir)
+    public JavaBeanGenerator(String modelDirName, String daoDirName, String templateDir)
     {
-        super(outputDirName);
+        this.modelDirName = modelDirName;
+        this.daoDirName = daoDirName;
 
         registerTemplateLoader(templateDir);
 
@@ -108,13 +116,14 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
             names =
                 new String[]
                 {
-                    nameToJavaFileName("", type.getName(), "Impl"), nameToJavaFileName("", type.getName(), "")
+                    nameToJavaFileName(modelDirName, "", type.getName(), "Impl"),
+                    nameToJavaFileName(modelDirName, "", type.getName(), "")
                 };
         }
         else
         {
             templates = new StringTemplateGroup[] { javaBeanTemplates };
-            names = new String[] { nameToJavaFileName("", type.getName(), "") };
+            names = new String[] { nameToJavaFileName(modelDirName, "", type.getName(), "") };
         }
 
         generate(model, decoratedType, templates, names, fields, extraFields, handlers);
@@ -133,7 +142,8 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
         String[] names =
             new String[]
             {
-                nameToJavaFileName("", type.getName(), ""), nameToJavaFileName("", type.getName(), "UserType")
+                nameToJavaFileName(modelDirName, "", type.getName(), ""),
+                nameToJavaFileName(daoDirName, "", type.getName(), "UserType")
             };
 
         Map<String, Type> fields =
@@ -174,7 +184,8 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
         String[] names =
             new String[]
             {
-                nameToJavaFileName("", type.getName(), ""), nameToJavaFileName("", type.getName(), "UserType")
+                nameToJavaFileName(modelDirName, "", type.getName(), ""),
+                nameToJavaFileName(daoDirName, "", type.getName(), "UserType")
             };
 
         Map<String, Type> fields =
@@ -229,7 +240,7 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
         final TypeDecorator decoratedType = TypeDecoratorFactory.decorateType(type);
 
         StringTemplateGroup[] templates = new StringTemplateGroup[] { javaBeanTemplates };
-        String[] names = new String[] { nameToJavaFileName("", type.getName(), "") };
+        String[] names = new String[] { nameToJavaFileName(modelDirName, "", type.getName(), "") };
 
         Map<String, Type> fields =
             new LinkedHashMap<String, Type>()

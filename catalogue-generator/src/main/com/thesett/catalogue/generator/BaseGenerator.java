@@ -84,24 +84,15 @@ public abstract class BaseGenerator implements Generator, TypeVisitor
     /** Defines the classpath relative path where the generation templates can be found. */
     private static final String TEMPLATES_PATH = "com/thesett/catalogue/generator";
 
-    /** Holds the name of the root directory to output to. */
-    protected String outputDirName;
-
     /** Holds the catalogue model to generate from. */
     protected Catalogue model;
 
     /** Used to keep track of output directories that have been created. */
     protected Set<String> createdOutputDirectories = new HashSet<String>();
 
-    /**
-     * Creates a stringtemplate generator to output to the specified directory root.
-     *
-     * @param outputDirName The root directory to generate output to.
-     */
-    protected BaseGenerator(String outputDirName)
+    /** Creates a StringTemplate generator. */
+    protected BaseGenerator()
     {
-        this.outputDirName = outputDirName;
-
         StringTemplateGroupLoader loader = new CommonGroupLoader(TEMPLATES_PATH, new DummyErrorHandler());
         StringTemplateGroup.registerGroupLoader(loader);
         StringTemplateGroup.registerDefaultLexer(AngleBracketTemplateLexer.class);
@@ -232,21 +223,22 @@ public abstract class BaseGenerator implements Generator, TypeVisitor
     }
 
     /**
-     * Converts a name to camel case and appends and prepends string onto it, then calculates the directory for the
+     * Converts a name to camel case and appends and prepends strings onto it, then calculates the directory for the
      * model package relative to the generation output directory and returns the result as the full path name of the
      * file to output to, for Java code generation.
      *
-     * @param  prefix  The prefix to add to the java file name.
-     * @param  name    The name to convert to camel case as the main part of the java file name.
-     * @param  postfix The postfix to add to the java file name.
+     * @param  rootDirName The root directory to output to, package directory will come under this.
+     * @param  prefix      The prefix to add to the java file name.
+     * @param  name        The name to convert to camel case as the main part of the java file name.
+     * @param  postfix     The postfix to add to the java file name.
      *
      * @return The full path to the java source file to output to.
      */
-    protected String nameToJavaFileName(String prefix, String name, String postfix)
+    protected String nameToJavaFileName(String rootDirName, String prefix, String name, String postfix)
     {
         // Work out the full path to the location to write to.
         String packagePath = model.getModelPackage().replace('.', '/');
-        final String fullOutputDirName = outputDirName + File.separator + packagePath;
+        final String fullOutputDirName = rootDirName + File.separator + packagePath;
 
         // Ensure that the output directory exists for the location, if it has not already been created.
         if (!createdOutputDirectories.contains(fullOutputDirName))

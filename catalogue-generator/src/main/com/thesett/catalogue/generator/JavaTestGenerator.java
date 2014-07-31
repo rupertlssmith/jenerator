@@ -45,6 +45,9 @@ public class JavaTestGenerator extends BaseGenerator implements ComponentTypeVis
     protected FileOutputProcessedTemplateHandler fileOutputProcessedTemplateHandler =
         new FileOutputProcessedTemplateHandler(false);
 
+    /** The name of the directory to output to. */
+    private final String outputDirName;
+
     /**
      * Creates a Java generator to output to the specified directory root.
      *
@@ -52,7 +55,7 @@ public class JavaTestGenerator extends BaseGenerator implements ComponentTypeVis
      */
     public JavaTestGenerator(String outputDirName)
     {
-        super(outputDirName);
+        this.outputDirName = outputDirName;
 
         javaTestTemplates = StringTemplateGroup.loadGroup(JAVA_TEST_TEMPLATES_GROUP);
         javaTestTemplates.registerRenderer(String.class, new CamelCaseRenderer());
@@ -68,7 +71,7 @@ public class JavaTestGenerator extends BaseGenerator implements ComponentTypeVis
         ComponentTypeDecorator decoratedType = (ComponentTypeDecorator) TypeDecoratorFactory.decorateType(type);
 
         StringTemplateGroup[] templates = new StringTemplateGroup[] { javaTestTemplates };
-        String[] names = new String[] { nameToJavaFileName("", type.getName(), "Test") };
+        String[] names = new String[] { nameToJavaFileName(outputDirName, "", type.getName(), "Test") };
         Map<String, Type> fields = decoratedType.getAllPropertyTypes();
         Map<String, Type> extraFields = null;
         ProcessedTemplateHandler[] handlers = new ProcessedTemplateHandler[] { fileOutputProcessedTemplateHandler };
