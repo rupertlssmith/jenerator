@@ -229,8 +229,8 @@ public class CatalogueMojo extends AbstractMojo
         parameters.put("package", modelPackage);
 
         // Generate the index mapping files.
-        transformModel(model, INDEX_MAPPING_TRANSFORM,
-            generatedSourcesDirectory + File.separatorChar + indexMappingFilename, parameters);
+        /*transformModel(model, INDEX_MAPPING_TRANSFORM,
+            generatedSourcesDirectory + File.separatorChar + indexMappingFilename, parameters);*/
 
         // Add generated sources to maven compilation path.
         if (new File(generatedSourcesDirectory).exists())
@@ -238,7 +238,7 @@ public class CatalogueMojo extends AbstractMojo
             project.addCompileSourceRoot(generatedSourcesDirectory);
         }
 
-        // Add generated test soruces to maven test compilation path.
+        // Add generated test sources to maven test compilation path.
         if (new File(generatedTestSourcesDirectory).exists())
         {
             project.addTestCompileSourceRoot(generatedTestSourcesDirectory);
