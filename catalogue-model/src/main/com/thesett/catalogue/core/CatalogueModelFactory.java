@@ -1517,11 +1517,6 @@ public class CatalogueModelFactory
         }
 
         /** {@inheritDoc} */
-        public Map<String, Type> getNaturalKeyFieldTypes() {
-            return null;
-        }
-
-        /** {@inheritDoc} */
         public Set<ComponentType> getImmediateAncestors()
         {
             return null;

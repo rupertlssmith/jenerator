@@ -62,6 +62,32 @@ public class ComponentTypeDecorator extends TypeDecorator implements ComponentTy
         return fields;
     }
 
+    /**
+     * Provides the types for the natural key field set. These types will also be decorated.
+     *
+     * @return The types for the natural key field set, or <tt>null</tt> if the component does not have a natural key
+     *         set.
+     */
+    public Map<String, Type> getNaturalKeyFieldTypes()
+    {
+        Set<String> naturalKeyFieldNames = ((ComponentType) type).getNaturalKeyFieldNames();
+
+        if ((naturalKeyFieldNames == null) || naturalKeyFieldNames.isEmpty())
+        {
+            return null;
+        }
+
+        Map<String, Type> fields = new LinkedHashMap<String, Type>();
+        Map<String, Type> originalFields = ((ComponentType) type).getAllPropertyTypes();
+
+        for (String fieldName : naturalKeyFieldNames)
+        {
+            fields.put(fieldName, TypeDecoratorFactory.decorateType(originalFields.get(fieldName)));
+        }
+
+        return fields;
+    }
+
     /** {@inheritDoc} */
     public State getInstance()
     {
@@ -87,13 +113,9 @@ public class ComponentTypeDecorator extends TypeDecorator implements ComponentTy
     }
 
     /** {@inheritDoc} */
-    public Set<String> getNaturalKeyFieldNames() {
+    public Set<String> getNaturalKeyFieldNames()
+    {
         return ((ComponentType) type).getNaturalKeyFieldNames();
-    }
-
-    /** {@inheritDoc} */
-    public Map<String, Type> getNaturalKeyFieldTypes() {
-        return ((ComponentType) type).getNaturalKeyFieldTypes();
     }
 
     /** {@inheritDoc} */
