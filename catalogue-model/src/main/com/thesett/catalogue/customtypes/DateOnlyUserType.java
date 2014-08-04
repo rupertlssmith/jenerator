@@ -95,8 +95,15 @@ public class DateOnlyUserType implements UserType
         Date value = rs.getDate(names[0]);
         log.debug("value = " + value);
 
-        // Convert the array of fields into a timeonly.
-        return new DateOnly(value.getYear(), value.getMonth(), value.getDate());
+        // Convert the array of fields into a date only.
+        if (value == null)
+        {
+            return null;
+        }
+        else
+        {
+            return new DateOnly(value.getYear(), value.getMonth(), value.getDate());
+        }
     }
 
     /** {@inheritDoc} */
@@ -113,7 +120,7 @@ public class DateOnlyUserType implements UserType
         // Check if the value to set is null and set a null value if so.
         if (value == null)
         {
-            st.setNull(index, Types.INTEGER);
+            st.setNull(index, Types.DATE);
         }
         else // The value is not a null so set the integer field.
         {
@@ -128,11 +135,16 @@ public class DateOnlyUserType implements UserType
     {
         log.debug("public Object deepCopy(Object value): called");
 
+        if (value == null)
+        {
+            return null;
+        }
+
         // Cast the object to be copied to an enumerated attribute.
         DateOnly date = (DateOnly) value;
         log.debug("t (to copy) = " + date);
 
-        // Createa copy with the same timestamp.
+        // Create a copy with the same timestamp.
         DateOnly copy = new DateOnly(date.getYear(), date.getMonth(), date.getDate());
         log.debug("copy = " + copy);
 

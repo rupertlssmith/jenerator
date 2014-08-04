@@ -178,7 +178,7 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
      *
      * @throws SQLException If there is an underlying SQLException it is allowed to fall through.
      */
-    public Object xnullSafeGet(ResultSet resultSet, String[] names, SessionImplementor session, Object owner)
+    public Object nullSafeGet(ResultSet resultSet, String[] names, SessionImplementor session, Object owner)
         throws SQLException
     {
         log.debug(
