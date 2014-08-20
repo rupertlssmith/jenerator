@@ -326,6 +326,11 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+    <xs:complexType name="BooleanType">
+        <xs:complexContent>
+            <xs:extension base="cat:FieldDeclrType"/>
+        </xs:complexContent>
+    </xs:complexType>    
     <xs:complexType name="IntegerType">
         <xs:complexContent>
             <xs:extension base="cat:FieldDeclrType"/>
@@ -428,6 +433,7 @@
     <xs:element name="FieldDeclrRoot" type="cat:FieldDeclrRootType" abstract="true" substitutionGroup="cat:ComponentPart"/>
     <xs:element name="FieldDeclr" type="cat:FieldDeclrType" abstract="true" substitutionGroup="cat:FieldDeclrRoot"/>
     <xs:element name="FieldDeclrModifier" type="cat:FieldDeclrModifierType" abstract="true" substitutionGroup="cat:FieldDeclrRoot"/>
+    <xs:element name="Boolean" type="cat:BooleanType" substitutionGroup="cat:FieldDeclr"/>
     <xs:element name="Integer" type="cat:IntegerType" substitutionGroup="cat:FieldDeclr"/>
     <xs:element name="Real" type="cat:RealType" substitutionGroup="cat:FieldDeclr"/>
     <xs:element name="String" type="cat:StringType" substitutionGroup="cat:FieldDeclr"/>

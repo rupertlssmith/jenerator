@@ -226,6 +226,7 @@ to an enumeration of states in the model and specify transitions etc there.
     <!-- Examples of all the basic types. -->
     <EntityDef name="basic_type_entity">
         <ExternalId/>
+        <Boolean name="boolean"/>
         <Integer name="integer"/>
         <Real name="real"/>
         <String name="string"/>
@@ -235,6 +236,7 @@ to an enumeration of states in the model and specify transitions etc there.
 
     <DimensionDef name="basic_type_dimension">
         <ExternalId/>
+        <Boolean name="boolean"/>        
         <Integer name="integer"/>
         <Real name="real"/>
         <String name="string"/>

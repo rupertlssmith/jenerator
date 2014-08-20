@@ -131,6 +131,7 @@ public class CatalogueModelFactory
         new HashMap<String, Type>()
         {
             {
+                put("boolean", JavaType.BOOLEAN_TYPE);
                 put("integer", JavaType.INTEGER_TYPE);
                 put("real", JavaType.FLOAT_TYPE);
                 put("string", JavaType.STRING_TYPE);

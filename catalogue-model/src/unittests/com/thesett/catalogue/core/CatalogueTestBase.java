@@ -28,6 +28,7 @@ import com.thesett.aima.attribute.time.TimeOnly;
 import com.thesett.aima.state.ComponentType;
 import com.thesett.aima.state.Type;
 import com.thesett.catalogue.interfaces.Catalogue;
+import com.thesett.catalogue.setup.BooleanType;
 import com.thesett.catalogue.setup.CatalogueDefinition;
 import com.thesett.catalogue.setup.ComponentDefType;
 import com.thesett.catalogue.setup.DateType;
@@ -235,6 +236,15 @@ public class CatalogueTestBase extends ConfiguratorTestBase
         assertTrue(errorMessage, errorMessage.equals(""));
     }
 
+    /** Check that all boolean fields in all product types in the raw model are present in the catalogue. */
+    public void testAllBooleanFieldsAllProductsInCatalogue() throws Exception
+    {
+        String errorMessage = checkAllProductFieldsOfTypeInCatalogue("boolean", Boolean.class, BooleanType.class);
+
+        // Report any errors.
+        assertTrue(errorMessage, errorMessage.equals(""));
+    }
+
     /** Check that all integer fields in all product types in the raw model are present in the catalogue. */
     public void testAllIntegerFieldsAllProductsInCatalogue() throws Exception
     {
@@ -296,6 +306,22 @@ public class CatalogueTestBase extends ConfiguratorTestBase
                 {
                     // Get the attribute declaration from the raw model.
                     StringType attributeDeclr = SetupModelHelper.getStringAttributeByName(dimensionDef, attributeName);
+
+                    // Check that the raw model contains the attribute.
+                    if (attributeDeclr == null)
+                    {
+                        errorMessage +=
+                            "The attribute, " + attributeName + ", on dimension ," + dimensionName +
+                            ", was not found in the raw catalogue model.\n";
+                    }
+                }
+
+                // Check boolean fields.
+                if (type.getBaseClass().equals(Boolean.class))
+                {
+                    // Get the attribute declaration from the raw model.
+                    BooleanType attributeDeclr =
+                        SetupModelHelper.getBooleanAttributeByName(dimensionDef, attributeName);
 
                     // Check that the raw model contains the attribute.
                     if (attributeDeclr == null)

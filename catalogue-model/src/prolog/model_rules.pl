@@ -23,8 +23,8 @@ java_double(X) :- float(X).
    Product types require some restructuring to extract the fields from unique blocks and to move implicit type
    definitions in collections to the top level.
 
-   This type expansion also deduces what the basic type will be. The Java/Hibernate translation phase turns that into
-   concrete assignment to Java/Hibernate types. Other translations can assign types appropriately.
+   This type expansion also deduces what the basic type will be. The Java/Hibernate translation phase turns
+   that into concrete assignment to Java/Hibernate types. Other translations can assign types appropriately.
 */
 
 normal_type(decimal, X, Prec, P) :- normal_type_decimal(decimal, X, Prec, P).

@@ -24,6 +24,7 @@ import javax.xml.bind.JAXBElement;
 import com.thesett.aima.logic.fol.Functor;
 import com.thesett.aima.logic.fol.VariableAndFunctorInterner;
 import com.thesett.catalogue.setup.BagType;
+import com.thesett.catalogue.setup.BooleanType;
 import com.thesett.catalogue.setup.CollectionType;
 import com.thesett.catalogue.setup.ComponentPartType;
 import com.thesett.catalogue.setup.ComponentType;
@@ -235,6 +236,10 @@ public class ComponentPartHandler implements FieldHandler
         else if (field instanceof HierarchyType)
         {
             fieldType = "hierarchy";
+        }
+        else if (field instanceof BooleanType)
+        {
+            fieldType = "boolean";
         }
         else if (field instanceof IntegerType)
         {

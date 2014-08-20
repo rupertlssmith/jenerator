@@ -467,6 +467,18 @@ public class SetupModelHelper
      *
      * @return A list of all integer attribute declarations in the dimension definition.
      */
+    public static List<BooleanType> getAllBooleanAttributes(ComponentDefType componentDef)
+    {
+        return getAllAttributesOfType(BooleanType.class, componentDef);
+    }
+
+    /**
+     * Extracts all the integer field declarations from a dimension definition.
+     *
+     * @param  componentDef The dimension definition.
+     *
+     * @return A list of all integer attribute declarations in the dimension definition.
+     */
     public static List<IntegerType> getAllIntegerAttributes(ComponentDefType componentDef)
     {
         return getAllAttributesOfType(IntegerType.class, componentDef);
@@ -585,6 +597,19 @@ public class SetupModelHelper
         }
 
         return null;
+    }
+
+    /**
+     * Finds a boolean attribute by name from a dimension definition.
+     *
+     * @param  componentDef The dimension definition.
+     * @param  name         The name of the boolean attribute to find.
+     *
+     * @return The matching boolean attribute or null if none is found.
+     */
+    public static BooleanType getBooleanAttributeByName(ComponentDefType componentDef, String name)
+    {
+        return getAttributeOfTypeByName(BooleanType.class, componentDef, name);
     }
 
     /**

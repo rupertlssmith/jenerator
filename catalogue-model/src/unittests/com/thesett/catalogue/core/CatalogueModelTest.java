@@ -83,6 +83,7 @@ public class CatalogueModelTest extends CatalogueTestBase
         suite.addTest(new CatalogueModelTest("testAllDateFieldsAllProductsInCatalogue", catalogue, definition));
         suite.addTest(new CatalogueModelTest("testAllEnumerationFieldsAllProductsInCatalogue", catalogue, definition));
         suite.addTest(new CatalogueModelTest("testAllHierarchyFieldsAllProductsInCatalogue", catalogue, definition));
+        suite.addTest(new CatalogueModelTest("testAllBooleanFieldsAllProductsInCatalogue", catalogue, definition));
         suite.addTest(new CatalogueModelTest("testAllIntegerFieldsAllProductsInCatalogue", catalogue, definition));
         suite.addTest(new CatalogueModelTest("testAllRealFieldsAllProductsInCatalogue", catalogue, definition));
         suite.addTest(new CatalogueModelTest("testAllStringFieldsAllProductsInCatalogue", catalogue, definition));
