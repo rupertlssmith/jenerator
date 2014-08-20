@@ -193,14 +193,14 @@ public abstract class EnumeratedStringAttributeUserType implements UserType
 
         // Extract the type name and byte representation of the attribute.
         String typeName = h.getType().getName();
-        byte byteRepresentation = h.getByteFromAttribute();
+        long longRepresentation = h.getId();
 
         // Get the factory for the named type.
         EnumeratedStringAttribute.EnumeratedStringAttributeFactory factory =
             EnumeratedStringAttribute.getFactoryForClass(typeName);
 
         // Use the factory to build a new enumerated attribute from its int representation.
-        EnumeratedStringAttribute copy = factory.getAttributeFromByte(byteRepresentation);
+        EnumeratedStringAttribute copy = factory.getAttributeFromId(longRepresentation);
         log.debug("copy = " + copy);
 
         return copy;
