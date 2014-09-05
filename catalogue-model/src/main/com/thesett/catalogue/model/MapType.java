@@ -13,31 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.thesett.catalogue.generator;
+package com.thesett.catalogue.model;
 
-import com.thesett.catalogue.model.Catalogue;
-import com.thesett.common.util.Function;
+import com.thesett.aima.state.Type;
 
 /**
- * Generator defines a controller for generating transformations of a catalogue model. In this case the transformation
- * is expected to have the side effect of writing out generated code from the model, and the return type is a boolean
- * flag, used to indicate that the generation process was succesfull.
+ * A MapType is a {@link com.thesett.aima.state.Type} that acts as a container for key/value instances of other types.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
- * <tr><td> Generate output from the catalogue model, indicating if succesfull.
+ * <tr><td> Encapsulate a key type.
+ * <tr><td> Encapsulate an element type.
  * </table></pre>
  *
  * @author Rupert Smith
  */
-public interface Generator extends Function<Catalogue, Boolean>
+public interface MapType<K, E> extends CollectionType<E>
 {
     /**
-     * Generates output from a catalogue model.
+     * Provides the type of the keys that this map contains.
      *
-     * @param  catalogue The model to generate from.
-     *
-     * @return <tt>true</tt> if the generation was succesfull.
+     * @return The type of the keys that this map contains.
      */
-    public Boolean apply(Catalogue catalogue);
+    public Type<K> getKeyType();
+
+    /**
+     * Establishes the type of the keys that this map contains.
+     *
+     * @param type The type of the keys that this map contains.
+     */
+    public void setKeyType(Type<K> type);
 }

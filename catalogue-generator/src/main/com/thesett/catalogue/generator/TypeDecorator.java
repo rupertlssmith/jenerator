@@ -28,11 +28,11 @@ import com.thesett.aima.state.InfiniteValuesException;
 import com.thesett.aima.state.RandomInstanceNotSupportedException;
 import com.thesett.aima.state.Type;
 import com.thesett.aima.state.TypeVisitor;
-import com.thesett.catalogue.interfaces.CollectionType;
-import com.thesett.catalogue.interfaces.DimensionType;
-import com.thesett.catalogue.interfaces.EntityType;
-import com.thesett.catalogue.interfaces.FactType;
-import com.thesett.catalogue.interfaces.ViewType;
+import com.thesett.catalogue.model.CollectionType;
+import com.thesett.catalogue.model.DimensionType;
+import com.thesett.catalogue.model.EntityType;
+import com.thesett.catalogue.model.FactType;
+import com.thesett.catalogue.model.ViewType;
 
 /**
  * TypeDecorators are used to decorate {@link com.thesett.aima.state.Type}s with additional derived flags, which can be

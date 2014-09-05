@@ -15,10 +15,10 @@
  */
 package com.thesett.catalogue.generator;
 
-import com.thesett.catalogue.interfaces.EntityType;
+import com.thesett.catalogue.model.EntityType;
 
 /**
- * EntityTypeDecorator is a {@link TypeDecorator} for {@link com.thesett.catalogue.interfaces.EntityType}s. It
+ * EntityTypeDecorator is a {@link TypeDecorator} for {@link com.thesett.catalogue.model.EntityType}s. It
  * automatically decorates the types of any fields of the entity that are accessed through it, and provides all of the
  * underlying properties of the decorated entity.
  *

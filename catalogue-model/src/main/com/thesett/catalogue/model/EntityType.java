@@ -13,31 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.thesett.catalogue.generator;
+package com.thesett.catalogue.model;
 
-import com.thesett.catalogue.model.Catalogue;
-import com.thesett.common.util.Function;
+import java.io.Serializable;
+
+import com.thesett.aima.state.ComponentType;
 
 /**
- * Generator defines a controller for generating transformations of a catalogue model. In this case the transformation
- * is expected to have the side effect of writing out generated code from the model, and the return type is a boolean
- * flag, used to indicate that the generation process was succesfull.
+ * An EntityType is a {@link com.thesett.aima.state.Type} that is a {@link ComponentType} that can be mapped onto
+ * persistent and queryable storage, most often a relational database.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
- * <tr><td> Generate output from the catalogue model, indicating if succesfull.
+ * <tr><td> Provide the types and names of fields that make up a persistent entity.
+ * <tr><td> Indicate whether or not an entity has a long lived external identifier.
  * </table></pre>
  *
  * @author Rupert Smith
  */
-public interface Generator extends Function<Catalogue, Boolean>
+public interface EntityType extends ComponentType, Serializable
 {
     /**
-     * Generates output from a catalogue model.
+     * Indicates whether or not the entity has a long lived external identifier.
      *
-     * @param  catalogue The model to generate from.
+     * @return <tt>true</tt> if the entity has an external id.
      *
-     * @return <tt>true</tt> if the generation was succesfull.
+     * @see    ExternalId
      */
-    public Boolean apply(Catalogue catalogue);
+    boolean isExternalId();
 }

@@ -22,12 +22,12 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 
 import com.thesett.aima.state.ComponentType;
-import com.thesett.catalogue.interfaces.Catalogue;
-import com.thesett.catalogue.interfaces.ComponentInstance;
-import com.thesett.catalogue.interfaces.EntityInstance;
-import com.thesett.catalogue.interfaces.ExternalId;
-import com.thesett.catalogue.interfaces.ExternallyIdentified;
-import com.thesett.catalogue.interfaces.ViewInstance;
+import com.thesett.catalogue.model.Catalogue;
+import com.thesett.catalogue.model.ComponentInstance;
+import com.thesett.catalogue.model.EntityInstance;
+import com.thesett.catalogue.model.ExternalId;
+import com.thesett.catalogue.model.ExternallyIdentified;
+import com.thesett.catalogue.model.ViewInstance;
 import com.thesett.index.Index;
 import com.thesett.index.IndexMappingException;
 import com.thesett.index.IndexStore;

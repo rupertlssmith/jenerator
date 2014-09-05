@@ -30,6 +30,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.thesett.catalogue.model.impl.CatalogueModel;
+import com.thesett.catalogue.model.impl.CollectionTypeImpl;
+import com.thesett.catalogue.model.impl.ComponentTypeImpl;
+import com.thesett.catalogue.model.impl.DimensionTypeImpl;
+import com.thesett.catalogue.model.impl.EntityTypeImpl;
+import com.thesett.catalogue.model.impl.FactTypeImpl;
+import com.thesett.catalogue.model.impl.MapTypeImpl;
+import com.thesett.catalogue.model.impl.ViewTypeImpl;
 import org.apache.log4j.Logger;
 
 import com.thesett.aima.attribute.impl.BigDecimalTypeImpl;
@@ -73,7 +81,7 @@ import com.thesett.catalogue.core.handlers.FieldHandler;
 import com.thesett.catalogue.core.handlers.HierarchyLabelFieldHandler;
 import com.thesett.catalogue.core.handlers.InQuotesFieldHandler;
 import com.thesett.catalogue.core.handlers.ViewHandler;
-import com.thesett.catalogue.interfaces.CollectionType;
+import com.thesett.catalogue.model.CollectionType;
 import com.thesett.catalogue.setup.CatalogueDefinition;
 import com.thesett.catalogue.setup.ComponentDefType;
 import com.thesett.catalogue.setup.DateRangeType;
@@ -104,13 +112,13 @@ import com.thesett.common.util.maps.HashArray;
  * <p/>The input to the catalogue model checker is a raw {@link CatalogueDefinition}. The output is a model, containing
  * the types from the raw model that type check and have been reduced to their canonical form.
  *
- * <p/>The factory outputs the results of type checking and reduction to normal as a {@link CatalogueModel}.
+ * <p/>The factory outputs the results of type checking and reduction to normal as a {@link com.thesett.catalogue.model.impl.CatalogueModel}.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
  * <tr><td> Reduce the raw catalogue model to its canonical form. <td> {@link CatalogueDefinition}
  * <tr><td> Type check the catalogue model. <td> {@link CatalogueDefinition}
- * <tr><td> Produce a CatalogueModel containing the results. <td> {@link CatalogueModel}.
+ * <tr><td> Produce a CatalogueModel containing the results. <td> {@link com.thesett.catalogue.model.impl.CatalogueModel}.
  * </table></pre>
  *
  * @author Rupert Smith
@@ -175,7 +183,7 @@ public class CatalogueModelFactory
 
     /**
      * Loads and compiles the model type checking rules, applies them to a catalogue definition, and outputs the
-     * normalized catalogue types as a {@link CatalogueModel}.
+     * normalized catalogue types as a {@link com.thesett.catalogue.model.impl.CatalogueModel}.
      *
      * <p/>Converts the catalogue model from its XML form into first order logic. This naturally specifies all of the
      * types defined in the model as sets, in the case of components, sets made up of the cross product of more

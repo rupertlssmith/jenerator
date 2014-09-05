@@ -19,7 +19,7 @@ import java.util.LinkedList;
 import java.util.Properties;
 
 import com.thesett.catalogue.config.ModelLoaderConfigBean;
-import com.thesett.catalogue.interfaces.Catalogue;
+import com.thesett.catalogue.model.Catalogue;
 import com.thesett.common.config.ConfigException;
 import com.thesett.common.config.Configurator;
 import com.thesett.common.util.CommandLineParser;

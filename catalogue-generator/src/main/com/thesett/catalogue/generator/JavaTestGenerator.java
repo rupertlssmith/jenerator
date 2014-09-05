@@ -21,7 +21,7 @@ import org.antlr.stringtemplate.StringTemplateGroup;
 
 import com.thesett.aima.state.ComponentType;
 import com.thesett.aima.state.Type;
-import com.thesett.catalogue.interfaces.ComponentTypeVisitor;
+import com.thesett.catalogue.model.ComponentTypeVisitor;
 
 /**
  * JavaBeanGenerator is a {@link Generator} that outputs Java beans and interfaces from a catalogue model.

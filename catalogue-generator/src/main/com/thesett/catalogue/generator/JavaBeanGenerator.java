@@ -27,7 +27,7 @@ import com.thesett.aima.attribute.impl.HierarchyTypeVisitor;
 import com.thesett.aima.state.ComponentType;
 import com.thesett.aima.state.Type;
 import com.thesett.aima.state.impl.JavaType;
-import com.thesett.catalogue.interfaces.ComponentTypeVisitor;
+import com.thesett.catalogue.model.ComponentTypeVisitor;
 
 /**
  * JavaBeanGenerator is a {@link Generator} that outputs Java beans and interfaces from a catalogue model.

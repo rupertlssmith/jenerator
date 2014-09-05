@@ -32,9 +32,9 @@ import com.thesett.aima.attribute.impl.TimeRangeType;
 import com.thesett.aima.attribute.impl.TimeRangeTypeVisitor;
 import com.thesett.aima.state.Type;
 import com.thesett.aima.state.impl.JavaType;
-import com.thesett.catalogue.interfaces.Catalogue;
-import com.thesett.catalogue.interfaces.EntityType;
-import com.thesett.catalogue.interfaces.EntityTypeVisitor;
+import com.thesett.catalogue.model.Catalogue;
+import com.thesett.catalogue.model.EntityType;
+import com.thesett.catalogue.model.EntityTypeVisitor;
 import com.thesett.common.util.FileUtils;
 
 /**

@@ -37,9 +37,9 @@
     <xsl:template name="index_def" match="cat:Index">
 
         <index-configuration name="{@name}">
-            <key-base-class name="com.thesett.catalogue.interfaces.ExternalId"/>
-            <record-base-class name="com.thesett.catalogue.interfaces.ComponentInstance"/>
-            <summary-base-class name="com.thesett.catalogue.interfaces.ViewInstance"/>
+            <key-base-class name="com.thesett.catalogue.model.ExternalId"/>
+            <record-base-class name="com.thesett.catalogue.model.ComponentInstance"/>
+            <summary-base-class name="com.thesett.catalogue.model.ViewInstance"/>
        
             <xsl:for-each select="cat:IndexedComponent">
                 <xsl:call-template name="dimension_mapping"/>

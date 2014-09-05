@@ -16,7 +16,7 @@
 package com.thesett.catalogue.generator;
 
 import com.thesett.aima.state.Type;
-import com.thesett.catalogue.interfaces.MapType;
+import com.thesett.catalogue.model.MapType;
 
 /**
  * MapTypeDecorator is a {@link TypeDecorator} for {@link MapType}s. It automatically decorates the type of the map keys

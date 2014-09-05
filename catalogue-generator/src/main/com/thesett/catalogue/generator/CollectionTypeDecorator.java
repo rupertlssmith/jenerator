@@ -16,7 +16,7 @@
 package com.thesett.catalogue.generator;
 
 import com.thesett.aima.state.Type;
-import com.thesett.catalogue.interfaces.CollectionType;
+import com.thesett.catalogue.model.CollectionType;
 
 /**
  * CollectionTypeDecorator is a {@link TypeDecorator} for {@link CollectionType}s. It automatically decorates the type

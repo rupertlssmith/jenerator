@@ -17,7 +17,7 @@ package com.thesett.catalogue.generator;
 
 import java.util.List;
 
-import com.thesett.catalogue.interfaces.Catalogue;
+import com.thesett.catalogue.model.Catalogue;
 
 /**
  * ChainedGenerator, chains a sequence of {@link Generator}s together, calling them succesively on the catalogue model.

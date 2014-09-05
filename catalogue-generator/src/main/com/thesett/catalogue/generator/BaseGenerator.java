@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
 
 import com.thesett.aima.state.Type;
 import com.thesett.aima.state.TypeVisitor;
-import com.thesett.catalogue.interfaces.Catalogue;
+import com.thesett.catalogue.model.Catalogue;
 import com.thesett.common.util.FileUtils;
 import com.thesett.common.util.StringUtils;
 

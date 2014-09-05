@@ -28,13 +28,13 @@ import com.thesett.aima.attribute.impl.TimeRangeTypeVisitor;
 import com.thesett.aima.state.ComponentType;
 import com.thesett.aima.state.Type;
 import com.thesett.aima.state.TypeVisitor;
-import com.thesett.catalogue.interfaces.CollectionType;
-import com.thesett.catalogue.interfaces.CollectionTypeVisitor;
-import com.thesett.catalogue.interfaces.ComponentTypeVisitor;
-import com.thesett.catalogue.interfaces.EntityType;
-import com.thesett.catalogue.interfaces.EntityTypeVisitor;
-import com.thesett.catalogue.interfaces.MapType;
-import com.thesett.catalogue.interfaces.MapTypeVisitor;
+import com.thesett.catalogue.model.CollectionType;
+import com.thesett.catalogue.model.CollectionTypeVisitor;
+import com.thesett.catalogue.model.ComponentTypeVisitor;
+import com.thesett.catalogue.model.EntityType;
+import com.thesett.catalogue.model.EntityTypeVisitor;
+import com.thesett.catalogue.model.MapType;
+import com.thesett.catalogue.model.MapTypeVisitor;
 
 /**
  * TypeDecoratorFactory is a {@link TypeVisitor}, that can visit a {@link com.thesett.aima.state.Type}, and based on the
