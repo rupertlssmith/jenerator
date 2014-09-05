@@ -41,6 +41,12 @@
 
         <dependency>
             <groupId>com.thesett</groupId>
+            <artifactId>base</artifactId>
+            <version>0.8.4-SNAPSHOT</version><!-- jenerator.version -->
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
             <artifactId>catalogue-generator</artifactId>
             <version>0.8.4-SNAPSHOT</version><!-- jenerator.version -->
         </dependency>
