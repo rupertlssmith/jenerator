@@ -40,7 +40,7 @@
 
         <dependency>
             <groupId>com.thesett</groupId>
-            <artifactId>aima</artifactId>
+            <artifactId>power_model</artifactId>
             <version>0.8.4-SNAPSHOT</version><!-- jenerator.version -->
         </dependency>
 
