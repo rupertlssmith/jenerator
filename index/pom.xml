@@ -65,10 +65,18 @@
         </dependency>
 
         <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>base</artifactId>
+            <version>0.8.4-SNAPSHOT</version><!-- base.version -->
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        
     </dependencies>
 
     <build>
