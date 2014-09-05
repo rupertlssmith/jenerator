@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.thesett</groupId>
-    <artifactId>catalogue-model</artifactId>
-    <name>catalogue-model</name>
+    <artifactId>catalogue-model-processor</artifactId>
+    <name>catalogue-model-processor</name>
     <version>0.8.4-SNAPSHOT</version><!-- jenerator.version -->
 
     <description>A catalogue which is confugurable at the knowledge level to catalogue and organise any type of data and to provide structured access to it, free text querying of it and automatic data warehousing of events relating to it.</description>
-    <url>http://www.thesett.com/catalogue-model</url>
+    <url>http://www.thesett.com/catalogue-model-processor</url>
 
     <packaging>jar</packaging>
 

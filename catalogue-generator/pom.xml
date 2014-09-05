@@ -46,7 +46,7 @@
 
         <dependency>
             <groupId>com.thesett</groupId>
-            <artifactId>catalogue-model</artifactId>
+            <artifactId>catalogue-model-processor</artifactId>
             <version>0.8.4-SNAPSHOT</version><!-- jenerator.version -->
         </dependency>
 

@@ -106,7 +106,7 @@
     </properties>
 
     <modules>
-        <module>catalogue-model</module>
+        <module>catalogue-model-processor</module>
         <module>catalogue-generator</module>
         <module>catalogue-maven-plugin</module>
         <module>configurator</module>
