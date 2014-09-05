@@ -106,7 +106,9 @@
     </properties>
 
     <modules>
+        <module>catalogue-model</module>
         <module>catalogue-model-processor</module>
+        <module>power-model-hibernate</module>
         <module>catalogue-generator</module>
         <module>catalogue-maven-plugin</module>
         <module>configurator</module>

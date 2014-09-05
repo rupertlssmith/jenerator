@@ -20,8 +20,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.logging.Logger;
 
-import org.apache.log4j.Logger;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.type.StringType;
 import org.hibernate.type.Type;
@@ -47,8 +47,8 @@ import com.thesett.aima.attribute.impl.HierarchyAttributeFactory;
  */
 public abstract class HierarchyAttributeCompositeUserType implements CompositeUserType
 {
-    /** Used for logging. */
-    private static final Logger log = Logger.getLogger(HierarchyAttributeCompositeUserType.class);
+    /** Used for debugging purposes. */
+    private static final Logger LOG = Logger.getLogger(HierarchyAttributeCompositeUserType.class.getName());
 
     /**
      * Gets the attribyte type class name.
@@ -84,7 +84,7 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
      */
     public Class returnedClass()
     {
-        log.debug("public Class returnedClass(): called");
+        LOG.fine("public Class returnedClass(): called");
 
         return HierarchyAttribute.class;
     }
@@ -99,12 +99,12 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
      */
     public boolean equals(Object x, Object y)
     {
-        log.debug("public boolean equals(Object x, Object y): called");
-        log.debug("x = " + x);
-        log.debug("y = " + y);
+        LOG.fine("public boolean equals(Object x, Object y): called");
+        LOG.fine("x = " + x);
+        LOG.fine("y = " + y);
 
         boolean result = (x == y) ? true : (((x != null) && (y != null)) ? x.equals(y) : false);
-        log.debug("result = " + result);
+        LOG.fine("result = " + result);
 
         return result;
     }
@@ -118,7 +118,7 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
      */
     public int hashCode(Object o)
     {
-        log.debug("public int hashCode(Object o): called");
+        LOG.fine("public int hashCode(Object o): called");
 
         return o.hashCode();
     }
@@ -132,11 +132,11 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
      */
     public Object deepCopy(Object value)
     {
-        log.debug("public Object deepCopy(Object value): called");
+        LOG.fine("public Object deepCopy(Object value): called");
 
         // Cast the object to be copied to a hierarchy attribute.
         HierarchyAttribute h = (HierarchyAttribute) value;
-        log.debug("h (to copy) = " + h);
+        LOG.fine("h (to copy) = " + h);
 
         // Extract the type name and int representation of the attribute.
         String typeName = h.getType().getName();
@@ -147,7 +147,7 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
 
         // Use the factory to build a new hierarchy attribute from its int representation.
         HierarchyAttribute copy = factory.getAttributeFromInt(intRepresentation);
-        log.debug("copy = " + copy);
+        LOG.fine("copy = " + copy);
 
         return copy;
     }
@@ -160,7 +160,7 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
      */
     public boolean isMutable()
     {
-        log.debug("public boolean isMutable(): called");
+        LOG.fine("public boolean isMutable(): called");
 
         return false;
     }
@@ -181,10 +181,10 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
     public Object nullSafeGet(ResultSet resultSet, String[] names, SessionImplementor session, Object owner)
         throws SQLException
     {
-        log.debug(
+        LOG.fine(
             "public Object nullSafeGet(ResultSet resultSet, String[] names, SessionImplementor session, Object owner): called");
-        log.debug("resultSet = " + resultSet);
-        log.debug("resultSet.getMetaData().getColumnCount() = " + resultSet.getMetaData().getColumnCount());
+        LOG.fine("resultSet = " + resultSet);
+        LOG.fine("resultSet.getMetaData().getColumnCount() = " + resultSet.getMetaData().getColumnCount());
 
         // Extract all the named fields as a string array.
         String[] fields = new String[names.length];
@@ -196,8 +196,8 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
         {
             fields[i] = resultSet.getString(names[i]);
 
-            log.debug("names[" + i + "] = " + names[i]);
-            log.debug("fields[" + i + "] = " + fields[i]);
+            LOG.fine("names[" + i + "] = " + names[i]);
+            LOG.fine("fields[" + i + "] = " + fields[i]);
 
             if (fields[i] != null)
             {
@@ -209,7 +209,7 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
             }
         }
 
-        log.debug("trueSize = " + trueSize);
+        LOG.fine("trueSize = " + trueSize);
 
         String[] trueFields = new String[trueSize];
         System.arraycopy(fields, 0, trueFields, 0, trueSize);
@@ -236,10 +236,10 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
     public void nullSafeSet(PreparedStatement statement, Object value, int index, SessionImplementor session)
         throws SQLException
     {
-        log.debug(
+        LOG.fine(
             "public void nullSafeSet(PreparedStatement statement, Object value, int index, SessionImplementor session): called");
-        log.debug("value = " + value);
-        log.debug("index = " + index);
+        LOG.fine("value = " + value);
+        LOG.fine("index = " + index);
 
         // Cast the value to insert to a hierarcy attribute.
         HierarchyAttribute h = (HierarchyAttribute) value;
@@ -260,7 +260,7 @@ public abstract class HierarchyAttributeCompositeUserType implements CompositeUs
             else
             {
                 String valueAtLevel = h.getValueAtLevel(i);
-                log.debug("valueAtLevel(" + i + ") = " + valueAtLevel);
+                LOG.fine("valueAtLevel(" + i + ") = " + valueAtLevel);
 
                 statement.setString(index + i, valueAtLevel);
             }

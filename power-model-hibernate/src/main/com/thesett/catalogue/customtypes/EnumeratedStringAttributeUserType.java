@@ -20,8 +20,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.logging.Logger;
 
-import org.apache.log4j.Logger;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.UserType;
 
@@ -39,8 +39,8 @@ import com.thesett.aima.attribute.impl.EnumeratedStringAttribute;
  */
 public abstract class EnumeratedStringAttributeUserType implements UserType
 {
-    /** Used for logging. */
-    private static final Logger log = Logger.getLogger(EnumeratedStringAttributeUserType.class);
+    /** Used for debugging purposes. */
+    private static final Logger LOG = Logger.getLogger(EnumeratedStringAttributeUserType.class.getName());
 
     /** Holds the column types that the enumeration is persisted to. */
     private static final int[] SQL_TYPES = { Types.VARCHAR };
@@ -69,7 +69,7 @@ public abstract class EnumeratedStringAttributeUserType implements UserType
      */
     public Class returnedClass()
     {
-        log.debug("public Class returnedClass(): called");
+        LOG.fine("public Class returnedClass(): called");
 
         return EnumeratedStringAttribute.class;
     }
@@ -84,12 +84,12 @@ public abstract class EnumeratedStringAttributeUserType implements UserType
      */
     public boolean equals(Object x, Object y)
     {
-        log.debug("public boolean equals(Object x, Object y): called");
-        log.debug("x = " + x);
-        log.debug("y = " + y);
+        LOG.fine("public boolean equals(Object x, Object y): called");
+        LOG.fine("x = " + x);
+        LOG.fine("y = " + y);
 
         boolean result = (x == y) ? true : (((x != null) && (y != null)) ? x.equals(y) : false);
-        log.debug("result = " + result);
+        LOG.fine("result = " + result);
 
         return result;
     }
@@ -103,7 +103,7 @@ public abstract class EnumeratedStringAttributeUserType implements UserType
      */
     public int hashCode(Object o)
     {
-        log.debug("public int hashCode(Object o): called");
+        LOG.fine("public int hashCode(Object o): called");
 
         return o.hashCode();
     }
@@ -122,13 +122,13 @@ public abstract class EnumeratedStringAttributeUserType implements UserType
     public Object nullSafeGet(ResultSet resultSet, String[] names, SessionImplementor sessionImplementor, Object owner)
         throws SQLException
     {
-        log.debug("public Object nullSafeGet(ResultSet resultSet, String[] names, Object owner): called");
-        log.debug("resultSet = " + resultSet);
-        log.debug("resultSet.getMetaData().getColumnCount() = " + resultSet.getMetaData().getColumnCount());
+        LOG.fine("public Object nullSafeGet(ResultSet resultSet, String[] names, Object owner): called");
+        LOG.fine("resultSet = " + resultSet);
+        LOG.fine("resultSet.getMetaData().getColumnCount() = " + resultSet.getMetaData().getColumnCount());
 
         // Extract the enumeration value as a string from the result set.
         String value = resultSet.getString(names[0]);
-        log.debug("value = " + value);
+        LOG.fine("value = " + value);
 
         // Create a factory for the named attribute class.
         EnumeratedStringAttribute.EnumeratedStringAttributeFactory factory =
@@ -152,9 +152,9 @@ public abstract class EnumeratedStringAttributeUserType implements UserType
     public void nullSafeSet(PreparedStatement statement, Object value, int index, SessionImplementor sessionImplementor)
         throws SQLException
     {
-        log.debug("public void nullSafeSet(PreparedStatement statement, Object value, int index): called");
-        log.debug("value = " + value);
-        log.debug("index = " + index);
+        LOG.fine("public void nullSafeSet(PreparedStatement statement, Object value, int index): called");
+        LOG.fine("value = " + value);
+        LOG.fine("index = " + index);
 
         // Cast the value to insert to a hierarcy attribute.
         EnumeratedStringAttribute h = (EnumeratedStringAttribute) value;
@@ -169,7 +169,7 @@ public abstract class EnumeratedStringAttributeUserType implements UserType
         else
         {
             String valueAsString = h.getStringValue();
-            log.debug("valueAsString = " + valueAsString);
+            LOG.fine("valueAsString = " + valueAsString);
             statement.setString(index, valueAsString);
         }
     }
@@ -185,11 +185,11 @@ public abstract class EnumeratedStringAttributeUserType implements UserType
      */
     public Object deepCopy(Object value)
     {
-        log.debug("public Object deepCopy(Object value): called");
+        LOG.fine("public Object deepCopy(Object value): called");
 
         // Cast the object to be copied to an enumerated attribute.
         EnumeratedStringAttribute h = (EnumeratedStringAttribute) value;
-        log.debug("h (to copy) = " + h);
+        LOG.fine("h (to copy) = " + h);
 
         // Extract the type name and byte representation of the attribute.
         String typeName = h.getType().getName();
@@ -201,7 +201,7 @@ public abstract class EnumeratedStringAttributeUserType implements UserType
 
         // Use the factory to build a new enumerated attribute from its int representation.
         EnumeratedStringAttribute copy = factory.getAttributeFromId(longRepresentation);
-        log.debug("copy = " + copy);
+        LOG.fine("copy = " + copy);
 
         return copy;
     }
@@ -213,7 +213,7 @@ public abstract class EnumeratedStringAttributeUserType implements UserType
      */
     public boolean isMutable()
     {
-        log.debug("public boolean isMutable(): called");
+        LOG.fine("public boolean isMutable(): called");
 
         return false;
     }

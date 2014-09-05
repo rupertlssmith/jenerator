@@ -20,8 +20,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.logging.Logger;
 
-import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.UserType;
@@ -40,8 +40,8 @@ import com.thesett.aima.attribute.time.TimeOnly;
  */
 public class TimeOnlyUserType implements UserType
 {
-    /** Used for logging. */
-    private static final Logger log = Logger.getLogger(TimeOnlyUserType.class);
+    /** Used for debugging purposes. */
+    private static final Logger LOG = Logger.getLogger(TimeOnlyUserType.class.getName());
 
     /** Holds the column types that the enumeration is persisted to. */
     private static final int[] SQL_TYPES = { Types.INTEGER };
@@ -55,7 +55,7 @@ public class TimeOnlyUserType implements UserType
     /** {@inheritDoc} */
     public Class returnedClass()
     {
-        log.debug("public Class returnedClass(): called");
+        LOG.fine("public Class returnedClass(): called");
 
         return TimeOnly.class;
     }
@@ -63,12 +63,12 @@ public class TimeOnlyUserType implements UserType
     /** {@inheritDoc} */
     public boolean equals(Object x, Object y) throws HibernateException
     {
-        log.debug("public boolean equals(Object x, Object y): called");
-        log.debug("x = " + x);
-        log.debug("y = " + y);
+        LOG.fine("public boolean equals(Object x, Object y): called");
+        LOG.fine("x = " + x);
+        LOG.fine("y = " + y);
 
         boolean result = (x == y) ? true : (((x != null) && (y != null)) ? x.equals(y) : false);
-        log.debug("result = " + result);
+        LOG.fine("result = " + result);
 
         return result;
     }
@@ -76,7 +76,7 @@ public class TimeOnlyUserType implements UserType
     /** {@inheritDoc} */
     public int hashCode(Object o) throws HibernateException
     {
-        log.debug("public int hashCode(Object o): called");
+        LOG.fine("public int hashCode(Object o): called");
 
         return o.hashCode();
     }
@@ -85,13 +85,13 @@ public class TimeOnlyUserType implements UserType
     public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor sessionImplementor, Object owner)
         throws HibernateException, SQLException
     {
-        log.debug("public Object nullSafeGet(ResultSet resultSet, String[] names, Object owner): called");
-        log.debug("resultSet = " + rs);
-        log.debug("resultSet.getMetaData().getColumnCount() = " + rs.getMetaData().getColumnCount());
+        LOG.fine("public Object nullSafeGet(ResultSet resultSet, String[] names, Object owner): called");
+        LOG.fine("resultSet = " + rs);
+        LOG.fine("resultSet.getMetaData().getColumnCount() = " + rs.getMetaData().getColumnCount());
 
         // Extract the timestamp as a string from the result set.
         long value = rs.getInt(names[0]);
-        log.debug("value = " + value);
+        LOG.fine("value = " + value);
 
         // Convert the array of fields into a timeonly.
         return new TimeOnly(value);
@@ -101,9 +101,9 @@ public class TimeOnlyUserType implements UserType
     public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor sessionImplementor)
         throws HibernateException, SQLException
     {
-        log.debug("public void nullSafeSet(PreparedStatement statement, Object value, int index): called");
-        log.debug("value = " + value);
-        log.debug("index = " + index);
+        LOG.fine("public void nullSafeSet(PreparedStatement statement, Object value, int index): called");
+        LOG.fine("value = " + value);
+        LOG.fine("index = " + index);
 
         // Cast the value to insert to a time only.
         TimeOnly h = (TimeOnly) value;
@@ -116,7 +116,7 @@ public class TimeOnlyUserType implements UserType
         else // The value is not a null so set the integer field.
         {
             long timestamp = h.getMilliseconds();
-            log.debug("valueAsLong = " + timestamp);
+            LOG.fine("valueAsLong = " + timestamp);
             st.setLong(index, timestamp);
         }
     }
@@ -124,15 +124,15 @@ public class TimeOnlyUserType implements UserType
     /** {@inheritDoc} */
     public Object deepCopy(Object value) throws HibernateException
     {
-        log.debug("public Object deepCopy(Object value): called");
+        LOG.fine("public Object deepCopy(Object value): called");
 
         // Cast the object to be copied to an enumerated attribute.
         TimeOnly t = (TimeOnly) value;
-        log.debug("t (to copy) = " + t);
+        LOG.fine("t (to copy) = " + t);
 
         // Createa copy with the same timestamp.
         TimeOnly copy = new TimeOnly(t.getMilliseconds());
-        log.debug("copy = " + copy);
+        LOG.fine("copy = " + copy);
 
         return copy;
     }
@@ -140,7 +140,7 @@ public class TimeOnlyUserType implements UserType
     /** {@inheritDoc} */
     public boolean isMutable()
     {
-        log.debug("public boolean isMutable(): called");
+        LOG.fine("public boolean isMutable(): called");
 
         return false;
     }

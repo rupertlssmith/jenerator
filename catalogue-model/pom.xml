@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.thesett</groupId>
-    <artifactId>catalogue-model-processor</artifactId>
-    <name>catalogue-model-processor</name>
+    <artifactId>catalogue-model</artifactId>
+    <name>catalogue-model</name>
     <version>0.8.4-SNAPSHOT</version><!-- jenerator.version -->
 
     <description>A catalogue which is confugurable at the knowledge level to catalogue and organise any type of data and to provide structured access to it, free text querying of it and automatic data warehousing of events relating to it.</description>
-    <url>http://www.thesett.com/catalogue-model-processor</url>
+    <url>http://www.thesett.com/catalogue-model</url>
 
     <packaging>jar</packaging>
 
@@ -44,12 +44,6 @@
             <version>0.8.4-SNAPSHOT</version><!-- jenerator.version -->
         </dependency>
 
-        <dependency>
-            <groupId>com.thesett</groupId>
-            <artifactId>catalogue-model</artifactId>
-            <version>0.8.4-SNAPSHOT</version><!-- jenerator.version -->
-        </dependency>
-        
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>prolog</artifactId>
@@ -86,50 +80,6 @@
     <build>
         <plugins>
 
-            <!-- Generates the bean model for the model setup from its schema. -->
-            <plugin>
-                <groupId>org.jvnet.jaxb2.maven2</groupId>
-                <artifactId>maven-jaxb2-plugin</artifactId>
-                <configuration>
-                    <extension>true</extension>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Set up the run plugin to generate a script to run the model checker with. -->
-            <plugin>
-                <groupId>com.thesett</groupId>
-                <artifactId>run-maven-plugin</artifactId>
-
-                <configuration>
-                    <scriptOutDirectory>target</scriptOutDirectory>
-                    <systemproperties>
-                        <property>
-                            <name>log4j.configuration</name>
-                            <value>${log4j.configuration}</value>
-                        </property>
-                    </systemproperties>
-                    <commands>
-                        <checker>com.thesett.catalogue.checker.ModelChecker</checker>
-                    </commands>
-                </configuration>
-
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>script</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
             <!-- Create a jar for the tests. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -144,24 +94,6 @@
             </plugin>
 
         </plugins>
-
-        <resources>
-            <!-- Make sure all resources are bundled. -->
-            <resource>
-                <directory>src/resources</directory>
-            </resource>
-
-            <resource>
-                <directory>src/prolog</directory>
-            </resource>
-        </resources>
-
-        <!-- Include the contents of the test-resources directory in all test classpaths. -->
-        <testResources>
-            <testResource>
-                <directory>src/test-resources</directory>
-            </testResource>
-        </testResources>
 
     </build>
 

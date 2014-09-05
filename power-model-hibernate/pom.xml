@@ -1,0 +1,70 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.thesett</groupId>
+    <artifactId>power-model-hibernate</artifactId>
+    <name>power-model-hibernate</name>
+    <version>0.8.4-SNAPSHOT</version><!-- jenerator.version -->
+
+    <description>A catalogue which is confugurable at the knowledge level to catalogue and organise any type of data and to provide structured access to it, free text querying of it and automatic data warehousing of events relating to it.</description>
+    <url>http://www.thesett.com/power-model-hibernate</url>
+
+    <packaging>jar</packaging>
+
+    <properties>
+        <topdir>${basedir}/..</topdir>
+    </properties>
+
+    <parent>
+        <groupId>com.thesett</groupId>
+        <artifactId>jenerator_build</artifactId>
+        <version>0.8.4-SNAPSHOT</version><!-- jenerator.version -->
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>power_model</artifactId>
+            <version>0.8.4-SNAPSHOT</version><!-- jenerator.version -->
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+        </dependency>
+
+        <!-- Libraries needed for running tests only. -->
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>base</artifactId>
+            <version>0.8.4-SNAPSHOT</version><!-- base.version -->
+            <scope>test</scope>
+        </dependency>        
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <!-- Create a jar for the tests. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+</project>
