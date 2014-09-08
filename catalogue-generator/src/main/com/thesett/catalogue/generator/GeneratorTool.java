@@ -139,7 +139,6 @@ public class GeneratorTool
                 {
                     JavaBeanGenerator javaBeanGenerator = new JavaBeanGenerator(templateDir);
                     javaBeanGenerator.setOutputDir(modelDirName);
-
                     add(javaBeanGenerator);
 
                     HibernateGenerator hibernateGenerator = new HibernateGenerator(templateDir);
