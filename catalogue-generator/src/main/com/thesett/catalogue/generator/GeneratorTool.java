@@ -139,10 +139,11 @@ public class GeneratorTool
                 {
                     JavaBeanGenerator javaBeanGenerator = new JavaBeanGenerator(templateDir);
                     javaBeanGenerator.setOutputDir(modelDirName);
-                    javaBeanGenerator.setDaoDirName(daoDirName);
+
                     add(javaBeanGenerator);
 
                     HibernateGenerator hibernateGenerator = new HibernateGenerator(templateDir);
+                    hibernateGenerator.setOutputDir(daoDirName);
                     hibernateGenerator.setMappingOutputDir(mappingDirName);
                     hibernateGenerator.setMappingFileName(hibernateMappingFileName);
                     add(hibernateGenerator);

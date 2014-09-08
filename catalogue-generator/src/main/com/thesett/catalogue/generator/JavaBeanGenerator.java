@@ -48,27 +48,15 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
     /** Defines the name of the template group for creating Java interfaces. */
     private static final String JAVA_INTERFACE_TEMPLATES_GROUP = "JavaInterface";
 
-    /** Defines the name of the template group for creating Hibernate configurations. */
-    private static final String HIBERNATE_USERTYPE_TEMPLATES_GROUP = "HibernateUserType";
-
     /** Holds the string template group to generate Java beans from. */
     private StringTemplateGroup javaBeanTemplates;
 
     /** Holds the string template group to generate Java interfaces from. */
     private StringTemplateGroup javaInterfaceTemplates;
 
-    /** Holds the string template group to generate user types from. */
-    private StringTemplateGroup hibernateUserTypeTemplates;
-
     /** Holds a file output handler that overwrites files. */
     protected FileOutputProcessedTemplateHandler fileOutputProcessedTemplateHandler =
         new FileOutputProcessedTemplateHandler(false);
-
-    /** The directory to output the model to. */
-    private String modelDirName;
-
-    /** The directory to output the DAO code to. */
-    private String daoDirName;
 
     /**
      * Creates a Java generator to output to the specified directory root.
@@ -84,29 +72,6 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
 
         javaInterfaceTemplates = StringTemplateGroup.loadGroup(JAVA_INTERFACE_TEMPLATES_GROUP);
         javaInterfaceTemplates.registerRenderer(String.class, new CamelCaseRenderer());
-
-        hibernateUserTypeTemplates = StringTemplateGroup.loadGroup(HIBERNATE_USERTYPE_TEMPLATES_GROUP);
-        hibernateUserTypeTemplates.registerRenderer(String.class, new CamelCaseRenderer());
-    }
-
-    /**
-     * Established the output directory.
-     *
-     * @param outputDir The root directory to generate model output to.
-     */
-    public void setOutputDir(String outputDir)
-    {
-        this.modelDirName = outputDir;
-    }
-
-    /**
-     * Establishes the DAO output directory.
-     *
-     * @param daoDirName The root directory to generate DAO output to.
-     */
-    public void setDaoDirName(String daoDirName)
-    {
-        this.daoDirName = daoDirName;
     }
 
     /**
@@ -131,119 +96,38 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
             names =
                 new String[]
                 {
-                    nameToJavaFileName(modelDirName, "", type.getName(), "Impl"),
-                    nameToJavaFileName(modelDirName, "", type.getName(), "")
+                    nameToJavaFileName(outputDir, "", type.getName(), "Impl"),
+                    nameToJavaFileName(outputDir, "", type.getName(), "")
                 };
         }
         else
         {
             templates = new StringTemplateGroup[] { javaBeanTemplates };
-            names = new String[] { nameToJavaFileName(modelDirName, "", type.getName(), "") };
+            names = new String[] { nameToJavaFileName(outputDir, "", type.getName(), "") };
         }
 
         generate(model, decoratedType, templates, names, fields, extraFields, handlers);
     }
 
     /**
-     * Generates a bean class for a hierarchy type in the catalogue model.
+     * {@inheritDoc}</p>
      *
-     * @param type The hierarchy type to create a bean for.
+     * Generates a bean class for each enum type.
      */
-    public void visit(final HierarchyType type)
+    public void visit(EnumeratedStringAttribute.EnumeratedStringType type)
     {
-        final TypeDecorator decoratedType = TypeDecoratorFactory.decorateType(type);
-
-        StringTemplateGroup[] templates = new StringTemplateGroup[] { javaBeanTemplates, hibernateUserTypeTemplates };
-        String[] names =
-            new String[]
-            {
-                nameToJavaFileName(modelDirName, "", type.getName(), ""),
-                nameToJavaFileName(daoDirName, "", type.getName(), "UserType")
-            };
-
-        Map<String, Type> fields =
-            new LinkedHashMap<String, Type>()
-            {
-                {
-                    put(type.getName(), decoratedType);
-                }
-            };
-
-        Map<String, Type> extraFields =
-            new LinkedHashMap<String, Type>()
-            {
-                {
-                    for (String label : type.getLevelNames())
-                    {
-                        put(label, TypeDecoratorFactory.decorateType(JavaType.STRING_TYPE));
-                    }
-                }
-            };
-
-        ProcessedTemplateHandler[] handlers =
-            new ProcessedTemplateHandler[] { fileOutputProcessedTemplateHandler, fileOutputProcessedTemplateHandler };
-
-        generate(model, decoratedType, templates, names, fields, extraFields, handlers);
+        generateBeanOnly(type);
     }
 
     /**
-     * Generates a hibernate user type class for an enum type in the catalogue model.
+     * {@inheritDoc}
      *
-     * @param type The enum type to create a bean for.
+     * <p/>Generates a bean class for each hierarchy type.
      */
-    public void visit(final EnumeratedStringAttribute.EnumeratedStringType type)
+    public void visit(HierarchyType type)
     {
-        final TypeDecorator decoratedType = TypeDecoratorFactory.decorateType(type);
-
-        StringTemplateGroup[] templates = new StringTemplateGroup[] { javaBeanTemplates, hibernateUserTypeTemplates };
-        String[] names =
-            new String[]
-            {
-                nameToJavaFileName(modelDirName, "", type.getName(), ""),
-                nameToJavaFileName(daoDirName, "", type.getName(), "UserType")
-            };
-
-        Map<String, Type> fields =
-            new LinkedHashMap<String, Type>()
-            {
-                {
-                    put(type.getName(), decoratedType);
-                }
-            };
-
-        Map<String, Type> extraFields =
-            new LinkedHashMap<String, Type>()
-            {
-                {
-                    put("value", TypeDecoratorFactory.decorateType(JavaType.STRING_TYPE));
-                }
-            };
-
-        ProcessedTemplateHandler[] handlers =
-            new ProcessedTemplateHandler[] { fileOutputProcessedTemplateHandler, fileOutputProcessedTemplateHandler };
-
-        generate(model, decoratedType, templates, names, fields, extraFields, handlers);
+        generateBeanOnly(type);
     }
-
-    /**
-     * Generates a bean class for a date range type in the catalogue model.
-     *
-     * @param type The date range type to create a bean for.
-     */
-    /*public void visit(final DateRangeType type)
-    {
-        generateBeanOnly(type);
-    }*/
-
-    /**
-     * Generates a bean class for a time range type in the catalogue model.
-     *
-     * @param type The time range type to create a bean for.
-     */
-    /*public void visit(final TimeRangeType type)
-    {
-        generateBeanOnly(type);
-    }*/
 
     /**
      * Generates a bean class for the type specified.
@@ -255,7 +139,7 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
         final TypeDecorator decoratedType = TypeDecoratorFactory.decorateType(type);
 
         StringTemplateGroup[] templates = new StringTemplateGroup[] { javaBeanTemplates };
-        String[] names = new String[] { nameToJavaFileName(modelDirName, "", type.getName(), "") };
+        String[] names = new String[] { nameToJavaFileName(outputDir, "", type.getName(), "") };
 
         Map<String, Type> fields =
             new LinkedHashMap<String, Type>()
@@ -273,8 +157,7 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
                 }
             };
 
-        ProcessedTemplateHandler[] handlers =
-            new ProcessedTemplateHandler[] { fileOutputProcessedTemplateHandler, fileOutputProcessedTemplateHandler };
+        ProcessedTemplateHandler[] handlers = new ProcessedTemplateHandler[] { fileOutputProcessedTemplateHandler };
 
         generate(model, decoratedType, templates, names, fields, extraFields, handlers);
     }

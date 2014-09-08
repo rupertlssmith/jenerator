@@ -88,6 +88,9 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
     /** Holds the catalogue model to generate from. */
     protected Catalogue model;
 
+    /** The directory to output the model to. */
+    protected String outputDir;
+
     /** Used to keep track of output directories that have been created. */
     protected Set<String> createdOutputDirectories = new HashSet<String>();
 
@@ -99,6 +102,16 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
         StringTemplateGroup.registerDefaultLexer(AngleBracketTemplateLexer.class);
 
         registerTemplateLoader(templateDir);
+    }
+
+    /**
+     * Establishes the main output directory.
+     *
+     * @param outputDir The root directory to generate model output to.
+     */
+    public void setOutputDir(String outputDir)
+    {
+        this.outputDir = outputDir;
     }
 
     /** {@inheritDoc} */

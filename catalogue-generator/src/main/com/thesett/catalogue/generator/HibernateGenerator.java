@@ -66,6 +66,9 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     /** Defines the name of the template group for creating Hibernate configurations. */
     private static final String HIBERNATE_WAREHOUSE_TEMPLATES_GROUP = "HibernateWarehouse";
 
+    /** Defines the name of the template group for creating Hibernate configurations. */
+    private static final String HIBERNATE_USERTYPE_TEMPLATES_GROUP = "HibernateUserType";
+
     /** Holds the string template group to generate Hibernate online configurations from. */
     private StringTemplateGroup hibernateOnlineTemplates;
 
@@ -74,6 +77,9 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
 
     /** Holds the string template group to generate Hibernate warehouse configurations from. */
     private StringTemplateGroup hibernateWarehouseTemplates;
+
+    /** Holds the string template group to generate user types from. */
+    private StringTemplateGroup hibernateUserTypeTemplates;
 
     /** The name of the directory to output hibernate mappings to. */
     private String mappingDirName;
@@ -93,6 +99,10 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     /** Output handler used to build up the warehouse database mapping configuration in. */
     private ProcessedTemplateHandler warehouseMappingHandler = new BufferingTemplateHandler();
 
+    /** Holds a file output handler that overwrites files. */
+    protected FileOutputProcessedTemplateHandler fileOutputProcessedTemplateHandler =
+        new FileOutputProcessedTemplateHandler(false);
+
     /**
      * Creates a generator for hibernate configuration XML and custom user types to output to the specified directory
      * root.
@@ -111,6 +121,9 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
 
         hibernateWarehouseTemplates = StringTemplateGroup.loadGroup(HIBERNATE_WAREHOUSE_TEMPLATES_GROUP);
         hibernateWarehouseTemplates.registerRenderer(String.class, new CamelCaseRenderer());
+
+        hibernateUserTypeTemplates = StringTemplateGroup.loadGroup(HIBERNATE_USERTYPE_TEMPLATES_GROUP);
+        hibernateUserTypeTemplates.registerRenderer(String.class, new CamelCaseRenderer());
     }
 
     /**
@@ -199,7 +212,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     /**
      * {@inheritDoc}
      *
-     * <p/>Generates hibernate configuration XML for a hierarchy type.
+     * <p/>Generates hibernate configuration XML for a hierarchy type, and a Java user type to acess it through.
      *
      * @param type The type to generate from.
      */
@@ -207,13 +220,29 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     {
         final TypeDecorator decoratedType = TypeDecoratorFactory.decorateType(type);
 
-        StringTemplateGroup[] templates = { hibernateOnlineTemplates, hibernateUserTypeConfigTemplates };
+        StringTemplateGroup[] templates =
+            { hibernateOnlineTemplates, hibernateUserTypeConfigTemplates, hibernateUserTypeTemplates };
         String[] names =
             new String[]
             {
-                nameToFileNameInRootGenerationDir(mappingFileName), nameToFileNameInRootGenerationDir(mappingFileName)
+                nameToFileNameInRootGenerationDir(mappingFileName), nameToFileNameInRootGenerationDir(mappingFileName),
+                nameToJavaFileName(outputDir, "", type.getName(), "UserType")
             };
+
         Map<String, Type> fields =
+            new LinkedHashMap<String, Type>()
+            {
+                {
+                    for (String label : type.getLevelNames())
+                    {
+                        put(label, TypeDecoratorFactory.decorateType(JavaType.STRING_TYPE));
+                    }
+
+                    put(type.getName(), decoratedType);
+                }
+            };
+
+        Map<String, Type> extraFields =
             new LinkedHashMap<String, Type>()
             {
                 {
@@ -224,10 +253,11 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
                 }
             };
 
-        Map<String, Type> extraFields = null;
-
         ProcessedTemplateHandler[] handlers =
-            new ProcessedTemplateHandler[] { normalizedTypeDefHandler, userTypeDefHandler };
+            new ProcessedTemplateHandler[]
+            {
+                normalizedTypeDefHandler, userTypeDefHandler, fileOutputProcessedTemplateHandler
+            };
 
         generate(model, decoratedType, templates, names, fields, extraFields, handlers);
     }
@@ -289,26 +319,44 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     /**
      * {@inheritDoc}
      *
-     * <p/>Generates hibernate configuration XML for an enumeration type.
+     * <p/>Generates hibernate configuration XML for an enumeration type, and a Java user type to access it through.
      *
      * @param type The type to generate from.
      */
-    public void visit(EnumeratedStringAttribute.EnumeratedStringType type)
+    public void visit(final EnumeratedStringAttribute.EnumeratedStringType type)
     {
         final TypeDecorator decoratedType = TypeDecoratorFactory.decorateType(type);
 
-        StringTemplateGroup[] templates = { hibernateOnlineTemplates, hibernateUserTypeConfigTemplates };
+        StringTemplateGroup[] templates =
+            { hibernateOnlineTemplates, hibernateUserTypeConfigTemplates, hibernateUserTypeTemplates };
         String[] names =
             new String[]
             {
-                nameToFileNameInRootGenerationDir(mappingFileName), nameToFileNameInRootGenerationDir(mappingFileName)
+                nameToFileNameInRootGenerationDir(mappingFileName), nameToFileNameInRootGenerationDir(mappingFileName),
+                nameToJavaFileName(outputDir, "", type.getName(), "UserType")
             };
-        Map<String, Type> fields = new LinkedHashMap<String, Type>();
 
-        Map<String, Type> extraFields = null;
+        Map<String, Type> fields =
+            new LinkedHashMap<String, Type>()
+            {
+                {
+                    put(type.getName(), decoratedType);
+                }
+            };
+
+        Map<String, Type> extraFields =
+            new LinkedHashMap<String, Type>()
+            {
+                {
+                    put("value", TypeDecoratorFactory.decorateType(JavaType.STRING_TYPE));
+                }
+            };
 
         ProcessedTemplateHandler[] handlers =
-            new ProcessedTemplateHandler[] { normalizedTypeDefHandler, userTypeDefHandler };
+            new ProcessedTemplateHandler[]
+            {
+                normalizedTypeDefHandler, userTypeDefHandler, fileOutputProcessedTemplateHandler
+            };
 
         generate(model, decoratedType, templates, names, fields, extraFields, handlers);
     }
