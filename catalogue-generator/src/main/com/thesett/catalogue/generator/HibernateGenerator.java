@@ -76,7 +76,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     private StringTemplateGroup hibernateWarehouseTemplates;
 
     /** The name of the directory to output hibernate mappings to. */
-    private final String mappingDirName;
+    private String mappingDirName;
 
     /** Holds the name of the file to output the hibernate mapping to. */
     private String mappingFileName;
@@ -97,16 +97,11 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
      * Creates a generator for hibernate configuration XML and custom user types to output to the specified directory
      * root.
      *
-     * @param mappingDirName  The directory root to generate mappings to.
-     * @param mappingFileName The name of the file to output the hibernate mapping to.
-     * @param templateDir     An alternative directory to load templates from, may be <tt>null</tt> to use defaults.
+     * @param templateDir An alternative directory to load templates from, may be <tt>null</tt> to use defaults.
      */
-    public HibernateGenerator(String mappingDirName, String mappingFileName, String templateDir)
+    public HibernateGenerator(String templateDir)
     {
-        this.mappingDirName = mappingDirName;
-        this.mappingFileName = mappingFileName;
-
-        registerTemplateLoader(templateDir);
+        super(templateDir);
 
         hibernateOnlineTemplates = StringTemplateGroup.loadGroup(HIBERNATE_ONLINE_TEMPLATES_GROUP);
         hibernateOnlineTemplates.registerRenderer(String.class, new CamelCaseRenderer());
@@ -116,6 +111,26 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
 
         hibernateWarehouseTemplates = StringTemplateGroup.loadGroup(HIBERNATE_WAREHOUSE_TEMPLATES_GROUP);
         hibernateWarehouseTemplates.registerRenderer(String.class, new CamelCaseRenderer());
+    }
+
+    /**
+     * Establishes the output directory to write the hibernate mapping to.
+     *
+     * @param mappingOutputDir The directory root to generate mappings to.
+     */
+    public void setMappingOutputDir(String mappingOutputDir)
+    {
+        this.mappingDirName = mappingOutputDir;
+    }
+
+    /**
+     * Estbalishes the name of the hibernate mapping file.
+     *
+     * @param mappingFileName The name of the file to output the hibernate mapping to.
+     */
+    public void setMappingFileName(String mappingFileName)
+    {
+        this.mappingFileName = mappingFileName;
     }
 
     /** Creates the opening section of a hibernate configuration file. */

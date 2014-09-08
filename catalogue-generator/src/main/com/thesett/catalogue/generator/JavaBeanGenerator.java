@@ -65,24 +65,19 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
         new FileOutputProcessedTemplateHandler(false);
 
     /** The directory to output the model to. */
-    private final String modelDirName;
+    private String modelDirName;
 
     /** The directory to output the DAO code to. */
-    private final String daoDirName;
+    private String daoDirName;
 
     /**
      * Creates a Java generator to output to the specified directory root.
      *
-     * @param modelDirName The root directory to generate model output to.
-     * @param daoDirName   The root directory to generator DAO output to.
-     * @param templateDir  An alternative directory to load templates from, may be <tt>null</tt> to use defaults.
+     * @param templateDir An alternative directory to load templates from, may be <tt>null</tt> to use defaults.
      */
-    public JavaBeanGenerator(String modelDirName, String daoDirName, String templateDir)
+    public JavaBeanGenerator(String templateDir)
     {
-        this.modelDirName = modelDirName;
-        this.daoDirName = daoDirName;
-
-        registerTemplateLoader(templateDir);
+        super(templateDir);
 
         javaBeanTemplates = StringTemplateGroup.loadGroup(JAVA_BEAN_TEMPLATES_GROUP);
         javaBeanTemplates.registerRenderer(String.class, new CamelCaseRenderer());
@@ -92,6 +87,26 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
 
         hibernateUserTypeTemplates = StringTemplateGroup.loadGroup(HIBERNATE_USERTYPE_TEMPLATES_GROUP);
         hibernateUserTypeTemplates.registerRenderer(String.class, new CamelCaseRenderer());
+    }
+
+    /**
+     * Established the output directory.
+     *
+     * @param outputDir The root directory to generate model output to.
+     */
+    public void setOutputDir(String outputDir)
+    {
+        this.modelDirName = outputDir;
+    }
+
+    /**
+     * Establishes the DAO output directory.
+     *
+     * @param daoDirName The root directory to generate DAO output to.
+     */
+    public void setDaoDirName(String daoDirName)
+    {
+        this.daoDirName = daoDirName;
     }
 
     /**

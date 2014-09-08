@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 
 import com.thesett.aima.state.Type;
 import com.thesett.aima.state.TypeVisitor;
+import com.thesett.aima.state.impl.ExtendableBeanState;
 import com.thesett.catalogue.model.Catalogue;
 import com.thesett.common.util.FileUtils;
 import com.thesett.common.util.StringUtils;
@@ -64,7 +65,7 @@ import com.thesett.common.util.StringUtils;
  *
  * @author Rupert Smith
  */
-public abstract class BaseGenerator implements Generator, TypeVisitor
+public abstract class BaseGenerator extends ExtendableBeanState implements Generator, TypeVisitor
 {
     /** Used for debugging purposes. */
     public static final Logger log = Logger.getLogger(BaseGenerator.class);
@@ -91,11 +92,13 @@ public abstract class BaseGenerator implements Generator, TypeVisitor
     protected Set<String> createdOutputDirectories = new HashSet<String>();
 
     /** Creates a StringTemplate generator. */
-    protected BaseGenerator()
+    protected BaseGenerator(String templateDir)
     {
         StringTemplateGroupLoader loader = new CommonGroupLoader(TEMPLATES_PATH, new DummyErrorHandler());
         StringTemplateGroup.registerGroupLoader(loader);
         StringTemplateGroup.registerDefaultLexer(AngleBracketTemplateLexer.class);
+
+        registerTemplateLoader(templateDir);
     }
 
     /** {@inheritDoc} */

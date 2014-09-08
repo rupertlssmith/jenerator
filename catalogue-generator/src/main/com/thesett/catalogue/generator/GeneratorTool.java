@@ -137,9 +137,15 @@ public class GeneratorTool
         Generator generator = new ChainedGenerator(new LinkedList<Generator>()
             {
                 {
-                    add(new JavaBeanGenerator(modelDirName, daoDirName, templateDir));
-                    add(new HibernateGenerator(mappingDirName, hibernateMappingFileName, templateDir));
-                    /*add(new JavaTestGenerator(testOutDirName));*/
+                    JavaBeanGenerator javaBeanGenerator = new JavaBeanGenerator(templateDir);
+                    javaBeanGenerator.setOutputDir(modelDirName);
+                    javaBeanGenerator.setDaoDirName(daoDirName);
+                    add(javaBeanGenerator);
+
+                    HibernateGenerator hibernateGenerator = new HibernateGenerator(templateDir);
+                    hibernateGenerator.setMappingOutputDir(mappingDirName);
+                    hibernateGenerator.setMappingFileName(hibernateMappingFileName);
+                    add(hibernateGenerator);
                 }
             });
 
