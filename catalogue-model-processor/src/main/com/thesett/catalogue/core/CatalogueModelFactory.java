@@ -684,7 +684,7 @@ public class CatalogueModelFactory
 
             if (regexpTerm instanceof StringLiteral)
             {
-                pattern = regexpTerm.toString();
+                pattern = ((StringLiteral) regexpTerm).stringValue();
             }
 
             // Create the named string pattern type.
