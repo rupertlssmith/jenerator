@@ -49,7 +49,7 @@ public class BeanValidationGenerator extends BaseGenerator implements ComponentT
     /** Output handler used to build up bean validation mappings. */
     private ProcessedTemplateHandler beanValidationHandler = new BufferingTemplateHandler();
 
-    private String validationFileName = "validation.xml";
+    private String validationFileName = "constraints.xml";
 
     /**
      * Creates a generator for Java Bean Validation configuration XML.
