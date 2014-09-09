@@ -371,16 +371,6 @@ public class TypeDecorator<T> implements Type<T>
     }
 
     /**
-     * Determines if the decorated type is a restricted range type.
-     *
-     * @return <tt>true</tt> iff the decorated type is a restricted range type.
-     */
-    public boolean isRangeType()
-    {
-        return false;
-    }
-
-    /**
      * Determines whether the decorated type is considered a primitive type.
      *
      * @return <tt>true</tt> if the decorated type is considered a primitive type.
@@ -398,6 +388,18 @@ public class TypeDecorator<T> implements Type<T>
     public boolean isBasic()
     {
         return Kind.Basic.equals(kind);
+    }
+
+    /**
+     * Determines whether the decorated type has extra constraints on its instance values.
+     *
+     * @return <tt>true</tt> iff the decorated type has extra constraints.
+     */
+    public boolean isRestricted()
+    {
+        List<TypeRestriction> restrictions = type.getRestrictions();
+
+        return (restrictions != null) && !restrictions.isEmpty();
     }
 
     /** {@inheritDoc} */
@@ -431,7 +433,8 @@ public class TypeDecorator<T> implements Type<T>
     }
 
     /** {@inheritDoc} */
-    public List<TypeRestriction> getRestrictions() {
+    public List<TypeRestriction> getRestrictions()
+    {
         return type.getRestrictions();
     }
 
