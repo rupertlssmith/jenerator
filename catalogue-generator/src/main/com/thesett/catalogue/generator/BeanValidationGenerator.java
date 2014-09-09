@@ -119,7 +119,7 @@ public class BeanValidationGenerator extends BaseGenerator implements ComponentT
 
         StringTemplateGroup[] templates;
         String[] names;
-        Map<String, Type> fields = decoratedType.getAllPropertyTypes();
+        Map<String, Type> fields = decoratedType.getAllRestrictedPropertyTypes();
         Map<String, Type> extraFields = null;
         ProcessedTemplateHandler[] handlers = new ProcessedTemplateHandler[] { beanValidationHandler };
 

@@ -1,0 +1,97 @@
+group HibernateOnline : HibernateCommon implements Generator;
+
+/*
+ * Holds a mapping from kinds of catalogue field types to templates for generating their validation constraints.
+ */
+fieldConstraintsTypeMap ::= [
+    "String":"string_constraints",
+    "Date":"date_constraints",
+    "BigDecimal":"bigdecimal_constraints",
+    "DateOnly":"date_only_constraints",
+    "TimeOnly":"time_only_constraints",
+    "Basic":"basic_constraints"
+]
+
+basicFieldConstraintsTypeMap ::= [
+    "Int":"int_constraints"
+]
+
+/*
+ * Creates the opening section of an output file, if one is required.
+ */
+file_open(catalogue) ::= <<
+\<constraint-mappings
+    version="1.1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://jboss.org/xml/ns/javax/validation/mapping validation-mapping-1.1.xsd"
+    xmlns="http://jboss.org/xml/ns/javax/validation/mapping">
+
+    \<default-package\><catalogue.modelPackage>\</default-package\>
+
+
+>>
+
+/*
+ * Generates the output for a beanto be validated.
+ */
+for_bean(catalogue, decorator, fields, extraFields) ::= <<
+<if(decorator.componentSubType)>
+    <bean_constraints(catalogue=catalogue, decorator=decorator, name=decorator.name, fields=fields)>
+<endif>
+>>
+
+bean_constraints(catalogue, decorator, name, fields, baseClass) ::= <<
+\<bean class="<name; format="ccu">" ignore-annotations="true"\>
+    <fields.keys:{<if(fields.(it).restricted)><(fieldConstraintsTypeMap.(fields.(it).kind))(name=it, decorator=fields.(it))><endif>}; separator="\n">
+\</bean\>
+
+
+>>
+
+/*
+ * Creates the closing section of an output file, if one is required.
+ */
+file_close() ::= <<
+\</constraint-mappings\>
+>>
+
+basic_constraints(name, decorator) ::= <<
+<(basicFieldConstraintsTypeMap.(decorator.primitiveKind))(name=name, decorator=decorator)>
+>>
+
+/* Holds a mapping from constraint names to templates to generate them. */
+constraintsMap ::= [
+    "Min":"min_constraint",
+    "Max":"max_constraint",
+    "Regex":"regex_constraint"
+]
+
+string_constraints(name, decorator) ::= <<
+\<field name="<name; format="cc">"\>
+    <decorator.restrictions:{it|<(constraintsMap.(it.name))(restriction=it)>}; separator="\n">
+\</field\>
+>>
+
+int_constraints(name, decorator) ::= <<
+\<field name="<name; format="cc">"\>
+    <decorator.restrictions:{it|<(constraintsMap.(it.name))(restriction=it)>}; separator="\n">
+\</field\>
+>>
+
+min_constraint(restriction) ::= <<
+\<constraint annotation="javax.validation.constraints.Min"\>
+    \<element name="value"\><restriction.min>\</element\>
+\</constraint\>
+>>
+
+max_constraint(restriction) ::= <<
+\<constraint annotation="javax.validation.constraints.Max"\>
+    \<element name="value"\><restriction.max>\</element\>
+\</constraint\>
+>>
+
+regex_constraint(restriction) ::= <<
+\<constraint annotation="javax.validation.constraints.Pattern"\>
+    \<element name="regexp"\><restriction.pattern>\</element\>
+\</constraint\>
+>>

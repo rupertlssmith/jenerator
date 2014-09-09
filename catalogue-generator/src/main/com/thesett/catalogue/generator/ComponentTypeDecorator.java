@@ -63,6 +63,29 @@ public class ComponentTypeDecorator extends TypeDecorator implements ComponentTy
     }
 
     /**
+     * Provides the types within the component that have extra restrictions on them.
+     *
+     * @return The types within the component that have extra restrictions on them, by name.
+     */
+    public Map<String, Type> getAllRestrictedPropertyTypes()
+    {
+        Map<String, Type> fields = new LinkedHashMap<String, Type>();
+        Map<String, Type> originalFields = ((ComponentType) type).getAllPropertyTypes();
+
+        for (Map.Entry<String, Type> field : originalFields.entrySet())
+        {
+            TypeDecorator decoratedField = TypeDecoratorFactory.decorateType(field.getValue());
+
+            if (decoratedField.isRestricted())
+            {
+                fields.put(field.getKey(), decoratedField);
+            }
+        }
+
+        return fields;
+    }
+
+    /**
      * Provides the types for the natural key field set. These types will also be decorated.
      *
      * @return The types for the natural key field set, or <tt>null</tt> if the component does not have a natural key
