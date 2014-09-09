@@ -311,6 +311,29 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
     }
 
     /**
+     * Converts a name to the name of a file in the root output directory for the generation, and ensures that that
+     * directory exists if it has not already been created.
+     *
+     * @param  name    The name to convert to a path to a file in the root generator output directory.
+     * @param  dirName The name of the directory to create the file in.
+     *
+     * @return The full path to the file to output to.
+     */
+    protected String nameToFileNameInRootGenerationDir(String name, String dirName)
+    {
+        // Ensure that the output directory exists for the location, if it has not already been created.
+        if (!createdOutputDirectories.contains(dirName))
+        {
+            File dir = new File(dirName);
+            dir.mkdirs();
+            createdOutputDirectories.add(dirName);
+        }
+
+        // Build the full path to the output file.
+        return dirName + File.separatorChar + name;
+    }
+
+    /**
      * ProcessedTemplateHandler is a call-back interface, that is used to call-back upon completion of every string
      * template, in order that output may be generated from it.
      *

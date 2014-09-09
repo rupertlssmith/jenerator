@@ -15,7 +15,6 @@
  */
 package com.thesett.catalogue.generator;
 
-import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -149,7 +148,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     /** Creates the opening section of a hibernate configuration file. */
     public void generateHibernateConfigOpening()
     {
-        String outputFileName = nameToFileNameInRootGenerationDir(mappingFileName);
+        String outputFileName = nameToFileNameInRootGenerationDir(mappingFileName, mappingDirName);
 
         // Instantiate the template to generate from.
         StringTemplate stringTemplate = hibernateOnlineTemplates.getInstanceOf(FILE_OPEN_TEMPLATE);
@@ -161,7 +160,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     /** Creates the closing section of a hibnerate configuration file. */
     public void generateHibernateConfigClosing()
     {
-        String outputFileName = nameToFileNameInRootGenerationDir(mappingFileName);
+        String outputFileName = nameToFileNameInRootGenerationDir(mappingFileName, mappingDirName);
 
         // Instantiate the template to generate from.
         StringTemplate stringTemplate = hibernateOnlineTemplates.getInstanceOf(FILE_CLOSE_TEMPLATE);
@@ -172,7 +171,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     /** Creates a closing section to the user type definitions. */
     public void generateHibernateUserTypeClosing()
     {
-        String outputFileName = nameToFileNameInRootGenerationDir(mappingFileName);
+        String outputFileName = nameToFileNameInRootGenerationDir(mappingFileName, mappingDirName);
 
         // Instantiate the template to generate from.
         StringTemplate stringTemplate = hibernateUserTypeConfigTemplates.getInstanceOf(FILE_CLOSE_TEMPLATE);
@@ -198,7 +197,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     public void postApply(Catalogue catalogue)
     {
         // Output the configuration sections built up in the output buffers in the correct order to the configuration file.
-        String outputFileName = nameToFileNameInRootGenerationDir(mappingFileName);
+        String outputFileName = nameToFileNameInRootGenerationDir(mappingFileName, mappingDirName);
 
         FileUtils.writeObjectToFile(outputFileName, userTypeDefHandler, true);
         generateHibernateUserTypeClosing();
@@ -225,7 +224,8 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
         String[] names =
             new String[]
             {
-                nameToFileNameInRootGenerationDir(mappingFileName), nameToFileNameInRootGenerationDir(mappingFileName),
+                nameToFileNameInRootGenerationDir(mappingFileName, mappingDirName),
+                nameToFileNameInRootGenerationDir(mappingFileName, mappingDirName),
                 nameToJavaFileName(outputDir, "", type.getName(), "UserType")
             };
 
@@ -277,7 +277,8 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
         String[] names =
             new String[]
             {
-                nameToFileNameInRootGenerationDir(mappingFileName), nameToFileNameInRootGenerationDir(mappingFileName)
+                nameToFileNameInRootGenerationDir(mappingFileName, mappingDirName),
+                nameToFileNameInRootGenerationDir(mappingFileName, mappingDirName)
             };
         Map<String, Type> fields = new LinkedHashMap<String, Type>();
 
@@ -304,7 +305,8 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
         String[] names =
             new String[]
             {
-                nameToFileNameInRootGenerationDir(mappingFileName), nameToFileNameInRootGenerationDir(mappingFileName)
+                nameToFileNameInRootGenerationDir(mappingFileName, mappingDirName),
+                nameToFileNameInRootGenerationDir(mappingFileName, mappingDirName)
             };
         Map<String, Type> fields = new LinkedHashMap<String, Type>();
 
@@ -332,7 +334,8 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
         String[] names =
             new String[]
             {
-                nameToFileNameInRootGenerationDir(mappingFileName), nameToFileNameInRootGenerationDir(mappingFileName),
+                nameToFileNameInRootGenerationDir(mappingFileName, mappingDirName),
+                nameToFileNameInRootGenerationDir(mappingFileName, mappingDirName),
                 nameToJavaFileName(outputDir, "", type.getName(), "UserType")
             };
 
@@ -376,7 +379,8 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
         String[] names =
             new String[]
             {
-                nameToFileNameInRootGenerationDir(mappingFileName), nameToFileNameInRootGenerationDir(mappingFileName)
+                nameToFileNameInRootGenerationDir(mappingFileName, mappingDirName),
+                nameToFileNameInRootGenerationDir(mappingFileName, mappingDirName)
             };
         Map<String, Type> fields = decoratedType.getAllPropertyTypes();
         Map<String, Type> extraFields = null;
@@ -384,59 +388,5 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
             new ProcessedTemplateHandler[] { onlineMappingHandler, warehouseMappingHandler };
 
         generate(model, decoratedType, templates, names, fields, extraFields, handlers);
-    }
-
-    /**
-     * Converts a name to the name of a file in the root output directory for the generation, and ensures that that
-     * directory exists if it has not already been created.
-     *
-     * @param  name The name to convert to a path to a file in the root generator output directory.
-     *
-     * @return The full path to the file to output to.
-     */
-    protected String nameToFileNameInRootGenerationDir(String name)
-    {
-        // Ensure that the output directory exists for the location, if it has not already been created.
-        if (!createdOutputDirectories.contains(mappingDirName))
-        {
-            File dir = new File(mappingDirName);
-            dir.mkdirs();
-            createdOutputDirectories.add(mappingDirName);
-        }
-
-        // Build the full path to the output file.
-        return mappingDirName + File.separatorChar + name;
-    }
-
-    /**
-     * BufferingTemplateHandler is a processed template handler, that retains the output fragments from all processed
-     * templates that it recieves in a buffer, so that the contents of the buffer may be output in a correct sequence at
-     * a later time.
-     *
-     * <pre><p/><table id="crc"><caption>CRC Card</caption>
-     * <tr><th> Responsibilities <th> Collaborations
-     * <tr><td> Retain the output of a template for later processing.
-     * </table></pre>
-     */
-    private class BufferingTemplateHandler implements ProcessedTemplateHandler
-    {
-        /** The buffer to build up the output in. */
-        private StringBuffer buffer = new StringBuffer();
-
-        /** {@inheritDoc} */
-        public void processed(StringTemplate template, String outputName)
-        {
-            buffer.append(template);
-        }
-
-        /**
-         * Provides the contents of the buffer that template output has been written to.
-         *
-         * @return The contents of the buffer that template output has been written to.
-         */
-        public String toString()
-        {
-            return buffer.toString();
-        }
     }
 }
