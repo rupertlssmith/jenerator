@@ -15,43 +15,30 @@
  */
 package com.thesett.catalogue.maven;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.net.URL;
-import java.util.HashMap;
+import java.lang.reflect.Constructor;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
-import javax.xml.transform.TransformerException;
-
-import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 
 import com.thesett.catalogue.config.ModelLoaderConfigBean;
-import com.thesett.catalogue.generator.GeneratorTool;
+import com.thesett.catalogue.generator.ChainedGenerator;
 import com.thesett.catalogue.model.Catalogue;
 import com.thesett.common.config.ConfigException;
 import com.thesett.common.config.Configurator;
-import com.thesett.common.xml.XslTransformerUtils;
+import com.thesett.common.util.ReflectionUtils;
 
 /**
- * CatalogueMojo implements a Maven 2 plugin, that calls {@link com.thesett.javasource.generator.SourceCodeGenerator} on
- * a specified catalgoue model using the catalogue code generation template files, and an output location and package.
- * It also transforms the catalogue model into a Hibernate mapping file, and an index mapping file for text based
- * searching.
+ * CatalogueMojo implements a Maven 2 plugin, that invokes code generators derived from
+ * {@link com.thesett.catalogue.generator.BaseGenerator}, with parameters defined in the POM.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
- * <tr><td> Call the source code generator with arguments passed from the pom.
- * <tr><td> Apply an XSLT transform to generate the Hibernate mapping.
- * <tr><td> Apply an XSLT transform to generate the index mapping.
+ * <tr><td> Call the source code generators with arguments passed from the POM.
  * </table></pre>
  *
  * @author                       Rupert Smith
@@ -64,9 +51,6 @@ public class CatalogueMojo extends AbstractMojo
     /** Holds the resource name of the configuration. */
     private static final String CONFIG = "generator-config.xml";
 
-    /** Holds the resource name of the catalogue index mapping transform. */
-    private static final String INDEX_MAPPING_TRANSFORM = "catalogue-def-to-index-config.xsl";
-
     /**
      * The maven project model.
      *
@@ -75,20 +59,6 @@ public class CatalogueMojo extends AbstractMojo
      * @readonly
      */
     public MavenProject project;
-
-    /**
-     * The directory containing generated sources.
-     *
-     * @parameter property="project.build.directory/generated-sources/javasource"
-     */
-    public String generatedSourcesDirectory;
-
-    /**
-     * The directory containing generated test sources.
-     *
-     * @parameter property="project.build.directory/generated-sources/javasourcetest"
-     */
-    public String generatedTestSourcesDirectory;
 
     /**
      * The model file, to generate from.
@@ -105,41 +75,6 @@ public class CatalogueMojo extends AbstractMojo
     public String templateDir;
 
     /**
-     * The output java package name for the model.
-     *
-     * @parameter property="modelPackage"
-     */
-    public String modelPackage;
-
-    /**
-     * The output java package name for the DAO utilities.
-     *
-     * @parameter property="daoPackage"
-     */
-    public String daoPackage;
-
-    /**
-     * The model output base directory.
-     *
-     * @parameter property="modelOutputDir"
-     */
-    public String modelOutputDir;
-
-    /**
-     * The DAO utilities output base directory.
-     *
-     * @parameter property="daoOutputDir"
-     */
-    public String daoOutputDir;
-
-    /**
-     * The output directory for mapping files.
-     *
-     * @parameter property="mappingOutputDir"
-     */
-    public String mappingOutputDir;
-
-    /**
      * The debug functors file name.
      *
      * @parameter property="debugModelFilename"
@@ -147,20 +82,11 @@ public class CatalogueMojo extends AbstractMojo
     public String debugModelFilename;
 
     /**
-     * The output filename for the hibernate mapping.
+     * The generator definitions.
      *
-     * @parameter
-     * @required
+     * @parameter property="generators"
      */
-    public String hibernateMappingFilename;
-
-    /**
-     * The output filename for the hibernate mapping.
-     *
-     * @parameter
-     * @required
-     */
-    public String indexMappingFilename;
+    public List<Generator> generators;
 
     /**
      * Applies the source code generator to the specified catalogue model using all of the catalogue generation
@@ -171,7 +97,7 @@ public class CatalogueMojo extends AbstractMojo
      */
     public void execute() throws MojoExecutionException, MojoFailureException
     {
-        getLog().info("public void execute(): called");
+        getLog().info("Jenerator Applying CodeGen to the Model.");
 
         // Load the configuration, substituting in the model file name specified on the command line.
         try
@@ -191,30 +117,13 @@ public class CatalogueMojo extends AbstractMojo
                 modelBean.setDebugRawFileName(debugModelFilename);
             }
 
-            // Set up default directories to output to, if no overrides were given.
-            if (modelOutputDir == null)
-            {
-                modelOutputDir = generatedSourcesDirectory;
-            }
-
-            if (daoOutputDir == null)
-            {
-                daoOutputDir = generatedSourcesDirectory;
-            }
-
-            if (mappingOutputDir == null)
-            {
-                mappingOutputDir = generatedSourcesDirectory;
-            }
-
             // Run the configuration.
             configurator.configureAll();
 
             // Generate from the loaded model.
             Catalogue catalogue = modelBean.getCatalogue();
 
-            GeneratorTool.generate(catalogue, modelOutputDir, daoOutputDir, mappingOutputDir, hibernateMappingFilename,
-                templateDir);
+            generate(catalogue, templateDir, generators);
         }
         catch (ConfigException e)
         {
@@ -223,103 +132,50 @@ public class CatalogueMojo extends AbstractMojo
 
             throw mfe;
         }
-
-        // Set up parameters to pass to all of the XSLT transforms.
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("package", modelPackage);
-
-        // Generate the index mapping files.
-        /*transformModel(model, INDEX_MAPPING_TRANSFORM,
-            generatedSourcesDirectory + File.separatorChar + indexMappingFilename, parameters);*/
-
-        // Add generated sources to maven compilation path.
-        if (new File(generatedSourcesDirectory).exists())
-        {
-            project.addCompileSourceRoot(generatedSourcesDirectory);
-        }
-
-        // Add generated test sources to maven test compilation path.
-        if (new File(generatedTestSourcesDirectory).exists())
-        {
-            project.addTestCompileSourceRoot(generatedTestSourcesDirectory);
-        }
-
-        // Add generated resources to the classpath.
-        if (new File(generatedSourcesDirectory).exists())
-        {
-            Resource resource = new Resource();
-            resource.setDirectory(generatedSourcesDirectory);
-            resource.addInclude(hibernateMappingFilename);
-            resource.addInclude(indexMappingFilename);
-
-            project.addResource(resource);
-        }
     }
 
     /**
-     * Applies an XSLT transform to a catalogue model file.
+     * Generates a set of Java bean classes and a Hibernate mapping file for those that require persisting, from a
+     * catalogue model.
      *
-     * @param  modelFileName         The file containing the model.
-     * @param  transformResourceName The resource on the classpath containing the transform to apply.
-     * @param  outputFileName        The file to output the results to.
-     * @param  parameters            Any parameters to pass to the transformation.
-     *
-     * @throws MojoFailureException   If the input or output files cannot be opened.
-     * @throws MojoExecutionException If the transform fails, or there is an IOException whilst operating on the files.
+     * @param model       The model to generate from.
+     * @param templateDir An alternative directory to load templates from, may be <tt>null</tt> to use defaults.
+     * @param generators  A list of generator configurations.
      */
-    private void transformModel(String modelFileName, String transformResourceName, String outputFileName,
-        Map<String, Object> parameters) throws MojoFailureException, MojoExecutionException
+    private void generate(Catalogue model, final String templateDir, final List<Generator> generators)
     {
-        // Holds the URL of the XSLT transform to apply.
-        URL transformURL = this.getClass().getClassLoader().getResource(transformResourceName);
+        // Generate from the loaded model for Java with a Hibernate persistence layer.
+        com.thesett.catalogue.generator.Generator generator =
+            new ChainedGenerator(new LinkedList<com.thesett.catalogue.generator.Generator>()
+                {
+                    {
+                        for (Generator generatorConfig : generators)
+                        {
+                            Map<String, String> params = generatorConfig.getConfig();
+                            Class<? extends com.thesett.catalogue.generator.BaseGenerator> generatorClass =
+                                (Class<? extends com.thesett.catalogue.generator.BaseGenerator>) ReflectionUtils
+                                .forName(params.get("type"));
+                            Constructor<? extends com.thesett.catalogue.generator.BaseGenerator> constructor =
+                                ReflectionUtils.getConstructor(generatorClass, new Class[] { String.class });
 
-        // Used to read the catalogue model XML with.
-        Reader modelReader;
+                            com.thesett.catalogue.generator.BaseGenerator generatorImpl =
+                                ReflectionUtils.newInstance(constructor, new Object[] { templateDir });
 
-        // Used to write the results of the transformation out with.
-        Writer resultWriter;
+                            for (Map.Entry<String, String> param : params.entrySet())
+                            {
+                                if ("type".equals(param.getKey()))
+                                {
+                                    continue;
+                                }
 
-        // Open the model file.
-        try
-        {
-            modelReader = new FileReader(modelFileName);
-        }
-        catch (FileNotFoundException e)
-        {
-            MojoFailureException failureException =
-                new MojoFailureException("Unable to open the model file '" + modelFileName + "' for reading.");
-            failureException.initCause(e);
-            throw failureException;
-        }
+                                generatorImpl.setProperty(param.getKey(), param.getValue());
+                            }
 
-        // Open the output file.
-        try
-        {
-            resultWriter = new FileWriter(outputFileName);
-        }
-        catch (IOException e)
-        {
-            MojoFailureException failureException =
-                new MojoFailureException("Unable to open the output file '" + outputFileName + "' for writing.");
-            failureException.initCause(e);
-            throw failureException;
-        }
+                            add(generatorImpl);
+                        }
+                    }
+                });
 
-        // Apply the transformation.
-        try
-        {
-            XslTransformerUtils.performXslTransformation(modelReader, transformURL, parameters, resultWriter);
-            modelReader.close();
-            resultWriter.close();
-        }
-        catch (TransformerException e)
-        {
-            throw new MojoExecutionException("There was an exception whilst transforming the model using the '" +
-                transformResourceName + "' transformation.", e);
-        }
-        catch (IOException e)
-        {
-            throw new MojoExecutionException("Got IOException whilst trying to close a file.", e);
-        }
+        generator.apply(model);
     }
 }

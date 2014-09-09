@@ -91,6 +91,9 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
     /** The directory to output the model to. */
     protected String outputDir;
 
+    /** The Java package name to generate to. */
+    private String modelPackage;
+
     /** Used to keep track of output directories that have been created. */
     protected Set<String> createdOutputDirectories = new HashSet<String>();
 
@@ -112,6 +115,16 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
     public void setOutputDir(String outputDir)
     {
         this.outputDir = outputDir;
+    }
+
+    /**
+     * Establishes the Java package name to generate to.
+     *
+     * @param modelPackage The Java package name to generate to.
+     */
+    public void setPackage(String modelPackage)
+    {
+        this.modelPackage = modelPackage;
     }
 
     /** {@inheritDoc} */
