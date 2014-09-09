@@ -17,6 +17,7 @@ package com.thesett.catalogue.generator;
 
 import java.math.BigDecimal;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import com.thesett.aima.attribute.impl.EnumeratedStringAttribute;
@@ -28,6 +29,7 @@ import com.thesett.aima.state.InfiniteValuesException;
 import com.thesett.aima.state.RandomInstanceNotSupportedException;
 import com.thesett.aima.state.Type;
 import com.thesett.aima.state.TypeVisitor;
+import com.thesett.aima.state.restriction.TypeRestriction;
 import com.thesett.catalogue.model.CollectionType;
 import com.thesett.catalogue.model.DimensionType;
 import com.thesett.catalogue.model.EntityType;
@@ -426,6 +428,11 @@ public class TypeDecorator<T> implements Type<T>
     public String getBaseClassName()
     {
         return type.getBaseClassName();
+    }
+
+    /** {@inheritDoc} */
+    public List<TypeRestriction> getRestrictions() {
+        return type.getRestrictions();
     }
 
     /** {@inheritDoc} */
