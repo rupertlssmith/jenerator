@@ -17,11 +17,13 @@ package com.thesett.catalogue.generator;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.thesett.aima.attribute.impl.EnumeratedStringAttribute;
 import com.thesett.aima.state.Type;
+import com.thesett.aima.state.restriction.TypeRestriction;
 
 /**
  * HierarchyTypeDecorator decorates a hierarchy type, exposing all of the available methods on hierarchy types in the
