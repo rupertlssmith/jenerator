@@ -122,7 +122,7 @@ public class BeanValidationGenerator extends BaseGenerator implements ComponentT
 
         StringTemplateGroup[] templates = new StringTemplateGroup[] { beanValidationTemplates };
         String[] names = new String[] { nameToFileNameInRootGenerationDir(validationFileName, outputDir) };
-        Map<String, Type> fields = decoratedType.getAllRestrictedPropertyTypes();
+        Map<String, Type> fields = decoratedType.getAllPropertyTypes();
         Map<String, Type> extraFields = null;
         ProcessedTemplateHandler[] handlers = new ProcessedTemplateHandler[] { beanValidationHandler };
 
