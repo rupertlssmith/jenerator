@@ -15,11 +15,14 @@
  */
 package com.thesett.catalogue.generator;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
+import com.thesett.aima.attribute.impl.EnumeratedStringAttribute;
+import com.thesett.aima.attribute.impl.EnumeratedStringTypeVisitor;
 import com.thesett.aima.state.ComponentType;
 import com.thesett.aima.state.Type;
 import com.thesett.catalogue.model.Catalogue;
@@ -38,7 +41,7 @@ import com.thesett.common.util.FileUtils;
  *
  * @author Rupert Smith
  */
-public class BeanValidationGenerator extends BaseGenerator implements ComponentTypeVisitor
+public class BeanValidationGenerator extends BaseGenerator implements ComponentTypeVisitor, EnumeratedStringTypeVisitor
 {
     /** Defines the name of the template group for creating Java Bean Validation configurations. */
     private static final String BEAN_VALIDATION_TEMPLATES_GROUP = "BeanValidation";
@@ -117,14 +120,38 @@ public class BeanValidationGenerator extends BaseGenerator implements ComponentT
     {
         ComponentTypeDecorator decoratedType = (ComponentTypeDecorator) TypeDecoratorFactory.decorateType(type);
 
-        StringTemplateGroup[] templates;
-        String[] names;
+        StringTemplateGroup[] templates = new StringTemplateGroup[] { beanValidationTemplates };
+        String[] names = new String[] { nameToFileNameInRootGenerationDir(validationFileName, outputDir) };
         Map<String, Type> fields = decoratedType.getAllRestrictedPropertyTypes();
         Map<String, Type> extraFields = null;
         ProcessedTemplateHandler[] handlers = new ProcessedTemplateHandler[] { beanValidationHandler };
 
-        templates = new StringTemplateGroup[] { beanValidationTemplates };
-        names = new String[] { nameToFileNameInRootGenerationDir(validationFileName, outputDir) };
+        generate(model, decoratedType, templates, names, fields, extraFields, handlers);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p/>Generates hibernate configuration XML for an enumeration type, and a Java user type to access it through.
+     *
+     * @param type The type to generate from.
+     */
+    public void visit(final EnumeratedStringAttribute.EnumeratedStringType type)
+    {
+        final TypeDecorator decoratedType = TypeDecoratorFactory.decorateType(type);
+
+        StringTemplateGroup[] templates = new StringTemplateGroup[] { beanValidationTemplates };
+        String[] names = new String[] { nameToFileNameInRootGenerationDir(validationFileName, outputDir) };
+        Map<String, Type> fields =
+            new LinkedHashMap<String, Type>()
+            {
+                {
+                    put(type.getName(), decoratedType);
+                }
+            };
+
+        Map<String, Type> extraFields = null;
+        ProcessedTemplateHandler[] handlers = new ProcessedTemplateHandler[] { beanValidationHandler };
 
         generate(model, decoratedType, templates, names, fields, extraFields, handlers);
     }
