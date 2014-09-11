@@ -119,6 +119,7 @@
     <!--The root type of the catalogue. The catalogue knowledge level defines types.-->
     <xs:complexType name="TypeDefType">
         <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="not_null" type="xs:boolean" use="optional"/>
     </xs:complexType>
     <!--The restriction types.-->
     <xs:complexType name="DecimalType">
@@ -313,6 +314,7 @@
                 <xs:attribute name="name" type="xs:string" use="required"/>
                 <xs:attribute name="type" type="xs:string" use="optional"/>
                 <xs:attribute name="value" type="xs:string" use="optional"/>
+                <xs:attribute name="not_null" type="xs:boolean" use="optional"/>
                 <xs:attribute name="formula" type="xs:string" use="optional"/>
             </xs:extension>
         </xs:complexContent>
