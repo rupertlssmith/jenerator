@@ -74,10 +74,40 @@ normal_type_int(integer_range, X, long, [from(From), to(To)]) :-
 
 /* ======== normal_type_decimal/4 */
 
-normal_type_decimal(decimal, X, bigdecimal, [precision(Precision), scale(Scale)]) :-
+/* These rules expand decimal ranges with optional from and to, to appropriate limits depending on the precision. */
+normal_type_decimal(decimal, X, bigdecimal, [precision(Precision), scale(Scale), from(From), to(To)]) :-
     type_instance(X, decimal_type, Params),
     member(precision(Precision), Params),
     member(scale(Scale), Params),
+    member(from(From), Params),
+    member(to(To), Params),
+    java_int(Precision),
+    java_int(Scale).
+
+normal_type_decimal(decimal, X, bigdecimal, [precision(Precision), scale(Scale), from("unbounded"), to(To)]) :-
+    type_instance(X, decimal_type, Params),
+    member(precision(Precision), Params),
+    member(scale(Scale), Params),
+    not(member(from(_), Params)),
+    member(to(To), Params),
+    java_int(Precision),
+    java_int(Scale).
+
+normal_type_decimal(decimal, X, bigdecimal, [precision(Precision), scale(Scale), from(From), to("unbounded")]) :-
+    type_instance(X, decimal_type, Params),
+    member(precision(Precision), Params),
+    member(scale(Scale), Params),
+    member(from(From), Params),
+    not(member(to(_), Params)),
+    java_int(Precision),
+    java_int(Scale).
+
+normal_type_decimal(decimal, X, bigdecimal, [precision(Precision), scale(Scale), from("unbounded"), to("unbounded")]) :-
+    type_instance(X, decimal_type, Params),
+    member(precision(Precision), Params),
+    member(scale(Scale), Params),
+    not(member(from(_), Params)),
+    not(member(to(_), Params)),
     java_int(Precision),
     java_int(Scale).
 

@@ -30,14 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.thesett.catalogue.model.impl.CatalogueModel;
-import com.thesett.catalogue.model.impl.CollectionTypeImpl;
-import com.thesett.catalogue.model.impl.ComponentTypeImpl;
-import com.thesett.catalogue.model.impl.DimensionTypeImpl;
-import com.thesett.catalogue.model.impl.EntityTypeImpl;
-import com.thesett.catalogue.model.impl.FactTypeImpl;
-import com.thesett.catalogue.model.impl.MapTypeImpl;
-import com.thesett.catalogue.model.impl.ViewTypeImpl;
 import org.apache.log4j.Logger;
 
 import com.thesett.aima.attribute.impl.BigDecimalTypeImpl;
@@ -51,6 +43,7 @@ import com.thesett.aima.attribute.time.DateOnly;
 import com.thesett.aima.attribute.time.TimeOnly;
 import com.thesett.aima.logic.fol.Clause;
 import com.thesett.aima.logic.fol.Functor;
+import com.thesett.aima.logic.fol.IntLiteral;
 import com.thesett.aima.logic.fol.NumericType;
 import com.thesett.aima.logic.fol.Parser;
 import com.thesett.aima.logic.fol.RecursiveList;
@@ -82,6 +75,14 @@ import com.thesett.catalogue.core.handlers.HierarchyLabelFieldHandler;
 import com.thesett.catalogue.core.handlers.InQuotesFieldHandler;
 import com.thesett.catalogue.core.handlers.ViewHandler;
 import com.thesett.catalogue.model.CollectionType;
+import com.thesett.catalogue.model.impl.CatalogueModel;
+import com.thesett.catalogue.model.impl.CollectionTypeImpl;
+import com.thesett.catalogue.model.impl.ComponentTypeImpl;
+import com.thesett.catalogue.model.impl.DimensionTypeImpl;
+import com.thesett.catalogue.model.impl.EntityTypeImpl;
+import com.thesett.catalogue.model.impl.FactTypeImpl;
+import com.thesett.catalogue.model.impl.MapTypeImpl;
+import com.thesett.catalogue.model.impl.ViewTypeImpl;
 import com.thesett.catalogue.setup.CatalogueDefinition;
 import com.thesett.catalogue.setup.ComponentDefType;
 import com.thesett.catalogue.setup.DateRangeType;
@@ -112,7 +113,8 @@ import com.thesett.common.util.maps.HashArray;
  * <p/>The input to the catalogue model checker is a raw {@link CatalogueDefinition}. The output is a model, containing
  * the types from the raw model that type check and have been reduced to their canonical form.
  *
- * <p/>The factory outputs the results of type checking and reduction to normal as a {@link com.thesett.catalogue.model.impl.CatalogueModel}.
+ * <p/>The factory outputs the results of type checking and reduction to normal as a
+ * {@link com.thesett.catalogue.model.impl.CatalogueModel}.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
@@ -412,7 +414,6 @@ public class CatalogueModelFactory
      * Extracts the natural key fields for a named component type in the catalogue model. Not all components have
      * natural key fields, in which case the resulting set of fields will be empty.
      *
-     *
      * @param  name The name of the component type to get the natural key fields of.
      *
      * @return The natural key fields of a named component type.
@@ -574,7 +575,7 @@ public class CatalogueModelFactory
     private void initializeAllDecimalTypes(Map<String, Type> catalogueTypes)
     {
         String queryString =
-            "?-normal_type(decimal, MN, JT, _MP), member(precision(Precision), _MP), member(scale(Scale), _MP).";
+            "?-normal_type(decimal, MN, JT, _MP), member(precision(Precision), _MP), member(scale(Scale), _MP), member(from(From), _MP), member(to(To), _MP).";
         Iterable<Map<String, Variable>> bindingsIterable = runQuery(queryString);
 
         for (Map<String, Variable> bindings : bindingsIterable)
@@ -583,11 +584,46 @@ public class CatalogueModelFactory
             String javaTypeName = engine.getFunctorName((Functor) bindings.get("JT").getValue());
             NumericType precisionTerm = (NumericType) bindings.get("Precision").getValue();
             NumericType scaleTerm = (NumericType) bindings.get("Scale").getValue();
+            Term fromTerm = bindings.get("From").getValue();
+            Term toTerm = bindings.get("To").getValue();
+
+            String from = null;
+
+            if (fromTerm instanceof StringLiteral)
+            {
+                from = ((StringLiteral) fromTerm).stringValue();
+            }
+            else if (fromTerm instanceof IntLiteral)
+            {
+                from = Integer.toString(((IntLiteral) fromTerm).intValue());
+            }
+
+            if ("unbounded".equals(from))
+            {
+                from = null;
+            }
+
+            String to = null;
+
+            if (toTerm instanceof StringLiteral)
+            {
+                to = ((StringLiteral) toTerm).stringValue();
+            }
+            else if (toTerm instanceof IntLiteral)
+            {
+                to = Integer.toString(((IntLiteral) toTerm).intValue());
+            }
+
+            if ("unbounded".equals(to))
+            {
+                to = null;
+            }
 
             if ("bigdecimal".equals(javaTypeName))
             {
                 catalogueTypes.put(typeName,
-                    BigDecimalTypeImpl.createInstance(typeName, precisionTerm.intValue(), scaleTerm.intValue()));
+                    BigDecimalTypeImpl.createInstance(typeName, precisionTerm.intValue(), scaleTerm.intValue(), from,
+                        to));
             }
         }
     }
@@ -1521,7 +1557,8 @@ public class CatalogueModelFactory
         }
 
         /** {@inheritDoc} */
-        public Set<String> getNaturalKeyFieldNames() {
+        public Set<String> getNaturalKeyFieldNames()
+        {
             return null;
         }
 

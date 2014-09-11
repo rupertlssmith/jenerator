@@ -127,6 +127,8 @@
                 <xs:attribute name="precision" type="xs:string" use="optional"/>
                 <xs:attribute name="scale" type="xs:int" use="optional"/>
                 <xs:attribute name="rounding" type="xs:string" use="optional"/>
+                <xs:attribute name="from" type="xs:integer" use="optional"/>
+                <xs:attribute name="to" type="xs:integer" use="optional"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -141,8 +143,6 @@
     <xs:complexType name="RealRangeType">
         <xs:complexContent>
             <xs:extension base="cat:DecimalType">
-                <xs:attribute name="from" type="xs:double" use="optional"/>
-                <xs:attribute name="to" type="xs:double" use="optional"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
