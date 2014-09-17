@@ -15,7 +15,6 @@
  */
 package com.thesett.catalogue.core;
 
-import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,14 +44,12 @@ import com.thesett.aima.logic.fol.Clause;
 import com.thesett.aima.logic.fol.Functor;
 import com.thesett.aima.logic.fol.IntLiteral;
 import com.thesett.aima.logic.fol.NumericType;
-import com.thesett.aima.logic.fol.Parser;
 import com.thesett.aima.logic.fol.RecursiveList;
 import com.thesett.aima.logic.fol.Sentence;
 import com.thesett.aima.logic.fol.StringLiteral;
 import com.thesett.aima.logic.fol.Term;
 import com.thesett.aima.logic.fol.Variable;
 import com.thesett.aima.logic.fol.interpreter.ResolutionEngine;
-import com.thesett.aima.logic.fol.isoprologparser.Token;
 import com.thesett.aima.logic.fol.isoprologparser.TokenSource;
 import com.thesett.aima.logic.fol.prolog.PrologCompiledClause;
 import com.thesett.aima.search.GoalState;
@@ -65,12 +62,9 @@ import com.thesett.aima.search.util.Searches;
 import com.thesett.aima.search.util.uninformed.DepthFirstSearch;
 import com.thesett.aima.state.*;
 import com.thesett.aima.state.impl.JavaType;
-import com.thesett.aima.state.impl.WrappedBeanState;
 import com.thesett.catalogue.core.handlers.ComponentPartHandler;
-import com.thesett.catalogue.core.handlers.DefaultFieldHandler;
 import com.thesett.catalogue.core.handlers.EnumLabelFieldHandler;
 import com.thesett.catalogue.core.handlers.ExternalIdHandler;
-import com.thesett.catalogue.core.handlers.FieldHandler;
 import com.thesett.catalogue.core.handlers.HierarchyLabelFieldHandler;
 import com.thesett.catalogue.core.handlers.InQuotesFieldHandler;
 import com.thesett.catalogue.core.handlers.ViewHandler;
@@ -87,22 +81,15 @@ import com.thesett.catalogue.setup.CatalogueDefinition;
 import com.thesett.catalogue.setup.ComponentDefType;
 import com.thesett.catalogue.setup.DateRangeType;
 import com.thesett.catalogue.setup.DecimalType;
-import com.thesett.catalogue.setup.DimensionDefType;
-import com.thesett.catalogue.setup.EntityDefType;
 import com.thesett.catalogue.setup.EnumerationDefType;
-import com.thesett.catalogue.setup.FactDefType;
 import com.thesett.catalogue.setup.HierarchyDefType;
 import com.thesett.catalogue.setup.IntegerRangeType;
-import com.thesett.catalogue.setup.RealRangeType;
 import com.thesett.catalogue.setup.SetupModelHelper;
 import com.thesett.catalogue.setup.StringPatternType;
 import com.thesett.catalogue.setup.TimeRangeType;
-import com.thesett.catalogue.setup.TypeDefType;
-import com.thesett.catalogue.setup.ViewDefType;
 import com.thesett.common.parsing.SourceCodeException;
 import com.thesett.common.util.EmptyIterator;
 import com.thesett.common.util.StringUtils;
-import com.thesett.common.util.maps.HashArray;
 
 /**
  * CatalogueModelFactory provides queries to type check the catalogue model, which requires greater sophistication than
@@ -209,21 +196,22 @@ public class CatalogueModelFactory
 
         // Extract all raw type definitions from the model and first order logic clauses for them.
         List<Sentence<Clause>> clauses = new ArrayList<Sentence<Clause>>();
+        ModelTermBuilder builder = new ListStyleTermBuilder(engine, modelWriter);
 
-        convertTypeToTerm(catalogueDef, engine, clauses, DecimalType.class,
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, DecimalType.class,
             new String[] { "precision", "scale", "rounding", "from", "to" });
-        convertTypeToTerm(catalogueDef, engine, clauses, IntegerRangeType.class, new String[] { "from", "to" });
-        convertTypeToTerm(catalogueDef, engine, clauses, StringPatternType.class, new String[] { "regexp" },
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, IntegerRangeType.class, new String[] { "from", "to" });
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, StringPatternType.class, new String[] { "regexp" },
             new InQuotesFieldHandler(new String[] { "regexp" }));
-        convertTypeToTerm(catalogueDef, engine, clauses, DateRangeType.class, new String[] { "from", "to" },
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, DateRangeType.class, new String[] { "from", "to" },
             new InQuotesFieldHandler(new String[] { "from", "to" }));
-        convertTypeToTerm(catalogueDef, engine, clauses, TimeRangeType.class, new String[] { "from", "to", "step" },
-            new InQuotesFieldHandler(new String[] { "from", "to", "step" }));
-        convertTypeToTerm(catalogueDef, engine, clauses, EnumerationDefType.class, new String[] { "label" },
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, TimeRangeType.class,
+            new String[] { "from", "to", "step" }, new InQuotesFieldHandler(new String[] { "from", "to", "step" }));
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, EnumerationDefType.class, new String[] { "label" },
             new EnumLabelFieldHandler());
-        convertTypeToTerm(catalogueDef, engine, clauses, HierarchyDefType.class,
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, HierarchyDefType.class,
             new String[] { "finalized", "level", "hierarchyLabel" }, new HierarchyLabelFieldHandler());
-        convertTypeToTerm(catalogueDef, engine, clauses, ComponentDefType.class,
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, ComponentDefType.class,
             new String[] { "componentPart", "view", "externalId" }, new ComponentPartHandler(engine), new ViewHandler(),
             new ExternalIdHandler());
 
@@ -1128,198 +1116,6 @@ public class CatalogueModelFactory
         }
 
         return engine.expandResultSetToMap(engine.iterator());
-    }
-
-    /**
-     * Converts types extracted from the XML catalogue model into first order logic clauses that encapsulate all the
-     * parameters that make up the type. For each type definiction in the catalogue model, the fields are extracted and
-     * passed through the custom handlers in turn, until one of them applies a transformation to the field. If none of
-     * the custom handlers applies a transformation, then the {@link DefaultFieldHandler} is used to transform the field
-     * into a name(value) functor.
-     *
-     * @param <T>            The type of types to extract.
-     * @param catalogueDef   The catalogue definition to extract types from.
-     * @param parser         The parser to parser terms with.
-     * @param clauses        The list of clauses to accumulate parsed clauses in.
-     * @param typeClass      The class of types to extract.
-     * @param properties     The properties to extract from the type bean.
-     * @param customHandlers A chain of custom handlers to apply to fields of type definitions, where the general
-     */
-    private <T extends TypeDefType> void convertTypeToTerm(CatalogueDefinition catalogueDef,
-        Parser<Clause, Token> parser, List<Sentence<Clause>> clauses, Class<T> typeClass, String[] properties,
-        FieldHandler... customHandlers)
-    {
-        // Create an instance of the default field handler.
-        FieldHandler defaultHandler = new DefaultFieldHandler();
-
-        // Loop over all instances of the specified type class found in the model.
-        for (TypeDefType type : SetupModelHelper.getAllTypeDefsOfType(typeClass, catalogueDef))
-        {
-            // Get the name of the type class.
-            String kind = engine.getFunctorName(typeClassToAtom(type));
-
-            // If the type is not known then ignore it and move on to the next one.
-            if (kind == null)
-            {
-                continue;
-            }
-
-            // Wrap the type as a bean state so that its properties can be extracted by name.
-            WrappedBeanState typeBean = new WrappedBeanState(type);
-
-            // Get the name of the type.
-            String name = (String) typeBean.getProperty("name");
-
-            // Build the first part of the type instance clause.
-            String termText = "type_instance(" + name + ", " + kind + ", [";
-
-            // Extract all the specified properties from the type bean, filtering out any nulls.
-            Map<String, Object> nonNullProperties = new HashArray<String, Object>();
-
-            for (String property : properties)
-            {
-                if (typeBean.hasProperty(property))
-                {
-                    Object value = typeBean.getProperty(property);
-
-                    if (value != null)
-                    {
-                        nonNullProperties.put(property, value);
-                    }
-                }
-            }
-
-            // Build the rest of the type instance clause from the non-null properties.
-            for (Iterator<Map.Entry<String, Object>> i = nonNullProperties.entrySet().iterator(); i.hasNext();)
-            {
-                Map.Entry<String, Object> entry = i.next();
-                String property = entry.getKey();
-                Object value = entry.getValue();
-
-                // Chain the raw property value down to the custom field handler if one is defined.
-                boolean handled = false;
-
-                for (FieldHandler handler : customHandlers)
-                {
-                    String result = handler.handleField(property, value, i.hasNext());
-
-                    if (result != null)
-                    {
-                        handled = true;
-                        termText += result;
-
-                        // Break out once one handler has responded.
-                        break;
-                    }
-                }
-
-                // If the custom handler did not handle the field then use the default.
-                if (!handled)
-                {
-                    termText += defaultHandler.handleField(property, value, i.hasNext());
-                }
-            }
-
-            termText += "]).";
-            log.debug(termText);
-
-            // CC the raw model text to the specified raw model writer, only if one was set.
-            if (modelWriter != null)
-            {
-                try
-                {
-                    modelWriter.write(termText + "\n");
-                    modelWriter.flush();
-                }
-                catch (IOException e)
-                {
-                    throw new RuntimeException("Error whilst writing out the raw model.", e);
-                }
-            }
-
-            // Parse the instance clause into a prolog clause and add it to the list of clauses.
-            parser.setTokenSource(TokenSource.getTokenSourceForString(termText));
-
-            try
-            {
-                Sentence<Clause> sentence = parser.parse();
-                clauses.add(sentence);
-            }
-            catch (SourceCodeException e)
-            {
-                throw new RuntimeException("Badly formed typedef conversion to logical term.", e);
-            }
-        }
-    }
-
-    /**
-     * Provides the prolog atom name for the specified type class.
-     *
-     * @param  type An instance of the type class to get the atom for.
-     *
-     * @return The atom name of the types representation in prolog.
-     */
-    private Functor typeClassToAtom(TypeDefType type)
-    {
-        String kind = null;
-
-        if (type instanceof DecimalType)
-        {
-            kind = "decimal_type";
-        }
-
-        if (type instanceof IntegerRangeType)
-        {
-            kind = "integer_range";
-        }
-        else if (type instanceof RealRangeType)
-        {
-            kind = "real_range";
-        }
-        else if (type instanceof StringPatternType)
-        {
-            kind = "string_pattern";
-        }
-        else if (type instanceof DateRangeType)
-        {
-            kind = "date_range";
-        }
-        else if (type instanceof TimeRangeType)
-        {
-            kind = "time_range";
-        }
-        else if (type instanceof EnumerationDefType)
-        {
-            kind = "enumeration_type";
-        }
-        else if (type instanceof HierarchyDefType)
-        {
-            kind = "hierarchy_type";
-        }
-        else if (type instanceof DimensionDefType)
-        {
-            kind = "dimension_type";
-        }
-        else if (type instanceof EntityDefType)
-        {
-            kind = "entity_type";
-        }
-        else if (type instanceof FactDefType)
-        {
-            kind = "fact_type";
-        }
-        else if (type instanceof ViewDefType)
-        {
-            kind = "view_type";
-        }
-        else if (type instanceof ComponentDefType)
-        {
-            kind = "component_type";
-        }
-
-        int id = engine.internFunctorName(kind, 0);
-
-        return new Functor(id, null);
     }
 
     /**
