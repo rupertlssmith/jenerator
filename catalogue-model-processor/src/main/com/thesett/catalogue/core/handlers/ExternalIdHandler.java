@@ -15,6 +15,7 @@
  */
 package com.thesett.catalogue.core.handlers;
 
+import com.thesett.catalogue.core.FieldHandler;
 import com.thesett.catalogue.setup.ExternalId;
 
 /**

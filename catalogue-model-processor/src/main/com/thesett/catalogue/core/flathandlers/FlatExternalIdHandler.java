@@ -13,50 +13,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.thesett.catalogue.core.handlers;
-
-import java.util.Iterator;
-import java.util.List;
+package com.thesett.catalogue.core.flathandlers;
 
 import com.thesett.catalogue.core.FieldHandler;
-import com.thesett.catalogue.setup.View;
+import com.thesett.catalogue.setup.ExternalId;
 
 /**
- * ViewHandler transforms 'view' fields into a views/1 functor with a list of view references as its argument.
+ * ExternalIdHandler transforms the optional 'externalId' field into an externalid/0 constant, indicating that and
+ * entity should support long lived external ids.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
- * <tr><td> Transform a view field into a list of view references. <td> {@link View}
+ * <tr><td> Transform an externalId field into an externalid/0 constant.
+ *     <td> {@link com.thesett.catalogue.setup.ExternalId}
  * </table></pre>
  *
  * @author Rupert Smith
  */
-public class ViewHandler implements FieldHandler
+public class FlatExternalIdHandler implements FieldHandler
 {
     /**
      * {@inheritDoc}
      *
-     * <p/>This transformation expects a list of {@link View}s as the fields argument and transforms these into a
-     * recursive list. This transformation only applies to 'view' fields.
+     * <p/>This transformation expects a list of {@link com.thesett.catalogue.setup.View}s as the fields argument and
+     * transforms these into a recursive list. This transformation only applies to 'view' fields.
      */
     public String handleField(String property, Object value, boolean more)
     {
-        if ("view".equals(property))
+        if ("externalId".equals(property))
         {
             // Cast the field value to a list of views.
-            List<View> views = (List<View>) value;
+            ExternalId views = (ExternalId) value;
 
-            String result = "views([";
-
-            for (Iterator<View> i = views.iterator(); i.hasNext();)
+            if (views != null)
             {
-                View view = i.next();
-                result += view.getType() + (i.hasNext() ? ", " : "");
+                return "externalid";
             }
-
-            result += "])" + (more ? ", " : "");
-
-            return result;
         }
 
         return null;

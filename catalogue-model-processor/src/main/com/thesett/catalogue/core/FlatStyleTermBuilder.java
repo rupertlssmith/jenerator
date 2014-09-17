@@ -38,18 +38,19 @@ import com.thesett.common.parsing.SourceCodeException;
 import com.thesett.common.util.maps.HashArray;
 
 /**
- * ListStyleTermBuilder produces terms with each defined type at the top, and the remainder of the AST making up the
- * type held in a structured list below it. Each type maps onto exactly one term.
+ * FlatStyleTermBuilder produces terms as fragments of an AST, that link to each other by reference. This results in
+ * several simple terms for each type definition. This is generally easier to query on than the list style terms, which
+ * require predicates to navigate into the lists to extract facts that are more easily exposed as top-level facts.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities </th><th> Collaborations </th>
  * <tr><td> Transform the raw catalogue model into first order logic list style. </td></tr>
  * </table></pre>
  */
-public class ListStyleTermBuilder extends BaseTermBuilder
+public class FlatStyleTermBuilder extends BaseTermBuilder
 {
     /** Used for debugging purposes. */
-    private static final Logger log = Logger.getLogger(ListStyleTermBuilder.class.getName());
+    private static final Logger log = Logger.getLogger(FlatStyleTermBuilder.class.getName());
 
     /**
      * Creates a model term builder.
@@ -57,7 +58,7 @@ public class ListStyleTermBuilder extends BaseTermBuilder
      * @param engine      The Prolog engine to generate the terms for.
      * @param modelWriter An optional writer to output a copy of the terms to, may be <tt>null</tt>.
      */
-    public ListStyleTermBuilder(ResolutionEngine<Clause, PrologCompiledClause, PrologCompiledClause> engine,
+    public FlatStyleTermBuilder(ResolutionEngine<Clause, PrologCompiledClause, PrologCompiledClause> engine,
         Writer modelWriter)
     {
         super(engine, modelWriter);

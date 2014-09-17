@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.thesett.catalogue.core.handlers;
+package com.thesett.catalogue.core.flathandlers;
 
 import java.util.Iterator;
 import java.util.List;
@@ -28,18 +28,18 @@ import com.thesett.catalogue.setup.LabelType;
  * <p/>
  * <pre><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
- * <tr><td> Transform an enumeration type declarations labels into a list. <td> {@link LabelType}.
+ * <tr><td> Transform an enumeration type declarations labels into a list. <td> {@link com.thesett.catalogue.setup.LabelType}.
  * </table></pre>
  *
  * @author Rupert Smith
  */
-public class EnumLabelFieldHandler implements FieldHandler
+public class FlatEnumLabelFieldHandler implements FieldHandler
 {
     /**
      * {@inheritDoc}
      *
-     * <p/>This transformation expects a list of {@link LabelType}s as the fields value, and transforms these into a
-     * recursive list. This transformation is only applied to 'label' fields.
+     * <p/>This transformation expects a list of {@link com.thesett.catalogue.setup.LabelType}s as the fields value, and
+     * transforms these into a recursive list. This transformation is only applied to 'label' fields.
      */
     public String handleField(String property, Object value, boolean more)
     {

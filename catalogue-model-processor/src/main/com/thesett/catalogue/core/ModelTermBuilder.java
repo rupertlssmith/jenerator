@@ -21,7 +21,6 @@ import com.thesett.aima.logic.fol.Clause;
 import com.thesett.aima.logic.fol.Parser;
 import com.thesett.aima.logic.fol.Sentence;
 import com.thesett.aima.logic.fol.isoprologparser.Token;
-import com.thesett.catalogue.core.handlers.FieldHandler;
 import com.thesett.catalogue.setup.CatalogueDefinition;
 import com.thesett.catalogue.setup.TypeDefType;
 

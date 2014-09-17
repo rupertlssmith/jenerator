@@ -62,6 +62,11 @@ import com.thesett.aima.search.util.Searches;
 import com.thesett.aima.search.util.uninformed.DepthFirstSearch;
 import com.thesett.aima.state.*;
 import com.thesett.aima.state.impl.JavaType;
+import com.thesett.catalogue.core.flathandlers.FlatEnumLabelFieldHandler;
+import com.thesett.catalogue.core.flathandlers.FlatExternalIdHandler;
+import com.thesett.catalogue.core.flathandlers.FlatHierarchyLabelFieldHandler;
+import com.thesett.catalogue.core.flathandlers.FlatInQuotesFieldHandler;
+import com.thesett.catalogue.core.flathandlers.FlatViewHandler;
 import com.thesett.catalogue.core.handlers.ComponentPartHandler;
 import com.thesett.catalogue.core.handlers.EnumLabelFieldHandler;
 import com.thesett.catalogue.core.handlers.ExternalIdHandler;
@@ -196,24 +201,8 @@ public class CatalogueModelFactory
 
         // Extract all raw type definitions from the model and first order logic clauses for them.
         List<Sentence<Clause>> clauses = new ArrayList<Sentence<Clause>>();
-        ModelTermBuilder builder = new ListStyleTermBuilder(engine, modelWriter);
 
-        builder.convertTypeToTerm(catalogueDef, engine, clauses, DecimalType.class,
-            new String[] { "precision", "scale", "rounding", "from", "to" });
-        builder.convertTypeToTerm(catalogueDef, engine, clauses, IntegerRangeType.class, new String[] { "from", "to" });
-        builder.convertTypeToTerm(catalogueDef, engine, clauses, StringPatternType.class, new String[] { "regexp" },
-            new InQuotesFieldHandler(new String[] { "regexp" }));
-        builder.convertTypeToTerm(catalogueDef, engine, clauses, DateRangeType.class, new String[] { "from", "to" },
-            new InQuotesFieldHandler(new String[] { "from", "to" }));
-        builder.convertTypeToTerm(catalogueDef, engine, clauses, TimeRangeType.class,
-            new String[] { "from", "to", "step" }, new InQuotesFieldHandler(new String[] { "from", "to", "step" }));
-        builder.convertTypeToTerm(catalogueDef, engine, clauses, EnumerationDefType.class, new String[] { "label" },
-            new EnumLabelFieldHandler());
-        builder.convertTypeToTerm(catalogueDef, engine, clauses, HierarchyDefType.class,
-            new String[] { "finalized", "level", "hierarchyLabel" }, new HierarchyLabelFieldHandler());
-        builder.convertTypeToTerm(catalogueDef, engine, clauses, ComponentDefType.class,
-            new String[] { "componentPart", "view", "externalId" }, new ComponentPartHandler(engine), new ViewHandler(),
-            new ExternalIdHandler());
+        convertTypesToTerms(clauses);
 
         // Add all the clauses to the knowledge base.
         for (Sentence<Clause> sentence : clauses)
@@ -289,6 +278,62 @@ public class CatalogueModelFactory
     public ResolutionEngine<Clause, PrologCompiledClause, PrologCompiledClause> getEngine()
     {
         return engine;
+    }
+
+    /**
+     * Applies a model term builder to the raw catalogue definition to transform it into a list of first order logic
+     * terms.
+     *
+     * @param clauses A list of clauses to place the resulting facts in.
+     */
+    private void convertTypesToTerms(List<Sentence<Clause>> clauses)
+    {
+        ModelTermBuilder builder = new ListStyleTermBuilder(engine, modelWriter);
+
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, DecimalType.class,
+            new String[] { "precision", "scale", "rounding", "from", "to" });
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, IntegerRangeType.class, new String[] { "from", "to" });
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, StringPatternType.class, new String[] { "regexp" },
+            new InQuotesFieldHandler(new String[] { "regexp" }));
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, DateRangeType.class, new String[] { "from", "to" },
+            new InQuotesFieldHandler(new String[] { "from", "to" }));
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, TimeRangeType.class,
+            new String[] { "from", "to", "step" }, new InQuotesFieldHandler(new String[] { "from", "to", "step" }));
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, EnumerationDefType.class, new String[] { "label" },
+            new EnumLabelFieldHandler());
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, HierarchyDefType.class,
+            new String[] { "finalized", "level", "hierarchyLabel" }, new HierarchyLabelFieldHandler());
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, ComponentDefType.class,
+            new String[] { "componentPart", "view", "externalId" }, new ComponentPartHandler(engine), new ViewHandler(),
+            new ExternalIdHandler());
+    }
+
+    /**
+     * Applies a model term builder to the raw catalogue definition to transform it into a list of first order logic
+     * terms.
+     *
+     * @param clauses A list of clauses to place the resulting facts in.
+     */
+    private void convertTypesToFlatTerms(List<Sentence<Clause>> clauses)
+    {
+        ModelTermBuilder builder = new ListStyleTermBuilder(engine, modelWriter);
+
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, DecimalType.class,
+            new String[] { "precision", "scale", "rounding", "from", "to" });
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, IntegerRangeType.class, new String[] { "from", "to" });
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, StringPatternType.class, new String[] { "regexp" },
+            new FlatInQuotesFieldHandler(new String[] { "regexp" }));
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, DateRangeType.class, new String[] { "from", "to" },
+            new FlatInQuotesFieldHandler(new String[] { "from", "to" }));
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, TimeRangeType.class,
+            new String[] { "from", "to", "step" }, new FlatInQuotesFieldHandler(new String[] { "from", "to", "step" }));
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, EnumerationDefType.class, new String[] { "label" },
+            new FlatEnumLabelFieldHandler());
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, HierarchyDefType.class,
+            new String[] { "finalized", "level", "hierarchyLabel" }, new FlatHierarchyLabelFieldHandler());
+        builder.convertTypeToTerm(catalogueDef, engine, clauses, ComponentDefType.class,
+            new String[] { "componentPart", "view", "externalId" }, new ComponentPartHandler(engine),
+            new FlatViewHandler(), new FlatExternalIdHandler());
     }
 
     /**

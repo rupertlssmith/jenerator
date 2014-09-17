@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.thesett.catalogue.core.handlers;
+package com.thesett.catalogue.core.flathandlers;
 
 import java.util.Iterator;
 import java.util.List;
@@ -26,18 +26,18 @@ import com.thesett.catalogue.setup.View;
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
- * <tr><td> Transform a view field into a list of view references. <td> {@link View}
+ * <tr><td> Transform a view field into a list of view references. <td> {@link com.thesett.catalogue.setup.View}
  * </table></pre>
  *
  * @author Rupert Smith
  */
-public class ViewHandler implements FieldHandler
+public class FlatViewHandler implements FieldHandler
 {
     /**
      * {@inheritDoc}
      *
-     * <p/>This transformation expects a list of {@link View}s as the fields argument and transforms these into a
-     * recursive list. This transformation only applies to 'view' fields.
+     * <p/>This transformation expects a list of {@link com.thesett.catalogue.setup.View}s as the fields argument and
+     * transforms these into a recursive list. This transformation only applies to 'view' fields.
      */
     public String handleField(String property, Object value, boolean more)
     {

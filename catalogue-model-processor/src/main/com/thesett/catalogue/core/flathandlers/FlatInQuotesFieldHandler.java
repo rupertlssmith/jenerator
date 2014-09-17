@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.thesett.catalogue.core.handlers;
-
-import com.thesett.catalogue.core.FieldHandler;
+package com.thesett.catalogue.core.flathandlers;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.thesett.catalogue.core.FieldHandler;
 
 /**
  * InQuotesFieldHandler transforms a matching subset of its input fields into a functors of arity 1. The name of the
@@ -32,7 +32,7 @@ import java.util.Set;
  *
  * @author Rupert Smith
  */
-public class InQuotesFieldHandler implements FieldHandler
+public class FlatInQuotesFieldHandler implements FieldHandler
 {
     /** Holds the set of field name to match for transformation. */
     Set<String> propertiesInQuotes = new HashSet<String>();
@@ -42,7 +42,7 @@ public class InQuotesFieldHandler implements FieldHandler
      *
      * @param properties The set of fields to transform.
      */
-    public InQuotesFieldHandler(String[] properties)
+    public FlatInQuotesFieldHandler(String[] properties)
     {
         Collections.addAll(propertiesInQuotes, properties);
     }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.thesett.catalogue.core.handlers;
+package com.thesett.catalogue.core;
 
 /**
  * A FieldHandler defines an optional transformation that can be applied to the fields of a type declaration in the

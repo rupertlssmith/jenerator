@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.thesett.catalogue.core.handlers;
+package com.thesett.catalogue.core.flathandlers;
 
 import java.util.Iterator;
 import java.util.List;
@@ -53,15 +53,15 @@ import com.thesett.catalogue.setup.UniqueType;
  * <pre><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
  * <tr><td> Transform the elements that make up a component into a list.
- *     <td> {@link ComponentPartType}, {@link ComponentType}, {@link FieldDeclrType}, {@link UniqueType},
- *          {@link ExtendComponentType}, {@link CollectionType}.
+ *     <td> {@link com.thesett.catalogue.setup.ComponentPartType}, {@link com.thesett.catalogue.setup.ComponentType}, {@link com.thesett.catalogue.setup.FieldDeclrType}, {@link com.thesett.catalogue.setup.UniqueType},
+ *          {@link com.thesett.catalogue.setup.ExtendComponentType}, {@link com.thesett.catalogue.setup.CollectionType}.
  * <tr><td> Transform component basic field declaration types into atoms.
- *     <td> {@link com.thesett.aima.logic.fol.Functor}, {@link VariableAndFunctorInterner}.
+ *     <td> {@link com.thesett.aima.logic.fol.Functor}, {@link com.thesett.aima.logic.fol.VariableAndFunctorInterner}.
  * </table></pre>
  *
  * @author Rupert Smith
  */
-public class ComponentPartHandler implements FieldHandler
+public class FlatComponentPartHandler implements FieldHandler
 {
     /** Holds the interner to use to transform the basic field types into atoms. */
     private VariableAndFunctorInterner interner;
@@ -71,7 +71,7 @@ public class ComponentPartHandler implements FieldHandler
      *
      * @param interner The interner to intern functor names with.
      */
-    public ComponentPartHandler(VariableAndFunctorInterner interner)
+    public FlatComponentPartHandler(VariableAndFunctorInterner interner)
     {
         this.interner = interner;
     }
@@ -81,7 +81,7 @@ public class ComponentPartHandler implements FieldHandler
      *
      * <p/>This transform turns the elements that make up a component into a list. If any of the elements are themselves
      * components, the transformation is recursively applied to them. This transformation expects the value of the field
-     * to be a list of {@link ComponentPartType}s.
+     * to be a list of {@link com.thesett.catalogue.setup.ComponentPartType}s.
      */
     public String handleField(String property, Object value, boolean more)
     {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.thesett.catalogue.core.handlers;
+package com.thesett.catalogue.core.flathandlers;
 
 import com.thesett.catalogue.core.FieldHandler;
 
@@ -28,7 +28,7 @@ import com.thesett.catalogue.core.FieldHandler;
  *
  * @author Rupert Smith
  */
-public class DefaultFieldHandler implements FieldHandler
+public class FlatDefaultFieldHandler implements FieldHandler
 {
     /**
      * {@inheritDoc}
