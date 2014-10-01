@@ -26,7 +26,8 @@ for_bean(catalogue, decorator, fields, extraFields) ::= <<
  * Creates the closing section of an output file, if one is required.
  */
 file_close() ::= <<
-  \<typedef class="com.thesett.catalogue.customtypes.DateOnlyUserType" name="date_only"/\>
+  \<typedef class="org.jadira.usertype.dateandtime.joda.PersistentLocalDate" name="date_only"/\>
   \<typedef class="com.thesett.catalogue.customtypes.TimeOnlyUserType" name="time_only"/\>
+  \<typedef class="org.jadira.usertype.dateandtime.joda.PersistentDateTime" name="timestamp"/\>
 
 >>

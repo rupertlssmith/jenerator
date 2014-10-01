@@ -30,6 +30,7 @@ hibernateOnlineTemplateMap ::= [
     "Collection":"collection_property_online",
     "DateOnly":"date_only_property_online",
     "TimeOnly":"time_only_property_online",
+    "Timestamp":"timestamp_property_online",
     default:"default_property_online"
 ]
 
@@ -48,6 +49,7 @@ hibernateWarehouseTemplateMap ::= [
 /*    "Collection":"collection_property_online", */
     "DateOnly":"date_only_property_online",
     "TimeOnly":"time_only_property_online",
+    "Timestamp":"timestamp_property_online",
     default:"default_property_online"
 ]
 
@@ -124,7 +126,7 @@ type="<field_decorator.baseClassName>"
  */
 hibernate_config_open(catalogue) ::= <<
 \<?xml version="1.0" encoding="UTF-8"?\>
-\<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"\>
+\<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"\>
 \<hibernate-mapping package="<catalogue.modelPackage>"\>
 
 >>
@@ -133,9 +135,9 @@ hibernate_config_open(catalogue) ::= <<
  * Creates the closing section of a hibernate configuration for the entire catalogue.
  */
 hibernate_config_close() ::= <<
-  \<class name="com.thesett.catalogue.interfaces.ExternalId" table="external_id"\>
+  \<class name="com.thesett.catalogue.model.ExternalId" table="external_id"\>
     \<id name="id" type="string"\>
-      \<column name="id" sql-type="char(32)" not-null="true"/\>
+      \<column name="id" sql-type="char(32)" not-null="false"/\>
       \<generator class="uuid.hex"/\>
     \</id\>
     \<property name="resource" type="string"/\>
@@ -192,7 +194,7 @@ hibernate_config_enumeration_bean(catalogue, name, fields) ::= <<
  * Creates a hibernate configuration section for an entity in the online tables.
  */
 hibernate_config_class_online(catalogue, name, fields) ::= <<
-  <hibernate_config_class(catalogue=catalogue, name=name, fields=fields, domain="online", templateMap=hibernateOnlineTemplateMap)>
+  <hibernate_config_class(catalogue=catalogue, name=name, fields=fields, templateMap=hibernateOnlineTemplateMap)>
 
 >>
 
@@ -208,61 +210,68 @@ hibernate_config_class_warehouse(catalogue, name, fields) ::= <<
  * Creates a hibernate configuration for persisting a class.
  */
 hibernate_config_class(catalogue, name, fields, domain, templateMap) ::= <<
-\<class name="<name; format="ccu">" table="<name>_<domain>" entity-name="<name>_<domain; format="ccu">" lazy="true"\>
+\<class name="<name; format="ccu">" table="<name><if(domain)>_<domain><endif>" <if(domain)>entity-name="<name; format="ccu">_<domain; format="ccu">"<endif> lazy="true"\>
   \<id name="id" column="id" type="long"\>
     \<generator class="native"/\>
   \</id\>
   <fields.keys:{<(templateMap.(fields.(it).kind))(fieldName=it, fieldDecorator=fields.(it))>}; separator="\n">
-  <if(decorator.externalId)>  \<many-to-one name="externalId" column="externalId" not-null="true" lazy="false" unique="true"/\><endif>
+  <if(decorator.externalId)>  \<many-to-one name="externalId" column="externalId" not-null="false" lazy="false" unique="true"/\><endif>
 \</class\>
 >>
 
 /*
  * Creates a default property configuration for fields of entities in online tables.
  */
-default_property_online(fieldName, fieldDecorator) ::= <<
-\<property name="<fieldName; format="cc">" column="<fieldName>" <(hibernateTypeTemplateMap.(fieldDecorator.baseClassName))(fieldDecorator)>/\>
+default_property_online(fieldName, fieldDecorator, qualifier) ::= <<
+\<property name="<fieldName; format="cc">" column="<qualifier><if(qualifier)><fieldName; format="ccu"><else><fieldName><endif>" <(hibernateTypeTemplateMap.(fieldDecorator.baseClassName))(fieldDecorator)>/\>
 >>
 
 /*
  * Creates a date only configuration for fields of entities in online tables.
  */
-date_only_property_online(fieldName, fieldDecorator) ::= <<
+date_only_property_online(fieldName, fieldDecorator, qualifier) ::= <<
 \<property name="<fieldName; format="cc">" column="<fieldName>" type="date_only"/\>
 >>
 
 /*
  * Creates a time only configuration for fields of entities in online tables.
  */
-time_only_property_online(fieldName, fieldDecorator) ::= <<
+time_only_property_online(fieldName, fieldDecorator, qualifier) ::= <<
 \<property name="<fieldName; format="cc">" column="<fieldName>" type="time_only"/\>
 >>
 
 /*
+ * Creates a timestamp configuration for fields of entities in online tables.
+ */
+timestamp_property_online(fieldName, fieldDecorator, qualifier) ::= <<
+\<property name="<fieldName; format="cc">" column="<fieldName>" type="timestamp"/\>
+>>
+    
+/*
  * Creates a hierarchy property configuration for hierarchy fields of entities in online tables.
  */
-hierarchy_property_online(fieldName, fieldDecorator) ::= <<
-\<many-to-one name="<fieldName; format="cc">" column="<fieldName>_id" not-null="true" lazy="false"/\>
+hierarchy_property_online(fieldName, fieldDecorator, qualifier) ::= <<
+\<many-to-one name="<fieldName; format="cc">" column="<fieldName>_id" not-null="false" lazy="false"/\>
 >>
 
 /*
  * Creates an enumeration property configuration for enumeration fields of entities in online tables.
  */
-enumeration_property_online(fieldName, fieldDecorator) ::= <<
-\<many-to-one name="<fieldName; format="cc">" column="<fieldName>_id" not-null="true" lazy="false"/\>
+enumeration_property_online(fieldName, fieldDecorator, qualifier) ::= <<
+\<many-to-one name="<fieldName; format="cc">" column="<fieldName>_id" not-null="false" lazy="false"/\>
 >>
 
 /*
  * Creates a property configuration for component reference fields of entities in online tables.
  */
-component_ref_property_online(fieldName, fieldDecorator) ::= <<
+component_ref_property_online(fieldName, fieldDecorator, qualifier) ::= <<
 <if(fieldDecorator.component)>
 \<component name="<fieldName; format="cc">"\>
-  <fieldDecorator.allPropertyTypes.keys:{compFieldName|<(templateMap.(fieldDecorator.allPropertyTypes.(compFieldName).baseClassName))(fieldName=compFieldName, fieldDecorator=fieldDecorator.allPropertyTypes.(compFieldName))>}; separator="\n">
+  <fieldDecorator.allPropertyTypes.keys:{compFieldName|<(templateMap.(fieldDecorator.allPropertyTypes.(compFieldName).kind))(fieldName=compFieldName, fieldDecorator=fieldDecorator.allPropertyTypes.(compFieldName), qualifier=fieldName)>}; separator="\n">
 \</component\>
 <else>
  <if(fieldDecorator.entitySubType)>
-\<many-to-one name="<fieldName; format="cc">" column="<fieldName>_id" entity-name="<fieldDecorator.name>_Online" not-null="false" lazy="proxy" cascade="evict"/\>
+\<many-to-one name="<fieldName; format="cc">" column="<fieldName>_id" class="<fieldDecorator.name; format="ccu">" not-null="false" lazy="proxy" cascade="evict"/\>
  <endif>
 <endif>
 >>
@@ -270,13 +279,13 @@ component_ref_property_online(fieldName, fieldDecorator) ::= <<
 /*
  * Creates a property configuration for a collection type.
  */
-collection_property_online(fieldName, fieldDecorator) ::= <<
+collection_property_online(fieldName, fieldDecorator, qualifier) ::= <<
 <(collectionKindTemplateMap.(fieldDecorator.collectionKind))()>
 >>
 
 collection_set() ::= <<
 <if(collectionElementTemplateMap.(fieldDecorator.elementType.kind))>
-\<set name="<fieldName; format="cc">" <collectionTableAttributeMap.(fieldDecorator.elementType.kind)>\>
+\<set name="<fieldName; format="cc">" <collectionTableAttributeMap.(fieldDecorator.elementType.kind)> cascade="all"\>
   \<key column="<fieldName>_id"/\>
   <(collectionElementTemplateMap.(fieldDecorator.elementType.kind))()>
 \</set\>
@@ -336,7 +345,7 @@ collection_element_component_ref() ::= <<
  * TODO: In some cases this could be reduced to a one-to-many. This special case needs to be detected and catered for.
  */
 collection_element_entity_ref() ::= 
-<<\<many-to-many entity-name="<fieldDecorator.elementType.name>_<domain; format="ccu">"/\> >>
+<<\<many-to-many class="<fieldDecorator.elementType.name; format="ccu"><if(domain)>_<domain; format="ccu"><endif>"/\> >>
 
 /*
  * Creates a collection element configuration for a collection of basic types.
@@ -347,7 +356,7 @@ collection_element_basic() ::=
 /*
  * Creates a hierarchy property configuration for entities in warehouse tables.
  */
-hierarchy_property_warehouse(fieldName, fieldDecorator) ::= <<
+hierarchy_property_warehouse(fieldName, fieldDecorator, qualifier) ::= <<
 \<component name="<fieldName; format="cc">" class="<fieldDecorator.name; format="ccu">"\>
   \<property name="<fieldDecorator.name; format="cc">" type="<fieldDecorator.name>_hierarchy"\>
     <fieldDecorator.levelNames:{\<column name="<fieldDecorator.name>_<it>"/\>}; separator="\n">
@@ -358,7 +367,7 @@ hierarchy_property_warehouse(fieldName, fieldDecorator) ::= <<
 /*
  * Creates an enumeration property configuration for entities in warehouse tables.
  */
-enumeration_property_warehouse(fieldName, fieldDecorator) ::= <<
+enumeration_property_warehouse(fieldName, fieldDecorator, qualifier) ::= <<
 \<component name="<fieldName; format="cc">" class="<fieldDecorator.name; format="ccu">"\>
   \<property name="<fieldDecorator.name; format="cc">" type="<fieldDecorator.name>_enumeration"\>
     <fieldDecorator.levelNames:{\<column name="<fieldDecorator.name>_<it>"/\>}; separator="\n">
@@ -370,9 +379,9 @@ enumeration_property_warehouse(fieldName, fieldDecorator) ::= <<
  * Creates a property configuration for component reference fields of entities in warehouse tables.
  * Only references to dimensions are preserved in the warehouse.
  */
-component_ref_property_warehouse(fieldName, fieldDecorator) ::= <<
+component_ref_property_warehouse(fieldName, fieldDecorator, qualifier) ::= <<
 <if(fieldDecorator.dimension)>
-\<many-to-one name="<fieldName; format="cc">" column="<fieldName>_id" entity-name="<fieldDecorator.name>_Online" not-null="false" lazy="proxy"/\>
+\<many-to-one name="<fieldName; format="cc">" column="<fieldName>_id" class="<fieldDecorator.name>" not-null="false" lazy="proxy"/\>
 <else>
 \<!-- Non dimension reference from warehouse table, map as component. --\>
 <endif>

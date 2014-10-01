@@ -36,7 +36,10 @@ typeClassMap ::= [
     "TimeOnly":"TimeRangeType"
 ]
 
-/* Holds a mapping from kinds of catalogue types to names of getter method for that type in the catalogue interface. */
+/*
+ * Holds a mapping from kinds of catalogue types to names of getter method for that type in the catalogue
+ * interface.
+ */
 typeClassGetterMethodMap ::= [
     "Component":"ComponentType",
     "Entity":"EntityType",
@@ -58,8 +61,17 @@ constantsTemplateMap ::= [
 ]
 
 /*
- * Holds a mapping from kinds of catalogue types to templates for generating their java types in the context of the
- * custom type to bean mappings, that is, for hierarchies, enumerations and range types.
+ * Holds a mapping from kinds of catalogue type to templates for serialization control logic, if needed.
+ */    
+serDesControlMap ::= [
+    "Component":"component_serdes_control",
+    "Entity":"entity_serdes_control",
+    default:"no_serdes_control"
+]    
+
+/*
+ * Holds a mapping from kinds of catalogue types to templates for generating their java types in the context of
+ * the custom type to bean mappings, that is, for hierarchies, enumerations and range types.
  */
 customBeanTypeMap ::= [
     "Component":"component_ref_type",
@@ -96,16 +108,8 @@ objectBeanTypeMap ::= [
 ]
 
 /*
- * Holds a mapping from catalogue types to templates for generating the RHS of assignments to fields of a bean from raw catalogue types.
- */
-assignmentTypeMap ::= [
-    "Hierarchy":"raw_to_field_assignment",
-    "Enumeration":"raw_to_field_assignment",
-    default:"default_assignment"
-]
-
-/*
- * Holds a mapping from kinds of catalogue types to templates for generating setters for fields of that type on an ordinary bean.
+ * Holds a mapping from kinds of catalogue types to templates for generating setters for fields of that type on
+ * an ordinary bean.
  */
 beanSetterTypeMap ::= [
     "Hierarchy":"hierarchy_setter",
@@ -113,13 +117,26 @@ beanSetterTypeMap ::= [
 ]
 
 /*
- * Holds a mapping from kinds of catalogue types to templates for generating setters for fields of that type on a hierarchy bean.
+ * Holds a mapping from kinds of catalogue types to templates for generating fluent setters for fields of that
+ * type on an ordinary bean.
+ */
+beanFluentTypeMap ::= [
+    "Hierarchy":"hierarchy_fluent",
+    default:"basic_fluent"
+]    
+
+/*
+ * Holds a mapping from kinds of catalogue types to templates for generating setters for fields of that type on
+ * a hierarchy bean.
  */
 hierarchySetterTypeMap ::= [
     default:"basic_setter"
 ]
 
-/* Holds a mapping from primitive types to the name of a template that creates an equality comparison for the type. */
+/*
+ * Holds a mapping from primitive types to the name of a template that creates an equality comparison for the
+ * type.
+ */
 comparisonMap ::= [
     "Object":"object_equals",
     default:"literal_equals"
@@ -138,7 +155,10 @@ hashCodeMap ::= [
     default:"object_hash_code"
 ]
 
-/* Holds a mapping from primitive types to the name of a template that creates a toString evaluation for the type. */
+/*
+ * Holds a mapping from primitive types to the name of a template that creates a toString evaluation for the
+ * type.
+ */
 toStringMap ::= [
     "Object":"object_to_string",
     default:"primitive_to_string"
@@ -156,20 +176,24 @@ file_open
  */
 for_bean(catalogue, decorator, fields, extraFields) ::= <<
 <if(decorator.view)>
-<catalogue_view_bean(catalogue=catalogue, decorator=decorator, name=classNameMap.(decorator.kind), fields=fields, baseClass=baseClassMap.(decorator.kind))>
+<catalogue_view_bean(catalogue=catalogue, decorator=decorator, name=classNameMap.(decorator.kind), fields=fields)>
 <else>
- <if(decorator.componentSubType)>
-<catalogue_component_bean(catalogue=catalogue, decorator=decorator, name=classNameMap.(decorator.kind), fields=fields, baseClass=baseClassMap.(decorator.kind))>
- <endif>
- <if(decorator.hierarchyType)>
+<if(decorator.entitySubType)>
+<catalogue_entity_bean(catalogue=catalogue, decorator=decorator, name=classNameMap.(decorator.kind), fields=fields)>
+<else>
+<if(decorator.componentSubType)>
+<catalogue_component_bean(catalogue=catalogue, decorator=decorator, name=classNameMap.(decorator.kind), fields=fields)>
+<endif>
+<endif>
+<if(decorator.hierarchyType)>
 <catalogue_hierarchy_bean(catalogue=catalogue, decorator=decorator, name=decorator.name, fields=fields, extraConsFields=extraFields)>
- <endif>
- <if(decorator.enumerationType)>
+<endif>
+<if(decorator.enumerationType)>
 <catalogue_enumeration_bean(catalogue=catalogue, decorator=decorator, name=decorator.name, fields=fields, extraConsFields=extraFields)>
- <endif>
- <if(decorator.rangeType)>
+<endif>
+<if(decorator.rangeType)>
 <catalogue_range_bean(catalogue=catalogue, decorator=decorator, name=decorator.name, fields=fields, extraConsFields=extraFields)>
- <endif>
+<endif>
 <endif>
 >>
 
@@ -181,17 +205,24 @@ file_close
 >>
 
 /*
+ * Creates a bean class for an entity type, with name/type fields, for a given catalogue model.
+ */
+catalogue_entity_bean(catalogue, decorator, name, fields, baseClass) ::= <<
+<bean(catalogue=catalogue, decorator=decorator, name=name, fields=fields, baseClass=baseClass, id_fields="long_id_fields", id_methods="long_id_methods", equals="true", extraCons="component_constructor", extraConsFields=fields, typeMap=componentBeanTypeMap, setterMap=beanSetterTypeMap, fluents="true", fluentMap=beanFluentTypeMap)>
+>>
+
+/*
  * Creates a bean class for a component type, with name/type fields, for a given catalogue model.
  */
 catalogue_component_bean(catalogue, decorator, name, fields, baseClass) ::= <<
-<bean(catalogue=catalogue, decorator=decorator, name=name, fields=fields, baseClass=baseClass, id_fields="long_id_fields", id_methods="long_id_methods", equals="true", typeMap=componentBeanTypeMap, setterMap=beanSetterTypeMap)>
+<bean(catalogue=catalogue, decorator=decorator, name=name, fields=fields, baseClass=baseClass, equals="true", extraCons="component_constructor", extraConsFields=fields, typeMap=componentBeanTypeMap, setterMap=beanSetterTypeMap, fluents="true", fluentMap=beanFluentTypeMap)>
 >>
 
 /*
  * Creates a bean class for a view implementation type, with name/type fields, for a given catalogue model.
  */
 catalogue_view_bean(catalogue, decorator, name, fields, baseClass) ::= <<
-<bean(catalogue=catalogue, decorator=decorator, name=name, fields=fields, baseClass=baseClass, id_fields="long_id_fields", id_methods="long_id_methods", equals="true", extraCons="view_impl_constructor", extraConsFields=fields, typeMap=componentBeanTypeMap, setterMap=beanSetterTypeMap)>
+<bean(catalogue=catalogue, decorator=decorator, name=name, fields=fields, baseClass=baseClass, id_fields="long_id_fields", id_methods="long_id_methods", equals="true", typeMap=componentBeanTypeMap, setterMap=beanSetterTypeMap, fluents="true", fluentMap=beanFluentTypeMap)>
 >>
 
 /*
@@ -205,23 +236,47 @@ catalogue_hierarchy_bean(catalogue, decorator, name, fields, extraConsFields) ::
  * Creates a bean class for a enumeration type, for a given catalogue model.
  */
 catalogue_enumeration_bean(catalogue, decorator, name, fields, extraConsFields) ::= <<
-<bean(catalogue=catalogue, decorator=decorator, name=name, fields=fields, baseClass="ExtendableBeanState", id_methods="enumeration_id_methods", equals="true", extraCons="enumeration_constructor", extraConsFields=extraConsFields, typeMap=customBeanTypeMap, setterMap=beanSetterTypeMap)>
+<bean(catalogue=catalogue, decorator=decorator, name=name, fields=fields, id_methods="enumeration_id_methods", equals="true", extraCons="enumeration_constructor", extraConsFields=extraConsFields, typeMap=customBeanTypeMap, setterMap=beanSetterTypeMap)>
 >>
 
 /*
  * Creates a bean class for a range type, for a given catalogue model.
  */
 catalogue_range_bean(catalogue, decorator, name, fields, extraConsFields) ::= <<
-<bean(catalogue=catalogue, decorator=decorator, name=name, fields=fields, baseClass="ExtendableBeanState", equals="true", extraConsFields=extraConsFields, typeMap=customBeanTypeMap, setterMap=beanSetterTypeMap)>
+<bean(catalogue=catalogue, decorator=decorator, name=name, fields=fields, equals="true", extraConsFields=extraConsFields, typeMap=customBeanTypeMap, setterMap=beanSetterTypeMap)>
 >>
 
+/*
+ * Creates a standard constructors for a component. That is, the default constructor, and a constructor that
+ * takes all fields, unless fluents are being used, in which case they replace the full constructor so it
+ * is not generated.
+ */
+component_constructor(name, fields) ::= <<
+/** No-arg constructor for serialization. */
+public <name; format="ccu">() {
+}
+
+<if(fluents)><else>
+<if(fields)>
+/** The full constructor to build the component from all of its elements. */
+public <name; format="ccu">(<fields.keys:{<(typeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">}; separator=", ">) {
+    <fields.keys:{this.<it; format="cc"> = <it; format="cc">;}; separator="\n">
+}
+
+<endif>
+<endif>    
+>>
+    
 /*
  * Creates a constructor for a hierarchy bean that accepts a list of label values.
  */
 hierarchy_constructor(name, fields) ::= <<
+/** No-arg constructor for serialization. */
+public <name; format="ccu">() {
+}
+    
 /** The constructor to build the hierarchy from a set of labels. */
-public <name; format="ccu">(<fields.keys:{<(customBeanTypeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">}; separator=", ">)
-{
+public <name; format="ccu">(<fields.keys:{<(customBeanTypeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">}; separator=", ">) {
     HierarchyAttributeFactory factory = HierarchyAttribute.getFactoryForClass("<name>");
 
     <name; format="cc"> = factory.createHierarchyAttribute(new String[] { <fields.keys:{<it; format="cc">}; separator=", "> });
@@ -232,34 +287,49 @@ public <name; format="ccu">(<fields.keys:{<(customBeanTypeMap.(fields.(it).kind)
  * Creates a constructor for a view bean that accepts an id and an external id as well as the usual parameters.
  */
 view_impl_constructor(name, fields) ::= <<
+/** No-arg constructor for serialization. */
+public <name; format="ccu">() {
+}
+    
 /** The constructor to build the view with an id and external id as well as the usual parameter. */
-public <name; format="ccu">(Long id, ExternalId externalId, <fields.keys:{<(objectBeanTypeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">}; separator=", ">)
-{
+public <name; format="ccu">(Long id, ExternalId externalId, <fields.keys:{<(objectBeanTypeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">}; separator=", ">) {
     this.id = id;
     this.externalId = externalId;
     <fields.keys:{this.<it; format="cc"> = <it; format="cc">; }; separator="\n">
 }
 >>
 
-default_assignment(field) ::= <<
-<it; format="cc">;
->>
-
-raw_to_field_assignment(field) ::= <<
-new <(typeMap.(fields.(it).kind))(field=fields.(it))>(<it; format="cc">);
->>
-
 /*
  * Creates a constructor for an enumeration bean that accepts a string label.
  */
-enumeration_constructor(name, fields) ::= <<
-/** The constructor to build the enumeration from a label. */
-public <name; format="ccu">(<fields.keys:{<(customBeanTypeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">}; separator=", ">)
-{
-    EnumeratedStringAttribute.EnumeratedStringAttributeFactory factory = EnumeratedStringAttribute.getFactoryForClass("<name>");
-
-    <name; format="cc"> = factory.createStringAttribute(<fields.keys:{<it; format="cc">}>);
+enumeration_constructor(name, fields) ::= <<   
+/** No-arg constructor for serialization. */
+public <name; format="ccu">() {
 }
+    
+/** The constructor to build the enumeration from a label. */
+public <name; format="ccu">(<fields.keys:{<(customBeanTypeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">}; separator=", ">) {
+    <name; format="cc"> = enumFactory().createStringAttribute(<fields.keys:{<it; format="cc">}>);
+}
+
+/**
+ * Produces a string representation for JSON serialization.
+ *
+ * @return A string representation for JSON serialization.
+ */
+@JsonValue
+public String asString() {
+    return <name; format="cc">.getStringValue();
+}
+
+/**
+ * Supplies the factory for creating instances of the enum.
+ *
+ * @return The factory for creating instances of the enum.
+ */        
+private EnumeratedStringAttribute.EnumeratedStringAttributeFactory enumFactory() {
+    return EnumeratedStringAttribute.getFactoryForClass("<name>");
+}    
 >>
 
 hierarchy_bean_type(field) ::= <<
@@ -272,8 +342,10 @@ EnumeratedStringAttribute
 
 /* Defines enumeration labels as public constants. */
 enumeration_constants(decorator) ::= <<
+<if(decorator.labels)>    
 /** Labels for  <(componentBeanTypeMap.(decorator.kind))(decorator)>. */
 <decorator.labels.keys:{public static final <(componentBeanTypeMap.(decorator.kind))(decorator)> <it; format="u"> = new <(componentBeanTypeMap.(decorator.kind))(decorator)>("<it>");}; separator="\n">
+<endif>
 
 >>
  
@@ -281,43 +353,60 @@ enumeration_constants(decorator) ::= <<
 no_constants(decorator) ::= <<
 >>
 
+/* Serialization control for components. */    
+component_serdes_control(decorator) ::= <<
+@JsonIgnoreProperties(ignoreUnknown = true, value = {"componentType"})
+@JsonInclude(Include.NON_NULL)
+>>
+
+/* Serialization control for entities. */    
+entity_serdes_control(decorator) ::= <<
+@JsonIgnoreProperties(ignoreUnknown = true, value = {"opaqueId", "componentType"})
+@JsonInclude(Include.NON_NULL)
+>>
+        
+/* Empty, no serialization control. */
+no_serdes_control(decorator) ::= <<
+>>
+
 /*
  * Creates a bean with getters and setters for the specified fields.
  */
-bean(catalogue, decorator, name, fields, baseClass, id_fields, id_methods, equals, extraCons, extraConsFields, typeMap, setterMap) ::= <<
+bean(catalogue, decorator, name, fields, baseClass, id_fields, id_methods, equals, extraCons, extraConsFields, typeMap, setterMap, fluents, fluentMap) ::= <<
 <package(catalogue)>
 
 import java.util.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.math.*;
 
-import org.apache.log4j.Logger;
+import com.fasterxml.jackson.annotation.*;
+import static com.fasterxml.jackson.annotation.JsonInclude.*;
+import org.joda.time.*;
 
-import com.thesett.aima.state.ComponentType;
-import com.thesett.aima.state.OrdinalAttribute;
-import com.thesett.aima.state.impl.ExtendableBeanState;
-import com.thesett.aima.attribute.impl.HierarchyAttribute;
-import com.thesett.aima.attribute.impl.HierarchyType;
-import com.thesett.aima.attribute.impl.HierarchyAttributeFactory;
-import com.thesett.aima.attribute.impl.EnumeratedStringAttribute;
-import com.thesett.aima.attribute.impl.DateRangeType;
-import com.thesett.aima.attribute.impl.TimeRangeType;
-import com.thesett.aima.attribute.time.DateOnly;
-import com.thesett.aima.attribute.time.TimeOnly;
-import com.thesett.catalogue.interfaces.*;
-import com.thesett.catalogue.core.*;
-import com.thesett.common.error.NotImplementedException;
-
+import com.thesett.aima.state.*;
+import com.thesett.aima.state.impl.*;
+import com.thesett.aima.attribute.impl.*;
+import com.thesett.aima.attribute.time.*;
+    
+<if(decorator.entitySubType)>    
+import org.mygovscot.api.entity.Entity;
+<endif>    
+    
 /**
- * Generated bean from catalogue model.
+ * Generated bean from catalogue model.<if(decorator.naturalKeyFieldTypes)>
+    
+ *
+ * \<p/\>Equality (and hashCode) is based on the following fields:
+ *
+ * \<pre\>\<p/\>\<table id="equality"\>\<caption\>Equality Fields\</caption\>
+ * \<tr\>\<th\> Field Name \</th\>\</tr\>
+<decorator.naturalKeyFieldTypes.keys:{ * \<tr\>\<td\> <it; format="cc"> \</tr\>\</td\>}; separator="\n">
+ * \</table\>\</pre\><endif>    
  *
  * @author Generated Code
  */
-public class <name; format="ccu"> extends <baseClass> implements <if(decorator.immediateAncestors)><decorator.immediateAncestors: {<it.name; format="ccu">}; separator=",">, <endif><if(decorator.externalId)>ExternallyIdentified, <endif>Serializable
-{
-    /** Holds the component type for this class. */
-    private static <typeClassMap.(decorator.kind)> componentType;
-
+<(serDesControlMap.(decorator.kind))(decorator=decorator)>
+public class <name; format="ccu"> <if(baseClass)>extends <baseClass><endif> implements <if(decorator.immediateAncestors)><decorator.immediateAncestors: {<it.name; format="ccu">}; separator=",">, <endif><if(decorator.externalId)>ExternallyIdentified, <endif><if(decorator.entitySubType)>Entity\<Long\>,<endif> Serializable {
     <(constantsTemplateMap.(decorator.kind))(decorator=decorator)>
     <if(decorator.externalId)>
     /** Holds the external id of this dimension element. */
@@ -332,64 +421,57 @@ public class <name; format="ccu"> extends <baseClass> implements <if(decorator.i
     <fields.keys:field_declrs(); separator="\n\n">
 
     <endif>
-    /** No-arg constructor for serialization. */
-    public <name; format="ccu">() {}
-
-    <if(fields)>
-    /** The full constructor to build the component from all of its elements. */
-    public <name; format="ccu">(<fields.keys:{<(typeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">}; separator=", ">)
-    {
-        <fields.keys:{this.<it; format="cc"> = <it; format="cc">;}; separator="\n">
-    }
-
-    <endif>
     <if(extraCons)>
     <(extraCons)(name=name, fields=extraConsFields)>
 
     <endif>
-    /**
-     * Allows the catalogue to which the class belongs to be injected.
-     *
-     * @param catalogue The catalogue to which this class belongs.
-     */
-    public static void setCatalogue(Catalogue catalogue)
-    {
-        componentType = catalogue.get<typeClassGetterMethodMap.(decorator.kind)>("<name>");
+    <if(id_methods)>
+    <(id_methods)()>
+
+    <endif>    
+    <if(fields)>
+    <if(fluents)><fields.keys:{<(fluentMap.(fields.(it).kind))(name)>}; separator="\n\n"><endif>
+    <fields.keys:getters(); separator="\n\n">
+    <fields.keys:{<(setterMap.(fields.(it).kind))()>}; separator="\n\n">
+
+    <endif>
+    <if(decorator.externalId)>
+    /** {@inheritDoc} */
+    public ExternalId getExternalId() {
+        return externalId;
     }
 
-    <if(decorator.componentSubType)>
-    /**
-     * Gets the component type that this component implements.
-     *
-     * @return The component type that this component implements.
-     */
-    public <typeClassMap.(decorator.kind)> getComponentType()
-    {
-        return componentType;
+    /** {@inheritDoc} */
+    public void setExternalId(ExternalId id) {
+        this.externalId = id;
     }
 
     <endif>
     <if(equals)>
+    <if(decorator.naturalKeyFieldTypes)>
     /**
-     * Determines whether an object of this type is equal to another object. To be equal the object being compared to
-     * (the comparator) must be an instance of this class and have identical field values to this one, for either all
-     * fields, or only the fields that have been designated to form a natural key. The object being compared must also
-     * have identical surrogate database ids (or both have null ids) to be equal.
+     * Determines whether an object of this type is equal to another object. To be equal the object being
+     * compared to (the comparator) must be an instance of this class and have identical natural key field
+     * values to this one.
      *
      * @param o The object to compare to.
      *
      * @return True if the comparator is equal to this, false otherwise.
      */
-    public boolean equals(Object o)
-    {
-        if (o instanceof <name; format="ccu">)
-        {
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null) {
+            return false;
+        }
+    
+        if (o instanceof <name; format="ccu">) {
             <name; format="ccu"> comp = (<name; format="ccu">)o;
 
-            return <if(id_fields)>((this.id == null && comp.id == null) || (this.id.equals(comp.id)))<endif><if(fields)><if(id_fields)> && <endif><fields.keys:{<(comparisonMap.(fields.(it).primitiveKind))(it)>}; separator=" && "><endif>;
-        }
-        else
-        {
+            return <decorator.naturalKeyFieldTypes.keys:{<(comparisonMap.(decorator.naturalKeyFieldTypes.(it).primitiveKind))(it)>}; separator=" && ">;
+        } else {
             return false;
         }
     }
@@ -400,38 +482,53 @@ public class <name; format="ccu"> extends <baseClass> implements <if(decorator.i
      *
      * @return A hash code of the components equality value.
      */
-    public int hashCode()
-    {
-        return <if(id_fields)>(int)(id ^ id \>\>\> 32)<endif><if(fields)><if(id_fields)> + <endif><fields.keys:{<(hashCodeMap.(fields.(it).primitiveKind))(it)>}; separator=" + "><endif>;
+    public int hashCode() {
+        return <decorator.naturalKeyFieldTypes.keys:{<(hashCodeMap.(decorator.naturalKeyFieldTypes.(it).primitiveKind))(it)>}; separator=" + ">;
+    }
+    <else>
+     <if(id_methods)>
+    /**
+     * Determines whether an object of this type is equal to another object. To be equal the object being
+     * compared to (the comparator) must be an instance of this class and have identical natural key field
+     * values to this one.
+     *
+     * @param o The object to compare to.
+     *
+     * @return True if the comparator is equal to this, false otherwise.
+     */
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null) {
+            return false;
+        }
+    
+        if (o instanceof <name; format="ccu">) {
+            <name; format="ccu"> comp = (<name; format="ccu">)o;
+
+            return getId() == null ? comp.getId() == null : getId().equals(comp.getId());
+        } else {
+            return false;
+        }
     }
 
-    <endif>
-    <if(fields)>
-    <fields.keys:getters(); separator="\n\n">
-    <fields.keys:{<(setterMap.(fields.(it).kind))()>}; separator="\n\n">
-
-    <endif>
-    <if(id_methods)>
-    <(id_methods)()>
-
-    <endif>
-    <if(decorator.externalId)>
-    /** {@inheritDoc} */
-    public ExternalId getExternalId()
-    {
-        return externalId;
+    /**
+     * Computes a hash code for the component that conforms with its equality method, being based on the same set
+     * of fields that are used to compute equality.
+     *
+     * @return A hash code of the components equality value.
+     */    
+    public int hashCode() {
+        return getId() == null ? 0 : getId().hashCode();
     }
-
-    /** {@inheritDoc} */
-    public void setExternalId(ExternalId id)
-    {
-        this.externalId = id;
-    }
-
+     <endif>
     <endif>
-    public String toString()
-    {
-        return "<name; format="ccu">"; //: [ " <if(fields)> + <endif><fields.keys:{"<it; format="cc"> = " + <it; format="cc">}; separator=" + "> + " ]";
+    <endif>    
+    /** Pretty printing for debugging purposes. */
+    public String toString() {
+        return "<name; format="ccu">: [ <if(id_fields)>id = " + id<else>"<endif><if(decorator.naturalKeyFieldTypes)> + <endif><decorator.naturalKeyFieldTypes.keys:{", <it; format="cc"> = " + <it; format="cc">}; separator=" + "> + " ]";
     }
 }
 >>
@@ -453,8 +550,7 @@ long_id_methods() ::= <<
  *
  * @return The database surrogate id.
  */
-protected Long getId()
-{
+public Long getId() {
     return id;
 }
 
@@ -463,8 +559,7 @@ protected Long getId()
  *
  * @param id The database surrogate id.
  */
-protected void setId(Long id)
-{
+public void setId(Long id) {
     this.id = id;
 }
 >>
@@ -474,14 +569,12 @@ protected void setId(Long id)
  */
 hierarchy_id_methods() ::= <<
 /** {@inheritDoc} */
-public HierarchyType getHierarchyType() 
-{
+public HierarchyType getHierarchyType() {
     return componentType;
 }
 
 /** {@inheritDoc} */
-public HierarchyAttribute getHierarchy()
-{
+public HierarchyAttribute getHierarchy() {
     return <name; format="cc">;
 }
 
@@ -491,14 +584,10 @@ public HierarchyAttribute getHierarchy()
  * @return The interned id of the hierarchy attribute that this bean wraps, or \<tt\>null\</tt\> if the attribute has
  *         not been set on this.
  */
-protected Long getId()
-{
-    if (<name; format="cc"> != null)
-    {
+public Long getId() {
+    if (<name; format="cc"> != null) {
         return <name; format="cc">.getId();
-    }
-    else
-    {
+    } else {
         return null;
     }
 }
@@ -513,10 +602,8 @@ protected Long getId()
  *
  * @param id The new id value to set on the hierarchy attribute.
  */
-protected void setId(Long id)
-{
-    if (<name; format="cc"> != null)
-    {
+public void setId(Long id) {
+    if (<name; format="cc"> != null) {
         <name; format="cc">.setId(id);
     }
 }
@@ -529,37 +616,20 @@ enumeration_id_methods() ::= <<
 /**
  * Gets the interned id of the enumeration attribute that this bean wraps.
  *
- * @return The interned id of the enumeration attribute that this bean wraps, or \<tt\>null\</tt\> if the attribute has
- *         not been set on this.
+ * @return The interned id of the enumeration attribute that this bean wraps.
  */
-private Long getId()
-{
-    if (<name; format="cc"> != null)
-    {
-        return <name; format="cc">.getId();
-    }
-    else
-    {
-        return null;
-    }
+public Long getId() {
+    return <name; format="cc">.getId();
 }
 
 /**
- * Sets the interned id of the hierarcy attribute that this bean wraps. Depending on whether the enumeration has been
- * finalized or not, this will either change the value of the enumeration, or set a new interned id on its existing
- * value.
- * 
- * \<p/\>See {@link com.thesett.aima.attribute.impl,EnumeratedStringAttribute#setId} for more information about
- * setting ids on enumeration attributes.
+ * Sets the id of the enumerated attribute that this bean wraps. This sets the value of the enumerated attribute
+ * that this bean wraps, to the one with matching id.
  *
- * @param id The new id value to set on the enumeration attribute.
+ * @param id The id the enumerated attribute value to use.
  */
-private void setId(Long id)
-{
-    if (<name; format="cc"> != null)
-    {
-        <name; format="cc">.setId(id);
-    }
+public void setId(Long id) {
+    <name; format="cc"> = enumFactory().getAttributeFromId(id);
 }
 >>
 
@@ -580,7 +650,9 @@ getters() ::= <<
  *
  * @return The <it> property.
  */
-public <(typeMap.(fields.(it).kind))(field=fields.(it))> get<it; format="ccu">() { return <it; format="cc">; }
+public <(typeMap.(fields.(it).kind))(field=fields.(it))> get<it; format="ccu">() {
+    return <it; format="cc">;
+}
 >>
 
 /*
@@ -592,7 +664,9 @@ basic_setter() ::= <<
  *
  * @param <it; format="cc"> The <it> property.
  */
-public void set<it; format="ccu">(<(typeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">) { this.<it; format="cc"> = <it; format="cc">; }
+public void set<it; format="ccu">(<(typeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">) {
+    this.<it; format="cc"> = <it; format="cc">;
+}
 >>
 
 /*
@@ -604,21 +678,65 @@ hierarchy_setter() ::= <<
  *
  * @param <it; format="cc"> The <it> property.
  */
-public void set<it; format="ccu">(<(typeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">) { this.<it; format="cc"> = <it; format="cc">; }
+public void set<it; format="ccu">(<(typeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">) {
+    this.<it; format="cc"> = <it; format="cc">;
+}
+    
+/**
+ * Accepts a new value for the <it> property.
+ *
+ * @param <it; format="cc"> The <it> property.
+ */
+public void set<it; format="ccu">(HierarchyAttribute <it; format="cc">) {
+    this.<it; format="cc"> = new <(typeMap.(fields.(it).kind))(field=fields.(it))>(<it; format="cc">);
+}
+>>
+
+/*
+ * Creates public fluent setters for all name/type attributes.
+ */
+basic_fluent(this) ::= <<
+/**
+ * Accepts a new value for the <it> property.
+ *
+ * @param <it; format="cc"> The <it> property.
+ */
+public <this; format="ccu"> with<it; format="ccu">(<(typeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">) {
+    this.<it; format="cc"> = <it; format="cc">;
+    return this;
+}
+>>
+
+/*
+ * Creates public fluent setters for all hierarchy attributes.
+ */
+hierarchy_fluent(this) ::= <<
+/**
+ * Accepts a new value for the <it> property.
+ *
+ * @param <it; format="cc"> The <it> property.
+ */
+public <this; format="ccu"> with<it; format="ccu">(<(typeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">) {
+    this.<it; format="cc"> = <it; format="cc">;
+    return this;
+}
 
 /**
  * Accepts a new value for the <it> property.
  *
  * @param <it; format="cc"> The <it> property.
  */
-public void set<it; format="ccu">(HierarchyAttribute <it; format="cc">) { this.<it; format="cc"> = new <(typeMap.(fields.(it).kind))(field=fields.(it))>(<it; format="cc">); }
+public <this; format="ccu"> with<it; format="ccu">(HierarchyAttribute <it; format="cc">) {
+    this.<it; format="cc"> = new <(typeMap.(fields.(it).kind))(field=fields.(it))>(<it; format="cc">);
+    return this;
+}
 >>
-
+    
 /*
  * Creates an equality comparison between two objects.
  */
 object_equals(name) ::= <<
-((<name; format="cc"> == null && comp.<name; format="cc"> == null) || <name; format="cc">.equals(comp.<name; format="cc">))
+<name; format="cc"> == null ? comp.<name; format="cc"> == null : <name; format="cc">.equals(comp.<name; format="cc">)
 >>
 
 /*
@@ -632,7 +750,7 @@ literal_equals(name) ::= <<
  * Computes the hash code of an object.
  */
 object_hash_code(name) ::= <<
-<name; format="cc">.hashCode()
+(<name; format="cc"> == null ? 0 : <name; format="cc">.hashCode())
 >>
 
 /*

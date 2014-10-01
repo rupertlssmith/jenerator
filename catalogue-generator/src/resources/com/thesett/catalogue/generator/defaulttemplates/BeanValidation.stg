@@ -1,9 +1,10 @@
 group HibernateOnline : HibernateCommon implements Generator;
 
 /*
- * Holds a mapping from kinds of catalogue field types to templates for generating their validation constraints.
+ * Holds a mapping from kinds of component field types to templates for generating their validation constraints.
  */
-fieldConstraintsTypeMap ::= [
+beanFieldsConstraintsTypeMap ::= [
+    "Enumeration":"enum_type_constraints",
     "String":"string_constraints",
     "Date":"date_constraints",
     "BigDecimal":"bigdecimal_constraints",
@@ -12,6 +13,13 @@ fieldConstraintsTypeMap ::= [
     "Basic":"basic_constraints"
 ]
 
+/*
+ * Holds a mapping from kinds of enum field types to templates for generating their validation constraints.
+ */
+enumFieldsConstraintsTypeMap ::= [
+    "Enumeration":"enum_constraints"
+]
+    
 basicFieldConstraintsTypeMap ::= [
     "Int":"int_constraints"
 ]
@@ -35,14 +43,21 @@ file_open(catalogue) ::= <<
  * Generates the output for a beanto be validated.
  */
 for_bean(catalogue, decorator, fields, extraFields) ::= <<
+<if(decorator.view)>
+<else>
 <if(decorator.componentSubType)>
-    <bean_constraints(catalogue=catalogue, decorator=decorator, name=decorator.name, fields=fields)>
+    <bean_constraints(catalogue=catalogue, decorator=decorator, name=decorator.name, fields=fields, typeMap=beanFieldsConstraintsTypeMap)>
 <endif>
->>
+<if(decorator.enumerationType)>
+    <bean_constraints(catalogue=catalogue, decorator=decorator, name=decorator.name, fields=fields, typeMap=enumFieldsConstraintsTypeMap)>
+<endif>
+<endif>
 
-bean_constraints(catalogue, decorator, name, fields, baseClass) ::= <<
+>>
+            
+bean_constraints(catalogue, decorator, name, fields, baseClass, typeMap) ::= <<
 \<bean class="<name; format="ccu">" ignore-annotations="true"\>
-    <fields.keys:{<if(fields.(it).restricted)><(fieldConstraintsTypeMap.(fields.(it).kind))(name=it, decorator=fields.(it))><endif>}; separator="\n">
+    <fields.keys:{<if(fields.(it).restricted)><(typeMap.(fields.(it).kind))(name=it, decorator=fields.(it))><else><valid_field(name=it, decorator=fields.(it))><endif>}; separator="\n">
 \</bean\>
 
 
@@ -55,29 +70,54 @@ file_close() ::= <<
 \</constraint-mappings\>
 >>
 
+valid_field(name, decorator) ::= <<
+\<field name="<name; format="cc">"\>
+    <valid_constraint()>
+\</field\>
+>>
+    
 basic_constraints(name, decorator) ::= <<
 <(basicFieldConstraintsTypeMap.(decorator.primitiveKind))(name=name, decorator=decorator)>
 >>
 
-/* Holds a mapping from constraint names to templates to generate them. */
-constraintsMap ::= [
+/* Holds a mapping from constraint names on fields of components to templates to generate them. */
+fieldConstraintsMap ::= [
+    "ValidEnum":"valid_constraint",
     "Min":"min_constraint",
     "Max":"max_constraint",
+    "DecimalMin":"decimal_min_constraint",
+    "DecimalMax":"decimal_max_constraint",
     "Regex":"regex_constraint"
 ]
+    
+enum_type_constraints(name, decorator) ::= <<
+\<field name="<name; format="cc">"\>
+    <decorator.restrictions:{it|<(fieldConstraintsMap.(it.name))(restriction=it)>}; separator="\n">
+\</field\>    
+>>
 
 string_constraints(name, decorator) ::= <<
 \<field name="<name; format="cc">"\>
-    <decorator.restrictions:{it|<(constraintsMap.(it.name))(restriction=it)>}; separator="\n">
+    <decorator.restrictions:{it|<(fieldConstraintsMap.(it.name))(restriction=it)>}; separator="\n">
+\</field\>
+>>
+
+bigdecimal_constraints(name, decorator) ::= <<
+\<field name="<name; format="cc">"\>
+    <decorator.restrictions:{it|<(fieldConstraintsMap.(it.name))(restriction=it)>}; separator="\n">
 \</field\>
 >>
 
 int_constraints(name, decorator) ::= <<
 \<field name="<name; format="cc">"\>
-    <decorator.restrictions:{it|<(constraintsMap.(it.name))(restriction=it)>}; separator="\n">
+    <decorator.restrictions:{it|<(fieldConstraintsMap.(it.name))(restriction=it)>}; separator="\n">
 \</field\>
 >>
-
+        
+valid_constraint(restriction) ::= <<
+\<valid/\>
+>>
+    
 min_constraint(restriction) ::= <<
 \<constraint annotation="javax.validation.constraints.Min"\>
     \<element name="value"\><restriction.min>\</element\>
@@ -90,8 +130,37 @@ max_constraint(restriction) ::= <<
 \</constraint\>
 >>
 
+decimal_min_constraint(restriction) ::= <<
+\<constraint annotation="javax.validation.constraints.DecimalMin"\>
+    \<element name="value"\><restriction.min>\</element\>
+\</constraint\>
+>>
+
+decimal_max_constraint(restriction) ::= <<
+\<constraint annotation="javax.validation.constraints.DecimalMax"\>
+    \<element name="value"\><restriction.max>\</element\>
+\</constraint\>
+>>
+    
 regex_constraint(restriction) ::= <<
 \<constraint annotation="javax.validation.constraints.Pattern"\>
     \<element name="regexp"\><restriction.pattern>\</element\>
+\</constraint\>
+>>
+
+/* Holds a mapping from constraint names on fields of enums  to templates to generate them. */
+enumConstraintsMap ::= [
+    "ValidEnum":"enum_constraint"
+]
+    
+enum_constraints(name, decorator) ::= <<
+\<field name="<name; format="cc">"\>
+    <decorator.restrictions:{it|<(enumConstraintsMap.(it.name))(restriction=it)>}; separator="\n">
+\</field\>    
+>>
+    
+enum_constraint(restriction) ::= <<
+\<constraint annotation="com.thesett.aima.attribute.validation.ValidEnum"\>
+    \<element name="value"\><restriction.enumTypeName>\</element\>
 \</constraint\>
 >>

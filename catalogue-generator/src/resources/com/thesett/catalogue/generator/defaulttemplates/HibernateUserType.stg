@@ -58,15 +58,13 @@ import com.thesett.aima.attribute.impl.*;
  *
  * @author Generated Code
  */
-public class <name; format="ccu">UserType extends <baseClass>
-{
+public class <name; format="ccu">UserType extends <baseClass> {
     <if(extraMethods)>
     <(extraMethods)(name=name, fields=extraMethodsFields)>
 
     <endif>
     /** {@inheritDoc} */
-    public String getTypeName()
-    {
+    public String getTypeName() {
         return "<name>";
     }
 }
@@ -77,8 +75,7 @@ public class <name; format="ccu">UserType extends <baseClass>
  */
 hibernate_hierarchy_setup_methods(name, fields) ::= <<
 /** {@inheritDoc} */
-public String[] getPropertyNames()
-{
+public String[] getPropertyNames() {
     // Ensure that the hierarchy attribute type has been set up with its level names.
     HierarchyAttribute.getFactoryForClass(getTypeName()).setLevelNames(new String[] { <fields.keys: {"<it>"}; separator=", "> });
 
@@ -86,10 +83,8 @@ public String[] getPropertyNames()
 }
 
 /** {@inheritDoc} */
-public int getColumnCount()
-{
+public int getColumnCount() {
     return (new String[] { <fields.keys: {"<it>"}; separator=", "> }).length;
 }
 
 >>
-

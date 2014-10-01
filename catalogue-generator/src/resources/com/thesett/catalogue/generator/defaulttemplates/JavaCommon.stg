@@ -19,6 +19,7 @@ componentBeanTypeMap ::= [
     "String":"string_type",
     "DateOnly":"date_only_type",
     "TimeOnly":"time_only_type",
+    "Timestamp":"timestamp_type",
     "BigDecimal":"bigdecimal_type",
     default:"basic_type"
 ]
@@ -85,7 +86,7 @@ date_or_range_type(field) ::= <<
 <if(field.rangeType)>
 <field.name; format="ccu">
 <else>
-DateOnly
+LocalDate
 <endif>
 >>
 
@@ -98,13 +99,17 @@ TimeOnly
 >>
 
 date_only_type(field) ::= <<
-DateOnly
+LocalDate
 >>
 
 time_only_type(field) ::= <<
 TimeOnly
 >>
 
+timestamp_type(field) ::= <<
+DateTime
+>>
+    
 collection_type(field) ::= <<
 <if(field.map)>
 <collectionTypeMap.(field.collectionKind)><if(field.elementType)><if(field.keyType)>\<<(typeMap.(field.keyType.kind))(field=field.keyType)>, <(typeMap.(field.elementType.kind))(field=field.elementType)>\><endif><endif>
