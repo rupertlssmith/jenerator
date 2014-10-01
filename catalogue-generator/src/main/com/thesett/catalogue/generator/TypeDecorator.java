@@ -16,6 +16,7 @@
 package com.thesett.catalogue.generator;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -194,6 +195,11 @@ public class TypeDecorator<T> implements Type<T>
         else if (TimeOnly.class.equals(type.getBaseClass()))
         {
             kind = Kind.TimeOnly;
+            primitiveKind = PrimitiveKind.Object;
+        }
+        else if (Date.class.equals(type.getBaseClass()))
+        {
+            kind = Kind.Timestamp;
             primitiveKind = PrimitiveKind.Object;
         }
         else if (BigDecimal.class.equals(type.getBaseClass()))

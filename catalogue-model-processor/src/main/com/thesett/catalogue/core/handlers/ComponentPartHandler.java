@@ -40,6 +40,7 @@ import com.thesett.catalogue.setup.MapType;
 import com.thesett.catalogue.setup.RealType;
 import com.thesett.catalogue.setup.SetType;
 import com.thesett.catalogue.setup.StringType;
+import com.thesett.catalogue.setup.TimeStampType;
 import com.thesett.catalogue.setup.TimeType;
 import com.thesett.catalogue.setup.UniqueType;
 
@@ -257,6 +258,10 @@ public class ComponentPartHandler implements FieldHandler
         else if (field instanceof TimeType)
         {
             fieldType = "time";
+        }
+        else if (field instanceof TimeStampType)
+        {
+            fieldType = "timestamp";
         }
 
         int id = interner.internFunctorName(fieldType, 0);

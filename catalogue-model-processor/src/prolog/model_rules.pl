@@ -480,6 +480,7 @@ basic_type(real).
 basic_type(string).
 basic_type(date).
 basic_type(time).
+basic_type(timestamp).
 
 /* ======== product_type/1
    Determines whether a type is a product type.

@@ -20,6 +20,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -140,6 +141,7 @@ public class CatalogueModelFactory
                 put("string", JavaType.STRING_TYPE);
                 put("date", new JavaType(DateOnly.class));
                 put("time", new JavaType(TimeOnly.class));
+                put("timestamp", new JavaType(Date.class));
             }
         };
 

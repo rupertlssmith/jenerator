@@ -232,6 +232,7 @@ to an enumeration of states in the model and specify transitions etc there.
         <String name="string"/>
         <Date name="date"/>
         <Time name="time"/>
+        <TimeStamp name="timestamp"/>
     </EntityDef>
 
     <DimensionDef name="basic_type_dimension">

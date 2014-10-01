@@ -362,6 +362,11 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+    <xs:complexType name="TimeStampType">
+        <xs:complexContent>
+            <xs:extension base="cat:FieldDeclrType"/>
+        </xs:complexContent>
+    </xs:complexType>
     <xs:complexType name="HierarchyType">
         <xs:complexContent>
             <xs:extension base="cat:FieldDeclrType"/>
@@ -441,6 +446,7 @@
     <xs:element name="String" type="cat:StringType" substitutionGroup="cat:FieldDeclr"/>
     <xs:element name="Date" type="cat:DateType" substitutionGroup="cat:FieldDeclr"/>
     <xs:element name="Time" type="cat:TimeType" substitutionGroup="cat:FieldDeclr"/>
+    <xs:element name="TimeStamp" type="cat:TimeStampType" substitutionGroup="cat:FieldDeclr"/>
     <xs:element name="Hierarchy" type="cat:HierarchyType" substitutionGroup="cat:FieldDeclr"/>
     <xs:element name="Enumeration" type="cat:EnumerationType" substitutionGroup="cat:FieldDeclr"/>
     <xs:element name="Component" type="cat:ComponentType" substitutionGroup="cat:FieldDeclr"/>
