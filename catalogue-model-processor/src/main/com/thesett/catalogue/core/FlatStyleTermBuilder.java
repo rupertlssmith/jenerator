@@ -91,7 +91,7 @@ public class FlatStyleTermBuilder extends BaseTermBuilder
             String name = (String) typeBean.getProperty("name");
 
             // Build the first part of the type instance clause.
-            String termText = "type_instance(" + name + ", " + kind + ", [";
+            String termText = "type_instance(" + name + ", " + kind + ")\n";
 
             // Extract all the specified properties from the type bean, filtering out any nulls.
             Map<String, Object> nonNullProperties = new HashArray<String, Object>();
@@ -140,7 +140,6 @@ public class FlatStyleTermBuilder extends BaseTermBuilder
                 }
             }
 
-            termText += "]).";
             log.fine(termText);
 
             // CC the raw model text to the specified raw model writer, only if one was set.
@@ -158,7 +157,7 @@ public class FlatStyleTermBuilder extends BaseTermBuilder
             }
 
             // Parse the instance clause into a prolog clause and add it to the list of clauses.
-            parser.setTokenSource(TokenSource.getTokenSourceForString(termText));
+            /*parser.setTokenSource(TokenSource.getTokenSourceForString(termText));
 
             try
             {
@@ -168,7 +167,7 @@ public class FlatStyleTermBuilder extends BaseTermBuilder
             catch (SourceCodeException e)
             {
                 throw new RuntimeException("Badly formed typedef conversion to logical term.", e);
-            }
+            }*/
         }
     }
 

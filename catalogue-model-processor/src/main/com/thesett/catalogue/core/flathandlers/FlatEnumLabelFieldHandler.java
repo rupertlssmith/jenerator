@@ -48,15 +48,14 @@ public class FlatEnumLabelFieldHandler implements FieldHandler
             // Convert the property value to a list of labels.
             List<LabelType> labels = (List<LabelType>) value;
 
-            String result = "labels([";
+            String result = "";
 
             for (Iterator<LabelType> i = labels.iterator(); i.hasNext();)
             {
                 LabelType label = i.next();
-                result += label.getName() + (i.hasNext() ? ", " : "");
-            }
 
-            result += "])" + (more ? ", " : "");
+                result += "label(" + label.getName() + (i.hasNext() ? ", " : "") + ")\n";
+            }
 
             return result;
         }

@@ -38,6 +38,6 @@ public class FlatDefaultFieldHandler implements FieldHandler
      */
     public String handleField(String property, Object value, boolean more)
     {
-        return property + "(" + value + ")" + (more ? ", " : "");
+        return property + "(" + value + ")\n";
     }
 }

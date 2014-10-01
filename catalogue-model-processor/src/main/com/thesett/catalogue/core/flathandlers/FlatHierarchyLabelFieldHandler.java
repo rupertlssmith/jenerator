@@ -55,7 +55,7 @@ public class FlatHierarchyLabelFieldHandler implements FieldHandler
 
             decomposeLabels(labels, labelsBuffer);
 
-            return "labels(" + labelsBuffer + ")" + (more ? ", " : "");
+            return "labels(" + labelsBuffer + ")\n";
 
         }
         else if ("level".equals(property))
@@ -66,11 +66,11 @@ public class FlatHierarchyLabelFieldHandler implements FieldHandler
 
             decomposeLevels(level, levelsBuffer);
 
-            return "levels([" + levelsBuffer + "])" + (more ? ", " : "");
+            return "levels(" + levelsBuffer + ")\n";
         }
         else if ("finalized".equals(property))
         {
-            return "finalized" + (more ? ", " : "");
+            return "finalized\n";
         }
 
         return null;

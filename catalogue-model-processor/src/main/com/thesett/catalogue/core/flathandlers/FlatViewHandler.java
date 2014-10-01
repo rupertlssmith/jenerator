@@ -46,15 +46,14 @@ public class FlatViewHandler implements FieldHandler
             // Cast the field value to a list of views.
             List<View> views = (List<View>) value;
 
-            String result = "views([";
+            String result = "";
 
             for (Iterator<View> i = views.iterator(); i.hasNext();)
             {
                 View view = i.next();
-                result += view.getType() + (i.hasNext() ? ", " : "");
-            }
 
-            result += "])" + (more ? ", " : "");
+                result += "view(" + view.getType() + ")\n";
+            }
 
             return result;
         }

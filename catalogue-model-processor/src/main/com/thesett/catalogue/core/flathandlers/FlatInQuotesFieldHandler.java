@@ -57,7 +57,7 @@ public class FlatInQuotesFieldHandler implements FieldHandler
     {
         if (propertiesInQuotes.contains(property))
         {
-            return property + "(\"" + value.toString() + "\")" + (more ? ", " : "");
+            return property + "(\"" + value.toString() + "\")\n";
         }
 
         return null;

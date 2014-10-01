@@ -15,6 +15,7 @@
  */
 package com.thesett.catalogue.core;
 
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -204,6 +205,8 @@ public class CatalogueModelFactory
 
         convertTypesToTerms(clauses);
 
+        //convertTypesToFlatTerms(new ArrayList<Sentence<Clause>>());
+
         // Add all the clauses to the knowledge base.
         for (Sentence<Clause> sentence : clauses)
         {
@@ -316,7 +319,7 @@ public class CatalogueModelFactory
      */
     private void convertTypesToFlatTerms(List<Sentence<Clause>> clauses)
     {
-        ModelTermBuilder builder = new ListStyleTermBuilder(engine, modelWriter);
+        ModelTermBuilder builder = new FlatStyleTermBuilder(engine, new OutputStreamWriter(System.out));
 
         builder.convertTypeToTerm(catalogueDef, engine, clauses, DecimalType.class,
             new String[] { "precision", "scale", "rounding", "from", "to" });

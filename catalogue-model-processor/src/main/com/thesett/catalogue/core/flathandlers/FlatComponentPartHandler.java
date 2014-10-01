@@ -91,10 +91,12 @@ public class FlatComponentPartHandler implements FieldHandler
             List<JAXBElement<? extends ComponentPartType>> componentParts =
                 (List<JAXBElement<? extends ComponentPartType>>) value;
 
-            String result = "fields([";
+            String result = "";
 
             for (Iterator<JAXBElement<? extends ComponentPartType>> i = componentParts.iterator(); i.hasNext();)
             {
+                result += "field(";
+
                 ComponentPartType componentPart = i.next().getValue();
 
                 if (componentPart instanceof ComponentType)
@@ -203,11 +205,9 @@ public class FlatComponentPartHandler implements FieldHandler
 
                 if (i.hasNext())
                 {
-                    result += ", ";
+                    result += ")\n";
                 }
             }
-
-            result += "])" + (more ? ", " : "");
 
             return result;
         }
