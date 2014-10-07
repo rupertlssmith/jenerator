@@ -379,7 +379,9 @@
     </xs:complexType>
     <xs:complexType name="ComponentType">
         <xs:complexContent>
-            <xs:extension base="cat:FieldDeclrType"/>
+            <xs:extension base="cat:FieldDeclrType">
+                <xs:attribute name="owner" type="xs:boolean" use="optional"/>
+            </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <!--The unique/natural key demarcator type.-->
