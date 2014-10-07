@@ -101,7 +101,8 @@ public class ComponentPartHandler implements FieldHandler
                 if (componentPart instanceof ComponentType)
                 {
                     ComponentType component = (ComponentType) componentPart;
-                    result += "component_ref(" + component.getName() + ", " + component.getType() + ")";
+                    String owner = ((component.isOwner() != null) && component.isOwner()) ? "true" : "false";
+                    result += "component_ref(" + component.getName() + ", " + component.getType() + ", " + owner + ")";
                 }
                 else if (componentPart instanceof FieldDeclrType)
                 {
