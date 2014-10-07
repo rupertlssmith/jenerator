@@ -589,3 +589,34 @@ properties_accum(PFS, [F|FS]) :-
 properties_accum([P|PFS], [P|FS]) :-
     P = property(_, _),
     properties_accum(PFS, FS).
+
+/* === Entity relationships. === */
+
+/* ======== related_uni/4
+ Describes one direction of the relationship between two entities, and the property on the first entity
+ which holds the relationship.
+ */
+related_uni(R-to-one, E1, E2, Prop) :-
+    normal_type(entity_type, E1, _, MP1),
+    normal_type(entity_type, E2, _, MP2),
+    MP1 = [fields(FS1)|Props1],
+    member(component_ref(Prop, E2), FS1).
+
+related_uni(R-to-many, E1, E2, Prop) :-
+    normal_type(entity_type, E1, _, MP1),
+    normal_type(entity_type, E2, _, MP2),
+    MP1 = [fields(FS1)|Props1],
+    member(collection(_, Prop, component_ref(_, E2)), FS1).
+
+/* ======== related/5
+ Describes the relationship between two entities, its arity and its direction of navigability. The property
+ on the first entity which holds the relationship also forms part of this relation.
+ */
+related(X-to-Y, bi, E1, E2, Prop) :-
+    related_uni(X-to-Y, E1, E2, Prop),
+    related_uni(Y-to-X, E2, E1, _).
+
+related(X-to-Y, uni, E1, E2, Prop) :-
+    related_uni(X-to-Y, E1, E2, Prop),
+    not(related_uni(Y-to-X, E2, E1, _)),
+    X = many.
