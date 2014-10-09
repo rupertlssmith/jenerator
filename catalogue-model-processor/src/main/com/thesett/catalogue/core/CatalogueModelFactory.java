@@ -96,6 +96,7 @@ import com.thesett.catalogue.setup.StringPatternType;
 import com.thesett.catalogue.setup.TimeRangeType;
 import com.thesett.common.parsing.SourceCodeException;
 import com.thesett.common.util.EmptyIterator;
+import com.thesett.common.util.Pair;
 import com.thesett.common.util.StringUtils;
 
 /**
@@ -344,12 +345,14 @@ public class CatalogueModelFactory
     /**
      * Extracts the fields and their types for a named component type in the catalogue model.
      *
-     * @param  catalogueTypes The map to build up the catalogue types in.
-     * @param  name           The name of the component type to get the fields of.
+     * @param  catalogueTypes                  The map to build up the catalogue types in.
+     * @param  name                            The name of the component type to get the fields of.
+     * @param  fieldsWithPossibleRelationships A list to build up fields that need examined for relationships.
      *
      * @return The fields and types of a named component type.
      */
-    private Map<String, Type> getComponentFields(Map<String, Type> catalogueTypes, String name)
+    private Map<String, Type> getComponentFields(Map<String, Type> catalogueTypes, String name,
+        List<Pair<String, String>> fieldsWithPossibleRelationships)
     {
         String queryString =
             "?-product_type(_PT), normal_type(_PT, " + name +
@@ -407,6 +410,8 @@ public class CatalogueModelFactory
                     Type fieldType = new PendingComponentRefType(fieldTypeName);
                     results.put(fieldName, fieldType);
                 }
+
+                fieldsWithPossibleRelationships.add(new Pair(name, fieldName));
             }
             else if ("collection".equals(fieldKind))
             {
@@ -442,6 +447,8 @@ public class CatalogueModelFactory
                 {
                     results.put(fieldName, new CollectionTypeImpl(elementType, ArrayList.class, collectionKind));
                 }
+
+                fieldsWithPossibleRelationships.add(new Pair(name, fieldName));
             }
         }
 
@@ -515,6 +522,34 @@ public class CatalogueModelFactory
         }
 
         return results;
+    }
+
+    /**
+     * Queries the relationships between components, to discover what the nature of those relationship is.
+     *
+     * @param fieldsWithPossibleRelationships A list of components and fields that may be the ends of relationships.
+     */
+    private Object getRelationshipForField(List<Pair<String, String>> fieldsWithPossibleRelationships)
+    {
+        String queryString = "?-related(From, To, Direction, Component, OtherComponent, Field, Owner).";
+        Iterable<Map<String, Variable>> fieldBindingsIterable = runQuery(queryString);
+
+        for (Map<String, Variable> variables : fieldBindingsIterable)
+        {
+            String componentName = engine.getFunctorName((Functor) variables.get("Component").getValue());
+            String fieldName = engine.getFunctorName((Functor) variables.get("Field").getValue());
+            String arityFrom = engine.getFunctorName((Functor) variables.get("From").getValue());
+            String arityTo = engine.getFunctorName((Functor) variables.get("To").getValue());
+            Boolean biDirectional = engine.getFunctorName((Functor) variables.get("Direction").getValue()).equals("bi");
+            String target = engine.getFunctorName((Functor) variables.get("OtherComponent").getValue());
+            Boolean owner = engine.getFunctorName((Functor) variables.get("Owner").getValue()).equals("true");
+
+            System.out.println(componentName + ":" + fieldName + " is related to " + target + " with navigability of " +
+                (biDirectional ? " bi-directional" : "uni-directional") + ", arity of " + arityFrom + "-to-" + arityTo +
+                ", and " + (owner ? "is" : "is not") + " the owner of the relationship.");
+        }
+
+        return new Object();
     }
 
     /**
@@ -1021,13 +1056,16 @@ public class CatalogueModelFactory
             log.debug("Found " + typeName + ": " + componentName);
         }
 
+        LinkedList<Pair<String, String>> fieldsWithPossibleRelationships = new LinkedList<Pair<String, String>>();
+
         for (Map.Entry<String, Collection<String>> componentNamesEntry : componentNamesByType.entrySet())
         {
             String componentType = componentNamesEntry.getKey();
 
             for (String componentName : componentNamesEntry.getValue())
             {
-                Map<String, Type> componentFields = getComponentFields(catalogueTypes, componentName);
+                Map<String, Type> componentFields =
+                    getComponentFields(catalogueTypes, componentName, fieldsWithPossibleRelationships);
                 Set<String> naturalKeyFields = getNaturalKeyFields(componentName);
                 Set<ComponentType> ancestors = getComponentAncestors(catalogueTypes, componentName);
 
@@ -1140,6 +1178,9 @@ public class CatalogueModelFactory
                 componentType.setImmediateAncestors(replacementAncestors);
             }
         }
+
+        // Examine all the component relationships.
+        getRelationshipForField(fieldsWithPossibleRelationships);
     }
 
     /**

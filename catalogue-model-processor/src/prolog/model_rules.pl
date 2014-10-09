@@ -596,13 +596,13 @@ properties_accum([P|PFS], [P|FS]) :-
  Describes one direction of the relationship between two entities, and the property on the first entity
  which holds the relationship.
  */
-related_uni(R-to-one, E1, E2, Prop, Owner) :-
+related_uni(R, one, E1, E2, Prop, Owner) :-
     normal_type(entity_type, E1, _, MP1),
     normal_type(entity_type, E2, _, MP2),
     MP1 = [fields(FS1)|Props1],
     member(component_ref(Prop, E2, Owner), FS1).
 
-related_uni(R-to-many, E1, E2, Prop, Owner) :-
+related_uni(R, many, E1, E2, Prop, Owner) :-
     normal_type(entity_type, E1, _, MP1),
     normal_type(entity_type, E2, _, MP2),
     MP1 = [fields(FS1)|Props1],
@@ -612,11 +612,11 @@ related_uni(R-to-many, E1, E2, Prop, Owner) :-
  Describes the relationship between two entities, its arity and its direction of navigability. The property
  on the first entity which holds the relationship also forms part of this relation.
  */
-related(X-to-Y, bi, E1, E2, Prop, Owner) :-
-    related_uni(X-to-Y, E1, E2, Prop, Owner),
-    related_uni(Y-to-X, E2, E1, _, _).
+related(X, Y, bi, E1, E2, Prop, Owner) :-
+    related_uni(X, Y, E1, E2, Prop, Owner),
+    related_uni(Y, X, E2, E1, _, _).
 
-related(X-to-Y, uni, E1, E2, Prop, Owner) :-
-    related_uni(X-to-Y, E1, E2, Prop, Owner),
-    not(related_uni(Y-to-X, E2, E1, _, _)),
+related(X, Y, uni, E1, E2, Prop, Owner) :-
+    related_uni(X, Y, E1, E2, Prop, Owner),
+    not(related_uni(Y, X, E2, E1, _, _)),
     X = many.
