@@ -544,9 +544,55 @@ public class CatalogueModelFactory
             String target = engine.getFunctorName((Functor) variables.get("OtherComponent").getValue());
             Boolean owner = engine.getFunctorName((Functor) variables.get("Owner").getValue()).equals("true");
 
+            boolean alphaOrder = componentName.compareTo(target) < 0;
+            boolean fromOne = "one".equals(arityFrom);
+            boolean fromMany = "many".equals(arityFrom);
+            boolean toOne = "one".equals(arityTo);
+            boolean toMany = "many".equals(arityTo);
+            boolean oneToOne = fromOne && toOne;
+            boolean oneToMany = fromOne && toMany;
+            boolean manyToOne = fromMany && toOne;
+            boolean manyToMany = fromMany && toMany;
+
+            // uni-directional, this end is the owner; goes first.
+            // one-one put owner first
+            // one-many put one end first
+            // many-one put one end first
+            // many-many put either end first (alphabetical is fine).
+            boolean goesFirst = false;
+
+            if (!biDirectional)
+            {
+                owner = true;
+                goesFirst = true;
+            }
+            else if (oneToOne)
+            {
+                goesFirst = owner;
+            }
+            else if (oneToMany)
+            {
+                owner = true;
+                goesFirst = true;
+            }
+            else if (manyToOne)
+            {
+                owner = false;
+                goesFirst = false;
+            }
+            else if (manyToMany)
+            {
+                goesFirst = alphaOrder;
+            }
+
+            String firstComponent = (goesFirst) ? componentName : target;
+            String secondComponent = (goesFirst) ? target : componentName;
+            String relationName = firstComponent + "-" + secondComponent;
+
             System.out.println(componentName + ":" + fieldName + " is related to " + target + " with navigability of " +
                 (biDirectional ? " bi-directional" : "uni-directional") + ", arity of " + arityFrom + "-to-" + arityTo +
-                ", and " + (owner ? "is" : "is not") + " the owner of the relationship.");
+                ", and " + (owner ? "is" : "is not") + " the owner of the relationship. The relationship name is " +
+                relationName + ".");
         }
 
         return new Object();
