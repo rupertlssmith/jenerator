@@ -76,6 +76,7 @@ import com.thesett.catalogue.core.handlers.HierarchyLabelFieldHandler;
 import com.thesett.catalogue.core.handlers.InQuotesFieldHandler;
 import com.thesett.catalogue.core.handlers.ViewHandler;
 import com.thesett.catalogue.model.CollectionType;
+import com.thesett.catalogue.model.EntityType;
 import com.thesett.catalogue.model.impl.CatalogueModel;
 import com.thesett.catalogue.model.impl.CollectionTypeImpl;
 import com.thesett.catalogue.model.impl.ComponentTypeImpl;
@@ -83,6 +84,9 @@ import com.thesett.catalogue.model.impl.DimensionTypeImpl;
 import com.thesett.catalogue.model.impl.EntityTypeImpl;
 import com.thesett.catalogue.model.impl.FactTypeImpl;
 import com.thesett.catalogue.model.impl.MapTypeImpl;
+import com.thesett.catalogue.model.impl.Relationship;
+import static com.thesett.catalogue.model.impl.Relationship.Arity.Many;
+import static com.thesett.catalogue.model.impl.Relationship.Arity.One;
 import com.thesett.catalogue.model.impl.ViewTypeImpl;
 import com.thesett.catalogue.setup.CatalogueDefinition;
 import com.thesett.catalogue.setup.ComponentDefType;
@@ -96,7 +100,6 @@ import com.thesett.catalogue.setup.StringPatternType;
 import com.thesett.catalogue.setup.TimeRangeType;
 import com.thesett.common.parsing.SourceCodeException;
 import com.thesett.common.util.EmptyIterator;
-import com.thesett.common.util.Pair;
 import com.thesett.common.util.StringUtils;
 
 /**
@@ -345,14 +348,12 @@ public class CatalogueModelFactory
     /**
      * Extracts the fields and their types for a named component type in the catalogue model.
      *
-     * @param  catalogueTypes                  The map to build up the catalogue types in.
-     * @param  name                            The name of the component type to get the fields of.
-     * @param  fieldsWithPossibleRelationships A list to build up fields that need examined for relationships.
+     * @param  catalogueTypes The map to build up the catalogue types in.
+     * @param  name           The name of the component type to get the fields of.
      *
      * @return The fields and types of a named component type.
      */
-    private Map<String, Type> getComponentFields(Map<String, Type> catalogueTypes, String name,
-        List<Pair<String, String>> fieldsWithPossibleRelationships)
+    private Map<String, Type> getComponentFields(Map<String, Type> catalogueTypes, String name)
     {
         String queryString =
             "?-product_type(_PT), normal_type(_PT, " + name +
@@ -410,8 +411,6 @@ public class CatalogueModelFactory
                     Type fieldType = new PendingComponentRefType(fieldTypeName);
                     results.put(fieldName, fieldType);
                 }
-
-                fieldsWithPossibleRelationships.add(new Pair(name, fieldName));
             }
             else if ("collection".equals(fieldKind))
             {
@@ -447,8 +446,6 @@ public class CatalogueModelFactory
                 {
                     results.put(fieldName, new CollectionTypeImpl(elementType, ArrayList.class, collectionKind));
                 }
-
-                fieldsWithPossibleRelationships.add(new Pair(name, fieldName));
             }
         }
 
@@ -527,9 +524,9 @@ public class CatalogueModelFactory
     /**
      * Queries the relationships between components, to discover what the nature of those relationship is.
      *
-     * @param fieldsWithPossibleRelationships A list of components and fields that may be the ends of relationships.
+     * @param catalogueTypes
      */
-    private Object getRelationshipForField(List<Pair<String, String>> fieldsWithPossibleRelationships)
+    private void initializeAllRelationships(Map<String, Type> catalogueTypes)
     {
         String queryString = "?-related(From, To, Direction, Component, OtherComponent, Field, Owner).";
         Iterable<Map<String, Variable>> fieldBindingsIterable = runQuery(queryString);
@@ -545,10 +542,8 @@ public class CatalogueModelFactory
             Boolean owner = engine.getFunctorName((Functor) variables.get("Owner").getValue()).equals("true");
 
             boolean alphaOrder = componentName.compareTo(target) < 0;
-            boolean fromOne = "one".equals(arityFrom);
-            boolean fromMany = "many".equals(arityFrom);
-            boolean toOne = "one".equals(arityTo);
-            boolean toMany = "many".equals(arityTo);
+            Relationship.Arity from = "one".equals(arityFrom) ? One : Many;
+            Relationship.Arity to = "one".equals(arityTo) ? One : Many;
 
             // Decide which end of the relationship is the owner. This is the end that holds the foreign key, except
             // when a relationship is uni-directional, in which case it is the end that holds the object reference.
@@ -566,21 +561,21 @@ public class CatalogueModelFactory
                 owner = true;
                 goesFirst = true;
             }
-            else if (fromOne && toOne)
+            else if (One.equals(from) && One.equals(to))
             {
                 goesFirst = owner;
             }
-            else if (fromOne && toMany)
+            else if (One.equals(from) && Many.equals(to))
             {
                 owner = false;
                 goesFirst = true;
             }
-            else if (fromMany && toOne)
+            else if (Many.equals(from) && One.equals(to))
             {
                 owner = true;
                 goesFirst = false;
             }
-            else if (fromMany && toMany)
+            else if (Many.equals(from) && Many.equals(to))
             {
                 owner = false;
                 goesFirst = alphaOrder;
@@ -590,13 +585,23 @@ public class CatalogueModelFactory
             String secondComponent = (goesFirst) ? target : componentName;
             String relationName = firstComponent + "-" + secondComponent;
 
-            System.out.println(componentName + ":" + fieldName + " is related to " + target + " with navigability of " +
-                (biDirectional ? " bi-directional" : "uni-directional") + ", arity of " + arityFrom + "-to-" + arityTo +
-                ", and " + (owner ? "is" : "is not") + " the owner of the relationship. The relationship name is " +
-                relationName + ".");
-        }
+            Relationship relationship = new Relationship(target, biDirectional, from, to, owner, relationName);
 
-        return new Object();
+            Type type = catalogueTypes.get(componentName);
+
+            if (type instanceof EntityType)
+            {
+                EntityType entityType = (EntityType) type;
+
+                Map<String, Relationship> relationships = entityType.getRelationships();
+                relationships.put(fieldName, relationship);
+
+                System.out.println(componentName + ":" + fieldName + " is related to " + target +
+                    " with navigability of " + (biDirectional ? " bi-directional" : "uni-directional") + ", arity of " +
+                    arityFrom + "-to-" + arityTo + ", and " + (owner ? "is" : "is not") +
+                    " the owner of the relationship. The relationship name is " + relationName + ".");
+            }
+        }
     }
 
     /**
@@ -1103,16 +1108,13 @@ public class CatalogueModelFactory
             log.debug("Found " + typeName + ": " + componentName);
         }
 
-        LinkedList<Pair<String, String>> fieldsWithPossibleRelationships = new LinkedList<Pair<String, String>>();
-
         for (Map.Entry<String, Collection<String>> componentNamesEntry : componentNamesByType.entrySet())
         {
             String componentType = componentNamesEntry.getKey();
 
             for (String componentName : componentNamesEntry.getValue())
             {
-                Map<String, Type> componentFields =
-                    getComponentFields(catalogueTypes, componentName, fieldsWithPossibleRelationships);
+                Map<String, Type> componentFields = getComponentFields(catalogueTypes, componentName);
                 Set<String> naturalKeyFields = getNaturalKeyFields(componentName);
                 Set<ComponentType> ancestors = getComponentAncestors(catalogueTypes, componentName);
 
@@ -1227,7 +1229,7 @@ public class CatalogueModelFactory
         }
 
         // Examine all the component relationships.
-        getRelationshipForField(fieldsWithPossibleRelationships);
+        initializeAllRelationships(catalogueTypes);
     }
 
     /**

@@ -16,8 +16,10 @@
 package com.thesett.catalogue.model;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import com.thesett.aima.state.ComponentType;
+import com.thesett.catalogue.model.impl.Relationship;
 
 /**
  * An EntityType is a {@link com.thesett.aima.state.Type} that is a {@link ComponentType} that can be mapped onto
@@ -41,4 +43,11 @@ public interface EntityType extends ComponentType, Serializable
      * @see    ExternalId
      */
     boolean isExternalId();
+
+    /**
+     * Provide a description of all relationships on fields between this and other entities.
+     *
+     * @return A description of all relationships on fields between this and other entities.
+     */
+    Map<String, Relationship> getRelationships();
 }

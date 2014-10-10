@@ -15,6 +15,7 @@
  */
 package com.thesett.catalogue.model.impl;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -40,6 +41,9 @@ public class EntityTypeImpl extends ComponentTypeImpl implements EntityType
 {
     /** Flag to indicate when true, that this entity type supports external ids. */
     protected boolean externalIdFlag = false;
+
+    /** Describes relationships roots on fields of this entity. */
+    private Map<String, Relationship> relationships = new LinkedHashMap<String, Relationship>();
 
     /**
      * Creates an entity type with the specified name, fields and implementing class.
@@ -88,5 +92,11 @@ public class EntityTypeImpl extends ComponentTypeImpl implements EntityType
     public void setExternalIdFlag(boolean externalIdFlag)
     {
         this.externalIdFlag = externalIdFlag;
+    }
+
+    /** {@inheritDoc} */
+    public Map<String, Relationship> getRelationships()
+    {
+        return relationships;
     }
 }

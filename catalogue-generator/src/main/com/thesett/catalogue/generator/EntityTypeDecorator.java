@@ -15,12 +15,15 @@
  */
 package com.thesett.catalogue.generator;
 
+import java.util.Map;
+
 import com.thesett.catalogue.model.EntityType;
+import com.thesett.catalogue.model.impl.Relationship;
 
 /**
- * EntityTypeDecorator is a {@link TypeDecorator} for {@link com.thesett.catalogue.model.EntityType}s. It
- * automatically decorates the types of any fields of the entity that are accessed through it, and provides all of the
- * underlying properties of the decorated entity.
+ * EntityTypeDecorator is a {@link TypeDecorator} for {@link com.thesett.catalogue.model.EntityType}s. It automatically
+ * decorates the types of any fields of the entity that are accessed through it, and provides all of the underlying
+ * properties of the decorated entity.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
@@ -47,5 +50,11 @@ public class EntityTypeDecorator extends ComponentTypeDecorator implements Entit
     public boolean isExternalId()
     {
         return ((EntityType) type).isExternalId();
+    }
+
+    /** {@inheritDoc} */
+    public Map<String, Relationship> getRelationships()
+    {
+        return ((EntityType) type).getRelationships();
     }
 }
