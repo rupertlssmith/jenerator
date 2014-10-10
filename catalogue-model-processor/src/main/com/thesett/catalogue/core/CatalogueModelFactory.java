@@ -583,7 +583,7 @@ public class CatalogueModelFactory
 
             String firstComponent = (goesFirst) ? componentName : target;
             String secondComponent = (goesFirst) ? target : componentName;
-            String relationName = firstComponent + "-" + secondComponent;
+            String relationName = firstComponent + "_" + secondComponent;
 
             Relationship relationship = new Relationship(target, biDirectional, from, to, owner, relationName);
 
@@ -595,11 +595,6 @@ public class CatalogueModelFactory
 
                 Map<String, Relationship> relationships = entityType.getRelationships();
                 relationships.put(fieldName, relationship);
-
-                System.out.println(componentName + ":" + fieldName + " is related to " + target +
-                    " with navigability of " + (biDirectional ? " bi-directional" : "uni-directional") + ", arity of " +
-                    arityFrom + "-to-" + arityTo + ", and " + (owner ? "is" : "is not") +
-                    " the owner of the relationship. The relationship name is " + relationName + ".");
             }
         }
     }
