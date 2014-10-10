@@ -528,13 +528,14 @@ public class CatalogueModelFactory
      */
     private void initializeAllRelationships(Map<String, Type> catalogueTypes)
     {
-        String queryString = "?-related(From, To, Direction, Component, OtherComponent, Field, Owner).";
+        String queryString = "?-related(From, To, Direction, Component, OtherComponent, Field, TargetField, Owner).";
         Iterable<Map<String, Variable>> fieldBindingsIterable = runQuery(queryString);
 
         for (Map<String, Variable> variables : fieldBindingsIterable)
         {
             String componentName = engine.getFunctorName((Functor) variables.get("Component").getValue());
             String fieldName = engine.getFunctorName((Functor) variables.get("Field").getValue());
+            //String targetFieldName = engine.getFunctorName((Functor) variables.get("TargetField").getValue());
             String arityFrom = engine.getFunctorName((Functor) variables.get("From").getValue());
             String arityTo = engine.getFunctorName((Functor) variables.get("To").getValue());
             Boolean biDirectional = engine.getFunctorName((Functor) variables.get("Direction").getValue()).equals("bi");

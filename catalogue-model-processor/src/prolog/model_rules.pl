@@ -612,11 +612,11 @@ related_uni(R, many, E1, E2, Prop, Owner) :-
  Describes the relationship between two entities, its arity and its direction of navigability. The property
  on the first entity which holds the relationship also forms part of this relation.
  */
-related(X, Y, bi, E1, E2, Prop, Owner) :-
+related(X, Y, bi, E1, E2, Prop, TProp, Owner) :-
     related_uni(X, Y, E1, E2, Prop, Owner),
-    related_uni(Y, X, E2, E1, _, _).
+    related_uni(Y, X, E2, E1, TProp, _).
 
-related(X, Y, uni, E1, E2, Prop, Owner) :-
+related(X, Y, uni, E1, E2, Prop, TProp, Owner) :-
     related_uni(X, Y, E1, E2, Prop, Owner),
-    not(related_uni(Y, X, E2, E1, _, _)),
+    not(related_uni(Y, X, E2, E1, TProp, _)),
     X = many.
