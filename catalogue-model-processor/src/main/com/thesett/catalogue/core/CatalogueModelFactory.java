@@ -549,16 +549,16 @@ public class CatalogueModelFactory
             boolean fromMany = "many".equals(arityFrom);
             boolean toOne = "one".equals(arityTo);
             boolean toMany = "many".equals(arityTo);
-            boolean oneToOne = fromOne && toOne;
-            boolean oneToMany = fromOne && toMany;
-            boolean manyToOne = fromMany && toOne;
-            boolean manyToMany = fromMany && toMany;
 
-            // uni-directional, this end is the owner; goes first.
-            // one-one put owner first
-            // one-many put one end first
-            // many-one put one end first
-            // many-many put either end first (alphabetical is fine).
+            // Decide which end of the relationship is the owner. This is the end that holds the foreign key, except
+            // when a relationship is uni-directional, in which case it is the end that holds the object reference.
+            // Many to many relationships do not have an owner since they are symmetric.
+            // Also decide how to name the relationship. In the case of one-to-one relationships and uni-directional
+            // relationships put the name of the owning end first. In many-to-many relationships the choice is
+            // arbitrary, so alphabetical ordering is used. For other relationships put the singular end first, since
+            // it is more natural to think of an object holding a collection of some other object as the parent of
+            // the relationship.
+            // This feature extraction should really be handled in the Prolog code.
             boolean goesFirst = false;
 
             if (!biDirectional)
@@ -566,22 +566,23 @@ public class CatalogueModelFactory
                 owner = true;
                 goesFirst = true;
             }
-            else if (oneToOne)
+            else if (fromOne && toOne)
             {
                 goesFirst = owner;
             }
-            else if (oneToMany)
-            {
-                owner = true;
-                goesFirst = true;
-            }
-            else if (manyToOne)
+            else if (fromOne && toMany)
             {
                 owner = false;
+                goesFirst = true;
+            }
+            else if (fromMany && toOne)
+            {
+                owner = true;
                 goesFirst = false;
             }
-            else if (manyToMany)
+            else if (fromMany && toMany)
             {
+                owner = false;
                 goesFirst = alphaOrder;
             }
 
