@@ -90,6 +90,26 @@ public class Relationship
         return to;
     }
 
+    public boolean isFromOne()
+    {
+        return Arity.One.equals(from);
+    }
+
+    public boolean isFromMany()
+    {
+        return Arity.Many.equals(from);
+    }
+
+    public boolean isToOne()
+    {
+        return Arity.One.equals(to);
+    }
+
+    public boolean isToMany()
+    {
+        return Arity.Many.equals(to);
+    }
+
     public boolean isOwner()
     {
         return owner;
