@@ -539,7 +539,15 @@ public class CatalogueModelFactory
             String arityTo = engine.getFunctorName((Functor) variables.get("To").getValue());
             Boolean biDirectional = engine.getFunctorName((Functor) variables.get("Direction").getValue()).equals("bi");
             String target = engine.getFunctorName((Functor) variables.get("OtherComponent").getValue());
-            Boolean owner = engine.getFunctorName((Functor) variables.get("Owner").getValue()).equals("true");
+
+            Term ownerTerm = variables.get("Owner").getValue();
+            boolean owner = false;
+
+            if (ownerTerm.isFunctor())
+            {
+                owner = engine.getFunctorName((Functor) ownerTerm).equals("true");
+            }
+
             Term targetFieldTerm = variables.get("TargetField").getValue();
             String targetFieldName = null;
 
