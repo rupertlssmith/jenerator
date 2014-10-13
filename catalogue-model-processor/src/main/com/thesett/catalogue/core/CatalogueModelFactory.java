@@ -535,12 +535,18 @@ public class CatalogueModelFactory
         {
             String componentName = engine.getFunctorName((Functor) variables.get("Component").getValue());
             String fieldName = engine.getFunctorName((Functor) variables.get("Field").getValue());
-            //String targetFieldName = engine.getFunctorName((Functor) variables.get("TargetField").getValue());
             String arityFrom = engine.getFunctorName((Functor) variables.get("From").getValue());
             String arityTo = engine.getFunctorName((Functor) variables.get("To").getValue());
             Boolean biDirectional = engine.getFunctorName((Functor) variables.get("Direction").getValue()).equals("bi");
             String target = engine.getFunctorName((Functor) variables.get("OtherComponent").getValue());
             Boolean owner = engine.getFunctorName((Functor) variables.get("Owner").getValue()).equals("true");
+            Term targetFieldTerm = variables.get("TargetField").getValue();
+            String targetFieldName = null;
+
+            if (targetFieldTerm.isFunctor())
+            {
+                targetFieldName = engine.getFunctorName((Functor) targetFieldTerm);
+            }
 
             boolean alphaOrder = componentName.compareTo(target) < 0;
             Relationship.Arity from = "one".equals(arityFrom) ? One : Many;
@@ -586,7 +592,8 @@ public class CatalogueModelFactory
             String secondComponent = (goesFirst) ? target : componentName;
             String relationName = firstComponent + "_" + secondComponent;
 
-            Relationship relationship = new Relationship(target, biDirectional, from, to, owner, relationName);
+            Relationship relationship =
+                new Relationship(target, targetFieldName, biDirectional, from, to, owner, relationName);
 
             Type type = catalogueTypes.get(componentName);
 

@@ -35,6 +35,9 @@ public class Relationship
     /** The target component name. */
     private final String target;
 
+    /** The target field name within the target component. */
+    private final String targetFieldName;
+
     /** <tt>true</tt> iff the relationship is bi-drectional. */
     private final boolean biDirectional;
 
@@ -50,10 +53,11 @@ public class Relationship
     /** A name for this relationship. */
     private final String name;
 
-    public Relationship(String target, boolean biDirectional, Arity arityFrom, Arity arityTo, boolean owner,
-        String name)
+    public Relationship(String target, String targetFieldName, boolean biDirectional, Arity arityFrom, Arity arityTo,
+        boolean owner, String name)
     {
         this.target = target;
+        this.targetFieldName = targetFieldName;
         this.biDirectional = biDirectional;
         this.from = arityFrom;
         this.to = arityTo;
@@ -64,6 +68,11 @@ public class Relationship
     public String getTarget()
     {
         return target;
+    }
+
+    public String getTargetFieldName()
+    {
+        return targetFieldName;
     }
 
     public boolean isBiDirectional()
