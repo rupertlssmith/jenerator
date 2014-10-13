@@ -7,7 +7,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>catalogue-generator</artifactId>
     <name>catalogue-generator</name>
-    <version>0.8.8</version><!-- jenerator.version -->
+    <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
 
     <description>A source code generator to transform a catalogue model into java beans with persistence.</description>
     <url>http://www.thesett.com/catalogue-generator</url>
@@ -21,7 +21,7 @@
     <parent>
         <groupId>com.thesett</groupId>
         <artifactId>jenerator_build</artifactId>
-        <version>0.8.8</version><!-- jenerator.version -->
+        <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -29,25 +29,25 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>common</artifactId>
-            <version>0.8.8</version><!-- jenerator.version -->
+            <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>configurator</artifactId>
-            <version>0.8.8</version><!-- jenerator.version -->
+            <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>power_model</artifactId>
-            <version>0.8.8</version><!-- jenerator.version -->
+            <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>catalogue-model-processor</artifactId>
-            <version>0.8.8</version><!-- jenerator.version -->
+            <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
         </dependency>
 
         <dependency>
@@ -60,14 +60,14 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>junit-toolkit</artifactId>
-            <version>0.8.8</version><!-- junit_toolkit.version -->
+            <version>0.8.9-SNAPSHOT</version><!-- junit_toolkit.version -->
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>base</artifactId>
-            <version>0.8.8</version><!-- base.version -->
+            <version>0.8.9-SNAPSHOT</version><!-- base.version -->
             <scope>test</scope>
         </dependency>        
     </dependencies>
