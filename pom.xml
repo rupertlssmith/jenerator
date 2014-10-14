@@ -117,6 +117,7 @@
         <module>javasource-maven-plugin</module>
         <module>xmlbeans</module>
         <module>xmlutils</module>
+        <module>catalogue-example</module>
     </modules>
 
     <dependencyManagement>
