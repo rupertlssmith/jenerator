@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.thesett</groupId>
+        <artifactId>jenerator_build</artifactId>
+        <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <groupId>com.thesett</groupId>
+    <artifactId>catalogue-example</artifactId>
+    <name>catalogue-example</name>
+    <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
+
+    <packaging>pom</packaging>
+
+    <properties>
+        <topdir>${basedir}/..</topdir>
+    </properties>
+
+    <dependencies>
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <!-- Generates the source code for the back end from its model. -->
+            <plugin>
+                <groupId>com.thesett</groupId>
+                <artifactId>catalogue-maven-plugin</artifactId>
+                <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
+
+                <executions>
+                    <execution>
+                        <id>javasource</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <model>${topdir}/catalogue-model-processor/src/resources/test-catalogue.xml</model>
+                            <!--<templateDir>${basedir}/etc/templates</templateDir>-->
+
+                            <debugModelFilename>test_catalogue.pl</debugModelFilename>
+
+                            <generators>
+                                <generator>
+                                    <config>
+                                        <type>com.thesett.catalogue.generator.JavaBeanGenerator</type>
+                                        <package>com.thesett.catalogue.example</package>
+                                        <outputDir>${basedir}/target/generated-source/</outputDir>
+                                    </config>
+                                </generator>
+
+                                <generator>
+                                    <config>
+                                        <type>com.thesett.catalogue.generator.HibernateGenerator</type>
+                                        <package>com.thesett.catalogue.example.hibernate</package>
+                                        <outputDir>${basedir}/target/generated-source/</outputDir>
+                                        <mappingOutputDir>${basedir}/target/generated-source/</mappingOutputDir>
+                                        <mappingFileName>test_catalogue.hbm.xml</mappingFileName>
+                                    </config>
+                                </generator>
+
+                                <generator>
+                                    <config>
+                                        <type>com.thesett.catalogue.generator.BeanValidationGenerator</type>
+                                        <package>com.thesett.catalogue.example</package>
+                                        <outputDir>${basedir}/target/generated-source/</outputDir>
+                                    </config>
+                                </generator>
+                            </generators>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
