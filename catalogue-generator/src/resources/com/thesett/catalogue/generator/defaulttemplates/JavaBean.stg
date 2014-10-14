@@ -138,19 +138,18 @@ hierarchySetterTypeMap ::= [
  * type.
  */
 comparisonMap ::= [
-    "Object":"object_equals",
-    default:"literal_equals"
+    default:"object_equals"
 ]
 
 /* Holds a mapping from primitive types to the name of a template that creates a hash code for the type. */
 hashCodeMap ::= [
-    "Boolean":"",
-    "Char":"",
-    "Short":"",
-    "Int":"int_hash_code",
-    "Long":"long_hash_code",
-    "Float":"float_hash_code",
-    "Double":"",
+    "Boolean":"object_hash_code",
+    "Char":"object_hash_code",
+    "Short":"object_hash_code",
+    "Int":"object_hash_code",
+    "Long":"object_hash_code",
+    "Float":"object_hash_code",
+    "Double":"object_hash_code",
     "Object":"object_hash_code"
     default:"object_hash_code"
 ]
@@ -229,7 +228,7 @@ catalogue_view_bean(catalogue, decorator, name, fields, baseClass) ::= <<
  * Creates a bean class for a hierarchy type, for a given catalogue model.
  */
 catalogue_hierarchy_bean(catalogue, decorator, name, fields, extraConsFields) ::= <<
-<bean(catalogue=catalogue, decorator=decorator, name=name, fields=fields, id_methods="hierarchy_id_methods", equals="true", extraCons="hierarchy_constructor", extraConsFields=extraConsFields, typeMap=customBeanTypeMap, setterMap=hierarchySetterTypeMap)>
+<bean(catalogue=catalogue, decorator=decorator, name=name, fields=fields, baseClass="HierarchyInstanceBase", id_methods="hierarchy_id_methods", equals="true", extraCons="hierarchy_constructor", extraConsFields=extraConsFields, typeMap=customBeanTypeMap, setterMap=hierarchySetterTypeMap)>
 >>
 
 /*
@@ -381,15 +380,16 @@ import java.math.*;
 
 import com.fasterxml.jackson.annotation.*;
 import static com.fasterxml.jackson.annotation.JsonInclude.*;
-
-import com.thesett.catalogue.model.ExternalId;
-import com.thesett.catalogue.model.ExternallyIdentified;    
 import org.joda.time.*;
 
 import com.thesett.aima.state.*;
 import com.thesett.aima.state.impl.*;
 import com.thesett.aima.attribute.impl.*;
 import com.thesett.aima.attribute.time.*;
+    
+<if(decorator.entitySubType)>    
+import org.mygovscot.api.entity.Entity;
+<endif>    
     
 /**
  * Generated bean from catalogue model.<if(decorator.naturalKeyFieldTypes)>
@@ -405,7 +405,7 @@ import com.thesett.aima.attribute.time.*;
  * @author Generated Code
  */
 <(serDesControlMap.(decorator.kind))(decorator=decorator)>
-public class <name; format="ccu"> <if(baseClass)>extends <baseClass><endif> implements <if(decorator.immediateAncestors)><decorator.immediateAncestors: {<it.name; format="ccu">}; separator=",">, <endif><if(decorator.externalId)>ExternallyIdentified, <endif> Serializable {
+public class <name; format="ccu"> <if(baseClass)>extends <baseClass><endif> implements <if(decorator.immediateAncestors)><decorator.immediateAncestors: {<it.name; format="ccu">}; separator=",">, <endif><if(decorator.externalId)>ExternallyIdentified, <endif><if(decorator.entitySubType)>Entity\<Long\>,<endif> Serializable {
     <(constantsTemplateMap.(decorator.kind))(decorator=decorator)>
     <if(decorator.externalId)>
     /** Holds the external id of this dimension element. */
@@ -735,7 +735,7 @@ public <this; format="ccu"> with<it; format="ccu">(HierarchyAttribute <it; forma
  * Creates an equality comparison between two objects.
  */
 object_equals(name) ::= <<
-<name; format="cc"> == null ? comp.<name; format="cc"> == null : <name; format="cc">.equals(comp.<name; format="cc">)
+(<name; format="cc"> == null ? comp.<name; format="cc"> == null : <name; format="cc">.equals(comp.<name; format="cc">))
 >>
 
 /*

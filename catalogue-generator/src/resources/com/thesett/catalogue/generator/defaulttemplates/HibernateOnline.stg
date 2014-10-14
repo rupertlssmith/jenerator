@@ -16,13 +16,13 @@ file_open(catalogue) ::= <<
  */
 for_bean(catalogue, decorator, fields, extraFields) ::= <<
 <if(decorator.entitySubType)>
-<hibernate_config_class_online(catalogue=catalogue, name=decorator.name, fields=fields)>
+<hibernate_config_class_online(catalogue=catalogue, decorator=decorator, name=decorator.name, fields=fields)>
 <endif>
 <if(decorator.hierarchyType)>
-<hibernate_config_hierarchy_bean(catalogue=catalogue, name=decorator.name, fields=fields)>
+<hibernate_config_hierarchy_bean(catalogue=catalogue, decorator=decorator, name=decorator.name, fields=fields)>
 <endif>
 <if(decorator.enumerationType)>
-<hibernate_config_enumeration_bean(catalogue=catalogue, name=decorator.name, fields=fields)>
+<hibernate_config_enumeration_bean(catalogue=catalogue, decorator=decorator, name=decorator.name, fields=fields)>
 <endif>
 >>
 

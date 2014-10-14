@@ -25,7 +25,7 @@ componentBeanTypeMap ::= [
 ]
 
 /* Holds a mapping from primitive types names to their Java primitive type names. */
-primitiveTypeMap ::= [
+/*primitiveTypeMap ::= [
     "Boolean":"boolean",
     "Char":"char",
     "Short":"short",
@@ -34,11 +34,22 @@ primitiveTypeMap ::= [
     "Float":"float",
     "Double":"double",
     default:key
+]*/
+
+primitiveTypeMap ::= [
+    "Boolean":"Boolean",
+    "Char":"Character",
+    "Short":"Short",
+    "Int":"Integer",
+    "Long":"Long",
+    "Float":"Float",
+    "Double":"Double",
+    default:key
 ]
 
 objectTypeMap ::= [
     "Boolean":"Boolean",
-    "Char":"Char",
+    "Char":"Character",
     "Short":"Short",
     "Int":"Integer",
     "Long":"Long",

@@ -46,7 +46,6 @@ hibernateWarehouseTemplateMap ::= [
     "Fact":"component_ref_property_warehouse",
     "Hierarchy":"hierarchy_property_warehouse",
     "Enumeration":"enumeration_property_warehouse",
-/*    "Collection":"collection_property_online", */
     "DateOnly":"date_only_property_online",
     "TimeOnly":"time_only_property_online",
     "Timestamp":"timestamp_property_online",
@@ -54,13 +53,13 @@ hibernateWarehouseTemplateMap ::= [
 ]
 
 /*
- * Holds a mapping from kinds of catalogue type to the name of a template that creates a mapping configuration to add
- * an element of that type to a collection.
+ * Holds a mapping from kinds of catalogue type to the name of a template that creates a mapping configuration
+ * to add an element of that type to a collection.
  */
 collectionElementTemplateMap ::= [
-/*    "Component":"collection_element_component_ref",*/
     "Entity":"collection_element_entity_ref",
     "Dimension":"collection_element_entity_ref",
+    "Enumeration":"collection_element_entity_ref",
     "String":"collection_element_basic",
     "Date":"collection_element_basic",
     "Basic":"collection_element_basic"
@@ -157,7 +156,7 @@ hibernate_config_hierarchy_typedef(catalogue, name, fields) ::= <<
 /*
  * Creates a hibernate configuration section for a hierarchy bean.
  */
-hibernate_config_hierarchy_bean(catalogue, name, fields) ::= <<
+hibernate_config_hierarchy_bean(catalogue, decorator, name, fields) ::= <<
   \<class name="<name; format="ccu">" table="<name>_hierarchy" lazy="true"\>
     \<id name="id" column="id" type="long"\>
       \<generator class="assigned"/\>
@@ -180,7 +179,7 @@ hibernate_config_enumeration_typedef(catalogue, name, fields) ::= <<
 /*
  * Creates a hibernate configuration section for an enumeration bean.
  */
-hibernate_config_enumeration_bean(catalogue, name, fields) ::= <<
+hibernate_config_enumeration_bean(catalogue, decorator, name, fields) ::= <<
   \<class name="<name; format="ccu">" table="<name>_enumeration" lazy="true"\>
     \<id name="id" column="id" type="long"\>
       \<generator class="assigned"/\>
@@ -193,28 +192,28 @@ hibernate_config_enumeration_bean(catalogue, name, fields) ::= <<
 /*
  * Creates a hibernate configuration section for an entity in the online tables.
  */
-hibernate_config_class_online(catalogue, name, fields) ::= <<
-  <hibernate_config_class(catalogue=catalogue, name=name, fields=fields, templateMap=hibernateOnlineTemplateMap)>
+hibernate_config_class_online(catalogue, decorator, name, fields) ::= <<
+  <hibernate_config_class(catalogue=catalogue, decorator=decorator, name=name, fields=fields, templateMap=hibernateOnlineTemplateMap)>
 
 >>
 
 /*
  * Creates a hibernate configurations section for a dimension in the warehouse tables.
  */
-hibernate_config_class_warehouse(catalogue, name, fields) ::= <<
-  <hibernate_config_class(catalogue=catalogue, name=name, fields=fields, domain="warehouse", templateMap=hibernateWarehouseTemplateMap)>
+hibernate_config_class_warehouse(catalogue, decorator, name, fields) ::= <<
+  <hibernate_config_class(catalogue=catalogue, decorator=decorator, name=name, fields=fields, domain="warehouse", templateMap=hibernateWarehouseTemplateMap)>
 
 >>
 
 /*
  * Creates a hibernate configuration for persisting a class.
  */
-hibernate_config_class(catalogue, name, fields, domain, templateMap) ::= <<
+hibernate_config_class(catalogue, decorator, name, fields, domain, templateMap) ::= <<
 \<class name="<name; format="ccu">" table="<name><if(domain)>_<domain><endif>" <if(domain)>entity-name="<name; format="ccu">_<domain; format="ccu">"<endif> lazy="true"\>
   \<id name="id" column="id" type="long"\>
     \<generator class="native"/\>
   \</id\>
-  <fields.keys:{<(templateMap.(fields.(it).kind))(fieldName=it, fieldDecorator=fields.(it))>}; separator="\n">
+  <fields.keys:{<(templateMap.(fields.(it).kind))(fieldName=it, decorator=decorator, fieldDecorator=fields.(it))>}; separator="\n">
   <if(decorator.externalId)>  \<many-to-one name="externalId" column="externalId" not-null="false" lazy="false" unique="true"/\><endif>
 \</class\>
 >>
@@ -222,70 +221,74 @@ hibernate_config_class(catalogue, name, fields, domain, templateMap) ::= <<
 /*
  * Creates a default property configuration for fields of entities in online tables.
  */
-default_property_online(fieldName, fieldDecorator, qualifier) ::= <<
+default_property_online(fieldName, decorator, fieldDecorator, qualifier) ::= <<
 \<property name="<fieldName; format="cc">" column="<qualifier><if(qualifier)><fieldName; format="ccu"><else><fieldName><endif>" <(hibernateTypeTemplateMap.(fieldDecorator.baseClassName))(fieldDecorator)>/\>
 >>
 
 /*
  * Creates a date only configuration for fields of entities in online tables.
  */
-date_only_property_online(fieldName, fieldDecorator, qualifier) ::= <<
+date_only_property_online(fieldName, decorator, fieldDecorator, qualifier) ::= <<
 \<property name="<fieldName; format="cc">" column="<fieldName>" type="date_only"/\>
 >>
 
 /*
  * Creates a time only configuration for fields of entities in online tables.
  */
-time_only_property_online(fieldName, fieldDecorator, qualifier) ::= <<
+time_only_property_online(fieldName, decorator, fieldDecorator, qualifier) ::= <<
 \<property name="<fieldName; format="cc">" column="<fieldName>" type="time_only"/\>
 >>
 
 /*
  * Creates a timestamp configuration for fields of entities in online tables.
  */
-timestamp_property_online(fieldName, fieldDecorator, qualifier) ::= <<
+timestamp_property_online(fieldName, decorator, fieldDecorator, qualifier) ::= <<
 \<property name="<fieldName; format="cc">" column="<fieldName>" type="timestamp"/\>
 >>
     
 /*
  * Creates a hierarchy property configuration for hierarchy fields of entities in online tables.
  */
-hierarchy_property_online(fieldName, fieldDecorator, qualifier) ::= <<
+hierarchy_property_online(fieldName, decorator, fieldDecorator, qualifier) ::= <<
 \<many-to-one name="<fieldName; format="cc">" column="<fieldName>_id" not-null="false" lazy="false"/\>
 >>
 
 /*
  * Creates an enumeration property configuration for enumeration fields of entities in online tables.
  */
-enumeration_property_online(fieldName, fieldDecorator, qualifier) ::= <<
+enumeration_property_online(fieldName, decorator, fieldDecorator, qualifier) ::= <<
 \<many-to-one name="<fieldName; format="cc">" column="<fieldName>_id" not-null="false" lazy="false"/\>
 >>
 
 /*
  * Creates a property configuration for component reference fields of entities in online tables.
  */
-component_ref_property_online(fieldName, fieldDecorator, qualifier) ::= <<
+component_ref_property_online(fieldName, decorator, fieldDecorator, qualifier) ::= <<
 <if(fieldDecorator.component)>
 \<component name="<fieldName; format="cc">"\>
   <fieldDecorator.allPropertyTypes.keys:{compFieldName|<(templateMap.(fieldDecorator.allPropertyTypes.(compFieldName).kind))(fieldName=compFieldName, fieldDecorator=fieldDecorator.allPropertyTypes.(compFieldName), qualifier=fieldName)>}; separator="\n">
 \</component\>
 <else>
- <if(fieldDecorator.entitySubType)>
-\<many-to-one name="<fieldName; format="cc">" column="<fieldName>_id" class="<fieldDecorator.name; format="ccu">" not-null="false" lazy="proxy" cascade="evict"/\>
- <endif>
+<if(fieldDecorator.entitySubType)>
+<generate_relationship(fieldName=fieldName, decorator=decorator, fieldDecorator=fieldDecorator, relationship=decorator.relationships.(fieldName))>
+<endif>
 <endif>
 >>
 
 /*
  * Creates a property configuration for a collection type.
  */
-collection_property_online(fieldName, fieldDecorator, qualifier) ::= <<
+collection_property_online(fieldName, decorator, fieldDecorator, qualifier) ::= <<
+<if(decorator.relationships.(fieldName))>
+<generate_relationship(fieldName=fieldName, decorator=decorator, fieldDecorator=fieldDecorator, relationship=decorator.relationships.(fieldName))>
+<else>
 <(collectionKindTemplateMap.(fieldDecorator.collectionKind))()>
+<endif>
 >>
 
 collection_set() ::= <<
 <if(collectionElementTemplateMap.(fieldDecorator.elementType.kind))>
-\<set name="<fieldName; format="cc">" <collectionTableAttributeMap.(fieldDecorator.elementType.kind)> cascade="all"\>
+\<set name="<fieldName; format="cc">" <collectionTableAttributeMap.(fieldDecorator.elementType.kind)> lazy="false"\>
   \<key column="<fieldName>_id"/\>
   <(collectionElementTemplateMap.(fieldDecorator.elementType.kind))()>
 \</set\>
@@ -294,7 +297,7 @@ collection_set() ::= <<
 
 collection_list() ::= <<
 <if(collectionElementTemplateMap.(fieldDecorator.elementType.kind))>
-\<list name="<fieldName; format="cc">" <collectionTableAttributeMap.(fieldDecorator.elementType.kind)> lazy="true" cascade="evict"\>
+\<list name="<fieldName; format="cc">" <collectionTableAttributeMap.(fieldDecorator.elementType.kind)> lazy="false"\>
   \<key column="<fieldName>_id"/\>
   \<list-index column="<fieldName>_index"/\>
   <(collectionElementTemplateMap.(fieldDecorator.elementType.kind))()>
@@ -304,7 +307,7 @@ collection_list() ::= <<
 
 collection_bag() ::= <<
 <if(collectionElementTemplateMap.(fieldDecorator.elementType.kind))>
-\<bag name="<fieldName; format="cc">" <collectionTableAttributeMap.(fieldDecorator.elementType.kind)>\>
+\<bag name="<fieldName; format="cc">" <collectionTableAttributeMap.(fieldDecorator.elementType.kind)> lazy="false"\>
   \<key column="<fieldName>_id"/\>
   <(collectionElementTemplateMap.(fieldDecorator.elementType.kind))()>
 \</bag\>
@@ -313,7 +316,7 @@ collection_bag() ::= <<
 
 collection_map() ::= <<
 <if(collectionElementTemplateMap.(fieldDecorator.elementType.kind))>
-\<map name="<fieldName; format="cc">" <collectionTableAttributeMap.(fieldDecorator.elementType.kind)>\>
+\<map name="<fieldName; format="cc">" <collectionTableAttributeMap.(fieldDecorator.elementType.kind)> lazy="false"\>
   \<key column="<fieldName>_id"/\>
   \<map-key column="<fieldName>_key" <(hibernateTypeTemplateMap.(fieldDecorator.baseClassName))(fieldDecorator.keyType)>/\>
   <(collectionElementTemplateMap.(fieldDecorator.elementType.kind))()>
@@ -356,7 +359,7 @@ collection_element_basic() ::=
 /*
  * Creates a hierarchy property configuration for entities in warehouse tables.
  */
-hierarchy_property_warehouse(fieldName, fieldDecorator, qualifier) ::= <<
+hierarchy_property_warehouse(fieldName, decorator, fieldDecorator, qualifier) ::= <<
 \<component name="<fieldName; format="cc">" class="<fieldDecorator.name; format="ccu">"\>
   \<property name="<fieldDecorator.name; format="cc">" type="<fieldDecorator.name>_hierarchy"\>
     <fieldDecorator.levelNames:{\<column name="<fieldDecorator.name>_<it>"/\>}; separator="\n">
@@ -367,7 +370,7 @@ hierarchy_property_warehouse(fieldName, fieldDecorator, qualifier) ::= <<
 /*
  * Creates an enumeration property configuration for entities in warehouse tables.
  */
-enumeration_property_warehouse(fieldName, fieldDecorator, qualifier) ::= <<
+enumeration_property_warehouse(fieldName, decorator, fieldDecorator, qualifier) ::= <<
 \<component name="<fieldName; format="cc">" class="<fieldDecorator.name; format="ccu">"\>
   \<property name="<fieldDecorator.name; format="cc">" type="<fieldDecorator.name>_enumeration"\>
     <fieldDecorator.levelNames:{\<column name="<fieldDecorator.name>_<it>"/\>}; separator="\n">
@@ -379,7 +382,7 @@ enumeration_property_warehouse(fieldName, fieldDecorator, qualifier) ::= <<
  * Creates a property configuration for component reference fields of entities in warehouse tables.
  * Only references to dimensions are preserved in the warehouse.
  */
-component_ref_property_warehouse(fieldName, fieldDecorator, qualifier) ::= <<
+component_ref_property_warehouse(fieldName, decorator, fieldDecorator, qualifier) ::= <<
 <if(fieldDecorator.dimension)>
 \<many-to-one name="<fieldName; format="cc">" column="<fieldName>_id" class="<fieldDecorator.name>" not-null="false" lazy="proxy"/\>
 <else>
@@ -387,3 +390,183 @@ component_ref_property_warehouse(fieldName, fieldDecorator, qualifier) ::= <<
 <endif>
 >>
 
+/**
+ * Creates a comment describing an entity relationship.
+ */
+generate_relationship(decorator, fieldName, fieldDecorator, relationship) ::= <<
+<if(relationship)>\<!--REL: <fieldName> -> <relationship.target; format="ccu">:<relationship.targetFieldName; format="cc"> <relationship.from>-<relationship.to> <relationship.name> <if(relationship.owner)>owner<endif> <if(relationship.biDirectional)>bi<else>uni<endif>--\><endif>
+<if(relationship.fromOne)>
+<if(relationship.toOne)>
+<generate_relationship_one_to_one(decorator=decorator, fieldName=fieldName, fieldDecorator=fieldDecorator, relationship=relationship)>
+<else>
+<generate_relationship_one_to_many(decorator=decorator, fieldName=fieldName, fieldDecorator=fieldDecorator, relationship=relationship)>    
+<endif>
+<else>
+<if(relationship.toOne)>
+<generate_relationship_many_to_one(decorator=decorator, fieldName=fieldName, fieldDecorator=fieldDecorator, relationship=relationship)>
+<else>
+<generate_relationship_many_to_many(decorator=decorator, fieldName=fieldName, fieldDecorator=fieldDecorator, relationship=relationship)>
+<endif>
+<endif>
+>>
+
+generate_relationship_one_to_one(decorator, fieldName, fieldDecorator, relationship) ::= <<
+<if(relationship.biDirectional)>
+<if(relationship.owner)>
+<generate_relationship_one_to_one_bi_own(decorator=decorator, fieldName=fieldName, fieldDecorator=fieldDecorator, relationship=relationship)>
+<else>
+<generate_relationship_one_to_one_bi_notown(decorator=decorator, fieldName=fieldName, fieldDecorator=fieldDecorator, relationship=relationship)>
+<endif>
+<else>
+<if(relationship.owner)>
+<generate_relationship_one_to_one_uni_own(decorator=decorator, fieldName=fieldName, fieldDecorator=fieldDecorator, relationship=relationship)>
+<endif>
+<endif>
+>>
+
+generate_relationship_one_to_many(decorator, fieldName, fieldDecorator, relationship) ::= <<
+<if(relationship.biDirectional)>
+<if(relationship.owner)>
+<generate_relationship_one_to_many_bi_own(decorator=decorator, fieldName=fieldName, fieldDecorator=fieldDecorator, relationship=relationship)>
+<else>
+<generate_relationship_one_to_many_bi_notown(decorator=decorator, fieldName=fieldName, fieldDecorator=fieldDecorator, relationship=relationship)>
+<endif>
+<else>
+<if(relationship.owner)>
+<generate_relationship_one_to_many_uni_own(decorator=decorator, fieldName=fieldName, fieldDecorator=fieldDecorator, relationship=relationship)>
+<endif>
+<endif>
+>>
+
+generate_relationship_many_to_one(decorator, fieldName, fieldDecorator, relationship) ::= <<
+<if(relationship.biDirectional)>
+<if(relationship.owner)>
+<generate_relationship_many_to_one_bi_own(decorator=decorator, fieldName=fieldName, fieldDecorator=fieldDecorator, relationship=relationship)>
+<else>
+<generate_relationship_many_to_one_bi_notown(decorator=decorator, fieldName=fieldName, fieldDecorator=fieldDecorator, relationship=relationship)>
+<endif>
+<else>
+<if(relationship.owner)>
+<generate_relationship_many_to_one_uni_own(decorator=decorator, fieldName=fieldName, fieldDecorator=fieldDecorator, relationship=relationship)>
+<endif>
+<endif>
+>>
+
+generate_relationship_many_to_many(decorator, fieldName, fieldDecorator, relationship) ::= <<
+<if(relationship.biDirectional)>
+<if(relationship.owner)>
+<generate_relationship_many_to_many_bi_own(decorator=decorator, fieldName=fieldName, fieldDecorator=fieldDecorator, relationship=relationship)>
+<else>
+<generate_relationship_many_to_many_bi_notown(decorator=decorator, fieldName=fieldName, fieldDecorator=fieldDecorator, relationship=relationship)>
+<endif>
+<else>
+<if(relationship.owner)>
+<generate_relationship_many_to_many_uni_own(decorator=decorator, fieldName=fieldName, fieldDecorator=fieldDecorator, relationship=relationship)>
+<endif>
+<endif>
+>>
+
+/*
+ * Holds a mapping from relationship collection kinds to templates for generating property mappings for that
+ * kind of collection.
+ */
+collectionKindRelTemplateMap ::= [
+    "Set":"collection_set_rel",
+    "List":"collection_list_rel",
+    "Bag":"collection_bag_rel",
+    "Map":"collection_map_rel"
+]
+
+collectionKindRelCloseTemplateMap ::= [
+    "Set":"collection_set_rel_close",
+    "List":"collection_list_rel_close",
+    "Bag":"collection_bag_rel_close",
+    "Map":"collection_map_rel_close"
+]
+
+generate_relationship_one_to_one_bi_own(decorator, fieldName, fieldDecorator, relationship) ::= <<
+\<many-to-one name="<fieldName; format="cc">" column="<fieldName; format="cc">_id" unique="true" lazy="proxy" /\>
+>>
+
+generate_relationship_one_to_one_bi_notown(decorator, fieldName, fieldDecorator, relationship) ::= <<
+\<one-to-one name="<fieldName; format="cc">" property-ref="<relationship.targetFieldName; format="cc">" lazy="proxy" /\>
+>>
+
+generate_relationship_one_to_one_uni_own(decorator, fieldName, fieldDecorator, relationship) ::= <<
+>>
+
+generate_relationship_one_to_many_bi_own(decorator, fieldName, fieldDecorator, relationship) ::= <<
+>>
+
+generate_relationship_one_to_many_bi_notown(decorator, fieldName, fieldDecorator, relationship) ::= <<
+<(collectionKindRelTemplateMap.(fieldDecorator.collectionKind))(decorator=decorator, fieldName=fieldName, fieldDecorator=fieldDecorator, relationship=relationship, inverse="true")>
+  \<one-to-many class="<relationship.target; format="ccu">"/\>
+<(collectionKindRelCloseTemplateMap.(fieldDecorator.collectionKind))()>  
+>>
+
+generate_relationship_one_to_many_uni_own(decorator, fieldName, fieldDecorator, relationship) ::= <<
+>>
+
+generate_relationship_many_to_one_bi_own(decorator, fieldName, fieldDecorator, relationship) ::= <<
+\<many-to-one name="<fieldName; format="cc">" column="<fieldName; format="cc">_id" lazy="proxy" /\>
+>>
+
+generate_relationship_many_to_one_bi_notown(decorator, fieldName, fieldDecorator, relationship) ::= <<
+>>
+
+generate_relationship_many_to_one_uni_own(decorator, fieldName, fieldDecorator, relationship) ::= <<
+\<many-to-one name="<fieldName; format="cc">" column="<fieldName; format="cc">_id" lazy="false" cascade="all" /\>
+>>
+
+generate_relationship_many_to_many_bi_own(decorator, fieldName, fieldDecorator, relationship) ::= <<
+>>
+
+generate_relationship_many_to_many_bi_notown(decorator, fieldName, fieldDecorator, relationship) ::= <<
+<(collectionKindRelTemplateMap.(fieldDecorator.collectionKind))(decorator=decorator, fieldName=fieldName, fieldDecorator=fieldDecorator, relationship=relationship)>
+  \<many-to-many column="<relationship.target; format="cc">_id" class="<relationship.target; format="ccu">"/\>
+<(collectionKindRelCloseTemplateMap.(fieldDecorator.collectionKind))()>
+>>
+
+generate_relationship_many_to_many_uni_own(decorator, fieldName, fieldDecorator, relationship) ::= <<
+<(collectionKindRelTemplateMap.(fieldDecorator.collectionKind))(decorator=decorator, fieldName=fieldName, fieldDecorator=fieldDecorator, relationship=relationship, cascade="all", lazy="false")>
+  \<many-to-many column="<relationship.target; format="cc">_id" class="<relationship.target; format="ccu">"/\>
+<(collectionKindRelCloseTemplateMap.(fieldDecorator.collectionKind))()>
+>>
+
+collection_set_rel(decorator, fieldName, fieldDecorator, relationship, inverse, cascade, lazy) ::= <<
+\<set name="<fieldName; format="cc">" table="<relationship.name>"<if(inverse)> inverse="true"<endif><if(cascade)> cascade="<cascade>"<endif><if(lazy)> lazy="<lazy>"<endif>\>
+  \<key column="<decorator.name>_id"/\>
+>>
+
+collection_list_rel(decorator, fieldName, fieldDecorator, relationship, inverse, cascade, lazy) ::= <<
+\<list name="<fieldName; format="cc">" table="<relationship.name>"<if(inverse)> inverse="true"<endif><if(cascade)> cascade="<cascade>"<endif><if(lazy)> lazy="<lazy>"<endif>\>
+  \<key column="<decorator.name>_id"/\>
+  \<list-index column="<fieldName>_index"/\>
+>>
+
+collection_bag_rel(decorator, fieldName, fieldDecorator, relationship, inverse, cascade, lazy) ::= <<
+\<bag name="<fieldName; format="cc">" table="<relationship.name>"<if(inverse)> inverse="true"<endif><if(cascade)> cascade="<cascade>"<endif><if(lazy)> lazy="<lazy>"<endif>\>
+  \<key column="<decorator.name>_id"/\>
+>>
+
+collection_map_rel(decorator, fieldName, fieldDecorator, relationship, inverse, cascade, lazy) ::= <<
+\<map name="<fieldName; format="cc">" table="<relationship.name>"<if(inverse)> inverse="true"<endif><if(cascade)> cascade="<cascade>"<endif><if(lazy)> lazy="<lazy>"<endif>\>
+  \<key column="<decorator.name>_id"/\>
+  \<map-key column="<fieldName>_key" <(hibernateTypeTemplateMap.(fieldDecorator.baseClassName))(fieldDecorator.keyType)>/\>
+>>
+
+collection_set_rel_close() ::= <<
+\</set\>
+>>
+
+collection_list_rel_close() ::= <<
+\</list\>
+>>
+
+collection_bag_rel_close() ::= <<
+\</bag\>
+>>
+
+collection_map_rel_close() ::= <<
+\</map\>
+>>
