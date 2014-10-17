@@ -45,6 +45,13 @@ public interface EntityInstance<K extends Serializable> extends ComponentInstanc
      */
     void setId(K id);
 
+    /**
+     * Provides a fully opaque id for the entity.
+     *
+     * @return A fully opaque id for the entity.
+     */
+    InternalId getOpaqueId();
+
     /** {@inheritDoc} */
     EntityType getComponentType();
 }

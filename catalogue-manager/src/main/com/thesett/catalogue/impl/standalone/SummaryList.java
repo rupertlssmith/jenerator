@@ -24,11 +24,6 @@ import com.thesett.common.util.LazyPagingList;
  * SummaryList is a lazy paging list containing {@link ViewInstance}'s. It encapsulates the name of the entity and
  * criterion to be applied to it and its related entities in order to generate the list of results.
  *
- * <p/>It can be set to work in local or remote mode. In local mode it directly calls the paging method on
- * {@link CatalogueManagerServiceImpl}. In remote mode it makes a call through the remote facade
- * {@link CatalogueManagerRemote}. Local mode is used when working in the same JVM. Remote mode would be used
- * when deployed on a remote server being called, for example, through RMI or web services.
- *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
  * <tr><td> Encapsulate query criteria for pages of dimension element summaries.
@@ -136,9 +131,7 @@ public class SummaryList extends LazyPagingList<ViewInstance> implements Seriali
         }
         else
         {
-            result =
-                CatalogueManagerRemote.getInstance().executePagedQuery(start, number, databaseEntityName,
-                    entityTypeName, viewTypeName, criterion, joins);
+            throw new UnsupportedOperationException("Remote operation not supported.");
         }
 
         // Update the lists size in response to any changes to the results set.

@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.thesett.catalogue.model.UndoableCatalogueManagerService;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
@@ -29,6 +28,16 @@ import com.thesett.aima.state.Attribute;
 import com.thesett.aima.state.ComponentType;
 import com.thesett.aima.state.Type;
 import com.thesett.catalogue.hibernate.HibernateUtil;
+import com.thesett.catalogue.model.Catalogue;
+import com.thesett.catalogue.model.CatalogueManagerService;
+import com.thesett.catalogue.model.EntityInstance;
+import com.thesett.catalogue.model.EntityType;
+import com.thesett.catalogue.model.HierarchyInstance;
+import com.thesett.catalogue.model.InternalId;
+import com.thesett.catalogue.model.PagingResult;
+import com.thesett.catalogue.model.UndoableCatalogueManagerService;
+import com.thesett.catalogue.model.ViewInstance;
+import com.thesett.catalogue.model.ViewType;
 import com.thesett.common.util.UndoStackBase;
 
 /**

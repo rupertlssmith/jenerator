@@ -20,6 +20,8 @@ import java.io.Serializable;
 import com.thesett.aima.state.ComponentType;
 import com.thesett.catalogue.model.EntityInstance;
 import com.thesett.catalogue.model.EntityType;
+import com.thesett.catalogue.model.InternalId;
+import com.thesett.catalogue.model.impl.InternalIdImpl;
 
 /**
  * EntityInstanceBase provides a base class for implementing entity instances.
@@ -35,6 +37,12 @@ public abstract class EntityInstanceBase extends ComponentInstanceBase implement
 {
     /** {@inheritDoc} */
     public abstract EntityType getComponentType();
+
+    /** {@inheritDoc} */
+    public InternalId getOpaqueId()
+    {
+        return new InternalIdImpl(getId());
+    }
 
     /** {@inheritDoc} */
     public String getComponentTypeName()
