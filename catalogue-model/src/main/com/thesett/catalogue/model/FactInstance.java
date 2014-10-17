@@ -15,6 +15,8 @@
  */
 package com.thesett.catalogue.model;
 
+import java.io.Serializable;
+
 /**
  * A FactInstance is a {@link com.thesett.aima.state.State} that is an instance of a {@link FactType}.
  *
@@ -25,7 +27,7 @@ package com.thesett.catalogue.model;
  *
  * @author Rupert Smith
  */
-public interface FactInstance extends EntityInstance
+public interface FactInstance<K extends Serializable> extends EntityInstance<K>
 {
     /** {@inheritDoc} */
     FactType getComponentType();

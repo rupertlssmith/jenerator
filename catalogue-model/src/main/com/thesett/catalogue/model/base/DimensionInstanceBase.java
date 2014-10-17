@@ -29,7 +29,7 @@ import com.thesett.catalogue.model.DimensionType;
  *
  * @author Rupert Smith
  */
-public abstract class DimensionInstanceBase extends EntityInstanceBase implements DimensionInstance, Serializable
+public abstract class DimensionInstanceBase extends EntityInstanceBase implements DimensionInstance<Long>, Serializable
 {
     /** {@inheritDoc} */
     public abstract DimensionType getComponentType();

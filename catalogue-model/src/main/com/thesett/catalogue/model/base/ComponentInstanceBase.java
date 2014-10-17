@@ -33,17 +33,4 @@ import com.thesett.catalogue.model.ComponentInstance;
  */
 public abstract class ComponentInstanceBase extends ExtendableBeanState implements ComponentInstance, Serializable
 {
-    /**
-     * Gets the database id of this dimension element.
-     *
-     * @return The database id of this dimension element.
-     */
-    protected abstract Long getId();
-
-    /**
-     * Sets the database id of this dimension element.
-     *
-     * @param id The database id of this dimension element.
-     */
-    protected abstract void setId(Long id);
 }

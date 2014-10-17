@@ -30,7 +30,7 @@ import com.thesett.catalogue.model.FactType;
  *
  * @author Rupert Smith
  */
-public abstract class FactInstanceBase extends EntityInstanceBase implements FactInstance, Serializable
+public abstract class FactInstanceBase extends EntityInstanceBase implements FactInstance<Long>, Serializable
 {
     /** {@inheritDoc} */
     public abstract FactType getComponentType();

@@ -15,6 +15,8 @@
  */
 package com.thesett.catalogue.model;
 
+import java.io.Serializable;
+
 /**
  * A DimensionInstance is a {@link com.thesett.aima.state.State} that is an instance of a {@link DimensionType}.
  *
@@ -25,7 +27,7 @@ package com.thesett.catalogue.model;
  *
  * @author Rupert Smith
  */
-public interface DimensionInstance extends EntityInstance
+public interface DimensionInstance<K extends Serializable> extends EntityInstance<K>
 {
     /** {@inheritDoc} */
     DimensionType getComponentType();

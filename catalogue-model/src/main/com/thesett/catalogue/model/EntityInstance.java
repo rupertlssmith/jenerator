@@ -15,6 +15,8 @@
  */
 package com.thesett.catalogue.model;
 
+import java.io.Serializable;
+
 /**
  * An EntityInstance is a {@link com.thesett.aima.state.State} that is an instance of an {@link EntityType}. In addition
  * to the set of named and typed fields that a state has, all entities have a unique id that identifies them within
@@ -22,19 +24,26 @@ package com.thesett.catalogue.model;
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
- * <tr><td> Provide an opaque internal storage key to uniquely identify an entity.
+ * <tr><td> Provide an internal storage key to uniquely identify an entity.
  * </table></pre>
  *
  * @author Rupert Smith
  */
-public interface EntityInstance extends ComponentInstance
+public interface EntityInstance<K extends Serializable> extends ComponentInstance
 {
     /**
-     * Gets the internal persistence id of the entity.
+     * Supplies the entities id.
      *
-     * @return The id of the element. If the entity has not been persisted, this will be <tt>null</tt>.
+     * @return The entities id.
      */
-    public InternalId getOpaqueId();
+    K getId();
+
+    /**
+     * Establishes the entities id.
+     *
+     * @param id The entities id.
+     */
+    void setId(K id);
 
     /** {@inheritDoc} */
     EntityType getComponentType();
