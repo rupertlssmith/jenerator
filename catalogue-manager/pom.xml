@@ -1,0 +1,134 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.thesett</groupId>
+    <artifactId>catalogue-manager</artifactId>
+    <name>catalogue-manager</name>
+    <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
+
+    <description>A catalogue manager service.</description>
+    <url>http://www.thesett.com/catalogue-manager</url>
+
+    <packaging>jar</packaging>
+
+    <properties>
+        <topdir>${basedir}/..</topdir>
+    </properties>
+
+    <parent>
+        <groupId>com.thesett</groupId>
+        <artifactId>jenerator_build</artifactId>
+        <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>common</artifactId>
+            <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>configurator</artifactId>
+            <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>power_model</artifactId>
+            <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>catalogue-model</artifactId>
+            <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>catalogue-model-processor</artifactId>
+            <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
+        </dependency>
+        
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>prolog</artifactId>
+            <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>index</artifactId>
+            <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+        </dependency>
+
+        <!-- Libraries needed for running tests only. -->
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>catalogue-model-processor</artifactId>
+            <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>junit-toolkit</artifactId>
+            <version>0.8.9-SNAPSHOT</version><!-- junit_toolkit.version -->
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>base</artifactId>
+            <version>0.8.9-SNAPSHOT</version><!-- base.version -->
+            <scope>test</scope>
+        </dependency>        
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <!-- Create a jar for the tests. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+
+        <resources>
+            <!-- Make sure all resources are bundled. -->
+            <resource>
+                <directory>src/resources</directory>
+            </resource>
+        </resources>
+
+        <!-- Include the contents of the test-resources directory in all test classpaths. -->
+        <testResources>
+            <testResource>
+                <directory>src/test-resources</directory>
+            </testResource>
+        </testResources>
+
+    </build>
+
+</project>

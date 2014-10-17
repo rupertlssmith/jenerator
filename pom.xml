@@ -118,6 +118,7 @@
         <module>xmlbeans</module>
         <module>xmlutils</module>
         <module>catalogue-example</module>
+        <!--<module>catalogue-manager</module>-->
     </modules>
 
     <dependencyManagement>
