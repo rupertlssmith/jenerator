@@ -225,7 +225,7 @@ public class CatalogueConfigBeanImpl implements Serializable, CatalogueConfigBea
 
             //Class clz = type.getBaseClass();
 
-            Method setCatalogueMethod = clz.getMethod("setCatalogue", Catalogue.class);
+            Method setCatalogueMethod = clz.getMethod("setModel", Catalogue.class);
             ReflectionUtils.callStaticMethod(setCatalogueMethod, new Object[] { model });
         }
         catch (NoSuchMethodException e)
