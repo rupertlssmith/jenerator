@@ -18,13 +18,13 @@ package com.thesett.catalogue.core;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.thesett.catalogue.model.impl.InternalIdImpl;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.thesett.catalogue.config.HibernateConfigBean;
 import com.thesett.catalogue.model.ExternalId;
 import com.thesett.catalogue.model.base.EntityInstanceBase;
+import com.thesett.catalogue.model.impl.InternalIdImpl;
 import com.thesett.common.config.ConfigBeanContext;
 
 /**

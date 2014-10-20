@@ -50,19 +50,16 @@ public class CatalogueConfigBeanTest extends TestCase
     }
 
     /** Check that catalogue configuration succeeds in development mode. */
-    /*
-    public void testDevModeConfig() throws Exception
+    /*public void testDevModeConfig() throws Exception
     {
         // Create a configurator for the test setup and run it.
         Configurator configurator = new Configurator(TEST_CONFIG_DEV);
         configurator.loadConfigBeans();
         configurator.configureAll();
-    }
-    */
+    }*/
 
     /** Check that catalogue configuration succeeds in production mode. */
-    /*
-    public void testProdModeConfig() throws Exception
+    /*public void testProdModeConfig() throws Exception
     {
         // Create a configurator for the test setup and run it. This is a dev mode setup.
         Configurator configurator = new Configurator(TEST_CONFIG_DEV);
@@ -76,8 +73,7 @@ public class CatalogueConfigBeanTest extends TestCase
 
         // Re-run the configuration in production mode.
         configurator.reConfigureAll();
-    }
-    */
+    }*/
 
     protected void setUp() throws Exception
     {
