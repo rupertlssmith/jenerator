@@ -105,12 +105,6 @@ public class CatalogueManagerServiceImpl extends CatalogueManipulatorBase implem
             CatalogueConfigBean catalogueBean =
                 (CatalogueConfigBean) configBeanContext.getConfiguredBean(CatalogueConfigBeanImpl.class.getName());
             setCatalogue(catalogueBean.getCatalogue());
-
-            // Extract and keep a reference to the index store.
-            IndexStoreConfigBean indexStoreBean =
-                (IndexStoreConfigBean) configBeanContext.getConfiguredBean(
-                    "com.thesett.index.config.IndexStoreConfigBean");
-            setIndexStore(indexStoreBean.getIndexStore());
         }
         catch (ConfigException e)
         {

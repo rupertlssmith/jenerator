@@ -18,19 +18,24 @@ package com.thesett.catalogue.config;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicLong;
 
-import com.thesett.catalogue.model.Catalogue;
-import com.thesett.catalogue.model.ViewType;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.jdbc.Work;
 
 import com.thesett.aima.attribute.impl.EnumeratedStringAttribute;
 import com.thesett.aima.attribute.impl.HierarchyAttribute;
 import com.thesett.aima.attribute.impl.HierarchyType;
 import com.thesett.aima.state.ComponentType;
 import com.thesett.aima.state.Type;
+import com.thesett.catalogue.model.Catalogue;
+import com.thesett.catalogue.model.ViewType;
 import com.thesett.common.config.ConfigBeanContext;
 import com.thesett.common.config.ConfigException;
 import com.thesett.common.util.ReflectionUtils;
@@ -283,17 +288,19 @@ public class CatalogueConfigBeanImpl implements Serializable, CatalogueConfigBea
     {
         log.debug("private void createEnumerationReferenceTypes(): called");
 
+        final AtomicLong id = new AtomicLong();
+
         for (EnumeratedStringAttribute.EnumeratedStringType enumType : model.getAllEnumTypes())
         {
+            Session session = hibernateBean.getSecondarySession();
+            Transaction transaction = session.beginTransaction();
+
             for (Iterator<EnumeratedStringAttribute> enumIterator = enumType.getAllPossibleValuesIterator(false);
                     enumIterator.hasNext();)
             {
-                EnumeratedStringAttribute enumAttribute = enumIterator.next();
+                final EnumeratedStringAttribute enumAttribute = enumIterator.next();
                 String enumName = enumAttribute.getType().getName();
                 String enumClassName = StringUtils.toCamelCaseUpper(enumName);
-
-                Session session = hibernateBean.getSecondarySession();
-                Transaction transaction = session.beginTransaction();
 
                 // Create an instance of the enumeration bean class using a constructor on the enumeration value.
                 Class theBeanClass = ReflectionUtils.forName(model.getModelPackage() + "." + enumClassName);
@@ -301,16 +308,36 @@ public class CatalogueConfigBeanImpl implements Serializable, CatalogueConfigBea
                 Class[] arguments = new Class[] { EnumeratedStringAttribute.class };
                 Constructor beanConstructor = ReflectionUtils.getConstructor(theBeanClass, arguments);
 
+                enumAttribute.setId(id.get());
+
                 Object theBean = ReflectionUtils.newInstance(beanConstructor, new Object[] { enumAttribute });
 
                 log.debug("Created enum bean: " + theBean);
 
                 // Store the hierarchy value in the database.
-                session.save(theBean);
+                final String tableName = enumClassName + "_enumeration";
 
-                transaction.commit();
-                session.close();
+                session.doWork(new Work()
+                    {
+                        public void execute(Connection connection) throws SQLException
+                        {
+                            PreparedStatement sql = null;
+
+                            sql = connection.prepareStatement("DELETE FROM " + tableName);
+                            sql.execute();
+
+                            String value = enumAttribute.getStringValue();
+
+                            sql = connection.prepareStatement("INSERT INTO " + tableName + " VALUES (?, ?)");
+                            sql.setLong(1, id.getAndIncrement());
+                            sql.setString(2, value);
+                            sql.execute();
+                        }
+                    });
             }
+
+            transaction.commit();
+            session.close();
         }
     }
 }
