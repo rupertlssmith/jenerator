@@ -149,10 +149,6 @@ public class CatalogueConfigBeanImpl implements Serializable, CatalogueConfigBea
         ModeConfigBean modeBean =
             (ModeConfigBean) configBeanContext.getConfiguredBean("com.thesett.catalogue.config.ModeConfigBean");
 
-        // Ensure that the index store config bean has been set up, and get a reference to it.
-        IndexStoreConfigBean indexBean =
-            (IndexStoreConfigBean) configBeanContext.getConfiguredBean("com.thesett.index.config.IndexStoreConfigBean");
-
         // Create the catalogue logical model from the raw model.
         model = loaderBean.getCatalogue();
 
