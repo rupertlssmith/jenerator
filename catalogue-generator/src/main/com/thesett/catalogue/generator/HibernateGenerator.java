@@ -237,8 +237,6 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
                     {
                         put(label, TypeDecoratorFactory.decorateType(JavaType.STRING_TYPE));
                     }
-
-                    put(type.getName(), decoratedType);
                 }
             };
 
