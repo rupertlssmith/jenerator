@@ -620,3 +620,10 @@ related(X, Y, uni, E1, E2, Prop, TProp, Owner) :-
     related_uni(X, Y, E1, E2, Prop, Owner),
     not(related_uni(Y, X, E2, E1, TProp, _)),
     X = many.
+
+/* ======== top_level_entity/1
+ Lists all entities that are not owned by composition by a parent entity.
+ */
+top_level_entity(N) :-
+    normal_type(entity_type, N, _, _),
+    not(related(_, _, uni, _, N, _, _, O)).
