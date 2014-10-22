@@ -30,7 +30,7 @@ import com.thesett.common.util.StringUtils;
  *
  * @author Rupert Smith
  */
-class CamelCaseRenderer implements AttributeRenderer
+public class CamelCaseRenderer implements AttributeRenderer
 {
     /** {@inheritDoc} */
     public String toString(Object o)
