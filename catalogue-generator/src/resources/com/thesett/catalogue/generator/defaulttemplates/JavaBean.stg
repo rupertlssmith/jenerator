@@ -173,7 +173,7 @@ file_open
 /*
  * Generates the output for a bean in the specified catalogue.
  */
-for_bean(catalogue, decorator, fields, extraFields) ::= <<
+for_bean(catalogue, package, decorator, fields, extraFields) ::= <<
 <if(decorator.view)>
 <catalogue_view_bean(catalogue=catalogue, decorator=decorator, name=classNameMap.(decorator.kind), fields=fields)>
 <else>

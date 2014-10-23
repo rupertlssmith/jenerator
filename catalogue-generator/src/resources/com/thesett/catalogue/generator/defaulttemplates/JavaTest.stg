@@ -25,7 +25,7 @@ file_open
 /*
  * Generates the output for a bean in the specified catalogue.
  */
-for_bean(catalogue, decorator, fields, extraFields) ::= <<
+for_bean(catalogue, package, decorator, fields, extraFields) ::= <<
 <test(catalogue=catalogue, implName=componentImplNameMap.(decorator.kind), decorator=decorator, fields=fields, extraFields=extraFields)>
 >>
 

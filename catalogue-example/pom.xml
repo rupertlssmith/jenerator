@@ -51,7 +51,7 @@
                                 <generator>
                                     <config>
                                         <type>com.thesett.catalogue.generator.JavaBeanGenerator</type>
-                                        <package>com.thesett.catalogue.example</package>
+                                        <outputPackage>com.thesett.catalogue.example</outputPackage>
                                         <outputDir>${basedir}/target/generated-source/</outputDir>
                                     </config>
                                 </generator>
@@ -59,7 +59,7 @@
                                 <generator>
                                     <config>
                                         <type>com.thesett.catalogue.generator.HibernateGenerator</type>
-                                        <package>com.thesett.catalogue.example.hibernate</package>
+                                        <outputPackage>com.thesett.catalogue.example.hibernate</outputPackage>
                                         <outputDir>${basedir}/target/generated-source/</outputDir>
                                         <mappingOutputDir>${basedir}/target/generated-source/</mappingOutputDir>
                                         <mappingFileName>test_catalogue.hbm.xml</mappingFileName>
@@ -69,7 +69,7 @@
                                 <generator>
                                     <config>
                                         <type>com.thesett.catalogue.generator.BeanValidationGenerator</type>
-                                        <package>com.thesett.catalogue.example</package>
+                                        <outputPackage>com.thesett.catalogue.example</outputPackage>
                                         <outputDir>${basedir}/target/generated-source/</outputDir>
                                     </config>
                                 </generator>

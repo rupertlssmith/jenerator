@@ -42,7 +42,7 @@ file_open(catalogue) ::= <<
 /*
  * Generates the output for a beanto be validated.
  */
-for_bean(catalogue, decorator, fields, extraFields) ::= <<
+for_bean(catalogue, package, decorator, fields, extraFields) ::= <<
 <if(decorator.view)>
 <else>
 <if(decorator.componentSubType)>

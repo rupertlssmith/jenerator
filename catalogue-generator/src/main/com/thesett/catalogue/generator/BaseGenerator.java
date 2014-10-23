@@ -92,7 +92,7 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
     protected String outputDir;
 
     /** The Java package name to generate to. */
-    private String modelPackage;
+    private String outputPackage;
 
     /** Used to keep track of output directories that have been created. */
     protected Set<String> createdOutputDirectories = new HashSet<String>();
@@ -120,11 +120,11 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
     /**
      * Establishes the Java package name to generate to.
      *
-     * @param modelPackage The Java package name to generate to.
+     * @param outputPackage The Java package name to generate to.
      */
-    public void setPackage(String modelPackage)
+    public void setOutputPackage(String outputPackage)
     {
-        this.modelPackage = modelPackage;
+        this.outputPackage = outputPackage;
     }
 
     /** {@inheritDoc} */
@@ -244,7 +244,7 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
 
             stringTemplate.setAttribute("decorator", type);
             stringTemplate.setAttribute("catalogue", model);
-            stringTemplate.setAttribute("package", modelPackage);
+            stringTemplate.setAttribute("package", outputPackage);
             stringTemplate.setAttribute("fields", fields);
             stringTemplate.setAttribute("extraFields", extraFields);
 
@@ -264,11 +264,11 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
      *
      * @return The full path to the java source file to output to.
      */
-    protected String nameToJavaFileName(String rootDirName, String prefix, String name, String postfix)
+    protected String nameToJavaFileName(String rootDirName, String packageName, String prefix, String name,
+        String postfix)
     {
         // Work out the full path to the location to write to.
-        String packagePath = (modelPackage != null) ? modelPackage : model.getModelPackage();
-        packagePath = packagePath.replace('.', '/');
+        String packagePath = packageName.replace('.', '/');
 
         final String fullOutputDirName = rootDirName + File.separator + packagePath;
 
@@ -282,6 +282,26 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
 
         // Build the full path to the output file.
         return fullOutputDirName + File.separatorChar + prefix + StringUtils.toCamelCaseUpper(name) + postfix + ".java";
+    }
+
+    /**
+     * Converts a name to camel case and appends and prepends strings onto it, then calculates the directory for the
+     * model package relative to the generation output directory and returns the result as the full path name of the
+     * file to output to, for Java code generation.
+     *
+     * @param  rootDirName The root directory to output to, package directory will come under this.
+     * @param  prefix      The prefix to add to the java file name.
+     * @param  name        The name to convert to camel case as the main part of the java file name.
+     * @param  postfix     The postfix to add to the java file name.
+     *
+     * @return The full path to the java source file to output to.
+     */
+    protected String nameToJavaFileName(String rootDirName, String prefix, String name, String postfix)
+    {
+        // Work out the full path to the location to write to.
+        String packageName = (outputPackage != null) ? outputPackage : model.getModelPackage();
+
+        return nameToJavaFileName(rootDirName, packageName, prefix, name, postfix);
     }
 
     /**

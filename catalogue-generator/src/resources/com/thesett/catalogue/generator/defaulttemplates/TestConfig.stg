@@ -50,7 +50,7 @@ file_open(catalogue) ::= <<
 /*
  * Generates the output for a bean in the specified catalogue.
  */
-for_bean(catalogue, decorator, fields, extraFields) ::= <<
+for_bean(catalogue, package, decorator, fields, extraFields) ::= <<
 >>
 
 /*
