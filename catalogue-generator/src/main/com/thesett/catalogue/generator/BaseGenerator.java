@@ -244,6 +244,7 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
 
             stringTemplate.setAttribute("decorator", type);
             stringTemplate.setAttribute("catalogue", model);
+            stringTemplate.setAttribute("package", modelPackage);
             stringTemplate.setAttribute("fields", fields);
             stringTemplate.setAttribute("extraFields", extraFields);
 
@@ -266,7 +267,7 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
     protected String nameToJavaFileName(String rootDirName, String prefix, String name, String postfix)
     {
         // Work out the full path to the location to write to.
-        String packagePath = model.getModelPackage().replace('.', '/');
+        String packagePath = (modelPackage != null) ? modelPackage : model.getModelPackage().replace('.', '/');
         final String fullOutputDirName = rootDirName + File.separator + packagePath;
 
         // Ensure that the output directory exists for the location, if it has not already been created.
