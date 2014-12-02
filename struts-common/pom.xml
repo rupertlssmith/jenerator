@@ -4,7 +4,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>struts-common</artifactId>
     <name>struts-common</name>
-    <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
+    <version>0.8.9</version><!-- jenerator.version -->
 
     <description>The part of the common library that is Struts dependant. Split of from the rest of the common library as it needs to be deployed in .war files with Struts projects only.</description>
     <url>http://www.thesett.com/struts-common</url>
@@ -18,7 +18,7 @@
     <parent>
         <groupId>com.thesett</groupId>
         <artifactId>jenerator_build</artifactId>
-        <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
+        <version>0.8.9</version><!-- jenerator.version -->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -26,7 +26,7 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>common</artifactId>
-            <version>0.8.9-SNAPSHOT</version><!-- jenerator.version -->
+            <version>0.8.9</version><!-- jenerator.version -->
         </dependency>
 
         <dependency>
