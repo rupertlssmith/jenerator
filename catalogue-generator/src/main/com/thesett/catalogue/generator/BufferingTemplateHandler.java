@@ -38,6 +38,12 @@ public class BufferingTemplateHandler implements BaseGenerator.ProcessedTemplate
         buffer.append(template);
     }
 
+    /** Clears the internal buffer. */
+    public void clear()
+    {
+        buffer = new StringBuffer();
+    }
+
     /**
      * Provides the contents of the buffer that template output has been written to.
      *

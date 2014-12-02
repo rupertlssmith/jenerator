@@ -92,7 +92,7 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
     protected String outputDir;
 
     /** The Java package name to generate to. */
-    private String outputPackage;
+    protected String outputPackage;
 
     /** Used to keep track of output directories that have been created. */
     protected Set<String> createdOutputDirectories = new HashSet<String>();
@@ -223,8 +223,10 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
 
     /**
      * Applies a sequence of templates to a catalogue model, type from the catalogue, and set of fields from the type,
-     * and optioanlly an extra set of fields. These parameters are the parameters that the "for_bean" string template
-     * function is exptecting and they are passed to such a template, and the results written to the specified file.
+     * and optionally an extra set of fields. These parameters are the parameters that the "for_bean" string template
+     * function is expecting and they are passed to such a template, and the results written to the specified handler.
+     *
+     * <p/>Applies the default "for_bean" template.
      *
      * @param model       The catalogue model.
      * @param type        The type to generate for.
@@ -237,10 +239,31 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
     protected void generate(Catalogue model, Type type, StringTemplateGroup[] templates, String[] outputName,
         Map<String, Type> fields, Map<String, Type> extraFields, ProcessedTemplateHandler[] handler)
     {
+        generate(model, type, templates, outputName, fields, extraFields, handler, FOR_BEAN_TEMPLATE);
+    }
+
+    /**
+     * Applies a sequence of templates to a catalogue model, type from the catalogue, and set of fields from the type,
+     * and optionally an extra set of fields. These parameters are the parameters that the string template function is
+     * expecting and they are passed to such a template, and the results written to the specified handler.
+     *
+     * @param model        The catalogue model.
+     * @param type         The type to generate for.
+     * @param templates    The sequence of templates to apply.
+     * @param outputName   A sequence of named resources, such as files, to write the results to.
+     * @param fields       A set of fields from the type to generate for.
+     * @param extraFields  A optional secondary set of fields from the type to generate for.
+     * @param handler      A sequence of output handlers, to apply to the results.
+     * @param templateName The name of the template to apply.
+     */
+    protected void generate(Catalogue model, Type type, StringTemplateGroup[] templates, String[] outputName,
+        Map<String, Type> fields, Map<String, Type> extraFields, ProcessedTemplateHandler[] handler,
+        String templateName)
+    {
         for (int i = 0; i < templates.length; i++)
         {
             // Instantiate the template to generate from.
-            StringTemplate stringTemplate = templates[i].getInstanceOf(FOR_BEAN_TEMPLATE);
+            StringTemplate stringTemplate = templates[i].getInstanceOf(templateName);
 
             stringTemplate.setAttribute("decorator", type);
             stringTemplate.setAttribute("catalogue", model);
@@ -399,6 +422,63 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
         public void processed(StringTemplate template, String outputName)
         {
             FileUtils.writeObjectToFile(outputName, template, append);
+        }
+    }
+
+    /**
+     * Generate captures all the parameters to a call to the 'generate' methods. This can be useful if a call is to be
+     * delayed for some reason, such as calling the generate methods in a different order to the traversal over the
+     * model.
+     */
+    protected class Generate
+    {
+        private final Catalogue model;
+        private final ComponentTypeDecorator decoratedType;
+        private final StringTemplateGroup[] templates;
+        private final String[] names;
+        private final Map<String, Type> fields;
+        private final Map<String, Type> extraFields;
+        private final ProcessedTemplateHandler[] handlers;
+        private final String templateName;
+
+        public Generate(Catalogue model, ComponentTypeDecorator decoratedType, StringTemplateGroup[] templates,
+            String[] names, Map<String, Type> fields, Map<String, Type> extraFields,
+            ProcessedTemplateHandler[] handlers, String templateName)
+        {
+            this.model = model;
+            this.decoratedType = decoratedType;
+            this.templates = templates;
+            this.names = names;
+            this.fields = fields;
+            this.extraFields = extraFields;
+            this.handlers = handlers;
+            this.templateName = templateName;
+        }
+
+        public Generate(Catalogue model, ComponentTypeDecorator decoratedType, StringTemplateGroup[] templates,
+            String[] names, Map<String, Type> fields, Map<String, Type> extraFields,
+            ProcessedTemplateHandler[] handlers)
+        {
+            this.model = model;
+            this.decoratedType = decoratedType;
+            this.templates = templates;
+            this.names = names;
+            this.fields = fields;
+            this.extraFields = extraFields;
+            this.handlers = handlers;
+            this.templateName = null;
+        }
+
+        public void apply()
+        {
+            if (templateName == null)
+            {
+                generate(model, decoratedType, templates, names, fields, extraFields, handlers);
+            }
+            else
+            {
+                generate(model, decoratedType, templates, names, fields, extraFields, handlers, templateName);
+            }
         }
     }
 }
