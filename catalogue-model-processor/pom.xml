@@ -41,7 +41,7 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>power_model</artifactId>
-            <version>0.8.10-SNAPSHOT</version><!--jenerator.version-->
+            <version>0.8.10-SNAPSHOT</version><!--lojix.version-->
         </dependency>
 
         <dependency>
@@ -53,7 +53,7 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>prolog</artifactId>
-            <version>0.8.10-SNAPSHOT</version><!--jenerator.version-->
+            <version>0.8.10-SNAPSHOT</version><!--lojix.version-->
         </dependency>
 
         <dependency>
