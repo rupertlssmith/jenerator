@@ -1519,5 +1519,11 @@ public class CatalogueModelFactory
         public void setImmediateAncestors(Set<ComponentType> immediateAncestors)
         {
         }
+
+        /** {@inheritDoc} */
+        public State getMetaModel()
+        {
+            return null;
+        }
     }
 }

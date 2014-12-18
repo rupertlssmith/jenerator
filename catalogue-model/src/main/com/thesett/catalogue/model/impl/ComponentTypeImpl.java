@@ -63,6 +63,9 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
     /** Holds the ancestor types of this component. */
     private Set<ComponentType> immediateAncestors;
 
+    /** Holds the meta-model instance associated with this component. */
+    private State metaModel;
+
     /**
      * Creates a knowledge level description of a component type with the specified name for a set of attribute types.
      *
@@ -187,6 +190,22 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
     public int getNumPossibleValues()
     {
         return -1;
+    }
+
+    /** {@inheritDoc} */
+    public State getMetaModel()
+    {
+        return metaModel;
+    }
+
+    /**
+     * Associated a meta-model instance with this component.
+     *
+     * @param metaModel A meta-model instance to associate with this component.
+     */
+    public void setMetaModel(State metaModel)
+    {
+        this.metaModel = metaModel;
     }
 
     /** {@inheritDoc} */

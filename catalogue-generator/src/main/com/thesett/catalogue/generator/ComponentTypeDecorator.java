@@ -152,4 +152,10 @@ public class ComponentTypeDecorator extends TypeDecorator implements ComponentTy
     {
         ((ComponentType) type).setImmediateAncestors(immediateAncestors);
     }
+
+    /** {@inheritDoc} */
+    public State getMetaModel()
+    {
+        return ((ComponentType) type).getMetaModel();
+    }
 }
