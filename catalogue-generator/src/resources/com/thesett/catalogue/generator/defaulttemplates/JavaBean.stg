@@ -207,35 +207,35 @@ file_close
 /*
  * Creates a bean class for an entity type, with name/type fields, for a given catalogue model.
  */
-catalogue_entity_bean(catalogue, decorator, name, fields, baseClass) ::= <<
+catalogue_entity_bean(catalogue, decorator, name, fields, baseClass="") ::= <<
 <bean(catalogue=catalogue, decorator=decorator, name=name, fields=fields, baseClass=baseClass, id_fields="long_id_fields", id_methods="long_id_methods", equals="true", extraCons="component_constructor", extraConsFields=fields, typeMap=componentBeanTypeMap, setterMap=beanSetterTypeMap, fluents="true", fluentMap=beanFluentTypeMap)>
 >>
 
 /*
  * Creates a bean class for a component type, with name/type fields, for a given catalogue model.
  */
-catalogue_component_bean(catalogue, decorator, name, fields, baseClass) ::= <<
+catalogue_component_bean(catalogue, decorator, name, fields, baseClass="") ::= <<
 <bean(catalogue=catalogue, decorator=decorator, name=name, fields=fields, baseClass=baseClass, equals="true", extraCons="component_constructor", extraConsFields=fields, typeMap=componentBeanTypeMap, setterMap=beanSetterTypeMap, fluents="true", fluentMap=beanFluentTypeMap)>
 >>
 
 /*
  * Creates a bean class for a view implementation type, with name/type fields, for a given catalogue model.
  */
-catalogue_view_bean(catalogue, decorator, name, fields, baseClass) ::= <<
+catalogue_view_bean(catalogue, decorator, name, fields, baseClass="") ::= <<
 <bean(catalogue=catalogue, decorator=decorator, name=name, fields=fields, baseClass=baseClass, id_fields="long_id_fields", id_methods="long_id_methods", equals="true", typeMap=componentBeanTypeMap, setterMap=beanSetterTypeMap, fluents="true", fluentMap=beanFluentTypeMap)>
 >>
 
 /*
  * Creates a bean class for a hierarchy type, for a given catalogue model.
  */
-catalogue_hierarchy_bean(catalogue, decorator, name, fields, extraConsFields) ::= <<
+catalogue_hierarchy_bean(catalogue, decorator, name, fields, extraConsFields="") ::= <<
 <bean(catalogue=catalogue, decorator=decorator, name=name, fields=fields, baseClass="HierarchyInstanceBase", id_methods="hierarchy_id_methods", equals="true", extraCons="hierarchy_constructor", extraConsFields=extraConsFields, typeMap=customBeanTypeMap, setterMap=hierarchySetterTypeMap)>
 >>
 
 /*
  * Creates a bean class for a enumeration type, for a given catalogue model.
  */
-catalogue_enumeration_bean(catalogue, decorator, name, fields, extraConsFields) ::= <<
+catalogue_enumeration_bean(catalogue, decorator, name, fields, extraConsFields="") ::= <<
 <bean(catalogue=catalogue, decorator=decorator, name=name, fields=fields, id_methods="enumeration_id_methods", equals="true", extraCons="enumeration_constructor", extraConsFields=extraConsFields, typeMap=customBeanTypeMap, setterMap=beanSetterTypeMap)>
 >>
 
@@ -372,7 +372,7 @@ no_serdes_control(decorator) ::= <<
 /*
  * Creates a bean with getters and setters for the specified fields.
  */
-bean(catalogue, decorator, name, fields, baseClass, id_fields, id_methods, equals, extraCons, extraConsFields, typeMap, setterMap, fluents, fluentMap) ::= <<
+bean(catalogue, decorator, name, fields, baseClass="", id_fields="", id_methods="", equals="", extraCons="", extraConsFields="", typeMap, setterMap="", fluents="", fluentMap="") ::= <<
 <package(catalogue)>
 
 import java.util.*;
@@ -418,7 +418,7 @@ public class <name; format="ccu"> <if(baseClass)>extends <baseClass><endif> impl
 
     <endif>
     <if(fields)>
-    <fields.keys:field_declrs(); separator="\n\n">
+    <fields:{it|<field_declrs(it)>}; separator="\n\n">
 
     <endif>
     <if(extraCons)>
@@ -431,8 +431,8 @@ public class <name; format="ccu"> <if(baseClass)>extends <baseClass><endif> impl
     <endif>    
     <if(fields)>
     <if(fluents)><fields:{it|<(fluentMap.(fields.(it).kind))(name)>}; separator="\n\n"><endif>
-    <fields.keys:getters(); separator="\n\n">
-    <fields.keys:{it|<(setterMap.(fields.(it).kind))()>}; separator="\n\n">
+    <fields:{it|<getters(it)>}; separator="\n\n">
+    <fields:{it|<(setterMap.(fields.(it).kind))()>}; separator="\n\n">
 
     <endif>
     <if(decorator.externalId)>
@@ -636,22 +636,22 @@ public void setId(Long id) {
 /*
  * Creates protected field declarations for all name/type attributes.
  */
-field_declrs() ::= <<
-/** Holds the <it> property. */
-protected <(typeMap.(fields.(it).kind))(fields.(it))> <it; format="cc">;
+field_declrs(field) ::= <<
+/** Holds the <field> property. */
+protected <(typeMap.(fields.(field).kind))(fields.(field))> <field; format="cc">;
 >>
 
 /*
  * Creates public getters for all name/type attributes.
  */
-getters() ::= <<
+getters(field) ::= <<
 /**
- * Provides the <it> property.
+ * Provides the <field> property.
  *
- * @return The <it> property.
+ * @return The <field> property.
  */
-public <(typeMap.(fields.(it).kind))(fields.(it))> get<it; format="ccu">() {
-    return <it; format="cc">;
+public <(typeMap.(fields.(field).kind))(fields.(field))> get<field; format="ccu">() {
+    return <field; format="cc">;
 }
 >>
 
