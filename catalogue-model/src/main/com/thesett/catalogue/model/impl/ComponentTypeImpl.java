@@ -28,6 +28,7 @@ import com.thesett.aima.state.RandomInstanceNotSupportedException;
 import com.thesett.aima.state.State;
 import com.thesett.aima.state.Type;
 import com.thesett.aima.state.TypeVisitor;
+import com.thesett.aima.state.impl.MapBackedState;
 import com.thesett.catalogue.model.CollectionType;
 import com.thesett.catalogue.model.ComponentInstance;
 import com.thesett.catalogue.model.ComponentTypeVisitor;
@@ -195,6 +196,11 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
     /** {@inheritDoc} */
     public State getMetaModel()
     {
+        if (metaModel == null)
+        {
+            metaModel = new MapBackedState();
+        }
+
         return metaModel;
     }
 

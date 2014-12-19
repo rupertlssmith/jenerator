@@ -15,7 +15,9 @@
  */
 package com.thesett.catalogue.generator;
 
-import org.antlr.stringtemplate.AttributeRenderer;
+import java.util.Locale;
+
+import org.stringtemplate.v4.AttributeRenderer;
 
 import com.thesett.common.util.StringUtils;
 
@@ -32,6 +34,12 @@ import com.thesett.common.util.StringUtils;
  */
 public class CamelCaseRenderer implements AttributeRenderer
 {
+    /** {@inheritDoc} */
+    public String toString(Object o, String s, Locale locale)
+    {
+        return toString(o, s);
+    }
+
     /** {@inheritDoc} */
     public String toString(Object o)
     {

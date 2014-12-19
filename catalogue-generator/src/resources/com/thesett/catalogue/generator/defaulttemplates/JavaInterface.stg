@@ -65,12 +65,12 @@ getters_setters_interface() ::= <<
  *
  * @return The <it> property.
  */
-<(typeMap.(fields.(it).kind))(field=fields.(it))> get<it; format="ccu">();
+<(typeMap.(fields.(it).kind))(fields.(it))> get<it; format="ccu">();
 
 /**
  * Accepts a new value for the <it> property.
  *
  * @param <it; format="cc"> The <it> property.
  */
-void set<it; format="ccu">(<(typeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">);
+void set<it; format="ccu">(<(typeMap.(fields.(it).kind))(fields.(it))> <it; format="cc">);
 >>

@@ -522,9 +522,37 @@ public class CatalogueModelFactory
     }
 
     /**
+     * Queries the relationships between components, to find which components have no incoming relationship links by
+     * composition, and are therefore not wholly owned by other components and can be considered to be top-level.
+     *
+     * @param catalogueTypes The types in the catalogue to extract the top-level feature of.
+     */
+    private void initializeAllTopLevel(Map<String, Type> catalogueTypes)
+    {
+        // Query for all top-level entities.
+        String queryString = "?-top_level_entity(Name).";
+        Iterable<Map<String, Variable>> fieldBindingsIterable = runQuery(queryString);
+
+        for (Map<String, Variable> variables : fieldBindingsIterable)
+        {
+            String componentName = engine.getFunctorName((Functor) variables.get("Name").getValue());
+
+            // Check if the top-level entity was in the list of types to extract.
+            Type type = catalogueTypes.get(componentName);
+
+            if (type instanceof EntityType)
+            {
+                EntityType entityType = (EntityType) type;
+                State metaModel = entityType.getMetaModel();
+                metaModel.setProperty("topLevel", true);
+            }
+        }
+    }
+
+    /**
      * Queries the relationships between components, to discover what the nature of those relationship is.
      *
-     * @param catalogueTypes
+     * @param catalogueTypes The types in the catalogue to extract the relationships of.
      */
     private void initializeAllRelationships(Map<String, Type> catalogueTypes)
     {
@@ -1241,6 +1269,7 @@ public class CatalogueModelFactory
 
         // Examine all the component relationships.
         initializeAllRelationships(catalogueTypes);
+        initializeAllTopLevel(catalogueTypes);
     }
 
     /**

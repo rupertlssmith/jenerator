@@ -18,7 +18,8 @@ package com.thesett.catalogue.generator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.antlr.stringtemplate.StringTemplateGroup;
+import org.stringtemplate.v4.STGroup;
+import org.stringtemplate.v4.STGroupFile;
 
 import com.thesett.aima.attribute.impl.EnumeratedStringAttribute;
 import com.thesett.aima.attribute.impl.EnumeratedStringTypeVisitor;
@@ -49,14 +50,14 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
     private static final String JAVA_INTERFACE_TEMPLATES_GROUP = "JavaInterface";
 
     /** Holds the string template group to generate Java beans from. */
-    private StringTemplateGroup javaBeanTemplates;
+    private STGroup javaBeanTemplates;
 
     /** Holds the string template group to generate Java interfaces from. */
-    private StringTemplateGroup javaInterfaceTemplates;
+    private STGroup javaInterfaceTemplates;
 
     /** Holds a file output handler that overwrites files. */
-    protected FileOutputProcessedTemplateHandler fileOutputProcessedTemplateHandler =
-        new FileOutputProcessedTemplateHandler(false);
+    protected FileOutputRenderTemplateHandler fileOutputProcessedTemplateHandler =
+        new FileOutputRenderTemplateHandler(false);
 
     /**
      * Creates a Java generator to output to the specified directory root.
@@ -67,10 +68,10 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
     {
         super(templateDir);
 
-        javaBeanTemplates = StringTemplateGroup.loadGroup(JAVA_BEAN_TEMPLATES_GROUP);
+        javaBeanTemplates = new STGroupFile(templateGroupToFileName(JAVA_BEAN_TEMPLATES_GROUP));
         javaBeanTemplates.registerRenderer(String.class, new CamelCaseRenderer());
 
-        javaInterfaceTemplates = StringTemplateGroup.loadGroup(JAVA_INTERFACE_TEMPLATES_GROUP);
+        javaInterfaceTemplates = new STGroupFile(templateGroupToFileName(JAVA_INTERFACE_TEMPLATES_GROUP));
         javaInterfaceTemplates.registerRenderer(String.class, new CamelCaseRenderer());
     }
 
@@ -83,16 +84,16 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
     {
         ComponentTypeDecorator decoratedType = (ComponentTypeDecorator) TypeDecoratorFactory.decorateType(type);
 
-        StringTemplateGroup[] templates;
+        STGroup[] templates;
         String[] names;
         Map<String, Type> fields = decoratedType.getAllPropertyTypes();
         Map<String, Type> extraFields = null;
-        ProcessedTemplateHandler[] handlers =
-            new ProcessedTemplateHandler[] { fileOutputProcessedTemplateHandler, fileOutputProcessedTemplateHandler };
+        RenderTemplateHandler[] handlers =
+            new RenderTemplateHandler[] { fileOutputProcessedTemplateHandler, fileOutputProcessedTemplateHandler };
 
         if (decoratedType.isView())
         {
-            templates = new StringTemplateGroup[] { javaBeanTemplates, javaInterfaceTemplates };
+            templates = new STGroup[] { javaBeanTemplates, javaInterfaceTemplates };
             names =
                 new String[]
                 {
@@ -102,7 +103,7 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
         }
         else
         {
-            templates = new StringTemplateGroup[] { javaBeanTemplates };
+            templates = new STGroup[] { javaBeanTemplates };
             names = new String[] { nameToJavaFileName(outputDir, "", type.getName(), "") };
         }
 
@@ -138,7 +139,7 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
     {
         final TypeDecorator decoratedType = TypeDecoratorFactory.decorateType(type);
 
-        StringTemplateGroup[] templates = new StringTemplateGroup[] { javaBeanTemplates };
+        STGroup[] templates = new STGroup[] { javaBeanTemplates };
         String[] names = new String[] { nameToJavaFileName(outputDir, "", type.getName(), "") };
 
         Map<String, Type> fields =
@@ -157,7 +158,7 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
                 }
             };
 
-        ProcessedTemplateHandler[] handlers = new ProcessedTemplateHandler[] { fileOutputProcessedTemplateHandler };
+        RenderTemplateHandler[] handlers = new RenderTemplateHandler[] { fileOutputProcessedTemplateHandler };
 
         generate(model, decoratedType, templates, names, fields, extraFields, handlers);
     }

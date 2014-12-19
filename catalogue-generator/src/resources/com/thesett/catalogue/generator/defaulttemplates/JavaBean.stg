@@ -2,7 +2,8 @@
  * JavaBean is an implementation of the Generator interface, that creates Java beans for types
  * in a catalogue model.
  */
-group JavaBean : JavaCommon implements Generator;
+/*group JavaBean : JavaCommon implements Generator;*/
+import "JavaCommon.stg"
 
 /* Holds a mapping from kinds of catalogue types to class names for their implementation. */
 classNameMap ::= [
@@ -150,7 +151,7 @@ hashCodeMap ::= [
     "Long":"object_hash_code",
     "Float":"object_hash_code",
     "Double":"object_hash_code",
-    "Object":"object_hash_code"
+    "Object":"object_hash_code",
     default:"object_hash_code"
 ]
 
@@ -258,8 +259,8 @@ public <name; format="ccu">() {
 <if(fluents)><else>
 <if(fields)>
 /** The full constructor to build the component from all of its elements. */
-public <name; format="ccu">(<fields.keys:{<(typeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">}; separator=", ">) {
-    <fields.keys:{this.<it; format="cc"> = <it; format="cc">;}; separator="\n">
+public <name; format="ccu">(<fields:{it|<(typeMap.(fields.(it).kind))(fields.(it))> <it; format="cc">}; separator=", ">) {
+    <fields:{it|this.<it; format="cc"> = <it; format="cc">;}; separator="\n">
 }
 
 <endif>
@@ -275,10 +276,10 @@ public <name; format="ccu">() {
 }
     
 /** The constructor to build the hierarchy from a set of labels. */
-public <name; format="ccu">(<fields.keys:{<(customBeanTypeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">}; separator=", ">) {
+public <name; format="ccu">(<fields:{it|<(customBeanTypeMap.(fields.(it).kind))(fields.(it))> <it; format="cc">}; separator=", ">) {
     HierarchyAttributeFactory factory = HierarchyAttribute.getFactoryForClass("<name>");
 
-    <name; format="cc"> = factory.createHierarchyAttribute(new String[] { <fields.keys:{<it; format="cc">}; separator=", "> });
+    <name; format="cc"> = factory.createHierarchyAttribute(new String[] { <fields:{it|<it; format="cc">}; separator=", "> });
 }
 >>
 
@@ -291,10 +292,10 @@ public <name; format="ccu">() {
 }
     
 /** The constructor to build the view with an id and external id as well as the usual parameter. */
-public <name; format="ccu">(Long id, ExternalId externalId, <fields.keys:{<(objectBeanTypeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">}; separator=", ">) {
+public <name; format="ccu">(Long id, ExternalId externalId, <fields:{it|<(objectBeanTypeMap.(fields.(it).kind))(fields.(it))> <it; format="cc">}; separator=", ">) {
     this.id = id;
     this.externalId = externalId;
-    <fields.keys:{this.<it; format="cc"> = <it; format="cc">; }; separator="\n">
+    <fields.keys:{it|this.<it; format="cc"> = <it; format="cc">; }; separator="\n">
 }
 >>
 
@@ -307,8 +308,8 @@ public <name; format="ccu">() {
 }
     
 /** The constructor to build the enumeration from a label. */
-public <name; format="ccu">(<fields.keys:{<(customBeanTypeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">}; separator=", ">) {
-    <name; format="cc"> = enumFactory().createStringAttribute(<fields.keys:{<it; format="cc">}>);
+public <name; format="ccu">(<fields:{it|<(customBeanTypeMap.(fields.(it).kind))(fields.(it))> <it; format="cc">}; separator=", ">) {
+    <name; format="cc"> = enumFactory().createStringAttribute(<fields.keys:{it|<it; format="cc">}>);
 }
 
 /**
@@ -343,7 +344,7 @@ EnumeratedStringAttribute
 enumeration_constants(decorator) ::= <<
 <if(decorator.labels)>    
 /** Labels for  <(componentBeanTypeMap.(decorator.kind))(decorator)>. */
-<decorator.labels.keys:{public static final <(componentBeanTypeMap.(decorator.kind))(decorator)> <it; format="u"> = new <(componentBeanTypeMap.(decorator.kind))(decorator)>("<it>");}; separator="\n">
+<decorator.labels:{it|public static final <(componentBeanTypeMap.(decorator.kind))(decorator)> <it; format="u"> = new <(componentBeanTypeMap.(decorator.kind))(decorator)>("<it>");}; separator="\n">
 <endif>
 
 >>
@@ -399,14 +400,14 @@ import org.mygovscot.api.entity.Entity;
  *
  * \<pre\>\<p/\>\<table id="equality"\>\<caption\>Equality Fields\</caption\>
  * \<tr\>\<th\> Field Name \</th\>\</tr\>
-<decorator.naturalKeyFieldTypes.keys:{ * \<tr\>\<td\> <it; format="cc"> \</tr\>\</td\>}; separator="\n">
+<decorator.naturalKeyFieldTypes:{it| * \<tr\>\<td\> <it; format="cc"> \</tr\>\</td\>}; separator="\n">
  * \</table\>\</pre\><endif>    
  *
  * @author Generated Code
  */
-<(serDesControlMap.(decorator.kind))(decorator=decorator)>
-public class <name; format="ccu"> <if(baseClass)>extends <baseClass><endif> implements <if(decorator.immediateAncestors)><decorator.immediateAncestors: {<it.name; format="ccu">}; separator=",">, <endif><if(decorator.externalId)>ExternallyIdentified, <endif><if(decorator.entitySubType)>Entity\<Long\>,<endif> Serializable {
-    <(constantsTemplateMap.(decorator.kind))(decorator=decorator)>
+<(serDesControlMap.(decorator.kind))(decorator)>
+public class <name; format="ccu"> <if(baseClass)>extends <baseClass><endif> implements <if(decorator.immediateAncestors)><decorator.immediateAncestors: {it|<it.name; format="ccu">}; separator=",">, <endif><if(decorator.externalId)>ExternallyIdentified, <endif><if(decorator.entitySubType)>Entity\<Long\>,<endif> Serializable {
+    <(constantsTemplateMap.(decorator.kind))(decorator)>
     <if(decorator.externalId)>
     /** Holds the external id of this dimension element. */
     protected ExternalId externalId;
@@ -421,7 +422,7 @@ public class <name; format="ccu"> <if(baseClass)>extends <baseClass><endif> impl
 
     <endif>
     <if(extraCons)>
-    <(extraCons)(name=name, fields=extraConsFields)>
+    <(extraCons)(name, extraConsFields)>
 
     <endif>
     <if(id_methods)>
@@ -429,9 +430,9 @@ public class <name; format="ccu"> <if(baseClass)>extends <baseClass><endif> impl
 
     <endif>    
     <if(fields)>
-    <if(fluents)><fields.keys:{<(fluentMap.(fields.(it).kind))(name)>}; separator="\n\n"><endif>
+    <if(fluents)><fields:{it|<(fluentMap.(fields.(it).kind))(name)>}; separator="\n\n"><endif>
     <fields.keys:getters(); separator="\n\n">
-    <fields.keys:{<(setterMap.(fields.(it).kind))()>}; separator="\n\n">
+    <fields.keys:{it|<(setterMap.(fields.(it).kind))()>}; separator="\n\n">
 
     <endif>
     <if(decorator.externalId)>
@@ -469,7 +470,7 @@ public class <name; format="ccu"> <if(baseClass)>extends <baseClass><endif> impl
         if (o instanceof <name; format="ccu">) {
             <name; format="ccu"> comp = (<name; format="ccu">)o;
 
-            return <decorator.naturalKeyFieldTypes.keys:{<(comparisonMap.(decorator.naturalKeyFieldTypes.(it).primitiveKind))(it)>}; separator=" && ">;
+            return <decorator.naturalKeyFieldTypes:{it|<(comparisonMap.(decorator.naturalKeyFieldTypes.(it).primitiveKind))(it)>}; separator=" && ">;
         } else {
             return false;
         }
@@ -482,7 +483,7 @@ public class <name; format="ccu"> <if(baseClass)>extends <baseClass><endif> impl
      * @return A hash code of the components equality value.
      */
     public int hashCode() {
-        return <decorator.naturalKeyFieldTypes.keys:{<(hashCodeMap.(decorator.naturalKeyFieldTypes.(it).primitiveKind))(it)>}; separator=" + ">;
+        return <decorator.naturalKeyFieldTypes:{it|<(hashCodeMap.(decorator.naturalKeyFieldTypes.(it).primitiveKind))(it)>}; separator=" + ">;
     }
     <else>
      <if(id_methods)>
@@ -527,7 +528,7 @@ public class <name; format="ccu"> <if(baseClass)>extends <baseClass><endif> impl
     <endif>    
     /** Pretty printing for debugging purposes. */
     public String toString() {
-        return "<name; format="ccu">: [ <if(id_fields)>id = " + id<else>"<endif><if(decorator.naturalKeyFieldTypes)> + <endif><decorator.naturalKeyFieldTypes.keys:{", <it; format="cc"> = " + <it; format="cc">}; separator=" + "> + " ]";
+        return "<name; format="ccu">: [ <if(id_fields)>id = " + id<else>"<endif><if(decorator.naturalKeyFieldTypes)> + <endif><decorator.naturalKeyFieldTypes:{it|", <it; format="cc"> = " + <it; format="cc">}; separator=" + "> + " ]";
     }
 }
 >>
@@ -637,7 +638,7 @@ public void setId(Long id) {
  */
 field_declrs() ::= <<
 /** Holds the <it> property. */
-protected <(typeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">;
+protected <(typeMap.(fields.(it).kind))(fields.(it))> <it; format="cc">;
 >>
 
 /*
@@ -649,7 +650,7 @@ getters() ::= <<
  *
  * @return The <it> property.
  */
-public <(typeMap.(fields.(it).kind))(field=fields.(it))> get<it; format="ccu">() {
+public <(typeMap.(fields.(it).kind))(fields.(it))> get<it; format="ccu">() {
     return <it; format="cc">;
 }
 >>
@@ -663,7 +664,7 @@ basic_setter() ::= <<
  *
  * @param <it; format="cc"> The <it> property.
  */
-public void set<it; format="ccu">(<(typeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">) {
+public void set<it; format="ccu">(<(typeMap.(fields.(it).kind))(fields.(it))> <it; format="cc">) {
     this.<it; format="cc"> = <it; format="cc">;
 }
 >>
@@ -677,7 +678,7 @@ hierarchy_setter() ::= <<
  *
  * @param <it; format="cc"> The <it> property.
  */
-public void set<it; format="ccu">(<(typeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">) {
+public void set<it; format="ccu">(<(typeMap.(fields.(it).kind))(fields.(it))> <it; format="cc">) {
     this.<it; format="cc"> = <it; format="cc">;
 }
     
@@ -687,7 +688,7 @@ public void set<it; format="ccu">(<(typeMap.(fields.(it).kind))(field=fields.(it
  * @param <it; format="cc"> The <it> property.
  */
 public void set<it; format="ccu">(HierarchyAttribute <it; format="cc">) {
-    this.<it; format="cc"> = new <(typeMap.(fields.(it).kind))(field=fields.(it))>(<it; format="cc">);
+    this.<it; format="cc"> = new <(typeMap.(fields.(it).kind))(fields.(it))>(<it; format="cc">);
 }
 >>
 
@@ -700,7 +701,7 @@ basic_fluent(this) ::= <<
  *
  * @param <it; format="cc"> The <it> property.
  */
-public <this; format="ccu"> with<it; format="ccu">(<(typeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">) {
+public <this; format="ccu"> with<it; format="ccu">(<(typeMap.(fields.(it).kind))(fields.(it))> <it; format="cc">) {
     this.<it; format="cc"> = <it; format="cc">;
     return this;
 }
@@ -715,7 +716,7 @@ hierarchy_fluent(this) ::= <<
  *
  * @param <it; format="cc"> The <it> property.
  */
-public <this; format="ccu"> with<it; format="ccu">(<(typeMap.(fields.(it).kind))(field=fields.(it))> <it; format="cc">) {
+public <this; format="ccu"> with<it; format="ccu">(<(typeMap.(fields.(it).kind))(fields.(it))> <it; format="cc">) {
     this.<it; format="cc"> = <it; format="cc">;
     return this;
 }
@@ -726,7 +727,7 @@ public <this; format="ccu"> with<it; format="ccu">(<(typeMap.(fields.(it).kind))
  * @param <it; format="cc"> The <it> property.
  */
 public <this; format="ccu"> with<it; format="ccu">(HierarchyAttribute <it; format="cc">) {
-    this.<it; format="cc"> = new <(typeMap.(fields.(it).kind))(field=fields.(it))>(<it; format="cc">);
+    this.<it; format="cc"> = new <(typeMap.(fields.(it).kind))(fields.(it))>(<it; format="cc">);
     return this;
 }
 >>

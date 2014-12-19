@@ -18,8 +18,9 @@ package com.thesett.catalogue.generator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateGroup;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroup;
+import org.stringtemplate.v4.STGroupFile;
 
 import com.thesett.aima.attribute.impl.DateRangeType;
 import com.thesett.aima.attribute.impl.DateRangeTypeVisitor;
@@ -69,16 +70,16 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     private static final String HIBERNATE_USERTYPE_TEMPLATES_GROUP = "HibernateUserType";
 
     /** Holds the string template group to generate Hibernate online configurations from. */
-    private StringTemplateGroup hibernateOnlineTemplates;
+    private STGroup hibernateOnlineTemplates;
 
     /** Holds the string template group to generate Hibernate user type configurations from. */
-    private StringTemplateGroup hibernateUserTypeConfigTemplates;
+    private STGroup hibernateUserTypeConfigTemplates;
 
     /** Holds the string template group to generate Hibernate warehouse configurations from. */
-    private StringTemplateGroup hibernateWarehouseTemplates;
+    private STGroup hibernateWarehouseTemplates;
 
     /** Holds the string template group to generate user types from. */
-    private StringTemplateGroup hibernateUserTypeTemplates;
+    private STGroup hibernateUserTypeTemplates;
 
     /** The name of the directory to output hibernate mappings to. */
     private String mappingDirName;
@@ -87,20 +88,20 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     private String mappingFileName;
 
     /** Output handler used to build up custom user type def configurations in. */
-    private ProcessedTemplateHandler userTypeDefHandler = new BufferingTemplateHandler();
+    private RenderTemplateHandler userTypeDefHandler = new BufferingTemplateHandler();
 
     /** Output handler used to build up class mappings for normalized custom type definitions. */
-    private ProcessedTemplateHandler normalizedTypeDefHandler = new BufferingTemplateHandler();
+    private RenderTemplateHandler normalizedTypeDefHandler = new BufferingTemplateHandler();
 
     /** Output handler used to build up the online database mapping configuration in. */
-    private ProcessedTemplateHandler onlineMappingHandler = new BufferingTemplateHandler();
+    private RenderTemplateHandler onlineMappingHandler = new BufferingTemplateHandler();
 
     /** Output handler used to build up the warehouse database mapping configuration in. */
-    private ProcessedTemplateHandler warehouseMappingHandler = new BufferingTemplateHandler();
+    private RenderTemplateHandler warehouseMappingHandler = new BufferingTemplateHandler();
 
     /** Holds a file output handler that overwrites files. */
-    protected FileOutputProcessedTemplateHandler fileOutputProcessedTemplateHandler =
-        new FileOutputProcessedTemplateHandler(false);
+    protected FileOutputRenderTemplateHandler fileOutputProcessedTemplateHandler =
+        new FileOutputRenderTemplateHandler(false);
 
     /**
      * Creates a generator for hibernate configuration XML and custom user types to output to the specified directory
@@ -112,16 +113,17 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     {
         super(templateDir);
 
-        hibernateOnlineTemplates = StringTemplateGroup.loadGroup(HIBERNATE_ONLINE_TEMPLATES_GROUP);
+        hibernateOnlineTemplates = new STGroupFile(templateGroupToFileName(HIBERNATE_ONLINE_TEMPLATES_GROUP));
         hibernateOnlineTemplates.registerRenderer(String.class, new CamelCaseRenderer());
 
-        hibernateUserTypeConfigTemplates = StringTemplateGroup.loadGroup(HIBERNATE_USERTYPE_CONFIG_TEMPLATES_GROUP);
+        hibernateUserTypeConfigTemplates =
+            new STGroupFile(templateGroupToFileName(HIBERNATE_USERTYPE_CONFIG_TEMPLATES_GROUP));
         hibernateUserTypeConfigTemplates.registerRenderer(String.class, new CamelCaseRenderer());
 
-        hibernateWarehouseTemplates = StringTemplateGroup.loadGroup(HIBERNATE_WAREHOUSE_TEMPLATES_GROUP);
+        hibernateWarehouseTemplates = new STGroupFile(templateGroupToFileName(HIBERNATE_WAREHOUSE_TEMPLATES_GROUP));
         hibernateWarehouseTemplates.registerRenderer(String.class, new CamelCaseRenderer());
 
-        hibernateUserTypeTemplates = StringTemplateGroup.loadGroup(HIBERNATE_USERTYPE_TEMPLATES_GROUP);
+        hibernateUserTypeTemplates = new STGroupFile(templateGroupToFileName(HIBERNATE_USERTYPE_TEMPLATES_GROUP));
         hibernateUserTypeTemplates.registerRenderer(String.class, new CamelCaseRenderer());
     }
 
@@ -151,8 +153,8 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
         String outputFileName = nameToFileNameInRootGenerationDir(mappingFileName, mappingDirName);
 
         // Instantiate the template to generate from.
-        StringTemplate stringTemplate = hibernateOnlineTemplates.getInstanceOf(FILE_OPEN_TEMPLATE);
-        stringTemplate.setAttribute("catalogue", model);
+        ST stringTemplate = hibernateOnlineTemplates.getInstanceOf(FILE_OPEN_TEMPLATE);
+        stringTemplate.add("catalogue", model);
 
         FileUtils.writeObjectToFile(outputFileName, stringTemplate, false);
     }
@@ -163,7 +165,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
         String outputFileName = nameToFileNameInRootGenerationDir(mappingFileName, mappingDirName);
 
         // Instantiate the template to generate from.
-        StringTemplate stringTemplate = hibernateOnlineTemplates.getInstanceOf(FILE_CLOSE_TEMPLATE);
+        ST stringTemplate = hibernateOnlineTemplates.getInstanceOf(FILE_CLOSE_TEMPLATE);
 
         FileUtils.writeObjectToFile(outputFileName, stringTemplate, true);
     }
@@ -174,7 +176,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
         String outputFileName = nameToFileNameInRootGenerationDir(mappingFileName, mappingDirName);
 
         // Instantiate the template to generate from.
-        StringTemplate stringTemplate = hibernateUserTypeConfigTemplates.getInstanceOf(FILE_CLOSE_TEMPLATE);
+        ST stringTemplate = hibernateUserTypeConfigTemplates.getInstanceOf(FILE_CLOSE_TEMPLATE);
 
         FileUtils.writeObjectToFile(outputFileName, stringTemplate, true);
     }
@@ -219,7 +221,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     {
         final TypeDecorator decoratedType = TypeDecoratorFactory.decorateType(type);
 
-        StringTemplateGroup[] templates =
+        STGroup[] templates =
             { hibernateOnlineTemplates, hibernateUserTypeConfigTemplates, hibernateUserTypeTemplates };
         String[] names =
             new String[]
@@ -251,8 +253,8 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
                 }
             };
 
-        ProcessedTemplateHandler[] handlers =
-            new ProcessedTemplateHandler[]
+        RenderTemplateHandler[] handlers =
+            new RenderTemplateHandler[]
             {
                 normalizedTypeDefHandler, userTypeDefHandler, fileOutputProcessedTemplateHandler
             };
@@ -271,7 +273,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     {
         final TypeDecorator decoratedType = TypeDecoratorFactory.decorateType(type);
 
-        StringTemplateGroup[] templates = { hibernateOnlineTemplates, hibernateUserTypeConfigTemplates };
+        STGroup[] templates = { hibernateOnlineTemplates, hibernateUserTypeConfigTemplates };
         String[] names =
             new String[]
             {
@@ -282,8 +284,8 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
 
         Map<String, Type> extraFields = null;
 
-        ProcessedTemplateHandler[] handlers =
-            new ProcessedTemplateHandler[] { normalizedTypeDefHandler, userTypeDefHandler };
+        RenderTemplateHandler[] handlers =
+            new RenderTemplateHandler[] { normalizedTypeDefHandler, userTypeDefHandler };
 
         generate(model, decoratedType, templates, names, fields, extraFields, handlers);
     }
@@ -299,7 +301,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     {
         final TypeDecorator decoratedType = TypeDecoratorFactory.decorateType(type);
 
-        StringTemplateGroup[] templates = { hibernateOnlineTemplates, hibernateUserTypeConfigTemplates };
+        STGroup[] templates = { hibernateOnlineTemplates, hibernateUserTypeConfigTemplates };
         String[] names =
             new String[]
             {
@@ -310,8 +312,8 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
 
         Map<String, Type> extraFields = null;
 
-        ProcessedTemplateHandler[] handlers =
-            new ProcessedTemplateHandler[] { normalizedTypeDefHandler, userTypeDefHandler };
+        RenderTemplateHandler[] handlers =
+            new RenderTemplateHandler[] { normalizedTypeDefHandler, userTypeDefHandler };
 
         generate(model, decoratedType, templates, names, fields, extraFields, handlers);
     }
@@ -327,7 +329,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     {
         final TypeDecorator decoratedType = TypeDecoratorFactory.decorateType(type);
 
-        StringTemplateGroup[] templates =
+        STGroup[] templates =
             { hibernateOnlineTemplates, hibernateUserTypeConfigTemplates, hibernateUserTypeTemplates };
         String[] names =
             new String[]
@@ -353,8 +355,8 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
                 }
             };
 
-        ProcessedTemplateHandler[] handlers =
-            new ProcessedTemplateHandler[]
+        RenderTemplateHandler[] handlers =
+            new RenderTemplateHandler[]
             {
                 normalizedTypeDefHandler, userTypeDefHandler, fileOutputProcessedTemplateHandler
             };
@@ -365,7 +367,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     /**
      * {@inheritDoc}
      *
-     * <p/>Generates hibnerate configuration XML for an entity or sub-type.
+     * <p/>Generates hibernate configuration XML for an entity or sub-type.
      *
      * @param type The type to generate from.
      */
@@ -373,7 +375,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     {
         ComponentTypeDecorator decoratedType = (ComponentTypeDecorator) TypeDecoratorFactory.decorateType(type);
 
-        StringTemplateGroup[] templates = { hibernateOnlineTemplates, hibernateWarehouseTemplates };
+        STGroup[] templates = { hibernateOnlineTemplates, hibernateWarehouseTemplates };
         String[] names =
             new String[]
             {
@@ -382,8 +384,8 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
             };
         Map<String, Type> fields = decoratedType.getAllPropertyTypes();
         Map<String, Type> extraFields = null;
-        ProcessedTemplateHandler[] handlers =
-            new ProcessedTemplateHandler[] { onlineMappingHandler, warehouseMappingHandler };
+        RenderTemplateHandler[] handlers =
+            new RenderTemplateHandler[] { onlineMappingHandler, warehouseMappingHandler };
 
         generate(model, decoratedType, templates, names, fields, extraFields, handlers);
     }

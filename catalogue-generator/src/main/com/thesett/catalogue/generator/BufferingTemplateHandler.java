@@ -15,7 +15,7 @@
  */
 package com.thesett.catalogue.generator;
 
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 
 /**
  * BufferingTemplateHandler is a processed template handler, that retains the output fragments from all processed
@@ -27,15 +27,15 @@ import org.antlr.stringtemplate.StringTemplate;
  * <tr><td> Retain the output of a template for later processing.
  * </table></pre>
  */
-public class BufferingTemplateHandler implements BaseGenerator.ProcessedTemplateHandler
+public class BufferingTemplateHandler implements BaseGenerator.RenderTemplateHandler
 {
     /** The buffer to build up the output in. */
     private StringBuffer buffer = new StringBuffer();
 
     /** {@inheritDoc} */
-    public void processed(StringTemplate template, String outputName)
+    public void render(ST template, String outputName)
     {
-        buffer.append(template);
+        buffer.append(template.render());
     }
 
     /** Clears the internal buffer. */

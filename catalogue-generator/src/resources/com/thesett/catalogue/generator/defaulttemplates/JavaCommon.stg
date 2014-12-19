@@ -123,9 +123,9 @@ DateTime
     
 collection_type(field) ::= <<
 <if(field.map)>
-<collectionTypeMap.(field.collectionKind)><if(field.elementType)><if(field.keyType)>\<<(typeMap.(field.keyType.kind))(field=field.keyType)>, <(typeMap.(field.elementType.kind))(field=field.elementType)>\><endif><endif>
+<collectionTypeMap.(field.collectionKind)><if(field.elementType)><if(field.keyType)>\<<(typeMap.(field.keyType.kind))(field.keyType)>, <(typeMap.(field.elementType.kind))(field.elementType)>\><endif><endif>
 <else>
-<collectionTypeMap.(field.collectionKind)><if(field.elementType)>\<<(typeMap.(field.elementType.kind))(field=field.elementType)>\><endif>
+<collectionTypeMap.(field.collectionKind)><if(field.elementType)>\<<(typeMap.(field.elementType.kind))(field.elementType)>\><endif>
 <endif>
 >>
 

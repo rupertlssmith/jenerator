@@ -20,13 +20,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.antlr.stringtemplate.CommonGroupLoader;
-import org.antlr.stringtemplate.PathGroupLoader;
-import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateGroup;
-import org.antlr.stringtemplate.StringTemplateGroupLoader;
-import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
 import org.apache.log4j.Logger;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroup;
 
 import com.thesett.aima.state.Type;
 import com.thesett.aima.state.TypeVisitor;
@@ -83,7 +79,10 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
     protected static final String FILE_CLOSE_TEMPLATE = "file_close";
 
     /** Defines the classpath relative path where the generation templates can be found. */
-    private static final String TEMPLATES_PATH = "com/thesett/catalogue/generator";
+    //private static final String TEMPLATES_PATH = "com/thesett/catalogue/generator";
+
+    /** Holds the root group to load templates from. */
+    //protected STGroupDir loaderGroup;
 
     /** Holds the catalogue model to generate from. */
     protected Catalogue model;
@@ -97,12 +96,14 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
     /** Used to keep track of output directories that have been created. */
     protected Set<String> createdOutputDirectories = new HashSet<String>();
 
+    protected String templateRootPath;
+
     /** Creates a StringTemplate generator. */
     protected BaseGenerator(String templateDir)
     {
-        StringTemplateGroupLoader loader = new CommonGroupLoader(TEMPLATES_PATH, new DummyErrorHandler());
-        StringTemplateGroup.registerGroupLoader(loader);
-        StringTemplateGroup.registerDefaultLexer(AngleBracketTemplateLexer.class);
+        /*STGroupLoader loader = new CommonGroupLoader(TEMPLATES_PATH, new DummyErrorHandler());
+        STGroup.registerGroupLoader(loader);
+        STGroup.registerDefaultLexer(AngleBracketTemplateLexer.class);*/
 
         registerTemplateLoader(templateDir);
     }
@@ -236,8 +237,8 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
      * @param extraFields A optional secondary set of fields from the type to generate for.
      * @param handler     A sequence of output handlers, to apply to the results.
      */
-    protected void generate(Catalogue model, Type type, StringTemplateGroup[] templates, String[] outputName,
-        Map<String, Type> fields, Map<String, Type> extraFields, ProcessedTemplateHandler[] handler)
+    protected void generate(Catalogue model, Type type, STGroup[] templates, String[] outputName,
+        Map<String, Type> fields, Map<String, Type> extraFields, RenderTemplateHandler[] handler)
     {
         generate(model, type, templates, outputName, fields, extraFields, handler, FOR_BEAN_TEMPLATE);
     }
@@ -256,22 +257,21 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
      * @param handler      A sequence of output handlers, to apply to the results.
      * @param templateName The name of the template to apply.
      */
-    protected void generate(Catalogue model, Type type, StringTemplateGroup[] templates, String[] outputName,
-        Map<String, Type> fields, Map<String, Type> extraFields, ProcessedTemplateHandler[] handler,
-        String templateName)
+    protected void generate(Catalogue model, Type type, STGroup[] templates, String[] outputName,
+        Map<String, Type> fields, Map<String, Type> extraFields, RenderTemplateHandler[] handler, String templateName)
     {
         for (int i = 0; i < templates.length; i++)
         {
             // Instantiate the template to generate from.
-            StringTemplate stringTemplate = templates[i].getInstanceOf(templateName);
+            ST stringTemplate = templates[i].getInstanceOf(templateName);
 
-            stringTemplate.setAttribute("decorator", type);
-            stringTemplate.setAttribute("catalogue", model);
-            stringTemplate.setAttribute("package", outputPackage);
-            stringTemplate.setAttribute("fields", fields);
-            stringTemplate.setAttribute("extraFields", extraFields);
+            stringTemplate.add("decorator", type);
+            stringTemplate.add("catalogue", model);
+            stringTemplate.add("package", outputPackage);
+            stringTemplate.add("fields", fields);
+            stringTemplate.add("extraFields", extraFields);
 
-            handler[i].processed(stringTemplate, outputName[i]);
+            handler[i].render(stringTemplate, outputName[i]);
         }
     }
 
@@ -335,11 +335,10 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
      */
     protected void registerTemplateLoader(String templateDir)
     {
-        StringTemplateGroupLoader groupLoader;
-
         if ((templateDir == null) || "".equals(templateDir))
         {
-            groupLoader = new CommonGroupLoader(DEFAULT_TEMPLATE_PATH, new DummyErrorHandler());
+            //loaderGroup = new STGroupDir(DEFAULT_TEMPLATE_PATH);
+            this.templateRootPath = DEFAULT_TEMPLATE_PATH;
         }
         else
         {
@@ -350,10 +349,11 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
                 throw new RuntimeException("'templateDir' must be a valid path to a directory containing templates.");
             }
 
-            groupLoader = new PathGroupLoader(templateDir, new DummyErrorHandler());
+            //loaderGroup = new STGroupDir(templateDir);
+            this.templateRootPath = templateDir;
         }
 
-        StringTemplateGroup.registerGroupLoader(groupLoader);
+        //STGroup.registerGroupLoader(groupLoader);
     }
 
     /**
@@ -380,15 +380,30 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
     }
 
     /**
-     * ProcessedTemplateHandler is a call-back interface, that is used to call-back upon completion of every string
-     * template, in order that output may be generated from it.
+     * Translates a template group name into the name of the file containing that group. A ".stg" ending is added to the
+     * group to form the filename, and the {@link #templateRootPath} is prepended onto it to form the full path. The
+     * resulting file name can be understood by StringTemplate as either a relative file path, or a path within the
+     * classpath to locate the template group file.
+     *
+     * @param  group The name of the group to get the file name of.
+     *
+     * @return The full filename of the template group.
+     */
+    protected String templateGroupToFileName(String group)
+    {
+        return templateRootPath + File.separator + group + ".stg";
+    }
+
+    /**
+     * ProcessedTemplateHandler is a call-back interface, that is used to call-back upon readiness of a StringTemplate,
+     * in order that output may be generated from it through invoking the templates 'render' method.
      *
      * <pre><p/><table id="crc"><caption>CRC Card</caption>
      * <tr><th> Responsibilities
      * <tr><td> Accept notification of the processing of a string template.
      * </table></pre>
      */
-    protected interface ProcessedTemplateHandler
+    protected interface RenderTemplateHandler
     {
         /**
          * Notified once processing of a template is complete.
@@ -396,14 +411,14 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
          * @param template   The completed template.
          * @param outputName The name of the output resource, such as a file.
          */
-        public void processed(StringTemplate template, String outputName);
+        public void render(ST template, String outputName);
     }
 
     /**
      * FileOutputProcessedTemplateHandler is a processed template handler, that outputs its results to a file. The
      * handler can be created to append or overwrite files.
      */
-    protected class FileOutputProcessedTemplateHandler implements ProcessedTemplateHandler
+    protected class FileOutputRenderTemplateHandler implements RenderTemplateHandler
     {
         /** Flag used to indicate if the output file should be appended to. */
         private boolean append;
@@ -413,15 +428,15 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
          *
          * @param append <tt>true</tt> to append to files.
          */
-        public FileOutputProcessedTemplateHandler(boolean append)
+        public FileOutputRenderTemplateHandler(boolean append)
         {
             this.append = append;
         }
 
         /** {@inheritDoc} */
-        public void processed(StringTemplate template, String outputName)
+        public void render(ST template, String outputName)
         {
-            FileUtils.writeObjectToFile(outputName, template, append);
+            FileUtils.writeObjectToFile(outputName, template.render(), append);
         }
     }
 
@@ -434,16 +449,16 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
     {
         private final Catalogue model;
         private final ComponentTypeDecorator decoratedType;
-        private final StringTemplateGroup[] templates;
+        private final STGroup[] templates;
         private final String[] names;
         private final Map<String, Type> fields;
         private final Map<String, Type> extraFields;
-        private final ProcessedTemplateHandler[] handlers;
+        private final RenderTemplateHandler[] handlers;
         private final String templateName;
 
-        public Generate(Catalogue model, ComponentTypeDecorator decoratedType, StringTemplateGroup[] templates,
-            String[] names, Map<String, Type> fields, Map<String, Type> extraFields,
-            ProcessedTemplateHandler[] handlers, String templateName)
+        public Generate(Catalogue model, ComponentTypeDecorator decoratedType, STGroup[] templates, String[] names,
+            Map<String, Type> fields, Map<String, Type> extraFields, RenderTemplateHandler[] handlers,
+            String templateName)
         {
             this.model = model;
             this.decoratedType = decoratedType;
@@ -455,9 +470,8 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
             this.templateName = templateName;
         }
 
-        public Generate(Catalogue model, ComponentTypeDecorator decoratedType, StringTemplateGroup[] templates,
-            String[] names, Map<String, Type> fields, Map<String, Type> extraFields,
-            ProcessedTemplateHandler[] handlers)
+        public Generate(Catalogue model, ComponentTypeDecorator decoratedType, STGroup[] templates, String[] names,
+            Map<String, Type> fields, Map<String, Type> extraFields, RenderTemplateHandler[] handlers)
         {
             this.model = model;
             this.decoratedType = decoratedType;

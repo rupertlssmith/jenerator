@@ -18,8 +18,9 @@ package com.thesett.catalogue.generator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateGroup;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroup;
+import org.stringtemplate.v4.STGroupFile;
 
 import com.thesett.aima.attribute.impl.EnumeratedStringAttribute;
 import com.thesett.aima.attribute.impl.EnumeratedStringTypeVisitor;
@@ -47,10 +48,10 @@ public class BeanValidationGenerator extends BaseGenerator implements ComponentT
     private static final String BEAN_VALIDATION_TEMPLATES_GROUP = "BeanValidation";
 
     /** Holds the string template group to generate Java Bean Validation configurations from. */
-    private StringTemplateGroup beanValidationTemplates;
+    private STGroup beanValidationTemplates;
 
     /** Output handler used to build up bean validation mappings. */
-    private ProcessedTemplateHandler beanValidationHandler = new BufferingTemplateHandler();
+    private RenderTemplateHandler beanValidationHandler = new BufferingTemplateHandler();
 
     private String validationFileName = "constraints.xml";
 
@@ -63,7 +64,7 @@ public class BeanValidationGenerator extends BaseGenerator implements ComponentT
     {
         super(templateDir);
 
-        beanValidationTemplates = StringTemplateGroup.loadGroup(BEAN_VALIDATION_TEMPLATES_GROUP);
+        beanValidationTemplates = new STGroupFile(templateGroupToFileName(BEAN_VALIDATION_TEMPLATES_GROUP));
         beanValidationTemplates.registerRenderer(String.class, new CamelCaseRenderer());
     }
 
@@ -73,8 +74,8 @@ public class BeanValidationGenerator extends BaseGenerator implements ComponentT
         String outputFileName = nameToFileNameInRootGenerationDir(validationFileName, outputDir);
 
         // Instantiate the template to generate from.
-        StringTemplate stringTemplate = beanValidationTemplates.getInstanceOf(FILE_OPEN_TEMPLATE);
-        stringTemplate.setAttribute("catalogue", model);
+        ST stringTemplate = beanValidationTemplates.getInstanceOf(FILE_OPEN_TEMPLATE);
+        stringTemplate.add("catalogue", model);
 
         FileUtils.writeObjectToFile(outputFileName, stringTemplate, false);
     }
@@ -85,7 +86,7 @@ public class BeanValidationGenerator extends BaseGenerator implements ComponentT
         String outputFileName = nameToFileNameInRootGenerationDir(validationFileName, outputDir);
 
         // Instantiate the template to generate from.
-        StringTemplate stringTemplate = beanValidationTemplates.getInstanceOf(FILE_CLOSE_TEMPLATE);
+        ST stringTemplate = beanValidationTemplates.getInstanceOf(FILE_CLOSE_TEMPLATE);
 
         FileUtils.writeObjectToFile(outputFileName, stringTemplate, true);
     }
@@ -120,11 +121,11 @@ public class BeanValidationGenerator extends BaseGenerator implements ComponentT
     {
         ComponentTypeDecorator decoratedType = (ComponentTypeDecorator) TypeDecoratorFactory.decorateType(type);
 
-        StringTemplateGroup[] templates = new StringTemplateGroup[] { beanValidationTemplates };
+        STGroup[] templates = new STGroup[] { beanValidationTemplates };
         String[] names = new String[] { nameToFileNameInRootGenerationDir(validationFileName, outputDir) };
         Map<String, Type> fields = decoratedType.getAllPropertyTypes();
         Map<String, Type> extraFields = null;
-        ProcessedTemplateHandler[] handlers = new ProcessedTemplateHandler[] { beanValidationHandler };
+        RenderTemplateHandler[] handlers = new RenderTemplateHandler[] { beanValidationHandler };
 
         generate(model, decoratedType, templates, names, fields, extraFields, handlers);
     }
@@ -140,7 +141,7 @@ public class BeanValidationGenerator extends BaseGenerator implements ComponentT
     {
         final TypeDecorator decoratedType = TypeDecoratorFactory.decorateType(type);
 
-        StringTemplateGroup[] templates = new StringTemplateGroup[] { beanValidationTemplates };
+        STGroup[] templates = new STGroup[] { beanValidationTemplates };
         String[] names = new String[] { nameToFileNameInRootGenerationDir(validationFileName, outputDir) };
         Map<String, Type> fields =
             new LinkedHashMap<String, Type>()
@@ -151,7 +152,7 @@ public class BeanValidationGenerator extends BaseGenerator implements ComponentT
             };
 
         Map<String, Type> extraFields = null;
-        ProcessedTemplateHandler[] handlers = new ProcessedTemplateHandler[] { beanValidationHandler };
+        RenderTemplateHandler[] handlers = new RenderTemplateHandler[] { beanValidationHandler };
 
         generate(model, decoratedType, templates, names, fields, extraFields, handlers);
     }

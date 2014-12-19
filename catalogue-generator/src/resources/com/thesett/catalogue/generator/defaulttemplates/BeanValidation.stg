@@ -57,7 +57,7 @@ for_bean(catalogue, package, decorator, fields, extraFields) ::= <<
             
 bean_constraints(catalogue, decorator, name, fields, baseClass, typeMap) ::= <<
 \<bean class="<name; format="ccu">" ignore-annotations="true"\>
-    <fields.keys:{<if(fields.(it).restricted)><(typeMap.(fields.(it).kind))(name=it, decorator=fields.(it))><else><valid_field(name=it, decorator=fields.(it))><endif>}; separator="\n">
+    <fields:{it|<if(fields.(it).restricted)><(typeMap.(fields.(it).kind))(it, fields.(it))><else><valid_field(it, fields.(it))><endif>}; separator="\n">
 \</bean\>
 
 
@@ -77,7 +77,7 @@ valid_field(name, decorator) ::= <<
 >>
     
 basic_constraints(name, decorator) ::= <<
-<(basicFieldConstraintsTypeMap.(decorator.primitiveKind))(name=name, decorator=decorator)>
+<(basicFieldConstraintsTypeMap.(decorator.primitiveKind))(name, decorator)>
 >>
 
 /* Holds a mapping from constraint names on fields of components to templates to generate them. */
@@ -92,25 +92,25 @@ fieldConstraintsMap ::= [
     
 enum_type_constraints(name, decorator) ::= <<
 \<field name="<name; format="cc">"\>
-    <decorator.restrictions:{it|<(fieldConstraintsMap.(it.name))(restriction=it)>}; separator="\n">
+    <decorator.restrictions:{it|<(fieldConstraintsMap.(it.name))(it)>}; separator="\n">
 \</field\>    
 >>
 
 string_constraints(name, decorator) ::= <<
 \<field name="<name; format="cc">"\>
-    <decorator.restrictions:{it|<(fieldConstraintsMap.(it.name))(restriction=it)>}; separator="\n">
+    <decorator.restrictions:{it|<(fieldConstraintsMap.(it.name))(it)>}; separator="\n">
 \</field\>
 >>
 
 bigdecimal_constraints(name, decorator) ::= <<
 \<field name="<name; format="cc">"\>
-    <decorator.restrictions:{it|<(fieldConstraintsMap.(it.name))(restriction=it)>}; separator="\n">
+    <decorator.restrictions:{it|<(fieldConstraintsMap.(it.name))(it)>}; separator="\n">
 \</field\>
 >>
 
 int_constraints(name, decorator) ::= <<
 \<field name="<name; format="cc">"\>
-    <decorator.restrictions:{it|<(fieldConstraintsMap.(it.name))(restriction=it)>}; separator="\n">
+    <decorator.restrictions:{it|<(fieldConstraintsMap.(it.name))(it)>}; separator="\n">
 \</field\>
 >>
         
@@ -155,7 +155,7 @@ enumConstraintsMap ::= [
     
 enum_constraints(name, decorator) ::= <<
 \<field name="<name; format="cc">"\>
-    <decorator.restrictions:{it|<(enumConstraintsMap.(it.name))(restriction=it)>}; separator="\n">
+    <decorator.restrictions:{it|<(enumConstraintsMap.(it.name))(it)>}; separator="\n">
 \</field\>    
 >>
     
