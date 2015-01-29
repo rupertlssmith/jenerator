@@ -99,10 +99,6 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     /** Output handler used to build up the warehouse database mapping configuration in. */
     private RenderTemplateHandler warehouseMappingHandler = new BufferingTemplateHandler();
 
-    /** Holds a file output handler that overwrites files. */
-    protected FileOutputRenderTemplateHandler fileOutputProcessedTemplateHandler =
-        new FileOutputRenderTemplateHandler(false);
-
     /**
      * Creates a generator for hibernate configuration XML and custom user types to output to the specified directory
      * root.
@@ -156,7 +152,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
         ST stringTemplate = hibernateOnlineTemplates.getInstanceOf(FILE_OPEN_TEMPLATE);
         stringTemplate.add("catalogue", model);
 
-        FileUtils.writeObjectToFile(outputFileName, stringTemplate, false);
+        fileOutputHandlerOverwrite.render(stringTemplate, outputFileName);
     }
 
     /** Creates the closing section of a hibnerate configuration file. */
@@ -167,7 +163,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
         // Instantiate the template to generate from.
         ST stringTemplate = hibernateOnlineTemplates.getInstanceOf(FILE_CLOSE_TEMPLATE);
 
-        FileUtils.writeObjectToFile(outputFileName, stringTemplate, true);
+        fileOutputHandlerAppend.render(stringTemplate, outputFileName);
     }
 
     /** Creates a closing section to the user type definitions. */
@@ -256,7 +252,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
         RenderTemplateHandler[] handlers =
             new RenderTemplateHandler[]
             {
-                normalizedTypeDefHandler, userTypeDefHandler, fileOutputProcessedTemplateHandler
+                normalizedTypeDefHandler, userTypeDefHandler, fileOutputHandlerOverwrite
             };
 
         generate(model, decoratedType, templates, names, fields, extraFields, handlers);
@@ -284,8 +280,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
 
         Map<String, Type> extraFields = null;
 
-        RenderTemplateHandler[] handlers =
-            new RenderTemplateHandler[] { normalizedTypeDefHandler, userTypeDefHandler };
+        RenderTemplateHandler[] handlers = new RenderTemplateHandler[] { normalizedTypeDefHandler, userTypeDefHandler };
 
         generate(model, decoratedType, templates, names, fields, extraFields, handlers);
     }
@@ -312,8 +307,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
 
         Map<String, Type> extraFields = null;
 
-        RenderTemplateHandler[] handlers =
-            new RenderTemplateHandler[] { normalizedTypeDefHandler, userTypeDefHandler };
+        RenderTemplateHandler[] handlers = new RenderTemplateHandler[] { normalizedTypeDefHandler, userTypeDefHandler };
 
         generate(model, decoratedType, templates, names, fields, extraFields, handlers);
     }
@@ -358,7 +352,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
         RenderTemplateHandler[] handlers =
             new RenderTemplateHandler[]
             {
-                normalizedTypeDefHandler, userTypeDefHandler, fileOutputProcessedTemplateHandler
+                normalizedTypeDefHandler, userTypeDefHandler, fileOutputHandlerOverwrite
             };
 
         generate(model, decoratedType, templates, names, fields, extraFields, handlers);

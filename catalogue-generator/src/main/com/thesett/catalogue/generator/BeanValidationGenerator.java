@@ -77,7 +77,7 @@ public class BeanValidationGenerator extends BaseGenerator implements ComponentT
         ST stringTemplate = beanValidationTemplates.getInstanceOf(FILE_OPEN_TEMPLATE);
         stringTemplate.add("catalogue", model);
 
-        FileUtils.writeObjectToFile(outputFileName, stringTemplate, false);
+        fileOutputHandlerOverwrite.render(stringTemplate, outputFileName);
     }
 
     /** Generates the closing section of the validation configuration. */
@@ -88,7 +88,7 @@ public class BeanValidationGenerator extends BaseGenerator implements ComponentT
         // Instantiate the template to generate from.
         ST stringTemplate = beanValidationTemplates.getInstanceOf(FILE_CLOSE_TEMPLATE);
 
-        FileUtils.writeObjectToFile(outputFileName, stringTemplate, true);
+        fileOutputHandlerAppend.render(stringTemplate, outputFileName);
     }
 
     /**

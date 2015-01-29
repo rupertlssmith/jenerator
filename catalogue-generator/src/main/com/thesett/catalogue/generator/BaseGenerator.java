@@ -78,12 +78,6 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
     /** Defines the name of the template to create the closing section of output files. */
     protected static final String FILE_CLOSE_TEMPLATE = "file_close";
 
-    /** Defines the classpath relative path where the generation templates can be found. */
-    //private static final String TEMPLATES_PATH = "com/thesett/catalogue/generator";
-
-    /** Holds the root group to load templates from. */
-    //protected STGroupDir loaderGroup;
-
     /** Holds the catalogue model to generate from. */
     protected Catalogue model;
 
@@ -98,13 +92,17 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
 
     protected String templateRootPath;
 
+    /** Holds a file output handler that overwrites files. */
+    protected FileOutputRenderTemplateHandler fileOutputHandlerOverwrite =
+            new FileOutputRenderTemplateHandler(false);
+
+    /** Holds a file output handler that appends to files. */
+    protected FileOutputRenderTemplateHandler fileOutputHandlerAppend =
+            new FileOutputRenderTemplateHandler(true);
+
     /** Creates a StringTemplate generator. */
     protected BaseGenerator(String templateDir)
     {
-        /*STGroupLoader loader = new CommonGroupLoader(TEMPLATES_PATH, new DummyErrorHandler());
-        STGroup.registerGroupLoader(loader);
-        STGroup.registerDefaultLexer(AngleBracketTemplateLexer.class);*/
-
         registerTemplateLoader(templateDir);
     }
 
@@ -395,8 +393,8 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
     }
 
     /**
-     * ProcessedTemplateHandler is a call-back interface, that is used to call-back upon readiness of a StringTemplate,
-     * in order that output may be generated from it through invoking the templates 'render' method.
+     * RenderTemplateHandler is a call-back interface, that is used to call-back upon readiness of a StringTemplate, in
+     * order that output may be generated from it through invoking the templates 'render' method.
      *
      * <pre><p/><table id="crc"><caption>CRC Card</caption>
      * <tr><th> Responsibilities
