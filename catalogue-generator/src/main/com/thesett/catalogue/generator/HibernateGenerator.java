@@ -174,7 +174,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
         // Instantiate the template to generate from.
         ST stringTemplate = hibernateUserTypeConfigTemplates.getInstanceOf(FILE_CLOSE_TEMPLATE);
 
-        FileUtils.writeObjectToFile(outputFileName, stringTemplate, true);
+        fileOutputHandlerAppend.render(stringTemplate, outputFileName);
     }
 
     /**
