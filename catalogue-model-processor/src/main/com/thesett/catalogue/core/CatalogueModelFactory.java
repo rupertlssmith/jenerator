@@ -1269,7 +1269,7 @@ public class CatalogueModelFactory
 
         // Examine all the component relationships.
         initializeAllRelationships(catalogueTypes);
-        initializeAllTopLevel(catalogueTypes);
+        //initializeAllTopLevel(catalogueTypes);
     }
 
     /**
