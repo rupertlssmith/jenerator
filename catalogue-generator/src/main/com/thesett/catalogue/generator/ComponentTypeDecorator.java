@@ -22,6 +22,7 @@ import java.util.Set;
 import com.thesett.aima.state.ComponentType;
 import com.thesett.aima.state.State;
 import com.thesett.aima.state.Type;
+import com.thesett.catalogue.model.CollectionType;
 
 /**
  * ComponentTypeDecorator is a {@link TypeDecorator} for {@link ComponentType}s. It automatically decorates the types of
@@ -157,5 +158,69 @@ public class ComponentTypeDecorator extends TypeDecorator implements ComponentTy
     public State getMetaModel()
     {
         return ((ComponentType) type).getMetaModel();
+    }
+
+    public boolean isWithMapField()
+    {
+        return scanForCollectionKind(CollectionType.CollectionKind.Map);
+    }
+
+    public boolean isWithSetField()
+    {
+        return scanForCollectionKind(CollectionType.CollectionKind.Set);
+    }
+
+    public boolean isWithListField()
+    {
+        return scanForCollectionKind(CollectionType.CollectionKind.List);
+    }
+
+    public boolean isWithBigDecimalField()
+    {
+        return scanForKind(Kind.BigDecimal);
+    }
+
+    public boolean isWithDateOnlyField()
+    {
+        return scanForKind(Kind.DateOnly);
+    }
+
+    public boolean isWithTimeOnlyField()
+    {
+        return scanForKind(Kind.TimeOnly);
+    }
+
+    public boolean isWithTimestampField()
+    {
+        return scanForKind(Kind.Timestamp);
+    }
+
+    private boolean scanForKind(Kind kind)
+    {
+        for (Type type : getAllPropertyTypes().values())
+        {
+            if (((TypeDecorator) type).getKind() == kind)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean scanForCollectionKind(CollectionType.CollectionKind collectionKind)
+    {
+        for (Type type : getAllPropertyTypes().values())
+        {
+            if (((TypeDecorator) type).getKind() == Kind.Collection)
+            {
+                if (((CollectionTypeDecorator) type).getCollectionKind() == collectionKind)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
