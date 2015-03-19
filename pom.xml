@@ -7,7 +7,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>jenerator_build</artifactId>
     <name>projects</name>
-    <version>0.8.13-SNAPSHOT</version><!--jenerator.version-->
+    <version>0.8.13</version><!--jenerator.version-->
 
     <description>Jenerator is a code generator framework for Java.</description>
     <url>https://github.com/rupertlssmith/jenerator</url>
@@ -58,7 +58,7 @@
     <properties>
         <topdir>${basedir}/.</topdir>
 
-        <base.version>0.8.13-SNAPSHOT</base.version><!--base.version-->
+        <base.version>0.8.13</base.version><!--base.version-->
         
         <!-- Stops the dependency plugin running really slowly. -->
         <dependency.locations.enabled>false</dependency.locations.enabled>
@@ -82,7 +82,7 @@
         <maven.idea.plugin.version>2.2</maven.idea.plugin.version>
         <maven.war.plugin.version>2.0</maven.war.plugin.version>
         <javacc.maven.plugin.version>2.1</javacc.maven.plugin.version>
-        <maven.dashboard.plugin.version>0.8.13-SNAPSHOT</maven.dashboard.plugin.version><!--maven2_plugins.version-->
+        <maven.dashboard.plugin.version>0.8.13</maven.dashboard.plugin.version><!--maven2_plugins.version-->
         <jboss.maven.plugin.version>1.3.1</jboss.maven.plugin.version>
         <maven.pmd.plugin.version>2.4</maven.pmd.plugin.version>
         <maven.findbugs.plugin.version>2.5.3</maven.findbugs.plugin.version>
