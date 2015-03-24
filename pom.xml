@@ -94,7 +94,7 @@
         <javancss.maven.plugin.version>2.0-beta-2</javancss.maven.plugin.version>
         <maven.build.helper.plugin.version>1.3</maven.build.helper.plugin.version>
         <maven.ear.plugin.version>2.0</maven.ear.plugin.version> <!-- Later versions do not support resourcesDir. -->
-        <jacoco.maven.plugin.version>0.6.4.201312101107</jacoco.maven.plugin.version>
+        <jacoco.maven.plugin.version>0.7.4.201502262128</jacoco.maven.plugin.version>
 
         <log4j.configuration>file:${topdir}/etc/log4j.xml</log4j.configuration>
 
