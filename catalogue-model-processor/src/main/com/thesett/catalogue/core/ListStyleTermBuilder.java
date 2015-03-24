@@ -18,6 +18,7 @@ package com.thesett.catalogue.core;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -93,7 +94,8 @@ public class ListStyleTermBuilder extends BaseTermBuilder
             String termText = "type_instance(" + name + ", " + kind + ", [";
 
             // Extract all the specified properties from the type bean, filtering out any nulls.
-            Map<String, Object> nonNullProperties = new HashArray<String, Object>();
+            //Map<String, Object> nonNullProperties = new HashArray<String, Object>();
+            Map<String, Object> nonNullProperties = new LinkedHashMap<String, Object>();
 
             for (String property : properties)
             {
