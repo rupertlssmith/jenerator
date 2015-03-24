@@ -16,11 +16,9 @@
 package com.thesett.catalogue.model.base;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
-import com.thesett.catalogue.core.ConfiguratorTestBase;
-import com.thesett.catalogue.model.impl.ComponentTypeImpl;
 import org.apache.log4j.NDC;
 
 import com.thesett.aima.attribute.impl.EnumeratedStringAttribute;
@@ -29,7 +27,9 @@ import com.thesett.aima.attribute.time.DateOnly;
 import com.thesett.aima.attribute.time.TimeOnly;
 import com.thesett.aima.state.ComponentType;
 import com.thesett.aima.state.Type;
+import com.thesett.catalogue.core.ConfiguratorTestBase;
 import com.thesett.catalogue.model.Catalogue;
+import com.thesett.catalogue.model.impl.ComponentTypeImpl;
 import com.thesett.catalogue.setup.BooleanType;
 import com.thesett.catalogue.setup.CatalogueDefinition;
 import com.thesett.catalogue.setup.ComponentDefType;
@@ -259,7 +259,7 @@ public class CatalogueTestBase extends ConfiguratorTestBase
     /** Check that all real fields in all product types in the raw model are present in the catalogue. */
     public void testAllRealFieldsAllProductsInCatalogue() throws Exception
     {
-        Set<Class> classSet = new HashSet<Class>();
+        Set<Class> classSet = new LinkedHashSet<Class>();
         classSet.add(Float.class);
         classSet.add(BigDecimal.class);
 

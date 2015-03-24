@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -136,7 +134,7 @@ public class CatalogueModelFactory
 
     /** Holds a mapping from basic java type names in the model, to Java basic types. */
     private Map<String, Type> basicTypeNameToJavaTypeMap =
-        new HashMap<String, Type>()
+        new LinkedHashMap<String, Type>()
         {
             {
                 put("boolean", JavaType.BOOLEAN_TYPE);
@@ -151,7 +149,7 @@ public class CatalogueModelFactory
 
     /** Holds a mapping from names of kinds of collections to kinds of collections. */
     private Map<String, CollectionType.CollectionKind> nameToCollectionKindMap =
-        new HashMap<String, CollectionType.CollectionKind>()
+        new LinkedHashMap<String, CollectionType.CollectionKind>()
         {
             {
                 put("set", CollectionType.CollectionKind.Set);
@@ -223,7 +221,7 @@ public class CatalogueModelFactory
         String packageName = SetupModelHelper.getPackageName(catalogueDef);
 
         // Used to build a mapping of all top-level types in the model by name.
-        Map<String, Type> catalogueTypes = new HashMap<String, Type>();
+        Map<String, Type> catalogueTypes = new LinkedHashMap<String, Type>();
 
         // Query the model for all component types and cache the result in a map.
         initializeAllTypes(catalogueTypes, packageName);
@@ -496,7 +494,7 @@ public class CatalogueModelFactory
             "?-product_type(_PT), normal_type(_PT, " + name + ", class, _MP), member(views(_VS), _MP), member(V, _VS).";
         Iterable<Map<String, Variable>> viewBindingsIterable = runQuery(queryString);
 
-        final Set<ComponentType> results = new HashSet<ComponentType>();
+        final Set<ComponentType> results = new LinkedHashSet<ComponentType>();
 
         for (Map<String, Variable> variables : viewBindingsIterable)
         {
@@ -1122,7 +1120,7 @@ public class CatalogueModelFactory
         String queryString = "?-product_type(PT), normal_type(PT, MN, class, _MP).";
         Iterable<Map<String, Variable>> componentBindingsIterable = runQuery(queryString);
 
-        Map<String, Collection<String>> componentNamesByType = new HashMap<String, Collection<String>>();
+        Map<String, Collection<String>> componentNamesByType = new LinkedHashMap<String, Collection<String>>();
 
         for (Map<String, Variable> variables : componentBindingsIterable)
         {
@@ -1251,7 +1249,7 @@ public class CatalogueModelFactory
                 }
 
                 // Replace all view forward references.
-                Set<ComponentType> replacementAncestors = new HashSet<ComponentType>();
+                Set<ComponentType> replacementAncestors = new LinkedHashSet<ComponentType>();
 
                 for (ComponentType viewType : componentType.getImmediateAncestors())
                 {

@@ -16,8 +16,8 @@
 package com.thesett.catalogue.setup;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -736,7 +736,7 @@ public class SetupModelHelper
     {
         // Extract all the possible hierarchy label values by walking over the hierarchy labels, depth first,
         // taking as goal states either leaf labels or those explicitly marked as allowable.
-        Set<String[]> allLabelPaths = new HashSet<String[]>();
+        Set<String[]> allLabelPaths = new LinkedHashSet<String[]>();
 
         // Return the empty set if no labels have been specified.
         if (hierarchyDef.getHierarchyLabel() == null)

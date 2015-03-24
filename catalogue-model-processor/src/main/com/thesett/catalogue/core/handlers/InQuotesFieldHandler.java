@@ -15,11 +15,11 @@
  */
 package com.thesett.catalogue.core.handlers;
 
-import com.thesett.catalogue.core.FieldHandler;
-
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
+
+import com.thesett.catalogue.core.FieldHandler;
 
 /**
  * InQuotesFieldHandler transforms a matching subset of its input fields into a functors of arity 1. The name of the
@@ -35,7 +35,7 @@ import java.util.Set;
 public class InQuotesFieldHandler implements FieldHandler
 {
     /** Holds the set of field name to match for transformation. */
-    Set<String> propertiesInQuotes = new HashSet<String>();
+    Set<String> propertiesInQuotes = new LinkedHashSet<String>();
 
     /**
      * Creats a new in-quotes handler on the specified set of named fields.

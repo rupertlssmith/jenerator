@@ -18,7 +18,7 @@ package com.thesett.catalogue.model.impl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +56,7 @@ public class CatalogueModel implements Catalogue, Serializable
     protected String packageName;
 
     /** Holds a mapping of all top-level types in the model by name. */
-    protected Map<String, Type> catalogueTypes = new HashMap<String, Type>();
+    protected Map<String, Type> catalogueTypes = new LinkedHashMap<String, Type>();
 
     /**
      * Creates the cataloge on the specified set of types, implemented in the specified Java package.
