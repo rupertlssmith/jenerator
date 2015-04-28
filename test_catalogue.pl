@@ -1,19 +1,19 @@
-type_instance(percent, real_range, [to(100), from(0)]).
-type_instance(probability, real_range, [to(1), precision(double), from(0)]).
-type_instance(money, decimal_type, [scale(4), precision(19)]).
+type_instance(percent, real_range, [from(0), to(100)]).
+type_instance(probability, real_range, [precision(double), from(0), to(1)]).
+type_instance(money, decimal_type, [precision(19), scale(4)]).
 type_instance(positive, integer_range, [from(0)]).
-type_instance(rating, integer_range, [to(10), from(1)]).
+type_instance(rating, integer_range, [from(1), to(10)]).
 type_instance(email, string_pattern, [regexp("emailregexp")]).
 type_instance(username, string_pattern, []).
 type_instance(beyond_2000, date_range, [from("2000-01-01")]).
-type_instance(twentieth_century, date_range, [to("1999-12-31"), from("1900-01-01")]).
-type_instance(working_hours, time_range, [to("17:00:00"), from("09:00:00")]).
+type_instance(twentieth_century, date_range, [from("1900-01-01"), to("1999-12-31")]).
+type_instance(working_hours, time_range, [from("09:00:00"), to("17:00:00")]).
 type_instance(half_hourly, time_range, [step("00:30:00")]).
 type_instance(primary_colours, enumeration_type, [labels([red, green, blue])]).
 type_instance(colours, enumeration_type, [labels([red, orange, green, pink])]).
 type_instance(units, enumeration_type, [labels([meters, feet])]).
 type_instance(order_state, enumeration_type, [labels([creating, submitted, picking, billed, dispatched, failed])]).
-type_instance(taxonomy, hierarchy_type, [labels(label("all life", label("plant"), label("bacteria"), label("animal", label("mamal")), label("virus"))), levels([top, supertype, subtype]), finalized]).
+type_instance(taxonomy, hierarchy_type, [finalized, levels([top, supertype, subtype]), labels(label("all life", label("plant"), label("bacteria"), label("animal", label("mamal")), label("virus")))]).
 type_instance(three_levels, hierarchy_type, [levels([top, main, secondary])]).
 type_instance(product_hierarchy, hierarchy_type, [levels([all_products, category, subcategory])]).
 type_instance(simple_view, view_type, [fields([property(test_string, string)]), views([])]).
