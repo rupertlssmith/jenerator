@@ -69,4 +69,34 @@ public class CollectionTypeDecorator<T> extends TypeDecorator implements Collect
     {
         return CollectionKind.Map.equals(getCollectionKind());
     }
+
+    /**
+     * Reports whether or not this collection is a bag.
+     *
+     * @return <tt>true</tt> if this collection is a bag.
+     */
+    public boolean isBag()
+    {
+        return CollectionKind.Bag.equals(getCollectionKind());
+    }
+
+    /**
+     * Reports whether or not this collection is a list.
+     *
+     * @return <tt>true</tt> if this collection is a list.
+     */
+    public boolean isList()
+    {
+        return CollectionKind.List.equals(getCollectionKind());
+    }
+
+    /**
+     * Reports whether or not this collection is a set.
+     *
+     * @return <tt>true</tt> if this collection is a set.
+     */
+    public boolean isSet()
+    {
+        return CollectionKind.Set.equals(getCollectionKind());
+    }
 }
