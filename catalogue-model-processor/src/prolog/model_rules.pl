@@ -339,7 +339,7 @@ unique_field_accum(UniqueConstraints, [Field|AccumFields], [Field|Fields]) :-
     unique_field_accum(UniqueConstraints, AccumFields, Fields).
 
 unique_field_accum(UniqueConstraints, [Field|AccumFields], [Field|Fields]) :-
-    Field = component_ref(_, _, _),
+    Field = component_ref(_, _, _, _),
     unique_field_accum(UniqueConstraints, AccumFields, Fields).
 
 unique_field_accum(UniqueConstraints, Result, [Field|Fields]) :-
@@ -393,19 +393,19 @@ collection_field_accum(ParentName,
 
 /* No parent, more than one field, reference to new top-level component. */
 collection_field_accum(ParentName, 
-                       [collection(CollKind, CollName, component_ref(CollName, compound_name(_, CollName), _))|AccumFields], 
+                       [collection(CollKind, CollName, component_ref(CollName, compound_name(_, CollName), _, _))|AccumFields], 
                        [collection(CollKind, CollName, no_parent, fields([_|[_|_]]))|Fields]) :-
     collection_field_accum(ParentName, AccumFields, Fields).
 
 /* Parent, no fields, reference to self component. */
 collection_field_accum(ParentName, 
-                       [collection(CollKind, CollName, component_ref(ParentRef, ParentName, _))|AccumFields], 
+                       [collection(CollKind, CollName, component_ref(ParentRef, ParentName, _, _))|AccumFields], 
                        [collection(CollKind, CollName, parent(ParentRef), fields([]))|Fields]) :-
     collection_field_accum(ParentName, AccumFields, Fields).
 
 /* Parent, one or more fields, reference to new top-level component. */
 collection_field_accum(ParentName, 
-                       [collection(CollKind, CollName, component_ref(CollName, compound_name(_, CollName), _))|AccumFields], 
+                       [collection(CollKind, CollName, component_ref(CollName, compound_name(_, CollName), _, _))|AccumFields], 
                        [collection(CollKind, CollName, parent(_), fields([_|_]))|Fields]) :-
     collection_field_accum(ParentName, AccumFields, Fields).
 
@@ -465,7 +465,7 @@ collection_to_component_accum(ParentName,
     Field = collection(_, CollName, parent(ParentRef), fields(CollFields)),
     unique_field_accum(CollConstraints, ExpandedCollFields, CollFields),
     ExpandedCollFields \= [],
-    append(CollConstraints, [fields([component_ref(ParentRef, ParentName, _)|ExpandedCollFields]), views([])], CollProperties),
+    append(CollConstraints, [fields([component_ref(ParentRef, ParentName, _, _)|ExpandedCollFields]), views([])], CollProperties),
     collection_to_component_accum(ParentName, Components, Fields).
 
 /* Accumulates the names of properties into a list without their types or containing functors. */
@@ -474,7 +474,7 @@ property_names_accum([Name|Names], [Property|Properties]) :-
     Property = property(Name, _),
     property_names_accum(Names, Properties).
 property_names_accum([Name|Names], [Property|Properties]) :- 
-    Property = component_ref(Name, _, _),
+    Property = component_ref(Name, _, _, _),
     property_names_accum(Names, Properties).
 
 /* ======== basic_type/1
@@ -544,7 +544,7 @@ check_fields([collection(_, _, property(_, T))|FS]) :-
     check_property(T),
     check_fields(FS).
 
-check_fields([collection(_, _, component_ref(_, CompRef, _))|FS]) :-
+check_fields([collection(_, _, component_ref(_, CompRef, _, _))|FS]) :-
     normal_type(_, CompRef, _, _),
     check_fields(FS).
 
@@ -552,7 +552,7 @@ check_fields([extend(_, ExtendFields)|FS]) :-
     check_fields(ExtendFields),
     check_fields(FS).
 
-check_fields([component_ref(_, CompRef, _)|FS]) :-
+check_fields([component_ref(_, CompRef, _, _)|FS]) :-
     normal_type(_, CompRef, _, _),
     check_fields(FS).
 
@@ -584,7 +584,7 @@ properties(Properties, normal_type(_, _, _, TypeProps)) :-
 
 properties_accum([], []).
 properties_accum(PFS, [F|FS]) :-
-    (F = component_ref(_, _, _); F = collection(_, _, _, _); F = unique_fields(_, _); F = extend(_, _)),
+    (F = component_ref(_, _, _, _); F = collection(_, _, _, _); F = unique_fields(_, _); F = extend(_, _)),
     properties_accum(PFS, FS).
 properties_accum([P|PFS], [P|FS]) :-
     P = property(_, _),
@@ -600,13 +600,13 @@ related_uni(R, one, E1, E2, Prop, Owner) :-
     normal_type(entity_type, E1, _, MP1),
     normal_type(entity_type, E2, _, MP2),
     MP1 = [fields(FS1)|Props1],
-    member(component_ref(Prop, E2, Owner), FS1).
+    member(component_ref(Prop, E2, Owner, _), FS1).
 
 related_uni(R, many, E1, E2, Prop, Owner) :-
     normal_type(entity_type, E1, _, MP1),
     normal_type(entity_type, E2, _, MP2),
     MP1 = [fields(FS1)|Props1],
-    member(collection(_, Prop, component_ref(_, E2, Owner)), FS1).
+    member(collection(_, Prop, component_ref(_, E2, Owner, _)), FS1).
 
 /* ======== related/5
  Describes the relationship between two entities, its arity and its direction of navigability. The property
