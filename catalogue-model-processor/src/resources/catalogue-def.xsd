@@ -116,6 +116,13 @@
             <xs:attribute name="name" type="xs:string" use="required"/>
         </xs:complexType>
     </xs:element>
+    <!-- Simple type definitions. -->
+    <xs:simpleType name="relType" final="restriction" >
+        <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="composition" />
+            <xs:enumeration value="aggregation" />
+        </xs:restriction>
+    </xs:simpleType>
     <!--The root type of the catalogue. The catalogue knowledge level defines types.-->
     <xs:complexType name="TypeDefType">
         <xs:attribute name="name" type="xs:string" use="required"/>
@@ -226,6 +233,7 @@
                     <xs:element ref="cat:View" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element ref="cat:ComponentPart" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
+                <xs:attribute name="root" type="xs:boolean" use="optional"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -381,6 +389,7 @@
         <xs:complexContent>
             <xs:extension base="cat:FieldDeclrType">
                 <xs:attribute name="owner" type="xs:boolean" use="optional"/>
+                <xs:attribute name="rel" type="cat:relType" use="optional"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
