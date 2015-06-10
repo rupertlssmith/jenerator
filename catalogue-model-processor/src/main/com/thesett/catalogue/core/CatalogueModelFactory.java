@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.thesett.catalogue.core.handlers.DocRootHandler;
 import org.apache.log4j.Logger;
 
 import com.thesett.aima.attribute.impl.BigDecimalTypeImpl;
@@ -311,8 +312,8 @@ public class CatalogueModelFactory
         builder.convertTypeToTerm(catalogueDef, engine, clauses, HierarchyDefType.class,
             new String[] { "finalized", "level", "hierarchyLabel" }, new HierarchyLabelFieldHandler());
         builder.convertTypeToTerm(catalogueDef, engine, clauses, ComponentDefType.class,
-            new String[] { "componentPart", "view", "externalId" }, new ComponentPartHandler(engine), new ViewHandler(),
-            new ExternalIdHandler());
+            new String[] { "componentPart", "view", "externalId", "root" }, new ComponentPartHandler(engine),
+            new ViewHandler(), new ExternalIdHandler(), new DocRootHandler());
     }
 
     /**
