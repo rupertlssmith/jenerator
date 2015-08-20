@@ -125,6 +125,12 @@ public class ComponentTypeDecorator extends TypeDecorator implements ComponentTy
     }
 
     /** {@inheritDoc} */
+    public Map<String, String> getPropertyPresentAsAliases()
+    {
+        return ((ComponentType) type).getPropertyPresentAsAliases();
+    }
+
+    /** {@inheritDoc} */
     public String getPropertyPresentAsAlias(String name)
     {
         return ((ComponentType) type).getPropertyPresentAsAlias(name);

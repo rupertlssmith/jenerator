@@ -1553,6 +1553,11 @@ public class CatalogueModelFactory
         }
 
         /** {@inheritDoc} */
+        public Map<String, String> getPropertyPresentAsAliases() {
+            return null;
+        }
+
+        /** {@inheritDoc} */
         public String getPropertyPresentAsAlias(String name) {
             return null;
         }

@@ -104,6 +104,12 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
     }
 
     /** {@inheritDoc} */
+    public Map<String, String> getPropertyPresentAsAliases()
+    {
+        return presentAsAliases;
+    }
+
+    /** {@inheritDoc} */
     public String getPropertyPresentAsAlias(String name)
     {
         return presentAsAliases.get(name);
