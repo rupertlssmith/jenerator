@@ -1553,6 +1553,11 @@ public class CatalogueModelFactory
         }
 
         /** {@inheritDoc} */
+        public String getPropertyPresentAsAlias(String name) {
+            return null;
+        }
+
+        /** {@inheritDoc} */
         public void setPropertyType(String name, Type type)
         {
         }

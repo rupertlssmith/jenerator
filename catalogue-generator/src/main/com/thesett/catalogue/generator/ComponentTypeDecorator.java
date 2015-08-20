@@ -125,6 +125,12 @@ public class ComponentTypeDecorator extends TypeDecorator implements ComponentTy
     }
 
     /** {@inheritDoc} */
+    public String getPropertyPresentAsAlias(String name)
+    {
+        return ((ComponentType) type).getPropertyPresentAsAlias(name);
+    }
+
+    /** {@inheritDoc} */
     public void setPropertyType(String name, Type type)
     {
         ((ComponentType) type).setPropertyType(name, type);

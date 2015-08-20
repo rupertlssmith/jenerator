@@ -104,6 +104,12 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
     }
 
     /** {@inheritDoc} */
+    public String getPropertyPresentAsAlias(String name)
+    {
+        return presentAsAliases.get(name);
+    }
+
+    /** {@inheritDoc} */
     public void setPropertyType(String name, Type type)
     {
         properties.put(name, type);
