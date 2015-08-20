@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -29,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.thesett.catalogue.core.handlers.DocRootHandler;
 import org.apache.log4j.Logger;
 
 import com.thesett.aima.attribute.impl.BigDecimalTypeImpl;
@@ -69,6 +69,7 @@ import com.thesett.catalogue.core.flathandlers.FlatHierarchyLabelFieldHandler;
 import com.thesett.catalogue.core.flathandlers.FlatInQuotesFieldHandler;
 import com.thesett.catalogue.core.flathandlers.FlatViewHandler;
 import com.thesett.catalogue.core.handlers.ComponentPartHandler;
+import com.thesett.catalogue.core.handlers.DocRootHandler;
 import com.thesett.catalogue.core.handlers.EnumLabelFieldHandler;
 import com.thesett.catalogue.core.handlers.ExternalIdHandler;
 import com.thesett.catalogue.core.handlers.HierarchyLabelFieldHandler;
@@ -352,14 +353,14 @@ public class CatalogueModelFactory
      *
      * @return The fields and types of a named component type.
      */
-    private Map<String, Type> getComponentFields(Map<String, Type> catalogueTypes, String name)
+    private Map<String, FieldProperties> getComponentFields(Map<String, Type> catalogueTypes, String name)
     {
         String queryString =
             "?-product_type(_PT), normal_type(_PT, " + name +
             ", class, _MP), member(fields(_FS), _MP), member(F, _FS).";
         Iterable<Map<String, Variable>> fieldBindingsIterable = runQuery(queryString);
 
-        final Map<String, Type> results = new LinkedHashMap<String, Type>();
+        final Map<String, FieldProperties> results = new LinkedHashMap<String, FieldProperties>();
 
         for (Map<String, Variable> variables : fieldBindingsIterable)
         {
@@ -372,19 +373,32 @@ public class CatalogueModelFactory
             {
                 String fieldName = engine.getFunctorName((Functor) fieldFunctor.getArgument(0));
                 String fieldTypeName = engine.getFunctorName((Functor) fieldFunctor.getArgument(1));
+                Term presentAsTerm = fieldFunctor.getArgument(2).getValue();
+
+                String presentAsName = null;
+
+                if (presentAsTerm instanceof StringLiteral)
+                {
+                    String presentAs = ((StringLiteral) presentAsTerm).stringValue();
+
+                    if ((presentAs != null) && !presentAs.equals(fieldName))
+                    {
+                        presentAsName = presentAs;
+                    }
+                }
 
                 // Check if the type of the field is recognized as a basic type.
                 if (basicTypeNameToJavaTypeMap.containsKey(fieldTypeName))
                 {
                     Type fieldType = basicTypeNameToJavaTypeMap.get(fieldTypeName);
-                    results.put(fieldName, fieldType);
+                    results.put(fieldName, new FieldProperties(fieldType, presentAsName));
                 }
 
                 // Check if the type of the field is recognized as a user defined top-level type.
                 else if (catalogueTypes.containsKey(fieldTypeName))
                 {
                     Type fieldType = catalogueTypes.get(fieldTypeName);
-                    results.put(fieldName, fieldType);
+                    results.put(fieldName, new FieldProperties(fieldType, presentAsName));
                 }
                 else
                 {
@@ -401,14 +415,14 @@ public class CatalogueModelFactory
                 if (catalogueTypes.containsKey(fieldTypeName))
                 {
                     Type fieldType = catalogueTypes.get(fieldTypeName);
-                    results.put(fieldName, fieldType);
+                    results.put(fieldName, new FieldProperties(fieldType, null));
                 }
 
                 // Otherwise, the type is assumed to refer to a yet to be processed user type.
                 else
                 {
                     Type fieldType = new PendingComponentRefType(fieldTypeName);
-                    results.put(fieldName, fieldType);
+                    results.put(fieldName, new FieldProperties(fieldType, null));
                 }
             }
             else if ("collection".equals(fieldKind))
@@ -437,13 +451,15 @@ public class CatalogueModelFactory
 
                     Type keyType = resolveTypeName(catalogueTypes, keyTypeName);
 
-                    results.put(fieldName, new MapTypeImpl(keyType, elementType, ArrayList.class));
+                    MapTypeImpl fieldType = new MapTypeImpl(keyType, elementType, ArrayList.class);
+                    results.put(fieldName, new FieldProperties(fieldType, null));
                 }
 
                 // Otherwise the field is a non-map collection type, so create a collection type for the field.
                 else
                 {
-                    results.put(fieldName, new CollectionTypeImpl(elementType, ArrayList.class, collectionKind));
+                    CollectionTypeImpl fieldType = new CollectionTypeImpl(elementType, ArrayList.class, collectionKind);
+                    results.put(fieldName, new FieldProperties(fieldType, null));
                 }
             }
         }
@@ -1152,26 +1168,42 @@ public class CatalogueModelFactory
 
             for (String componentName : componentNamesEntry.getValue())
             {
-                Map<String, Type> componentFields = getComponentFields(catalogueTypes, componentName);
+                Map<String, FieldProperties> fieldProperties = getComponentFields(catalogueTypes, componentName);
+
+                Map<String, Type> componentFields = new LinkedHashMap<String, Type>();
+                Map<String, String> presentAsAliases = new HashMap<String, String>();
+
+                for (Map.Entry<String, FieldProperties> entry : fieldProperties.entrySet())
+                {
+                    componentFields.put(entry.getKey(), entry.getValue().type);
+
+                    String presentAsName = entry.getValue().presentAsName;
+
+                    if (presentAsName != null)
+                    {
+                        presentAsAliases.put(entry.getKey(), presentAsName);
+                    }
+                }
+
                 Set<String> naturalKeyFields = getNaturalKeyFields(componentName);
                 Set<ComponentType> ancestors = getComponentAncestors(catalogueTypes, componentName);
 
                 if ("component_type".equals(componentType))
                 {
                     catalogueTypes.put(componentName,
-                        new ComponentTypeImpl(componentName, componentFields, naturalKeyFields,
+                        new ComponentTypeImpl(componentFields, presentAsAliases, naturalKeyFields, componentName,
                             packageName + "." + StringUtils.toCamelCaseUpper(componentName), ancestors));
                 }
                 else if ("view_type".equals(componentType))
                 {
                     catalogueTypes.put(componentName,
-                        new ViewTypeImpl(componentName, componentFields, naturalKeyFields,
+                        new ViewTypeImpl(componentName, componentFields, presentAsAliases, naturalKeyFields,
                             packageName + "." + StringUtils.toCamelCaseUpper(componentName) + "Impl", ancestors));
                 }
                 else if ("entity_type".equals(componentType))
                 {
                     EntityTypeImpl entityType =
-                        new EntityTypeImpl(componentName, componentFields, naturalKeyFields,
+                        new EntityTypeImpl(componentName, componentFields, presentAsAliases, naturalKeyFields,
                             packageName + "." + StringUtils.toCamelCaseUpper(componentName), ancestors);
 
                     if (supportsExternalId(componentName))
@@ -1184,7 +1216,7 @@ public class CatalogueModelFactory
                 else if ("dimension_type".equals(componentType))
                 {
                     DimensionTypeImpl dimensionType =
-                        new DimensionTypeImpl(componentName, componentFields, naturalKeyFields,
+                        new DimensionTypeImpl(componentName, componentFields, presentAsAliases, naturalKeyFields,
                             packageName + "." + StringUtils.toCamelCaseUpper(componentName), ancestors);
 
                     if (supportsExternalId(componentName))
@@ -1197,7 +1229,7 @@ public class CatalogueModelFactory
                 else if ("fact_type".equals(componentType))
                 {
                     catalogueTypes.put(componentName,
-                        new FactTypeImpl(componentName, componentFields,
+                        new FactTypeImpl(componentName, componentFields, presentAsAliases,
                             packageName + "." + StringUtils.toCamelCaseUpper(componentName), ancestors));
                 }
             }
@@ -1552,6 +1584,21 @@ public class CatalogueModelFactory
         public State getMetaModel()
         {
             return null;
+        }
+    }
+
+    /**
+     * Used to capture the properties of a field of a component.
+     */
+    private static class FieldProperties
+    {
+        public Type type;
+        public String presentAsName;
+
+        private FieldProperties(Type type, String presentAsName)
+        {
+            this.type = type;
+            this.presentAsName = presentAsName;
         }
     }
 }

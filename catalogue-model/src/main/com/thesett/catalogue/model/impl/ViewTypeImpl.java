@@ -42,13 +42,14 @@ public class ViewTypeImpl extends ComponentTypeImpl implements ViewType
      *
      * @param name                 The name of the view.
      * @param attributes           The fields of the view.
+     * @param presentAsAliases     A map from names to externally presented names, if defined.
      * @param naturalKeyFields     The set of fields forming the natural key of the component.
      * @param operationalClassName An implementing class.
      * @param immediateAncestors   The immediate ancestors of this type.
      */
-    public ViewTypeImpl(String name, Map<String, Type> attributes, Set<String> naturalKeyFields,
-        String operationalClassName, Set<ComponentType> immediateAncestors)
+    public ViewTypeImpl(String name, Map<String, Type> attributes, Map<String, String> presentAsAliases,
+        Set<String> naturalKeyFields, String operationalClassName, Set<ComponentType> immediateAncestors)
     {
-        super(name, attributes, naturalKeyFields, operationalClassName, immediateAncestors);
+        super(attributes, presentAsAliases, naturalKeyFields, name, operationalClassName, immediateAncestors);
     }
 }

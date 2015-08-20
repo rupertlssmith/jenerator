@@ -114,7 +114,8 @@ public class ComponentPartHandler implements FieldHandler
                     String fieldType =
                         (field.getType() == null) ? interner.getFunctorName(fieldDeclrToAtom(field)) : field.getType();
 
-                    result += "property(" + field.getName() + ", " + fieldType + ")";
+                    String presentAs = field.getPresentAs() != null ? field.getPresentAs() : field.getName();
+                    result += "property(" + field.getName() + ", " + fieldType + ", \"" + presentAs + "\")";
                 }
                 else if (componentPart instanceof UniqueType)
                 {

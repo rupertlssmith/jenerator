@@ -335,7 +335,7 @@ unique_type_param_accum(Result,[fields(Fields)|Properties]) :-
 unique_field_accum([], [], []).
 
 unique_field_accum(UniqueConstraints, [Field|AccumFields], [Field|Fields]) :-
-    Field = property(_, _),
+    Field = property(_, _, _),
     unique_field_accum(UniqueConstraints, AccumFields, Fields).
 
 unique_field_accum(UniqueConstraints, [Field|AccumFields], [Field|Fields]) :-
@@ -471,7 +471,7 @@ collection_to_component_accum(ParentName,
 /* Accumulates the names of properties into a list without their types or containing functors. */
 property_names_accum([], []).
 property_names_accum([Name|Names], [Property|Properties]) :- 
-    Property = property(Name, _),
+    Property = property(Name, _, _),
     property_names_accum(Names, Properties).
 property_names_accum([Name|Names], [Property|Properties]) :- 
     Property = component_ref(Name, _, _, _),
@@ -536,7 +536,7 @@ check_property(T) :- type_check(_, T, _, _).
 
 check_fields([]).
 
-check_fields([property(_, T)|FS]) :-
+check_fields([property(_, T, _)|FS]) :-
     check_property(T),
     check_fields(FS).
 
@@ -587,7 +587,7 @@ properties_accum(PFS, [F|FS]) :-
     (F = component_ref(_, _, _, _); F = collection(_, _, _, _); F = unique_fields(_, _); F = extend(_, _)),
     properties_accum(PFS, FS).
 properties_accum([P|PFS], [P|FS]) :-
-    P = property(_, _),
+    P = property(_, _, _),
     properties_accum(PFS, FS).
 
 /* === Entity relationships. === */

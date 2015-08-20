@@ -44,12 +44,13 @@ public class FactTypeImpl extends EntityTypeImpl implements FactType
      *
      * @param name                 The name of the fact.
      * @param attributes           The fields of the fact.
+     * @param presentAsAliases     A map from names to externally presented names, if defined.
      * @param operationalClassName An implementing class.
      * @param immediateAncestors   The immediate ancestors of this type.
      */
-    public FactTypeImpl(String name, Map<String, Type> attributes, String operationalClassName,
-        Set<ComponentType> immediateAncestors)
+    public FactTypeImpl(String name, Map<String, Type> attributes, Map<String, String> presentAsAliases,
+        String operationalClassName, Set<ComponentType> immediateAncestors)
     {
-        super(name, attributes, new HashSet<String>(), operationalClassName, immediateAncestors);
+        super(name, attributes, presentAsAliases, new HashSet<String>(), operationalClassName, immediateAncestors);
     }
 }
