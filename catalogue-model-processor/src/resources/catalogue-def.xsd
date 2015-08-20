@@ -230,10 +230,10 @@
         <xs:complexContent>
             <xs:extension base="cat:TypeDefType">
                 <xs:sequence>
+                    <xs:element ref="cat:Root" minOccurs="0" maxOccurs="1"/>
                     <xs:element ref="cat:View" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element ref="cat:ComponentPart" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
-                <xs:attribute name="root" type="xs:boolean" use="optional"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -436,6 +436,11 @@
 
     <!--External Id declarations. -->
     <xs:element name="ExternalId">
+        <xs:complexType/>
+    </xs:element>
+
+    <!--Document root declarations. -->
+    <xs:element name="Root">
         <xs:complexType/>
     </xs:element>
 

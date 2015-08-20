@@ -16,6 +16,7 @@
 package com.thesett.catalogue.core.handlers;
 
 import com.thesett.catalogue.core.FieldHandler;
+import com.thesett.catalogue.setup.Root;
 
 /**
  * DocRootHandler transforms the optional 'root' attribute into an root/0 constant, indicating that a component should
@@ -30,20 +31,15 @@ import com.thesett.catalogue.core.FieldHandler;
  */
 public class DocRootHandler implements FieldHandler
 {
-    /**
-     * {@inheritDoc}
-     *
-     * <p/>This transformation expects a list of {@link com.thesett.catalogue.setup.View}s as the fields argument and
-     * transforms these into a recursive list. This transformation only applies to 'view' fields.
-     */
+    /** {@inheritDoc} */
     public String handleField(String property, Object value, boolean more)
     {
-        if ("externalId".equals(property))
+        if ("root".equals(property))
         {
             // Cast the field value to a list of views.
-            Boolean isRoot = (Boolean) value;
+            Root root = (Root) value;
 
-            if (isRoot != null)
+            if (root != null)
             {
                 return "root";
             }

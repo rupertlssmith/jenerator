@@ -32,12 +32,7 @@ import com.thesett.catalogue.setup.ExternalId;
  */
 public class ExternalIdHandler implements FieldHandler
 {
-    /**
-     * {@inheritDoc}
-     *
-     * <p/>This transformation expects a list of {@link com.thesett.catalogue.setup.View}s as the fields argument and
-     * transforms these into a recursive list. This transformation only applies to 'view' fields.
-     */
+    /** {@inheritDoc} */
     public String handleField(String property, Object value, boolean more)
     {
         if ("externalId".equals(property))
