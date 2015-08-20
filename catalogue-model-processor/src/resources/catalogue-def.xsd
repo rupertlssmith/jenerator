@@ -320,6 +320,7 @@
         <xs:complexContent>
             <xs:extension base="cat:FieldDeclrRootType">
                 <xs:attribute name="name" type="xs:string" use="required"/>
+                <xs:attribute name="present_as" type="xs:string" use="optional"/>
                 <xs:attribute name="type" type="xs:string" use="optional"/>
                 <xs:attribute name="value" type="xs:string" use="optional"/>
                 <xs:attribute name="not_null" type="xs:boolean" use="optional"/>
