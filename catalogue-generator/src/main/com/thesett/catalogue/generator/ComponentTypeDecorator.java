@@ -57,10 +57,6 @@ public class ComponentTypeDecorator extends TypeDecorator implements ComponentTy
 
         for (Map.Entry<String, Type> field : originalFields.entrySet())
         {
-            if (field.getValue()==null) {
-                System.out.println("break here, should not be null");
-            }
-
             fields.put(field.getKey(), TypeDecoratorFactory.decorateType(field.getValue()));
         }
 
