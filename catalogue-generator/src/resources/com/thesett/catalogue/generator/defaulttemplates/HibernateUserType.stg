@@ -2,12 +2,12 @@
  * Hibernate is an implementation of the Generator interface, that creates a Hibernate user types for
  * types in a catalogue model that require custom user types.
  */
-group HibernateUserType : JavaCommon implements Generator;
+import "JavaCommon.stg"
 
 /*
  * Creates the opening section of an output file, if one is required.
  */
-file_open(catalogue) ::= <<
+file_open(catalogue, package) ::= <<
 file_open
 >>
 
@@ -47,11 +47,10 @@ hibernate_enumeration_usertype(catalogue, name) ::= <<
 /*
  * Creates a custom hibernate mapping type.
  */
-hibernate_usertype(catalogue, name, baseClass, extraMethods, extraMethodsFields) ::= <<
+hibernate_usertype(catalogue, name, baseClass, extraMethods=false, extraMethodsFields=false) ::= <<
 <package(catalogue)>
 
-import com.thesett.catalogue.customtypes.*;
-import com.thesett.aima.attribute.impl.*;
+import com.thesett.catalogue.customtypes.EnumeratedStringAttributeUserType;
 
 /**
  * Generated custom hibernate type from catalogue model.
@@ -77,14 +76,14 @@ hibernate_hierarchy_setup_methods(name, fields) ::= <<
 /** {@inheritDoc} */
 public String[] getPropertyNames() {
     // Ensure that the hierarchy attribute type has been set up with its level names.
-    HierarchyAttribute.getFactoryForClass(getTypeName()).setLevelNames(new String[] { <fields: {it|"<it>"}; separator=", "> });
+    HierarchyAttribute.getFactoryForClass(getTypeName()).setLevelNames(new String[] { <fields.keys: {it|"<it>"}; separator=", "> });
 
     return super.getPropertyNames();
 }
 
 /** {@inheritDoc} */
 public int getColumnCount() {
-    return (new String[] { <fields: {it|"<it>"}; separator=", "> }).length;
+    return (new String[] { <fields.keys: {it|"<it>"}; separator=", "> }).length;
 }
 
 >>

@@ -3,7 +3,7 @@ interface Generator;
 /*
  * Creates the opening section of an output file, if one is required.
  */
-file_open(catalogue);
+file_open(catalogue, package);
 
 /*
  * Generates the output for a bean in the specified catalogue.

@@ -7,7 +7,7 @@ group TestConfig : JavaCommon implements Generator;
 /*
  * Creates the opening section of an output file, if one is required.
  */
-file_open(catalogue) ::= <<
+file_open(catalogue, package) ::= <<
 \<configBeans xmlns="http://thebadgerset.co.uk/config-beans-0.1"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://thebadgerset.co.uk/config-beans-0.1 config-beans.xsd"\>

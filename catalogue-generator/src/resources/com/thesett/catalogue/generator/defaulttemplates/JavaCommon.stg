@@ -25,17 +25,6 @@ componentBeanTypeMap ::= [
 ]
 
 /* Holds a mapping from primitive types names to their Java primitive type names. */
-/*primitiveTypeMap ::= [
-    "Boolean":"boolean",
-    "Char":"char",
-    "Short":"short",
-    "Int":"int",
-    "Long":"long",
-    "Float":"float",
-    "Double":"double",
-    default:key
-]*/
-
 primitiveTypeMap ::= [
     "Boolean":"Boolean",
     "Char":"Character",
@@ -69,7 +58,7 @@ collectionTypeMap ::= [
 /*
  * Creates the package declaration for a class file in a given catalogue model.
  */
-package(catalogue) ::= <<
+package(catalogue) ::= <<    
 package <catalogue.modelPackage>;
 >>
 
@@ -121,13 +110,13 @@ timestamp_type(field) ::= <<
 DateTime
 >>
     
-collection_type(field) ::= <<
+collection_type(field) ::= <%
 <if(field.map)>
-<collectionTypeMap.(field.collectionKind)><if(field.elementType)><if(field.keyType)>\<<(typeMap.(field.keyType.kind))(field.keyType)>, <(typeMap.(field.elementType.kind))(field.elementType)>\><endif><endif>
+<collectionTypeMap.(field.collectionKind)><if(field.elementType)><if(field.keyType)>\<<(typeMap.(field.keyType.kind))(field.keyType)>, <(typeMap.(field.elementType.kind))(field.elementType)>><endif><endif>
 <else>
-<collectionTypeMap.(field.collectionKind)><if(field.elementType)>\<<(typeMap.(field.elementType.kind))(field.elementType)>\><endif>
+<collectionTypeMap.(field.collectionKind)><if(field.elementType)>\<<(typeMap.(field.elementType.kind))(field.elementType)>><endif>
 <endif>
->>
+%>
 
 string_type(field) ::= <<
 String
@@ -147,4 +136,14 @@ basic_type(field) ::= <<
 
 object_type(field) ::= <<
 <objectTypeMap.(field.primitiveKind)>
+>>
+
+data_model_imports(decorator) ::= <<
+<if(decorator.withMapField)>import java.util.Map;<endif>
+<if(decorator.withSetField)>import java.util.Set;<endif>
+<if(decorator.withListField)>import java.util.List;<endif>
+<if(decorator.withBigDecimalField)>import java.math.BigDecimal;<endif>
+<if(decorator.withTimeOnlyField)>import org.joda.time.LocalTime;<endif>
+<if(decorator.withDateOnlyField)>import org.joda.time.LocalDate;<endif>
+<if(decorator.withTimestampField)>import org.joda.time.DateTime;<endif>
 >>

@@ -185,13 +185,13 @@ to an enumeration of states in the model and specify transitions etc there.
         <String name="test_string"/>
     </EntityDef>
 
-    <DimensionDef name="simple_dimension">
+    <!--<DimensionDef name="simple_dimension">
         <String name="test_string"/>
-    </DimensionDef>
+    </DimensionDef>-->
 
-    <FactDef name="simple_fact">
+    <!--<FactDef name="simple_fact">
         <String name="test_string"/>
-    </FactDef>
+    </FactDef>-->
 
     <!-- ================================ Components. ========================================= -->
 
@@ -202,10 +202,12 @@ to an enumeration of states in the model and specify transitions etc there.
     </ComponentDef>
 
     <!-- Measurement paired with a dimension to form a measurement of a specific dimension type. -->
+    <!--
     <ComponentDef name="measurement_of_b">
         <Component name="amount" type="measurement"/>
         <Component name="ref_to_b" type="b"/>
     </ComponentDef>
+    -->        
 
     <!-- An address component. -->
     <ComponentDef name="address">
@@ -235,7 +237,7 @@ to an enumeration of states in the model and specify transitions etc there.
         <TimeStamp name="timestamp"/>
     </EntityDef>
 
-    <DimensionDef name="basic_type_dimension">
+    <!--<DimensionDef name="basic_type_dimension">
         <ExternalId/>
         <Boolean name="boolean"/>        
         <Integer name="integer"/>
@@ -243,41 +245,41 @@ to an enumeration of states in the model and specify transitions etc there.
         <String name="string"/>
         <Date name="date"/>
         <Time name="time"/>
-    </DimensionDef>
+    </DimensionDef>-->
 
     <!-- Examples of all the restricted types. -->
-    <DimensionDef name="restricted_type_dimension">
+    <!--<DimensionDef name="restricted_type_dimension">
         <Integer name="restricted_integer" type="positive"/>
         <Real name="restricted_real" type="percent"/>
         <String name="restricted_string" type="email"/>
         <Date name="restricted_date" type="beyond_2000"/>
         <Time name="restricted_time" type="working_hours"/>
-    </DimensionDef>
+    </DimensionDef>-->
 
     <!-- Example of big decimal types. -->
-    <DimensionDef name="decimal_dimension">
+    <!--<DimensionDef name="decimal_dimension">
         <Real name="amount" type="money"/>
-    </DimensionDef>
+    </DimensionDef>-->
 
     <!-- A taxonmy dimension. -->
-    <DimensionDef name="taxonomy_dimension">
+    <!--<DimensionDef name="taxonomy_dimension">
         <ExternalId/>
         <View type="name_view"/>
         <String name="name"/>
         <Hierarchy name="taxonomy" type="taxonomy"/>
-    </DimensionDef>
+    </DimensionDef>-->
 
     <!-- Examples of all the custom types. -->
-    <DimensionDef name="custom_type_dimension">
+    <!--<DimensionDef name="custom_type_dimension">
         <Enumeration name="colour" type="colours"/>
         <Hierarchy name="taxonomy" type="taxonomy"/>
-    </DimensionDef>
+    </DimensionDef>-->
 
     <!-- A customer with an address and billing details. -->
-    <DimensionDef name="customer">
+    <!--<DimensionDef name="customer">
         <String name="name"/>
         <Component name="address" type="address"/>
-    </DimensionDef>
+    </DimensionDef>-->
 
     <!-- ================================ View Definition Examples. ========================= -->
 
@@ -287,13 +289,13 @@ to an enumeration of states in the model and specify transitions etc there.
     </ViewDef>
 
     <!-- This is a dimension with a name field that supports the name summary class. -->
-    <DimensionDef name="viewable_dimension">
+    <!--<DimensionDef name="viewable_dimension">
         <ExternalId/>
         <View type="name_view"/>
         <String name="name"/>
         <String name="etc"/>
         <Real name="relevance"/>
-    </DimensionDef>
+    </DimensionDef>-->
 
     <!-- ========================== Free Text Searchable Entity Examples. =================== -->
 
@@ -321,7 +323,7 @@ to an enumeration of states in the model and specify transitions etc there.
     </ViewDef>
 
     <!-- This is a dimenion with a natural name/type key, with equality based on that key. -->
-    <DimensionDef name="natural_dimension">
+    <!--<DimensionDef name="natural_dimension">
         <View type="summary_view"/>
 
         <Unique natural_key="true">
@@ -330,173 +332,143 @@ to an enumeration of states in the model and specify transitions etc there.
         </Unique>
 
         <String name="etc"/>
-    </DimensionDef>
+    </DimensionDef>-->
 
     <!-- This is the same dimension without the natural key, equality is based on value of all fields. -->
-    <DimensionDef name="value_dimension">
+    <!--<DimensionDef name="value_dimension">
         <View type="summary_view"/>
 
         <String name="name"/>
         <String name="type"/>
 
         <String name="etc"/>
-    </DimensionDef>
+    </DimensionDef>-->
 
     <!-- ================================ Collection Examples. ============================== -->
 
     <!-- Simple usage of all the collection types. -->
-    <DimensionDef name="collection_dimension">
+    <!--<DimensionDef name="collection_dimension">
 
-        <!-- Set of things. -->
         <Set name="set_of_things">
             <String name="thing"/>
         </Set>
 
-        <!-- Bag of things. -->
         <Bag name="bag_of_things">
             <String name="thing"/>
         </Bag>
 
-        <!-- List of things. -->
         <List name="list_of_things">
             <String name="thing"/>
         </List>
 
-        <!-- Map of things. -->
         <Map name="map_of_things">      
             <String name="thing"/>
             <Key><String name="key"/></Key>
         </Map>
 
-    </DimensionDef>
+    </DimensionDef>-->
 
     <!-- ================================ Relationship Examples. ============================ -->
 
     <!-- Defines a test dimension A with various relationships to dimensions B, C and D. -->
-    <DimensionDef name="a">
+    <!--<DimensionDef name="a">
 
-        <!-- ====== Unidirectional relationships. ====== -->
-
-        <!-- One to one from A to B, unidirectional. -->
         <Unique>
             <Component name="unique_ref_to_b" type="b"/>
         </Unique>
 
-        <!-- Many to one from A to B, unidirectional. -->
         <Component name="ref_to_b" type="b"/>
 
-        <!-- One to many from A to B, unidirectional. -->
         <Set name="set_unique_of_b">
             <Unique>
                 <Component name="ref_to_b" type="b"/>
             </Unique>
         </Set>
 
-        <!-- Many to many from A to B, unidirectional. -->
         <Set name="set_of_b">
             <Component name="ref_to_b" type="b"/>
         </Set>
 
-        <!-- Many to many from A to B, unidirectional, relationship supports multiple instances. -->
         <Bag name="bag_of_b">
             <Component name="ref_to_b" type="b"/>
         </Bag>
 
-        <!-- Many to many from A to B, unidirectional, relationship is ordered. -->
         <List name="list_of_b">
             <Component name="ref_to_b" type="b"/>
         </List>
 
-        <!-- Many to many from A to B, unidirectional, relationship is keyed. -->
         <Map name="map_of_b">
             <Component name="value" type="b"/>
             <Key><String name="key"/></Key>
         </Map>
 
-        <!-- ====== Bidirectional relationships. ====== -->
-
-        <!-- One to one from A to C, bidirectional, C has a single ref back to A. -->
         <Component name="ref_to_c" type="c"/>
 
-        <!-- Many to one from A to D, bidirectional, D has a set of refs back to A. -->
         <Component name="ref_to_d" type="d"/>
 
-        <!-- One to many from A to C, bidirectional, C has a single ref back to A.. -->
         <Set name="set_of_c">
             <Component name="ref_to_c" type="c"/>
         </Set>
 
-        <!-- Many to many from A to D, bidirectional, D has a set of refs back to A. -->
         <Set name="set_of_d">
             <Component name="ref_to_d" type="d"/>
         </Set>
 
-        <!-- ====== Parent/Child relationships. ====== -->
-
-        <!-- Set of things with a reference back to the parent. -->
         <Set name="set_of_things_ref_back">
             <Parent name="ref_to_parent"/>
         </Set>
 
-        <!-- List of things with a reference back to the parent. -->
         <List name="list_of_things_ref_back">
             <Parent name="ref_to_parent"/>
         </List>
 
-        <!-- Bag of things with a reference back to the parent. -->
         <Bag name="bag_of_things_ref_back">
             <Parent name="ref_to_parent"/>
         </Bag>
 
-        <!-- Map of things with a reference back to the parent. -->
         <Map name="map_of_things_ref_back">
             <Parent name="ref_to_parent"/>
             <Key><String name="key"/></Key>
         </Map>
 
-        <!-- ====== Association class relationships. ====== -->
-
-        <!-- Many to many from A to (quantity * B) tuple, association class is anonymous. -->
         <Set name="list_of_amount_of_b">
             <Integer name="quantity"/>
             <Component name="ref_to_b" type="b"/>
         </Set>
 
-        <!-- Many to many from A to (measurement * B), association class is anonymous. -->
         <Set name="list_of_measurement_of_b">
             <Component name="amount" type="measurement"/>
             <Component name="ref_to_b" type="b"/>
         </Set>
 
-        <!-- Many to many from A to (measurement * B), relationship is ordered, association class is named. -->
         <Set name="list_of_ref_to_measurement_of_b">
             <Component name="measurement_of_b" type="measurement_of_b"/>
         </Set>
 
-    </DimensionDef>
+    </DimensionDef>-->
 
     <!-- Dimension with no references back to A, for unidirectional relationships. -->
-    <DimensionDef name="b">
-    </DimensionDef>
+    <!--<DimensionDef name="b">
+    </DimensionDef>-->
 
     <!-- Dimension with single reference back to A, for one-to-x bidirectional relationships. -->
-    <DimensionDef name="c">
+    <!--<DimensionDef name="c">
         <Component name="ref_to_a" type="a"/>
-    </DimensionDef>
+    </DimensionDef>-->
 
     <!-- Dimension with many references back to A, for many-to-x bidirectional relationships. -->
-    <DimensionDef name="d">
+    <!--<DimensionDef name="d">
         <Set name="set_of_a">
             <Component name="ref_to_a" type="a"/>
         </Set>
-    </DimensionDef>
+    </DimensionDef>-->
 
     <!-- ================================ More Examples ===================================== -->
 
     <!-- A store dimension. -->
-    <DimensionDef name="store">
+    <!--<DimensionDef name="store">
         <Component name="address" type="address"/>
-    </DimensionDef>
+    </DimensionDef>-->
 
     <!-- A product hierarchy. -->
     <HierarchyDef name="product_hierarchy">
@@ -508,7 +480,7 @@ to an enumeration of states in the model and specify transitions etc there.
     </HierarchyDef>
     
     <!-- A product that customers buy. -->
-    <DimensionDef name="example_product">
+    <!--<DimensionDef name="example_product">
         <View type="brand"/>
 
         <String name="product_description"/>
@@ -517,8 +489,7 @@ to an enumeration of states in the model and specify transitions etc there.
         </Unique>
         <String name="brand_description"/>
         <Hierarchy name="product_hierarchy" type="product_hierarchy"/>
-        <!-- And lots more fields... -->
-    </DimensionDef>
+    </DimensionDef>-->
 
     <!-- A brand view onto the product dimension. -->
     <ViewDef name="brand">
@@ -534,7 +505,7 @@ to an enumeration of states in the model and specify transitions etc there.
     -->
     <EntityDef name="purchase_order">
         <View type="completed_purchase_order"/>
-        <Component name="customer" type="customer"/>
+        <!--<Component name="customer" type="customer"/>-->
 
         <Bag name="line_item">
             <Component name="product" type="example_product"/>
@@ -547,7 +518,7 @@ to an enumeration of states in the model and specify transitions etc there.
 
     <!-- Defines a view onto completed purchase orders. The processing state has been dropped. -->
     <ViewDef name="completed_purchase_order">
-        <Component name="customer" type="customer"/>
+        <!--<Component name="customer" type="customer"/>-->
 
         <Bag name="line_item">
             <Component name="product" type="example_product"/>
@@ -563,8 +534,9 @@ to an enumeration of states in the model and specify transitions etc there.
         if the customers identity can be known from a store card or credit card, otherwise the customer may be
         mapped onto an anonymous customer (but not a null key).
     -->
+    <!--
     <ComponentDef name="retail_sale">
-        <Component name="customer" type="customer"/>    
+        <Component name="customer" type="customer"/>
         <Component name="store" type="store"/>
 
         <Bag name="line_item">
@@ -572,6 +544,7 @@ to an enumeration of states in the model and specify transitions etc there.
             <Integer name="quantity"/>
         </Bag>
     </ComponentDef>
+    -->
 
     <!-- ================================ Data Warehouse Definition Examples. =============== -->
     
@@ -609,7 +582,7 @@ these field may also be automatially populated using formualas.
     -->
 
     <!-- Defines a retail sales fact table directly. -->
-    <FactDef name="pos_sale1">
+    <!--<FactDef name="pos_sale1">
         <Component name="customer" type="customer"/>
         <Component name="store" type="store"/>
 
@@ -617,51 +590,49 @@ these field may also be automatially populated using formualas.
             <Component name="product" type="example_product"/>
             <Integer name="quantity"/>
         </Bag>
-    </FactDef>
+    </FactDef>-->
 
     <!-- Defines a retail sales fact table, built from the retail sale component. -->
-    <FactDef name="pos_sale2">
+    <!--<FactDef name="pos_sale2">
         <Component name="retail_sale" type="retail_sale"/>
-    </FactDef>
+    </FactDef>-->
 
     <!-- A retail sales fact table, built from a component, enhanced with extra fields. -->
-    <FactDef name="pos_sale3">
+    <!--<FactDef name="pos_sale3">
         <Component name="retail_sale" type="retail_sale"/>
 
         <Real name="cost"/>
         <Real name="profit"/>
-    </FactDef>
+    </FactDef>-->
 
     <!-- Defines a purchase order fact table, built from the purchase order entity. -->
-    <FactDef name="order1">
+    <!--<FactDef name="order1">
         <Component name="purchase_order" type="purchase_order"/>
-    </FactDef>
+    </FactDef>-->
 
     <!-- Defines a purchase order fact table, showing how to add time and date pseudo-dimensions and other fields. -->
-    <FactDef name="order2">
+    <!--<FactDef name="order2">
         <Component name="purchase_order" type="purchase_order"/>
         
         <Date name="date" auto="true"/>
         <Time name="time" auto="true"/>
-    </FactDef>
+    </FactDef>-->
 
     <!-- An example accumulating fact table. -->
     <!-- Use of formulas and component extensions to populate fields of the fact from linked dimensions. -->
-    <FactDef name="order3">
+    <!--<FactDef name="order3">
         <Component name="purchase_order" type="purchase_order"/>
 
-        <!--<ExtendComponent name="purchase_order.line_item">-->
         <Real name="price" formula="example_product.price"/>
-        <!--</ExtendComponent>-->
 
         <Real name="total_order_price" formula="sum(purchase_order.line_item.price)"/>
 
         <Date name="date" auto="true"/>
         <Time name="time" auto="true"/>
-    </FactDef>
+    </FactDef>-->
 
     <!-- An example transaction fact table. An order transaction fact table, just contains completed orders. -->
-    <FactDef name="order_transaction">
+    <!--<FactDef name="order_transaction">
         <Component name="completed_purchase_order" type="completed_purchase_order"/>
 
         <ExtendComponent name="completed_purchase_order.line_item">
@@ -672,10 +643,10 @@ these field may also be automatially populated using formualas.
 
         <Date name="date" auto="true"/>
         <Time name="time" auto="true"/>
-    </FactDef>
+    </FactDef>-->
 
     <!-- An example snapshot fact table. A market basket fact table, specified directly using pairs of products. -->
-    <FactDef name="market_basket">
+    <!--<FactDef name="market_basket">
         <Component name="customer" type="customer"/>
         <Component name="store" type="store"/>
 
@@ -688,7 +659,7 @@ these field may also be automatially populated using formualas.
 
         <Real name="price_a" formula="product_a.price"/>
         <Real name="price_b" formula="product_b.price"/>
-    </FactDef>
+    </FactDef>-->
 
     <!-- ================================ Index Definition Examples. ======================== -->
 

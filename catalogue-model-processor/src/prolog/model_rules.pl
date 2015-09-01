@@ -597,14 +597,18 @@ properties_accum([P|PFS], [P|FS]) :-
  which holds the relationship.
  */
 related_uni(R, one, E1, E2, Prop, Owner) :-
-    normal_type(entity_type, E1, _, MP1),
-    normal_type(entity_type, E2, _, MP2),
+    product_type(CT1),
+    product_type(CT2),
+    normal_type(CT1, E1, _, MP1),
+    normal_type(CT2, E2, _, MP2),
     MP1 = [fields(FS1)|Props1],
     member(component_ref(Prop, E2, Owner, _), FS1).
 
 related_uni(R, many, E1, E2, Prop, Owner) :-
-    normal_type(entity_type, E1, _, MP1),
-    normal_type(entity_type, E2, _, MP2),
+    product_type(CT1),
+    product_type(CT2),
+    normal_type(CT1, E1, _, MP1),
+    normal_type(CT2, E2, _, MP2),
     MP1 = [fields(FS1)|Props1],
     member(collection(_, Prop, component_ref(_, E2, Owner, _)), FS1).
 

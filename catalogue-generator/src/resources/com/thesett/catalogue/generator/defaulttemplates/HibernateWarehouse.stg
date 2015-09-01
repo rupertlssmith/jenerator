@@ -7,7 +7,7 @@ group HibernateOnline : HibernateCommon implements Generator;
 /*
  * Creates the opening section of an output file, if one is required.
  */
-file_open(catalogue) ::= <<
+file_open(catalogue, package) ::= <<
 <hibernate_config_open(catalogue=catalogue)>
 >>
 

@@ -2,12 +2,12 @@
  * JavaInterface is an implementation of the Generator interface, that creates Java interfaces for types
  * in a catalogue model that require interfaces.
  */
-group JavaInterface : JavaCommon implements Generator;
+import "JavaCommon.stg"
 
 /*
  * Creates the opening section of an output file, if one is required.
  */
-file_open(catalogue) ::= <<
+file_open(catalogue, package) ::= <<
 file_open
 >>
 
@@ -16,7 +16,7 @@ file_open
  */
 for_bean(catalogue, package, decorator, fields, extraFields) ::= <<
 <if(decorator.view)>
-<catalogue_view_interface(catalogue=catalogue, name=decorator.name, fields=fields)>
+<catalogue_view_interface(catalogue=catalogue, decorator=decorator, name=decorator.name, fields=fields)>
 <endif>
 >>
 
@@ -30,7 +30,7 @@ file_close
 /*
  * Creates a view interface.
  */
-catalogue_view_interface(catalogue, name, fields) ::= <<
+catalogue_view_interface(catalogue, decorator, name, fields) ::= <<
 <interface(catalogue=catalogue, name=name, fields=fields, typeMap=componentBeanTypeMap)>
 >>
 
@@ -40,9 +40,7 @@ catalogue_view_interface(catalogue, name, fields) ::= <<
 interface(catalogue, name, fields, typeMap) ::= <<
 <package(catalogue)>
 
-import java.util.*;
-
-import com.thesett.aima.attribute.time.*;
+<data_model_imports(decorator)>
 
 /**
  * Generated bean interface from catalogue model.
@@ -51,7 +49,7 @@ import com.thesett.aima.attribute.time.*;
  */
 public interface <name; format="ccu"> {
     <if(fields)>
-    <fields.keys:getters_setters_interface(); separator="\n\n">
+    <fields.keys:{it|<getters_setters_interface(it)>}; separator="\n\n">
     <endif>
 }
 >>
@@ -59,18 +57,18 @@ public interface <name; format="ccu"> {
 /*
  * Creates public getters and setters method interfaces for all name/type attributes.
  */
-getters_setters_interface() ::= <<
+getters_setters_interface(field) ::= <<
 /**
- * Provides the <it> property.
+ * Provides the <field> property.
  *
- * @return The <it> property.
+ * @return The <field> property.
  */
-<(typeMap.(fields.(it).kind))(fields.(it))> get<it; format="ccu">();
+<(typeMap.(fields.(field).kind))(fields.(field))> get<field; format="ccu">();
 
 /**
- * Accepts a new value for the <it> property.
+ * Accepts a new value for the <field> property.
  *
- * @param <it; format="cc"> The <it> property.
+ * @param <field; format="cc"> The <field> property.
  */
-void set<it; format="ccu">(<(typeMap.(fields.(it).kind))(fields.(it))> <it; format="cc">);
+void set<field; format="ccu">(<(typeMap.(fields.(field).kind))(fields.(field))> <field; format="cc">);
 >>
