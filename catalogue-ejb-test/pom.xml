@@ -7,7 +7,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>catalogue-ejb-test</artifactId>
     <name>catalogue-ejb-test</name>
-    <version>0.8.18-SNAPSHOT</version><!--jenerator.version-->
+    <version>0.8.18</version><!--jenerator.version-->
 
     <description>In container tests for the index resource adapter.</description>
     <url>http://www.thesett.com/catalogue-ejb-test</url>
@@ -21,7 +21,7 @@
     <parent>
         <groupId>com.thesett</groupId>
         <artifactId>jenerator_build</artifactId>
-        <version>0.8.18-SNAPSHOT</version><!--jenerator.version-->
+        <version>0.8.18</version><!--jenerator.version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -29,58 +29,58 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>common</artifactId>
-            <version>0.8.18-SNAPSHOT</version><!--base.version-->
+            <version>0.8.18</version><!--base.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>configurator</artifactId>
-            <version>0.8.18-SNAPSHOT</version><!--jenerator.version-->
+            <version>0.8.18</version><!--jenerator.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>locator</artifactId>
-            <version>0.8.18-SNAPSHOT</version><!--jenerator.version-->
+            <version>0.8.18</version><!--jenerator.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>index</artifactId>
-            <version>0.8.18-SNAPSHOT</version><!--jenerator.version-->
+            <version>0.8.18</version><!--jenerator.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>index-ra-client</artifactId>
-            <version>0.8.18-SNAPSHOT</version><!--jenerator.version-->
+            <version>0.8.18</version><!--jenerator.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>catalogue</artifactId>
-            <version>0.8.18-SNAPSHOT</version><!--jenerator.version-->
+            <version>0.8.18</version><!--jenerator.version-->
             <type>ejb</type>
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>catalogue</artifactId>
-            <version>0.8.18-SNAPSHOT</version><!--jenerator.version-->
+            <version>0.8.18</version><!--jenerator.version-->
             <classifier>tests</classifier>
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>catalogue-model-processor</artifactId>
-            <version>0.8.18-SNAPSHOT</version><!--jenerator.version-->
+            <version>0.8.18</version><!--jenerator.version-->
             <classifier>tests</classifier>
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>index-ra</artifactId>
-            <version>0.8.18-SNAPSHOT</version><!--jenerator.version-->
+            <version>0.8.18</version><!--jenerator.version-->
             <type>rar</type>
         </dependency>
 
@@ -97,7 +97,7 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>catalogue-ejb-test-war</artifactId>
-            <version>0.8.18-SNAPSHOT</version><!--jenerator.version-->
+            <version>0.8.18</version><!--jenerator.version-->
             <type>war</type>
             <scope>provided</scope>
         </dependency>
