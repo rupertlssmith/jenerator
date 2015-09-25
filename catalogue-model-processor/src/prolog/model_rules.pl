@@ -46,16 +46,16 @@ normal_type(fact_type, X, class, P) :- normal_type_product(fact_type, X, class, 
 /* These rules expand integer ranges with only a from or a to specified to use the narrowest Java type
    available. */
 normal_type_int(integer_range, X, int, [from(From), to(IM)]) :- 
-    type_instance(X, integer_range, [from(From)]),java_int(From),int_max(IM).
+    type_instance(X, integer_range, [from(From)]),java_int(From),int_max(IM),(!).
 
 normal_type_int(integer_range, X, long, [from(From), to(LM)]) :- 
-    type_instance(X, integer_range, [from(From)]),java_long(From),long_max(LM),not(java_int(From)).
+    type_instance(X, integer_range, [from(From)]),java_long(From),long_max(LM),not(java_int(From)),(!).
 
 normal_type_int(integer_range, X, int, [from(IM), to(To)]) :- 
-    type_instance(X, integer_range, [to(To)]),java_int(To), int_min(IM).
+    type_instance(X, integer_range, [to(To)]),java_int(To), int_min(IM),(!).
 
 normal_type_int(integer_range, X, long, [from(LM), to(To)]) :- 
-    type_instance(X, integer_range, [to(To)]),java_long(To), long_min(LM),not(java_int(To)).
+    type_instance(X, integer_range, [to(To)]),java_long(To), long_min(LM),not(java_int(To)),(!).
 
 /* These rules expand integer ranges to use either a java int or long depending on the size of the from and
    to. */
@@ -64,7 +64,7 @@ normal_type_int(integer_range, X, int, [from(From), to(To)]) :-
     member(from(From),Params),
     member(to(To),Params),
     java_int(From),
-    java_int(To).
+    java_int(To),(!).
 
 normal_type_int(integer_range, X, long, [from(From), to(To)]) :-
     type_instance(X, integer_range, Params),
@@ -72,7 +72,7 @@ normal_type_int(integer_range, X, long, [from(From), to(To)]) :-
     member(to(To),Params),
     java_long(From),
     java_long(To),
-    not((java_int(From),java_int(To))).
+    not((java_int(From),java_int(To))),(!).
 
 /* ======== normal_type_decimal/4 */
 
@@ -299,13 +299,13 @@ normal_type_product(CompType, Name, class, Accum) :-
     product_type(CompType),
     type_instance(Name, CompType, Params),
     unique_type_param_accum(UniqueAccum, Params),
-    collection_type_param_accum(Name, Accum, UniqueAccum).
+    collection_type_param_accum(Name, Accum, UniqueAccum),(!).
 
 normal_type_product(CompType, CollName, class, CollComponentParams) :-
     product_type(CompType),
     type_instance(Name, CompType, Params),
     promoted_collection_accum(Name, Components, Params),
-    member(top_level_component(CollName, CollComponentParams), Components).
+    member(top_level_component(CollName, CollComponentParams), Components),(!).
 
 /* ======== unqiue_type_param_accum/2
    Accumulates the unique fields and constraints by the unique_field_accum/3 predicate accross all
@@ -315,7 +315,7 @@ unique_type_param_accum([], []).
 
 unique_type_param_accum([Prop|AccumProperties],[Prop|Properties]) :- 
     Prop \= fields(_),
-    unique_type_param_accum(AccumProperties, Properties).
+    unique_type_param_accum(AccumProperties, Properties),(!).
 
 unique_type_param_accum(Result,[fields(Fields)|Properties]) :- 
     unique_field_accum(UniqueConstraints, AccumFields, Fields),
@@ -336,7 +336,7 @@ unique_field_accum([], [], []).
 
 unique_field_accum(UniqueConstraints, [Field|AccumFields], [Field|Fields]) :-
     Field = property(_, _, _),
-    unique_field_accum(UniqueConstraints, AccumFields, Fields).
+    unique_field_accum(UniqueConstraints, AccumFields, Fields),(!).
 
 unique_field_accum(UniqueConstraints, [Field|AccumFields], [Field|Fields]) :-
     Field = component_ref(_, _, _, _),
@@ -347,19 +347,19 @@ unique_field_accum(UniqueConstraints, Result, [Field|Fields]) :-
     property_names_accum(Names, ConstrainedFields),
     append(ConstrainedFields, AccumFields, Result),
     append([unique_fields(Key, Names)], AccumUniqueConstraints, UniqueConstraints),
-    unique_field_accum(AccumUniqueConstraints, AccumFields, Fields).
+    unique_field_accum(AccumUniqueConstraints, AccumFields, Fields),(!).
 
 unique_field_accum(UniqueConstraints, 
                    [collection(CollKind, CollName, Parent, fields(UniqueCollFields))|AccumFields], 
                    [Field|Fields]) :-
     Field = collection(CollKind, CollName, Parent, fields(CollFields)),
     unique_field_accum(_, UniqueCollFields, CollFields),
-    unique_field_accum(UniqueConstraints, AccumFields, Fields).
+    unique_field_accum(UniqueConstraints, AccumFields, Fields),(!).
 
 unique_field_accum(UniqueConstraints, [extend(ExtRef, UniqueExtFields)|AccumFields], [Field|Fields]) :-
     Field = extend(ExtRef, fields(ExtFields)),
     unique_field_accum(_, UniqueExtFields, ExtFields),
-    unique_field_accum(UniqueConstraints, AccumFields, Fields).
+    unique_field_accum(UniqueConstraints, AccumFields, Fields),(!).
 
 /* ======== collection_type_param_accum/3
    Accumulates the expansion of collections into references to components using the collection_field_accum/2 
@@ -369,7 +369,7 @@ collection_type_param_accum(_, [], []).
 
 collection_type_param_accum(ParentName, [Prop|AccumProperties],[Prop|Properties]) :- 
     Prop \= fields(_),
-    collection_type_param_accum(ParentName, AccumProperties, Properties).
+    collection_type_param_accum(ParentName, AccumProperties, Properties),(!).
 
 collection_type_param_accum(ParentName, [fields(AccumFields)|AccumProperties],[fields(Fields)|Properties]) :- 
     collection_field_accum(ParentName, AccumFields, Fields), 
@@ -383,7 +383,7 @@ collection_field_accum(_, [], []).
 
 collection_field_accum(ParentName, [Field|AccumFields] , [Field|Fields]) :-
     Field \= collection(_, _, _, _),
-    collection_field_accum(ParentName, AccumFields, Fields).
+    collection_field_accum(ParentName, AccumFields, Fields),(!).
 
 /* No parent, one field, direct collection. */
 collection_field_accum(ParentName, 
@@ -417,7 +417,7 @@ promoted_collection_accum(_, [], []).
 /* Skip all non-field parameters of the generating component type. */
 promoted_collection_accum(ParentName, AccumComponents, [Prop|Properties]) :-
     Prop \= fields(_),
-    promoted_collection_accum(ParentName, AccumComponents, Properties).
+    promoted_collection_accum(ParentName, AccumComponents, Properties),(!).
 
 /* Extract any collections appearing in the fields. */
 promoted_collection_accum(ParentName, Result, [fields(Fields)|Properties]) :-
@@ -431,7 +431,7 @@ collection_to_component_accum(_, [], []).
 
 collection_to_component_accum(ParentName, Components, [Field|Fields]) :-
     Field \= collection(_, _, _, _),
-    collection_to_component_accum(ParentName, Components, Fields).
+    collection_to_component_accum(ParentName, Components, Fields),(!).
 
 /* No parent, one field, direct collection. */
 collection_to_component_accum(ParentName, 
@@ -502,19 +502,19 @@ product_type(fact_type).
    type checks. Component types must also match the types of fields specified in any views that they
    have.
 */
-type_check(integer_range, MN, JT, NP) :- normal_type(integer_range, MN, JT, NP).
+type_check(integer_range, MN, JT, NP) :- normal_type(integer_range, MN, JT, NP),(!).
 
-type_check(real_range, MN, JT, NP) :- normal_type(real_range, MN, JT, NP).
+type_check(real_range, MN, JT, NP) :- normal_type(real_range, MN, JT, NP),(!).
 
-type_check(string_pattern, MN, JT, NP) :- normal_type(string_pattern, MN, JT, NP).
+type_check(string_pattern, MN, JT, NP) :- normal_type(string_pattern, MN, JT, NP),(!).
 
-type_check(date_range, MN, JT, NP) :- normal_type(date_range, MN, JT, NP).
+type_check(date_range, MN, JT, NP) :- normal_type(date_range, MN, JT, NP),(!).
 
-type_check(time_range, MN, JT, NP) :- normal_type(time_range, MN, JT, NP).
+type_check(time_range, MN, JT, NP) :- normal_type(time_range, MN, JT, NP),(!).
 
-type_check(enumeration_type, MN, JT, NP) :- normal_type(enumeration_type, MN, JT, NP).
+type_check(enumeration_type, MN, JT, NP) :- normal_type(enumeration_type, MN, JT, NP),(!).
 
-type_check(hierarchy_type, MN, JT, NP) :- normal_type(hierarchy_type, MN, JT, NP).
+type_check(hierarchy_type, MN, JT, NP) :- normal_type(hierarchy_type, MN, JT, NP),(!).
 
 type_check(T, MN, JT, TypeProps) :- 
     product_type(T),
@@ -602,7 +602,7 @@ related_uni(R, one, E1, E2, Prop, Owner) :-
     normal_type(CT1, E1, _, MP1),
     normal_type(CT2, E2, _, MP2),
     MP1 = [fields(FS1)|Props1],
-    member(component_ref(Prop, E2, Owner, _), FS1).
+    member(component_ref(Prop, E2, Owner, _), FS1),(!).
 
 related_uni(R, many, E1, E2, Prop, Owner) :-
     product_type(CT1),
@@ -610,7 +610,7 @@ related_uni(R, many, E1, E2, Prop, Owner) :-
     normal_type(CT1, E1, _, MP1),
     normal_type(CT2, E2, _, MP2),
     MP1 = [fields(FS1)|Props1],
-    member(collection(_, Prop, component_ref(_, E2, Owner, _)), FS1).
+    member(collection(_, Prop, component_ref(_, E2, Owner, _)), FS1),(!).
 
 /* ======== related/5
  Describes the relationship between two entities, its arity and its direction of navigability. The property
@@ -620,13 +620,13 @@ related_uni(R, many, E1, E2, Prop, Owner) :-
 related(X, Y, bi, E1, E2, Prop, TProp, Owner) :-
     related_uni(X, Y, E1, E2, Prop, Owner),
     related_uni(Y, X, E2, E1, TProp, _),
-    E1 \= E2.
+    E1 \= E2,(!).
 
 /* This makes reflexive relationships one-to-many. */
 related(many, Y, bi, E1, E2, Prop, TProp, Owner) :-
     related_uni(X, Y, E1, E2, Prop, Owner),
     related_uni(Y, X, E2, E1, TProp, _),
-    E1 = E2.
+    E1 = E2,(!).
 
 related(X, Y, uni, E1, E2, Prop, TProp, Owner) :-
     related_uni(X, Y, E1, E2, Prop, Owner),
