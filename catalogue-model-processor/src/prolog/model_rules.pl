@@ -602,7 +602,7 @@ related_uni(R, one, E1, E2, Prop, Owner) :-
     normal_type(CT1, E1, _, MP1),
     normal_type(CT2, E2, _, MP2),
     MP1 = [fields(FS1)|Props1],
-    member(component_ref(Prop, E2, Owner, _), FS1),(!).
+    member(component_ref(Prop, E2, Owner, _), FS1).
 
 related_uni(R, many, E1, E2, Prop, Owner) :-
     product_type(CT1),
@@ -610,7 +610,7 @@ related_uni(R, many, E1, E2, Prop, Owner) :-
     normal_type(CT1, E1, _, MP1),
     normal_type(CT2, E2, _, MP2),
     MP1 = [fields(FS1)|Props1],
-    member(collection(_, Prop, component_ref(_, E2, Owner, _)), FS1),(!).
+    member(collection(_, Prop, component_ref(_, E2, Owner, _)), FS1).
 
 /* ======== related/5
  Describes the relationship between two entities, its arity and its direction of navigability. The property
@@ -620,13 +620,13 @@ related_uni(R, many, E1, E2, Prop, Owner) :-
 related(X, Y, bi, E1, E2, Prop, TProp, Owner) :-
     related_uni(X, Y, E1, E2, Prop, Owner),
     related_uni(Y, X, E2, E1, TProp, _),
-    E1 \= E2,(!).
+    E1 \= E2.
 
 /* This makes reflexive relationships one-to-many. */
 related(many, Y, bi, E1, E2, Prop, TProp, Owner) :-
     related_uni(X, Y, E1, E2, Prop, Owner),
     related_uni(Y, X, E2, E1, TProp, _),
-    E1 = E2,(!).
+    E1 = E2.
 
 related(X, Y, uni, E1, E2, Prop, TProp, Owner) :-
     related_uni(X, Y, E1, E2, Prop, Owner),
