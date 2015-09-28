@@ -299,13 +299,13 @@ normal_type_product(CompType, Name, class, Accum) :-
     product_type(CompType),
     type_instance(Name, CompType, Params),
     unique_type_param_accum(UniqueAccum, Params),
-    collection_type_param_accum(Name, Accum, UniqueAccum).
+    collection_type_param_accum(Name, Accum, UniqueAccum),(!).
 
 normal_type_product(CompType, CollName, class, CollComponentParams) :-
     product_type(CompType),
     type_instance(Name, CompType, Params),
     promoted_collection_accum(Name, Components, Params),
-    member(top_level_component(CollName, CollComponentParams), Components).
+    member(top_level_component(CollName, CollComponentParams), Components),(!).
 
 /* ======== unqiue_type_param_accum/2
    Accumulates the unique fields and constraints by the unique_field_accum/3 predicate accross all
@@ -315,7 +315,7 @@ unique_type_param_accum([], []).
 
 unique_type_param_accum([Prop|AccumProperties],[Prop|Properties]) :- 
     Prop \= fields(_),
-    unique_type_param_accum(AccumProperties, Properties).
+    unique_type_param_accum(AccumProperties, Properties),(!).
 
 unique_type_param_accum(Result,[fields(Fields)|Properties]) :- 
     unique_field_accum(UniqueConstraints, AccumFields, Fields),
@@ -336,7 +336,7 @@ unique_field_accum([], [], []).
 
 unique_field_accum(UniqueConstraints, [Field|AccumFields], [Field|Fields]) :-
     Field = property(_, _, _),
-    unique_field_accum(UniqueConstraints, AccumFields, Fields).
+    unique_field_accum(UniqueConstraints, AccumFields, Fields),(!).
 
 unique_field_accum(UniqueConstraints, [Field|AccumFields], [Field|Fields]) :-
     Field = component_ref(_, _, _, _),
@@ -347,19 +347,19 @@ unique_field_accum(UniqueConstraints, Result, [Field|Fields]) :-
     property_names_accum(Names, ConstrainedFields),
     append(ConstrainedFields, AccumFields, Result),
     append([unique_fields(Key, Names)], AccumUniqueConstraints, UniqueConstraints),
-    unique_field_accum(AccumUniqueConstraints, AccumFields, Fields).
+    unique_field_accum(AccumUniqueConstraints, AccumFields, Fields),(!).
 
 unique_field_accum(UniqueConstraints, 
                    [collection(CollKind, CollName, Parent, fields(UniqueCollFields))|AccumFields], 
                    [Field|Fields]) :-
     Field = collection(CollKind, CollName, Parent, fields(CollFields)),
     unique_field_accum(_, UniqueCollFields, CollFields),
-    unique_field_accum(UniqueConstraints, AccumFields, Fields).
+    unique_field_accum(UniqueConstraints, AccumFields, Fields),(!).
 
 unique_field_accum(UniqueConstraints, [extend(ExtRef, UniqueExtFields)|AccumFields], [Field|Fields]) :-
     Field = extend(ExtRef, fields(ExtFields)),
     unique_field_accum(_, UniqueExtFields, ExtFields),
-    unique_field_accum(UniqueConstraints, AccumFields, Fields).
+    unique_field_accum(UniqueConstraints, AccumFields, Fields),(!).
 
 /* ======== collection_type_param_accum/3
    Accumulates the expansion of collections into references to components using the collection_field_accum/2 
@@ -369,7 +369,7 @@ collection_type_param_accum(_, [], []).
 
 collection_type_param_accum(ParentName, [Prop|AccumProperties],[Prop|Properties]) :- 
     Prop \= fields(_),
-    collection_type_param_accum(ParentName, AccumProperties, Properties).
+    collection_type_param_accum(ParentName, AccumProperties, Properties),(!).
 
 collection_type_param_accum(ParentName, [fields(AccumFields)|AccumProperties],[fields(Fields)|Properties]) :- 
     collection_field_accum(ParentName, AccumFields, Fields), 
@@ -383,7 +383,7 @@ collection_field_accum(_, [], []).
 
 collection_field_accum(ParentName, [Field|AccumFields] , [Field|Fields]) :-
     Field \= collection(_, _, _, _),
-    collection_field_accum(ParentName, AccumFields, Fields).
+    collection_field_accum(ParentName, AccumFields, Fields),(!).
 
 /* No parent, one field, direct collection. */
 collection_field_accum(ParentName, 
@@ -417,7 +417,7 @@ promoted_collection_accum(_, [], []).
 /* Skip all non-field parameters of the generating component type. */
 promoted_collection_accum(ParentName, AccumComponents, [Prop|Properties]) :-
     Prop \= fields(_),
-    promoted_collection_accum(ParentName, AccumComponents, Properties).
+    promoted_collection_accum(ParentName, AccumComponents, Properties),(!).
 
 /* Extract any collections appearing in the fields. */
 promoted_collection_accum(ParentName, Result, [fields(Fields)|Properties]) :-
@@ -431,7 +431,7 @@ collection_to_component_accum(_, [], []).
 
 collection_to_component_accum(ParentName, Components, [Field|Fields]) :-
     Field \= collection(_, _, _, _),
-    collection_to_component_accum(ParentName, Components, Fields).
+    collection_to_component_accum(ParentName, Components, Fields),(!).
 
 /* No parent, one field, direct collection. */
 collection_to_component_accum(ParentName, 
@@ -502,19 +502,19 @@ product_type(fact_type).
    type checks. Component types must also match the types of fields specified in any views that they
    have.
 */
-type_check(integer_range, MN, JT, NP) :- normal_type(integer_range, MN, JT, NP).
+type_check(integer_range, MN, JT, NP) :- normal_type(integer_range, MN, JT, NP),(!).
 
-type_check(real_range, MN, JT, NP) :- normal_type(real_range, MN, JT, NP).
+type_check(real_range, MN, JT, NP) :- normal_type(real_range, MN, JT, NP),(!).
 
-type_check(string_pattern, MN, JT, NP) :- normal_type(string_pattern, MN, JT, NP).
+type_check(string_pattern, MN, JT, NP) :- normal_type(string_pattern, MN, JT, NP),(!).
 
-type_check(date_range, MN, JT, NP) :- normal_type(date_range, MN, JT, NP).
+type_check(date_range, MN, JT, NP) :- normal_type(date_range, MN, JT, NP),(!).
 
-type_check(time_range, MN, JT, NP) :- normal_type(time_range, MN, JT, NP).
+type_check(time_range, MN, JT, NP) :- normal_type(time_range, MN, JT, NP),(!).
 
-type_check(enumeration_type, MN, JT, NP) :- normal_type(enumeration_type, MN, JT, NP).
+type_check(enumeration_type, MN, JT, NP) :- normal_type(enumeration_type, MN, JT, NP),(!).
 
-type_check(hierarchy_type, MN, JT, NP) :- normal_type(hierarchy_type, MN, JT, NP).
+type_check(hierarchy_type, MN, JT, NP) :- normal_type(hierarchy_type, MN, JT, NP),(!).
 
 type_check(T, MN, JT, TypeProps) :- 
     product_type(T),
