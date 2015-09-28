@@ -46,16 +46,16 @@ normal_type(fact_type, X, class, P) :- normal_type_product(fact_type, X, class, 
 /* These rules expand integer ranges with only a from or a to specified to use the narrowest Java type
    available. */
 normal_type_int(integer_range, X, int, [from(From), to(IM)]) :- 
-    type_instance(X, integer_range, [from(From)]),java_int(From),int_max(IM),(!).
+    type_instance(X, integer_range, [from(From)]),java_int(From),int_max(IM).
 
 normal_type_int(integer_range, X, long, [from(From), to(LM)]) :- 
-    type_instance(X, integer_range, [from(From)]),java_long(From),long_max(LM),not(java_int(From)),(!).
+    type_instance(X, integer_range, [from(From)]),java_long(From),long_max(LM),not(java_int(From)).
 
 normal_type_int(integer_range, X, int, [from(IM), to(To)]) :- 
-    type_instance(X, integer_range, [to(To)]),java_int(To), int_min(IM),(!).
+    type_instance(X, integer_range, [to(To)]),java_int(To), int_min(IM).
 
 normal_type_int(integer_range, X, long, [from(LM), to(To)]) :- 
-    type_instance(X, integer_range, [to(To)]),java_long(To), long_min(LM),not(java_int(To)),(!).
+    type_instance(X, integer_range, [to(To)]),java_long(To), long_min(LM),not(java_int(To)).
 
 /* These rules expand integer ranges to use either a java int or long depending on the size of the from and
    to. */
@@ -64,7 +64,7 @@ normal_type_int(integer_range, X, int, [from(From), to(To)]) :-
     member(from(From),Params),
     member(to(To),Params),
     java_int(From),
-    java_int(To),(!).
+    java_int(To).
 
 normal_type_int(integer_range, X, long, [from(From), to(To)]) :-
     type_instance(X, integer_range, Params),
@@ -72,7 +72,7 @@ normal_type_int(integer_range, X, long, [from(From), to(To)]) :-
     member(to(To),Params),
     java_long(From),
     java_long(To),
-    not((java_int(From),java_int(To))),(!).
+    not((java_int(From),java_int(To))).
 
 /* ======== normal_type_decimal/4 */
 
