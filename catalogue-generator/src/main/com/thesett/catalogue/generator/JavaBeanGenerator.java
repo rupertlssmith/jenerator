@@ -59,6 +59,9 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
     protected FileOutputRenderTemplateHandler fileOutputProcessedTemplateHandler =
         new FileOutputRenderTemplateHandler(false);
 
+    /** Indicates whether implementations should be generated for views or not. */
+    private boolean viewImplementations;
+
     /**
      * Creates a Java generator to output to the specified directory root.
      *
@@ -73,6 +76,11 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
 
         javaInterfaceTemplates = new STGroupFile(templateGroupToFileName(JAVA_INTERFACE_TEMPLATES_GROUP));
         javaInterfaceTemplates.registerRenderer(String.class, new CamelCaseRenderer());
+    }
+
+    public void setViewImplementations(String value)
+    {
+        viewImplementations = "true".equals(value);
     }
 
     /**
@@ -93,13 +101,21 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
 
         if (decoratedType.isView())
         {
-            templates = new STGroup[] { javaBeanTemplates, javaInterfaceTemplates };
-            names =
-                new String[]
-                {
-                    nameToJavaFileName(outputDir, "", type.getName(), "Impl"),
-                    nameToJavaFileName(outputDir, "", type.getName(), "")
-                };
+            if (viewImplementations)
+            {
+                templates = new STGroup[] { javaBeanTemplates, javaInterfaceTemplates };
+                names =
+                    new String[]
+                    {
+                        nameToJavaFileName(outputDir, "", type.getName(), "Impl"),
+                        nameToJavaFileName(outputDir, "", type.getName(), "")
+                    };
+            }
+            else
+            {
+                templates = new STGroup[] { javaInterfaceTemplates };
+                names = new String[] { nameToJavaFileName(outputDir, "", type.getName(), "") };
+            }
         }
         else
         {
