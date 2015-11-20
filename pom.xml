@@ -6,7 +6,7 @@
 
     <groupId>com.thesett</groupId>
     <artifactId>jenerator_build</artifactId>
-    <name>projects</name>
+    <name>Jenerator</name>
     <version>0.8.23-SNAPSHOT</version><!--jenerator.version-->
 
     <description>Jenerator is a code generator framework for Java.</description>
