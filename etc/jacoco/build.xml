@@ -1,0 +1,46 @@
+<project xmlns:jacoco="antlib:org.jacoco.ant">
+    <target name="jacocoreport">
+
+        <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+            <classpath>
+                <fileset dir=".">
+                    <include name="*.jar"/>
+                </fileset>
+            </classpath>
+        </taskdef>
+
+        <jacoco:report>
+
+            <executiondata>
+                <file file="../../code-coverage/jacoco.exec"/>
+            </executiondata>
+
+            <structure name="Base Library">
+                <classfiles>
+                    <fileset dir="../..">
+                        <include name="**/*.class"/>
+                        <exclude name="**/test/**/*.class"/>
+                    </fileset>
+                </classfiles>
+                <sourcefiles encoding="UTF-8">
+                    <fileset dir="../../catalogue-generator/src/main"/>
+                    <fileset dir="../../configurator/src/main"/>
+                    <fileset dir="../../power-model-hibernate/src/main"/>
+                    <fileset dir="../../struts-common/src/main"/>
+                    <fileset dir="../../catalogue-maven-plugin/src/main"/>
+                    <fileset dir="../../catalogue-model/src/main"/>
+                    <fileset dir="../../javasource/src/main"/>
+                    <fileset dir="../../xmlbeans/src/main"/>
+                    <fileset dir="../../xmlutils/src/main"/>
+                    <fileset dir="../../index/src/main"/>
+                    <fileset dir="../../javasource-maven-plugin/src/main"/>
+                    <fileset dir="../../catalogue-manager/src/main"/>
+                    <fileset dir="../../catalogue-model-processor/src/main"/>                    
+                </sourcefiles>
+            </structure>
+
+            <html destdir="../../code-coverage"/>
+
+        </jacoco:report>
+    </target>
+</project>
