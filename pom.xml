@@ -534,7 +534,7 @@
                     <artifactId>jalopy-maven</artifactId>
                     <version>${jalopy.maven.plugin.version}</version>
                     <configuration>
-                        <profile>default</profile>
+                        <profile>open_source</profile>
                         <sources>
                             <source>${basedir}/src/main</source>
                             <source>${basedir}/src/unittests</source>
