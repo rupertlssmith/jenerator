@@ -680,7 +680,7 @@ public class CatalogueModelFactory
         {
             // If the query fails to parse or link, then this is a non-recoverable bug, so is reported as a runtime
             // exception.
-            throw new RuntimeException("The query, " + queryString + ", failed to compile.", e);
+            throw new IllegalStateException("The query, " + queryString + ", failed to compile.", e);
         }
 
         return engine.resolve() != null;
@@ -1323,7 +1323,7 @@ public class CatalogueModelFactory
         {
             // If the query fails to parse or link, then this is a non-recoverable bug, so is reported as a runtime
             // exception.
-            throw new RuntimeException("The query, " + queryString + ", failed to compile.", e);
+            throw new IllegalStateException("The query, " + queryString + ", failed to compile.", e);
         }
 
         return engine.expandResultSetToMap(engine.iterator());

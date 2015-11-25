@@ -124,7 +124,7 @@ public class ModelChecker
         }
         catch (ConfigException e)
         {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
 

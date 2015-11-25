@@ -342,7 +342,7 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
 
             if (!f.exists() || !f.isDirectory())
             {
-                throw new RuntimeException("'templateDir' must be a valid path to a directory containing templates.");
+                throw new IllegalStateException("'templateDir' must be a valid path to a directory containing templates.");
             }
 
             //loaderGroup = new STGroupDir(templateDir);

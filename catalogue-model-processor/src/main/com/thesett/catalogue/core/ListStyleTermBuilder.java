@@ -152,7 +152,7 @@ public class ListStyleTermBuilder extends BaseTermBuilder
                 }
                 catch (IOException e)
                 {
-                    throw new RuntimeException("Error whilst writing out the raw model.", e);
+                    throw new IllegalStateException("Error whilst writing out the raw model.", e);
                 }
             }
 
@@ -166,7 +166,7 @@ public class ListStyleTermBuilder extends BaseTermBuilder
             }
             catch (SourceCodeException e)
             {
-                throw new RuntimeException("Badly formed typedef conversion to logical term.", e);
+                throw new IllegalStateException("Badly formed typedef conversion to logical term.", e);
             }
         }
     }

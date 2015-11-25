@@ -215,7 +215,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
             }
             catch (InterruptedException e)
             {
-                throw new RuntimeException("Interrupted whilst waiting for global write lock.", e);
+                throw new IllegalStateException("Interrupted whilst waiting for global write lock.", e);
             }
         }
 
@@ -271,7 +271,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
             }
             catch (InterruptedException e)
             {
-                throw new RuntimeException("Interrupted whilst waiting for global write lock.", e);
+                throw new IllegalStateException("Interrupted whilst waiting for global write lock.", e);
             }
         }
 
@@ -311,7 +311,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
             }
             catch (InterruptedException e)
             {
-                throw new RuntimeException("Interrupted whilst waiting for global write lock.", e);
+                throw new IllegalStateException("Interrupted whilst waiting for global write lock.", e);
             }
         }
 
@@ -368,7 +368,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
             }
             catch (InterruptedException e)
             {
-                throw new RuntimeException("Interrupted whilst waiting for global write lock.", e);
+                throw new IllegalStateException("Interrupted whilst waiting for global write lock.", e);
             }
         }
 
@@ -416,7 +416,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
             }
             catch (InterruptedException e)
             {
-                throw new RuntimeException("Interrupted whilst waiting for global write lock.", e);
+                throw new IllegalStateException("Interrupted whilst waiting for global write lock.", e);
             }
         }
 
@@ -640,7 +640,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
             }
             catch (InterruptedException e)
             {
-                throw new RuntimeException("Interrupted whilst waiting for global write lock.", e);
+                throw new IllegalStateException("Interrupted whilst waiting for global write lock.", e);
             }
 
             // Check that this transaction has made changes to be committed.
@@ -694,7 +694,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
             }
             catch (InterruptedException e)
             {
-                throw new RuntimeException("Interrupted whilst waiting for global write lock.", e);
+                throw new IllegalStateException("Interrupted whilst waiting for global write lock.", e);
             }
 
             // Check if the current transaction holds the global write lock on this index, otherwise nothing needs to

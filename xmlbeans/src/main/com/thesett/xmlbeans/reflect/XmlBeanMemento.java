@@ -124,7 +124,7 @@ public class XmlBeanMemento implements Memento
             }
             else
             {
-                throw new RuntimeException("Unknown sub-type of 'RootType' encountered.");
+                throw new IllegalStateException("Unknown sub-type of 'RootType' encountered.");
             }
 
             values.put(propertyName, multiTypeData);
@@ -134,7 +134,7 @@ public class XmlBeanMemento implements Memento
     /** {@inheritDoc} */
     public void captureNonNull()
     {
-        throw new RuntimeException("Not implemented.");
+        throw new IllegalStateException("Not implemented.");
     }
 
     /**

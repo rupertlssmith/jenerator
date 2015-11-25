@@ -175,7 +175,7 @@ public class SourceCodeGenerator
         }
         catch (FileNotFoundException e)
         {
-            throw new RuntimeException("The specified file, " + options.get("templatefile") + ", cannot be opened.", e);
+            throw new IllegalStateException("The specified file, " + options.get("templatefile") + ", cannot be opened.", e);
         }
 
         // Try to locate and open the model file.
@@ -187,7 +187,7 @@ public class SourceCodeGenerator
         }
         catch (FileNotFoundException e)
         {
-            throw new RuntimeException("The specified file, " + options.get("modelfile") + ", cannot be opened.", e);
+            throw new IllegalStateException("The specified file, " + options.get("modelfile") + ", cannot be opened.", e);
         }
 
         generateFromReaders(templateFileReader, modelFileReader, packageName, outputDirectoryName);
@@ -217,7 +217,7 @@ public class SourceCodeGenerator
         }
         catch (JAXBException e)
         {
-            throw new RuntimeException("The template cannot be unmarshalled.", e);
+            throw new IllegalStateException("The template cannot be unmarshalled.", e);
         }
 
         // Load, validate and parse the model XML file.
@@ -229,7 +229,7 @@ public class SourceCodeGenerator
         }
         catch (IOException e)
         {
-            throw new RuntimeException("The model file cannot be read.", e);
+            throw new IllegalStateException("The model file cannot be read.", e);
         }
 
         // Check if the output directory exists and create it if not.
@@ -251,7 +251,7 @@ public class SourceCodeGenerator
         }
         catch (IOException e)
         {
-            throw new RuntimeException("There was an i/o exception during writing of the source code.", e);
+            throw new IllegalStateException("There was an i/o exception during writing of the source code.", e);
         }
     }
 

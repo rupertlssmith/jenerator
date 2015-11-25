@@ -114,7 +114,7 @@ public class GeneratorTool
         }
         catch (ConfigException e)
         {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
 

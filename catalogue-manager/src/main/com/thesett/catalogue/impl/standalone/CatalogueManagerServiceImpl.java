@@ -107,7 +107,7 @@ public class CatalogueManagerServiceImpl extends CatalogueManipulatorBase implem
         }
         catch (ConfigException e)
         {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
 
@@ -267,7 +267,7 @@ public class CatalogueManagerServiceImpl extends CatalogueManipulatorBase implem
             }
             catch (IndexUnknownKeyException e)
             {
-                throw new RuntimeException(e);
+                throw new IllegalStateException(e);
             }
         }
     }
@@ -302,7 +302,7 @@ public class CatalogueManagerServiceImpl extends CatalogueManipulatorBase implem
             }
             catch (IndexUnknownKeyException e)
             {
-                throw new RuntimeException(e);
+                throw new IllegalStateException(e);
             }
         }
     }

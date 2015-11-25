@@ -116,7 +116,7 @@ public class Configurator implements Serializable, ConfigBeanContext
         }
         catch (NamingException e)
         {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
 

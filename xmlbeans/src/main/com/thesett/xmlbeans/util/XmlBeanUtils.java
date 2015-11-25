@@ -62,7 +62,7 @@ public class XmlBeanUtils
             // Validation should already have ensured that this cannot happen. Consider altering the memento
             // interface so that this can be checked for, or allow this method to fail with a checked
             // exception.
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
 }

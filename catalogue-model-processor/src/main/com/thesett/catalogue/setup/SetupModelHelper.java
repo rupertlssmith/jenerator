@@ -777,7 +777,7 @@ public class SetupModelHelper
         catch (SearchNotExhaustiveException e)
         {
             // There should not be any search failure exceptions, rethrow as runtimes if there are.
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
 
         return allLabelPaths;

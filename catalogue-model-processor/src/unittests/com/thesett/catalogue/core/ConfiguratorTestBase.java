@@ -91,7 +91,7 @@ public class ConfiguratorTestBase extends TestCase
         catch (ConfigException e)
         {
             log.warn("There was a configuration exception whilst loading the test setup.", e);
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
 }
