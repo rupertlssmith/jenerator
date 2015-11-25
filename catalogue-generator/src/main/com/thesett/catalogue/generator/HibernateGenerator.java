@@ -250,10 +250,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
             };
 
         RenderTemplateHandler[] handlers =
-            new RenderTemplateHandler[]
-            {
-                normalizedTypeDefHandler, userTypeDefHandler, fileOutputHandlerOverwrite
-            };
+            new RenderTemplateHandler[] { normalizedTypeDefHandler, userTypeDefHandler, fileOutputHandlerOverwrite };
 
         generate(model, decoratedType, templates, names, fields, extraFields, handlers);
     }
@@ -350,10 +347,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
             };
 
         RenderTemplateHandler[] handlers =
-            new RenderTemplateHandler[]
-            {
-                normalizedTypeDefHandler, userTypeDefHandler, fileOutputHandlerOverwrite
-            };
+            new RenderTemplateHandler[] { normalizedTypeDefHandler, userTypeDefHandler, fileOutputHandlerOverwrite };
 
         generate(model, decoratedType, templates, names, fields, extraFields, handlers);
     }

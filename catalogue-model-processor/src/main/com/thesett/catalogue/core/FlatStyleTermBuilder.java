@@ -27,14 +27,12 @@ import com.thesett.aima.logic.fol.Parser;
 import com.thesett.aima.logic.fol.Sentence;
 import com.thesett.aima.logic.fol.interpreter.ResolutionEngine;
 import com.thesett.aima.logic.fol.isoprologparser.Token;
-import com.thesett.aima.logic.fol.isoprologparser.TokenSource;
 import com.thesett.aima.logic.fol.prolog.PrologCompiledClause;
 import com.thesett.aima.state.impl.WrappedBeanState;
 import com.thesett.catalogue.core.handlers.DefaultFieldHandler;
 import com.thesett.catalogue.setup.CatalogueDefinition;
 import com.thesett.catalogue.setup.SetupModelHelper;
 import com.thesett.catalogue.setup.TypeDefType;
-import com.thesett.common.parsing.SourceCodeException;
 import com.thesett.common.util.maps.HashArray;
 
 /**

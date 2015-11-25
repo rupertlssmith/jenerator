@@ -93,12 +93,10 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
     protected String templateRootPath;
 
     /** Holds a file output handler that overwrites files. */
-    protected FileOutputRenderTemplateHandler fileOutputHandlerOverwrite =
-            new FileOutputRenderTemplateHandler(false);
+    protected FileOutputRenderTemplateHandler fileOutputHandlerOverwrite = new FileOutputRenderTemplateHandler(false);
 
     /** Holds a file output handler that appends to files. */
-    protected FileOutputRenderTemplateHandler fileOutputHandlerAppend =
-            new FileOutputRenderTemplateHandler(true);
+    protected FileOutputRenderTemplateHandler fileOutputHandlerAppend = new FileOutputRenderTemplateHandler(true);
 
     /** Creates a StringTemplate generator. */
     protected BaseGenerator(String templateDir)

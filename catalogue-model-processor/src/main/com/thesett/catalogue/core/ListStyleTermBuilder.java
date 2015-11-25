@@ -36,7 +36,6 @@ import com.thesett.catalogue.setup.CatalogueDefinition;
 import com.thesett.catalogue.setup.SetupModelHelper;
 import com.thesett.catalogue.setup.TypeDefType;
 import com.thesett.common.parsing.SourceCodeException;
-import com.thesett.common.util.maps.HashArray;
 
 /**
  * ListStyleTermBuilder produces terms with each defined type at the top, and the remainder of the AST making up the

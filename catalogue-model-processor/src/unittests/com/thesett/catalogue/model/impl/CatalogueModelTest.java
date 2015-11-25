@@ -15,21 +15,21 @@
  */
 package com.thesett.catalogue.model.impl;
 
-import com.thesett.catalogue.core.ConfiguratorTestBase;
-import com.thesett.catalogue.model.base.CatalogueTestBase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.apache.log4j.Logger;
 
 import com.thesett.catalogue.config.ModelLoaderConfigBean;
+import com.thesett.catalogue.core.ConfiguratorTestBase;
 import com.thesett.catalogue.model.Catalogue;
+import com.thesett.catalogue.model.base.CatalogueTestBase;
 import com.thesett.catalogue.setup.CatalogueDefinition;
 import com.thesett.common.config.ConfigBeanContext;
 
 /**
- * CatalogueTest creates a {@link com.thesett.catalogue.core.CatalogueModelFactory} and checks it against the raw model using the tests defined in
- * {@link com.thesett.catalogue.model.base.CatalogueTestBase}.
+ * CatalogueTest creates a {@link com.thesett.catalogue.core.CatalogueModelFactory} and checks it against the raw model
+ * using the tests defined in {@link com.thesett.catalogue.model.base.CatalogueTestBase}.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
@@ -87,6 +87,7 @@ public class CatalogueModelTest extends CatalogueTestBase
         suite.addTest(new CatalogueModelTest("testAllHierarchyFieldsAllProductsInCatalogue", catalogue, definition));
         suite.addTest(new CatalogueModelTest("testAllBooleanFieldsAllProductsInCatalogue", catalogue, definition));
         suite.addTest(new CatalogueModelTest("testAllIntegerFieldsAllProductsInCatalogue", catalogue, definition));
+
         //suite.addTest(new CatalogueModelTest("testAllRealFieldsAllProductsInCatalogue", catalogue, definition));
         suite.addTest(new CatalogueModelTest("testAllStringFieldsAllProductsInCatalogue", catalogue, definition));
         suite.addTest(new CatalogueModelTest("testAllTimeFieldsAllProductsInCatalogue", catalogue, definition));

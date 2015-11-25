@@ -132,7 +132,8 @@ public class XmlBeanMemento implements Memento
     }
 
     /** {@inheritDoc} */
-    public void captureNonNull() {
+    public void captureNonNull()
+    {
         throw new RuntimeException("Not implemented.");
     }
 
