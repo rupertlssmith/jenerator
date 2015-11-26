@@ -37,7 +37,7 @@ public class CollectionTypeDecorator<T> extends TypeDecorator implements Collect
      *
      * @param type The collection type to decorate.
      */
-    public CollectionTypeDecorator(CollectionType type)
+    public CollectionTypeDecorator(Type type)
     {
         super(type);
     }

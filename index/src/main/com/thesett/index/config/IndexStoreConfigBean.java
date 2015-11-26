@@ -19,6 +19,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -311,10 +312,10 @@ public class IndexStoreConfigBean implements ConfigBean, Serializable
         String errorMessages = "";
 
         // Used to hold all the stop-words definition names.
-        Set<String> stopWordsRefNames = new HashSet<String>();
+        Collection<String> stopWordsRefNames = new HashSet<String>();
 
         // Used to hold all the synonyms definition names.
-        Set<String> synonymsRefNames = new HashSet<String>();
+        Collection<String> synonymsRefNames = new HashSet<String>();
 
         // Validate the external files for all top-level stop words definitions.
         for (StopWordsType nextStopWords : configurations.getStopWordsDef())

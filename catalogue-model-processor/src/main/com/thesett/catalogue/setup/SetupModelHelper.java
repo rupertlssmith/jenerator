@@ -90,7 +90,7 @@ public class SetupModelHelper
      *
      * @return All typedefs.
      */
-    public static List<TypeDefType> getAllTypeDefs(CatalogueDefinition definition)
+    public static Iterable<TypeDefType> getAllTypeDefs(CatalogueDefinition definition)
     {
         return getAllTypeDefsOfType(TypeDefType.class, definition);
     }
@@ -102,7 +102,7 @@ public class SetupModelHelper
      *
      * @return All componentdefs.
      */
-    public static List<ComponentDefType> getAllComponentDefs(CatalogueDefinition definition)
+    public static Iterable<ComponentDefType> getAllComponentDefs(CatalogueDefinition definition)
     {
         return getAllTypeDefsOfType(ComponentDefType.class, definition);
     }
@@ -114,7 +114,7 @@ public class SetupModelHelper
      *
      * @return All dimensionDefs.
      */
-    public static List<DimensionDefType> getAllDimensionDefs(CatalogueDefinition definition)
+    public static Iterable<DimensionDefType> getAllDimensionDefs(CatalogueDefinition definition)
     {
         return getAllTypeDefsOfType(DimensionDefType.class, definition);
     }
@@ -234,7 +234,7 @@ public class SetupModelHelper
      *
      * @return All hierarchyDefs.
      */
-    public static List<HierarchyDefType> getAllHierarchyDefs(CatalogueDefinition definition)
+    public static Iterable<HierarchyDefType> getAllHierarchyDefs(CatalogueDefinition definition)
     {
         return getAllTypeDefsOfType(HierarchyDefType.class, definition);
     }

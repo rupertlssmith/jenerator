@@ -18,6 +18,7 @@ package com.thesett.index.prototype;
 import java.io.IOException;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -50,7 +51,7 @@ public class ParsingUtils
      *
      * @return The text as a set of words.
      */
-    public static Set<String> toSetOfWords(String text, Set<String> stopWords)
+    public static Set<String> toSetOfWords(String text, Collection<String> stopWords)
     {
         log.debug("private Set<String> toSetOfWords(String text): called");
 

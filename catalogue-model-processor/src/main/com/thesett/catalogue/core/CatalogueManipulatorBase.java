@@ -32,6 +32,7 @@ import com.thesett.index.Index;
 import com.thesett.index.IndexMappingException;
 import com.thesett.index.IndexStore;
 import com.thesett.index.IndexUnknownKeyException;
+import org.hibernate.SharedSessionContract;
 
 /**
  * CatalogueManipulatorBase extracts common functions for working with catalogue models.
@@ -99,7 +100,7 @@ public class CatalogueManipulatorBase
      *
      * @param session The hibernate session to use.
      */
-    protected void rebuildIndexesInSession(Session session)
+    protected void rebuildIndexesInSession(SharedSessionContract session)
     {
         // Empty all the indexes.
         for (String name : getCatalogue().getAllIndexes())

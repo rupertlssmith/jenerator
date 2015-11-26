@@ -56,7 +56,7 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
     private final STGroup javaInterfaceTemplates;
 
     /** Holds a file output handler that overwrites files. */
-    protected FileOutputRenderTemplateHandler fileOutputProcessedTemplateHandler =
+    protected RenderTemplateHandler fileOutputProcessedTemplateHandler =
         new FileOutputRenderTemplateHandler(false);
 
     /** Indicates whether implementations should be generated for views or not. */

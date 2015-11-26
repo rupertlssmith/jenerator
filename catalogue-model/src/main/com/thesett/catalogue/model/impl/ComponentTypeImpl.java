@@ -172,7 +172,7 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
     /** {@inheritDoc} */
     public Object createRandomInstance() throws RandomInstanceNotSupportedException
     {
-        ComponentInstance instance = (ComponentInstance) getDefaultInstance();
+        State instance = (ComponentInstance) getDefaultInstance();
 
         for (Map.Entry<String, Type> field : getAllPropertyTypes().entrySet())
         {

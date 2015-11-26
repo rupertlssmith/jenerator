@@ -15,6 +15,7 @@
  */
 package com.thesett.catalogue.core.flathandlers;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -35,7 +36,7 @@ import com.thesett.catalogue.core.FieldHandler;
 public class FlatInQuotesFieldHandler implements FieldHandler
 {
     /** Holds the set of field name to match for transformation. */
-    Set<String> propertiesInQuotes = new HashSet<String>();
+    Collection<String> propertiesInQuotes = new HashSet<String>();
 
     /**
      * Creats a new in-quotes handler on the specified set of named fields.

@@ -16,6 +16,7 @@
 package com.thesett.catalogue.generator;
 
 import com.thesett.aima.state.Type;
+import com.thesett.catalogue.model.CollectionType;
 import com.thesett.catalogue.model.MapType;
 
 /**
@@ -37,7 +38,7 @@ public class MapTypeDecorator<K, E> extends CollectionTypeDecorator<E> implement
      *
      * @param type The map type to decorate.
      */
-    public MapTypeDecorator(MapType type)
+    public MapTypeDecorator(CollectionType type)
     {
         super(type);
     }

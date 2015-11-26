@@ -678,14 +678,14 @@ public class CatalogueManagerServiceImpl extends CatalogueManipulatorBase implem
      *
      * @return A collection of entities from the original set that match the specified fields.
      */
-    private Collection<EntityType> filterEntitiesMatchingFields(Collection<EntityType> entities,
+    private Collection<EntityType> filterEntitiesMatchingFields(Iterable<EntityType> entities,
         Map<String, Attribute> matchings)
     {
         log.debug(
             "private Collection<EntityType> filterEntitiesMatchingFields(Collection<EntityType> entities, Map<String, Attribute> matchings): called");
 
         // Build a list of all entity types that contain the named attributes as field with matching name and type.
-        List<EntityType> results = new ArrayList<EntityType>();
+        Collection<EntityType> results = new ArrayList<EntityType>();
 
         for (EntityType entityType : entities)
         {
@@ -743,13 +743,13 @@ public class CatalogueManagerServiceImpl extends CatalogueManipulatorBase implem
      *
      * @return A collection of entities from the original set that conform to the specified view type.
      */
-    private Collection<EntityType> filterEntitiesMatchingViews(Collection<EntityType> entities, ViewType view)
+    private Collection<EntityType> filterEntitiesMatchingViews(Iterable<EntityType> entities, ComponentType view)
     {
         log.debug(
             "private Collection<EntityType> filterEntitiesMatchingViews(Collection<EntityType> entities, ViewType view): called");
 
         // Build a list of all entity types that conform to the specified view type.
-        List<EntityType> results = new ArrayList<EntityType>();
+        Collection<EntityType> results = new ArrayList<EntityType>();
 
         for (EntityType entityType : entities)
         {

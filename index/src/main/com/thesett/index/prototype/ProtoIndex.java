@@ -496,7 +496,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
         // query result.
 
         // Used to build up the results in.
-        Set<IndexRecord> result = new HashSet<IndexRecord>();
+        Collection<IndexRecord> result = new HashSet<IndexRecord>();
 
         // Used to indicate the search on the first word is in progress. The first words results are added to the result
         // set and subsequent words results take the intersection with it.
@@ -508,7 +508,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
         {
             // log.debug("word = " + word);
 
-            Set<IndexRecord> wordResult = new HashSet<IndexRecord>();
+            Collection<IndexRecord> wordResult = new HashSet<IndexRecord>();
 
             // Try to expand the query term using the synonym database.
             if (synonyms.containsKey(word))
@@ -766,7 +766,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
      * @param rating     The new records rating.
      * @param setOfWords The set of words to index the new entry against.
      */
-    private void addNewRecord(K key, E indexEntry, float rating, Set<String> setOfWords)
+    private void addNewRecord(K key, E indexEntry, float rating, Iterable<String> setOfWords)
     {
         // log.debug("private void addNewRecord(K key, E indexEntry, float rating, Set<String> setOfWords): called");
 
@@ -1029,7 +1029,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
         Set<IndexRecord> results = new HashSet<IndexRecord>();
 
         // Used to build up a list of invalidated keys to sweep out of the index.
-        Set<InvalidateableKey<K>> keysToRemove = new HashSet<InvalidateableKey<K>>();
+        Collection<InvalidateableKey<K>> keysToRemove = new HashSet<InvalidateableKey<K>>();
 
         // Query the index for all keys matching the term.
         Set<InvalidateableKey<K>> keys = index.get(term);

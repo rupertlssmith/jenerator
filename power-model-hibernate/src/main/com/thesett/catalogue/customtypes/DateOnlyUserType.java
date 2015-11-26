@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.logging.Logger;
 
+import com.thesett.aima.attribute.time.DayOfYear;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.UserType;
@@ -115,7 +116,7 @@ public class DateOnlyUserType implements UserType
         LOG.fine("index = " + index);
 
         // Cast the value to insert to a time only.
-        DateOnly h = (DateOnly) value;
+        DayOfYear h = (DateOnly) value;
 
         // Check if the value to set is null and set a null value if so.
         if (value == null)
@@ -141,7 +142,7 @@ public class DateOnlyUserType implements UserType
         }
 
         // Cast the object to be copied to an enumerated attribute.
-        DateOnly date = (DateOnly) value;
+        DayOfYear date = (DateOnly) value;
         LOG.fine("t (to copy) = " + date);
 
         // Create a copy with the same timestamp.

@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.thesett.common.util.Function;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -142,10 +143,10 @@ public class CatalogueMojo extends AbstractMojo
      * @param templateDir An alternative directory to load templates from, may be <tt>null</tt> to use defaults.
      * @param generators  A list of generator configurations.
      */
-    private void generate(Catalogue model, final String templateDir, final List<Generator> generators)
+    private void generate(Catalogue model, final String templateDir, final Iterable<Generator> generators)
     {
         // Generate from the loaded model for Java with a Hibernate persistence layer.
-        com.thesett.catalogue.generator.Generator generator =
+        Function generator =
             new ChainedGenerator(new LinkedList<com.thesett.catalogue.generator.Generator>()
                 {
                     {

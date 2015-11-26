@@ -119,7 +119,7 @@ public class BeanValidationGenerator extends BaseGenerator implements ComponentT
     /** {@inheritDoc} */
     public void visit(ComponentType type)
     {
-        ComponentTypeDecorator decoratedType = (ComponentTypeDecorator) TypeDecoratorFactory.decorateType(type);
+        ComponentType decoratedType = (ComponentTypeDecorator) TypeDecoratorFactory.decorateType(type);
 
         STGroup[] templates = new STGroup[] { beanValidationTemplates };
         String[] names = new String[] { nameToFileNameInRootGenerationDir(validationFileName, outputDir) };

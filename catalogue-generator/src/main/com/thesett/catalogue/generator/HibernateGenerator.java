@@ -18,6 +18,7 @@ package com.thesett.catalogue.generator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.thesett.aima.state.ComponentType;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
@@ -361,7 +362,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
      */
     public void visit(EntityType type)
     {
-        ComponentTypeDecorator decoratedType = (ComponentTypeDecorator) TypeDecoratorFactory.decorateType(type);
+        ComponentType decoratedType = (ComponentTypeDecorator) TypeDecoratorFactory.decorateType(type);
 
         STGroup[] templates = { hibernateOnlineTemplates, hibernateWarehouseTemplates };
         String[] names =

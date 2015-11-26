@@ -22,6 +22,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.logging.Logger;
 
+import com.thesett.aima.state.ReferencableAttribute;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.UserType;
 
@@ -188,7 +189,7 @@ public abstract class EnumeratedStringAttributeUserType implements UserType
         LOG.fine("public Object deepCopy(Object value): called");
 
         // Cast the object to be copied to an enumerated attribute.
-        EnumeratedStringAttribute h = (EnumeratedStringAttribute) value;
+        ReferencableAttribute h = (EnumeratedStringAttribute) value;
         LOG.fine("h (to copy) = " + h);
 
         // Extract the type name and byte representation of the attribute.

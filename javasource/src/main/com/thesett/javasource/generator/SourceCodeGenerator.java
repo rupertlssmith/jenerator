@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -275,7 +276,7 @@ public class SourceCodeGenerator
      *
      * @throws IOException If there is an i/o exception on the writer whilst writing the source code out.
      */
-    public void generate(Tl template, Document model, SourceCodeWriter out, Map<String, String> variables)
+    public void generate(Tl template, Node model, SourceCodeWriter out, Map<String, String> variables)
         throws IOException
     {
         // Create a context stack to hold the current generation context.
@@ -869,7 +870,7 @@ public class SourceCodeGenerator
          */
         public Iterator getPrefixes(String namespaceURI)
         {
-            List<String> result = new ArrayList<String>();
+            Collection<String> result = new ArrayList<String>();
             result.add(getPrefix(namespaceURI));
 
             return result.iterator();

@@ -23,6 +23,7 @@ import com.thesett.catalogue.model.Catalogue;
 import com.thesett.common.config.ConfigException;
 import com.thesett.common.config.Configurator;
 import com.thesett.common.util.CommandLineParser;
+import com.thesett.common.util.Function;
 
 /**
  * Generator creates source code for the operational level implementation of a catalogue from its knowledge level
@@ -134,7 +135,7 @@ public class GeneratorTool
         final String mappingDirName, final String hibernateMappingFileName, final String templateDir)
     {
         // Generate from the loaded model for Java with a Hibernate persistence layer.
-        Generator generator = new ChainedGenerator(new LinkedList<Generator>()
+        Function generator = new ChainedGenerator(new LinkedList<Generator>()
             {
                 {
                     JavaBeanGenerator javaBeanGenerator = new JavaBeanGenerator(templateDir);

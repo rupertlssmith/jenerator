@@ -20,6 +20,8 @@ import java.io.Writer;
 import java.net.URL;
 import java.util.Map;
 
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -54,12 +56,12 @@ public class XslTransformerUtils
     {
         // Create a new XSLT transformer to perform the transformation with, using the specified transformation.
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        StreamSource xslSource = new StreamSource(xslt.toString());
+        Source xslSource = new StreamSource(xslt.toString());
         Templates xslTemplates = transformerFactory.newTemplates(xslSource);
         Transformer transformer = xslTemplates.newTransformer();
 
         // Create a StreamSource to read the XML to be transformed.
-        StreamSource xmlSource = new StreamSource(documentReader);
+        Source xmlSource = new StreamSource(documentReader);
 
         // Pass any parameters to the transformation if some have been passed to this method.
         if (parameters != null)
@@ -71,7 +73,7 @@ public class XslTransformerUtils
         }
 
         // Create a StreamResult to write the transformed XML to.
-        StreamResult result = new StreamResult(outputWriter);
+        Result result = new StreamResult(outputWriter);
 
         // Apply the transform.
         transformer.transform(xmlSource, result);

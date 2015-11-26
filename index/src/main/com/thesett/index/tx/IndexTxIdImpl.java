@@ -15,6 +15,7 @@
  */
 package com.thesett.index.tx;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,7 +36,7 @@ public class IndexTxIdImpl implements IndexTxId
     private static long currentTxId = 1L;
 
     /** Holds the current set of valid transaction identifiers. These all correspond to 'live' transactions. */
-    private static final Set<IndexTxId> liveTransactions = new HashSet<IndexTxId>();
+    private static final Collection<IndexTxId> liveTransactions = new HashSet<IndexTxId>();
 
     /** Holds the transaction id number of this transaction id. */
     private final long txId;

@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.thesett.aima.search.SearchMethod;
 import org.apache.log4j.Logger;
 
 import com.thesett.aima.attribute.impl.BigDecimalTypeImpl;
@@ -557,7 +558,7 @@ public class CatalogueModelFactory
 
             if (type instanceof EntityType)
             {
-                EntityType entityType = (EntityType) type;
+                ComponentType entityType = (EntityType) type;
                 State metaModel = entityType.getMetaModel();
                 metaModel.setProperty("topLevel", true);
             }
@@ -1014,9 +1015,9 @@ public class CatalogueModelFactory
             String typeName = engine.getFunctorName((Functor) nameVar.getValue());
 
             Variable labelsVar = enumBindings.get("L");
-            RecursiveList labelsList = (RecursiveList) labelsVar.getValue();
+            Iterable<Term> labelsList = (RecursiveList) labelsVar.getValue();
 
-            List<String> labelNames = new LinkedList<String>();
+            Collection<String> labelNames = new LinkedList<String>();
 
             for (Term levelTerm : labelsList)
             {
@@ -1047,7 +1048,7 @@ public class CatalogueModelFactory
         Iterable<Map<String, Variable>> hierarchyBingingsIterable = runQuery(queryString);
 
         // Used to keep the names of hierarchies to initialize.
-        List<String> hierarchyNames = new LinkedList<String>();
+        Collection<String> hierarchyNames = new LinkedList<String>();
 
         for (Map<String, Variable> hierarchyBindings : hierarchyBingingsIterable)
         {
@@ -1056,7 +1057,7 @@ public class CatalogueModelFactory
             hierarchyNames.add(typeName);
 
             Variable levelsVar = hierarchyBindings.get("Lev");
-            RecursiveList levelsList = (RecursiveList) levelsVar.getValue();
+            Iterable<Term> levelsList = (RecursiveList) levelsVar.getValue();
 
             List<String> levelNames = new LinkedList<String>();
 
@@ -1089,7 +1090,7 @@ public class CatalogueModelFactory
                 LabelState startState = new LabelState(labels);
 
                 // Create a depth first search over the label space, and extract all label paths from it.
-                QueueBasedSearchMethod<LabelState, LabelState> labelSearch =
+                SearchMethod labelSearch =
                     new DepthFirstSearch<LabelState, LabelState>();
                 labelSearch.reset();
                 labelSearch.addStartState(startState);
@@ -1267,7 +1268,7 @@ public class CatalogueModelFactory
 
                         if (elementType instanceof PendingComponentRefType)
                         {
-                            PendingComponentRefType pendingType = (PendingComponentRefType) elementType;
+                            Type pendingType = (PendingComponentRefType) elementType;
 
                             Type replacementType = catalogueTypes.get(pendingType.getName());
                             collectionType.setElementType(replacementType);

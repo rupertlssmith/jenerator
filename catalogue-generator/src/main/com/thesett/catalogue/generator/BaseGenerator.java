@@ -16,6 +16,7 @@
 package com.thesett.catalogue.generator;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -88,15 +89,15 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
     protected String outputPackage;
 
     /** Used to keep track of output directories that have been created. */
-    protected Set<String> createdOutputDirectories = new HashSet<String>();
+    protected Collection<String> createdOutputDirectories = new HashSet<String>();
 
     protected String templateRootPath;
 
     /** Holds a file output handler that overwrites files. */
-    protected FileOutputRenderTemplateHandler fileOutputHandlerOverwrite = new FileOutputRenderTemplateHandler(false);
+    protected RenderTemplateHandler fileOutputHandlerOverwrite = new FileOutputRenderTemplateHandler(false);
 
     /** Holds a file output handler that appends to files. */
-    protected FileOutputRenderTemplateHandler fileOutputHandlerAppend = new FileOutputRenderTemplateHandler(true);
+    protected RenderTemplateHandler fileOutputHandlerAppend = new FileOutputRenderTemplateHandler(true);
 
     /** Creates a StringTemplate generator. */
     protected BaseGenerator(String templateDir)

@@ -16,6 +16,7 @@
 package com.thesett.catalogue.generator;
 
 import com.thesett.aima.attribute.impl.DateRangeType;
+import com.thesett.aima.state.Type;
 
 /**
  * DateRangeTypeDecorator decorates a date range type.
@@ -34,7 +35,7 @@ public class DateRangeTypeDecorator extends TypeDecorator
      *
      * @param type The date range type to decorate.
      */
-    public DateRangeTypeDecorator(DateRangeType type)
+    public DateRangeTypeDecorator(Type type)
     {
         super(type);
     }
