@@ -33,7 +33,7 @@ public interface ExternallyIdentified
      *
      * @return The external id of the element.
      */
-    public ExternalId getExternalId();
+    ExternalId getExternalId();
 
     /**
      * Sets the external id of the element.

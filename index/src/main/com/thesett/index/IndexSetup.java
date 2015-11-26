@@ -69,14 +69,14 @@ public interface IndexSetup<D, E>
      * @param clsSummary The class of the summary records mapped.
      * @param im         The index type mapping.
      */
-    public void addMapping(Class<? extends D> clsFull, Class<? extends E> clsSummary, IndexMapping im);
+    void addMapping(Class<? extends D> clsFull, Class<? extends E> clsSummary, IndexMapping im);
 
     /**
      * Sets the stop words that should be ignored whenever found in the data records and not indexed.
      *
      * @param words A collection of stop words.
      */
-    public void setStopWords(Collection<String> words);
+    void setStopWords(Collection<String> words);
 
     /**
      * Sets the synonyms that matching query terms should be expanded into prior to searching the index. The synonym
@@ -88,7 +88,7 @@ public interface IndexSetup<D, E>
      *
      * @param synonyms The map of synonyms.
      */
-    public void setSynonyms(Map<String, Set<String>> synonyms);
+    void setSynonyms(Map<String, Set<String>> synonyms);
 
     /**
      * Sets the degree of fuzzy matching to limit searches to. Fuzzy matching limit usually means the edit distance but
@@ -96,8 +96,8 @@ public interface IndexSetup<D, E>
      *
      * @param limit The maximum fuzzy matching limit.
      */
-    public void setFuzzyTolerance(int limit);
+    void setFuzzyTolerance(int limit);
 
     /** Resets the index setup, deleting all mappings, synonym mappings and stop words. */
-    public void reset();
+    void reset();
 }

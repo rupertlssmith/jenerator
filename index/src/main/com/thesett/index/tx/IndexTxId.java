@@ -32,14 +32,14 @@ package com.thesett.index.tx;
 public interface IndexTxId
 {
     /** Invalidates the transaction id. */
-    public void invalidate();
+    void invalidate();
 
     /**
      * Checks whether or not this transaction id is valid.
      *
      * @return <tt>true if this is a valid 'live' transaction id, <tt>false</tt> otherwise.
      */
-    public boolean isValid();
+    boolean isValid();
 
     /**
      * Checks if this index transaction id is the same as another one.
@@ -48,12 +48,12 @@ public interface IndexTxId
      *
      * @return <tt>true</tt>If the comparator is also an index tx id the same as this one, <tt>false</tt> otherwise.
      */
-    public boolean equals(Object o);
+    boolean equals(Object o);
 
     /**
      * Computes a hashCode of index tx ids to allow them to be used efficiently in hashing data structures.
      *
      * @return A hash code of the transaction id.
      */
-    public int hashCode();
+    int hashCode();
 }

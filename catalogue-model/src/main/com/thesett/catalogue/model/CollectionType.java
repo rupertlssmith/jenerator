@@ -33,7 +33,7 @@ import com.thesett.aima.state.Type;
 public interface CollectionType<E> extends Type, Serializable
 {
     /** Enumerates the different kinds of collections that the model supports. */
-    public enum CollectionKind
+    enum CollectionKind
     {
         /** The collection is an unordered set, each element may only appear once. */
         Set,
@@ -53,19 +53,19 @@ public interface CollectionType<E> extends Type, Serializable
      *
      * @return The type of the elements that this collection contains.
      */
-    public Type<E> getElementType();
+    Type<E> getElementType();
 
     /**
      * Establishes the type of the elements that this collection contains.
      *
      * @param type The type of the elements that this collection contains.
      */
-    public void setElementType(Type<E> type);
+    void setElementType(Type<E> type);
 
     /**
      * Provides the kind of collection that this is.
      *
      * @return The kind of collection that this is.
      */
-    public CollectionKind getCollectionKind();
+    CollectionKind getCollectionKind();
 }

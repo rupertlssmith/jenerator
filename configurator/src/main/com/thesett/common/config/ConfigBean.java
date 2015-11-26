@@ -50,12 +50,12 @@ public interface ConfigBean
      *
      * @throws ConfigException If some error occurs that means that the configuration cannot be succesfully completed.
      */
-    public void doConfigure(boolean force, ConfigBeanContext configBeanContext) throws ConfigException;
+    void doConfigure(boolean force, ConfigBeanContext configBeanContext) throws ConfigException;
 
     /**
      * Checks whether or not the config bean has been succesfully run and is in a configured state.
      *
      * @return True if the config bean has run its configuration succesfully.
      */
-    public boolean getConfigured();
+    boolean getConfigured();
 }

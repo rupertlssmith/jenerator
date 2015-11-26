@@ -39,5 +39,5 @@ public interface Generator extends Function<Catalogue, Boolean>
      *
      * @return <tt>true</tt> if the generation was succesfull.
      */
-    public Boolean apply(Catalogue catalogue);
+    Boolean apply(Catalogue catalogue);
 }

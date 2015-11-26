@@ -34,5 +34,5 @@ public interface ComponentTypeVisitor
      *
      * @param type The component type to visit.
      */
-    public void visit(ComponentType type);
+    void visit(ComponentType type);
 }

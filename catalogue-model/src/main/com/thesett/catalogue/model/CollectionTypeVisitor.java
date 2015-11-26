@@ -33,5 +33,5 @@ public interface CollectionTypeVisitor
      * @param <E>  The type of the elements of the collection.
      * @param type The collection type to visit.
      */
-    public <E> void visit(CollectionType<E> type);
+    <E> void visit(CollectionType<E> type);
 }

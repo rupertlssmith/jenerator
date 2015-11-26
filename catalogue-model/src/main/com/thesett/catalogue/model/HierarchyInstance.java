@@ -39,7 +39,7 @@ public interface HierarchyInstance extends State
      *
      * @return The id of the element.
      */
-    public InternalId getOpaqueId();
+    InternalId getOpaqueId();
 
     /**
      * Provides the hierarchy type of this instance.

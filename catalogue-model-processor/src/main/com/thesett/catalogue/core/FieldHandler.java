@@ -41,5 +41,5 @@ public interface FieldHandler
      *
      * @return A transformed field, or <tt>null</tt> to apply no transformation.
      */
-    public String handleField(String property, Object value, boolean more);
+    String handleField(String property, Object value, boolean more);
 }

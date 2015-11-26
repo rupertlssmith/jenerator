@@ -32,5 +32,5 @@ public interface EntityTypeVisitor
      *
      * @param type The entity type to visit.
      */
-    public void visit(EntityType type);
+    void visit(EntityType type);
 }

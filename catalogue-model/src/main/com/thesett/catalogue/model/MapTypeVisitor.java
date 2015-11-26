@@ -34,5 +34,5 @@ public interface MapTypeVisitor
      * @param <E>  The type of the elements of the map.
      * @param type The map type to visit.
      */
-    public <K, E> void visit(MapType<K, E> type);
+    <K, E> void visit(MapType<K, E> type);
 }

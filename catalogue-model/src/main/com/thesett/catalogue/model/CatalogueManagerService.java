@@ -58,14 +58,14 @@ public interface CatalogueManagerService
      *
      * @return The catalogue.
      */
-    public Catalogue getCatalogue();
+    Catalogue getCatalogue();
 
     /**
      * Creates a new persistent hierarchy bean.
      *
      * @param hierarchy The hierarchy bean to create.
      */
-    public void createHierarchyInstance(HierarchyInstance hierarchy);
+    void createHierarchyInstance(HierarchyInstance hierarchy);
 
     /**
      * Permanently deletes a hierarchy instance, specified by its internal id.
@@ -73,7 +73,7 @@ public interface CatalogueManagerService
      * @param type The type of the instance to delete.
      * @param id   The id of the instance to delete.
      */
-    public void deleteHierarchyInstance(HierarchyType type, InternalId id);
+    void deleteHierarchyInstance(HierarchyType type, InternalId id);
 
     /**
      * Given an instance of a hierarchy, queries the database to see if that instance exists in it, and optionally if
@@ -84,14 +84,14 @@ public interface CatalogueManagerService
      *
      * @return A list matching hierarchy instances, or an empty list if none are found.
      */
-    public List<HierarchyInstance> retreiveHierarchyInstances(HierarchyInstance hierarchy, boolean queryChildren);
+    List<HierarchyInstance> retreiveHierarchyInstances(HierarchyInstance hierarchy, boolean queryChildren);
 
     /**
      * Creates a new persistent entity.
      *
      * @param element The transient entity to create as a persistent entity.
      */
-    public void createEntityInstance(EntityInstance element);
+    void createEntityInstance(EntityInstance element);
 
     /**
      * Fetches an entity of the specified type by its internal id.
@@ -101,7 +101,7 @@ public interface CatalogueManagerService
      *
      * @return The entity matching the entity type and id, or <tt>null</tt> if no match can be found.
      */
-    public EntityInstance retrieveEntityInstance(EntityType entityType, InternalId id);
+    EntityInstance retrieveEntityInstance(EntityType entityType, InternalId id);
 
     /**
      * Looks up an external id and resolves it into the entity with that id.
@@ -110,14 +110,14 @@ public interface CatalogueManagerService
      *
      * @return An entity with matching external id, or <tt>null</tt> if no match can be found.
      */
-    public EntityInstance retrieveByExternalId(String id);
+    EntityInstance retrieveByExternalId(String id);
 
     /**
      * Overwrites an existing entity with a new value.
      *
      * @param element The new value to overwrite the entity with.
      */
-    public void updateEntityInstance(EntityInstance element);
+    void updateEntityInstance(EntityInstance element);
 
     /**
      * Permanently deletes an entity, specified by its internal id.
@@ -125,7 +125,7 @@ public interface CatalogueManagerService
      * @param entityType The type of entity to delete.
      * @param id         The id of the element to delete.
      */
-    public void deleteEntityInstance(EntityType entityType, InternalId id);
+    void deleteEntityInstance(EntityType entityType, InternalId id);
 
     /**
      * Provides a listing by entity type of views of entities matching a set of named attributes. The attributes do not
@@ -140,7 +140,7 @@ public interface CatalogueManagerService
      *
      * @return A map from entity types to matching entities.
      */
-    public Map<EntityType, List<ViewInstance>> browse(Map<String, Attribute> matchings, String viewTypeName);
+    Map<EntityType, List<ViewInstance>> browse(Map<String, Attribute> matchings, String viewTypeName);
 
     /**
      * Provides a listing by entity type of views of entities matching a set of named attributes. The attributes do not
@@ -156,7 +156,7 @@ public interface CatalogueManagerService
      *
      * @return A map from entity types to matching entities.
      */
-    public List<ViewInstance> browse(EntityType entityType, Map<String, Attribute> matchings, String viewTypeName);
+    List<ViewInstance> browse(EntityType entityType, Map<String, Attribute> matchings, String viewTypeName);
 
     /**
      * Performs a free text search over indexed entities, returning views onto all entities that conform to the
@@ -168,7 +168,7 @@ public interface CatalogueManagerService
      *
      * @return A list of views onto all matching entities that conform to the specified view type.
      */
-    public List<ViewInstance> freeTextSearch(String indexName, String query, ViewType view);
+    List<ViewInstance> freeTextSearch(String indexName, String query, ViewType view);
 
     /**
      * Performs a free text search over indexed entities, returning views onto all entities that conform to the
@@ -181,8 +181,8 @@ public interface CatalogueManagerService
      * @return A map of views onto all matching entities that conform to the specified view type, grouped by entity
      *         type.
      */
-    public Map<ComponentType, List<ViewInstance>> freeTextSearchByEntityType(String indexName, String query,
-        ViewType view);
+    Map<ComponentType, List<ViewInstance>> freeTextSearchByEntityType(String indexName, String query,
+                                                                      ViewType view);
 
     /**
      * Executes a query specified in parts and returns the results in pages. The query to execute consists of an entity
@@ -200,9 +200,9 @@ public interface CatalogueManagerService
      *
      * @return A list of dimension element summaries.
      */
-    public PagingResult executePagedQuery(int from, int number, String databaseEntityName, String entityTypeName,
-        String viewTypeName, Criterion criterion, Map<String, Criterion> joins);
+    PagingResult executePagedQuery(int from, int number, String databaseEntityName, String entityTypeName,
+                                   String viewTypeName, Criterion criterion, Map<String, Criterion> joins);
 
     /** Causes all indexes in the catalogue to be brough up-to-date with their entity data. */
-    public void rebuildIndexes();
+    void rebuildIndexes();
 }

@@ -38,12 +38,12 @@ public interface RawDataService
      *
      * @param dataSet The data set to upload in XML.
      */
-    public void uploadDataSet(String dataSet); //throws MultipleUserErrorException;
+    void uploadDataSet(String dataSet); //throws MultipleUserErrorException;
 
     /**
      * Used to ping the service to check it is reachable.
      *
      * @return <tt>true</tt> always.
      */
-    public boolean ping();
+    boolean ping();
 }

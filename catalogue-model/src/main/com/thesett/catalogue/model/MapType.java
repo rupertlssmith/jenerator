@@ -35,12 +35,12 @@ public interface MapType<K, E> extends CollectionType<E>
      *
      * @return The type of the keys that this map contains.
      */
-    public Type<K> getKeyType();
+    Type<K> getKeyType();
 
     /**
      * Establishes the type of the keys that this map contains.
      *
      * @param type The type of the keys that this map contains.
      */
-    public void setKeyType(Type<K> type);
+    void setKeyType(Type<K> type);
 }

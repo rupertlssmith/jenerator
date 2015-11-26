@@ -59,7 +59,7 @@ package com.thesett.index;
 public interface TransactionalIndex<K, D, E> extends Index<K, D, E>
 {
     /** Defines the different transaction isolation levels. */
-    public enum IsolationLevel
+    enum IsolationLevel
     {
         /** Used to indiciate the 'None' transaction isolation level. */
         None,
@@ -82,24 +82,24 @@ public interface TransactionalIndex<K, D, E> extends Index<K, D, E>
      *
      * @param isolationLevel The transaction isolation level to support.
      */
-    public void setTransactionalMode(IsolationLevel isolationLevel);
+    void setTransactionalMode(IsolationLevel isolationLevel);
 
     /**
      * Gets the isolation level in force.
      *
      * @return The isolation level in force.
      */
-    public IsolationLevel getTransationalMode();
+    IsolationLevel getTransationalMode();
 
     /**
      * When operating in transactional mode causes any changes since the last commit to be made visible to the search
      * method.
      */
-    public void commit();
+    void commit();
 
     /**
      * When operation in transactional mode causes any changes since the last commit to be dropped and never made
      * visible to the search method.
      */
-    public void rollback();
+    void rollback();
 }

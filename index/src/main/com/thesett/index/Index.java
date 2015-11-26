@@ -139,7 +139,7 @@ public interface Index<K, D, E>
      *                               exists for it or if a field specified in a matching mapping cannot be found on the
      *                               object being mapped.
      */
-    public void add(K key, D fullRecord, E indexEntry) throws IndexMappingException;
+    void add(K key, D fullRecord, E indexEntry) throws IndexMappingException;
 
     /**
      * Updates a record in the index. Its indexed fields are extracted from the full record again and the new index
@@ -154,7 +154,7 @@ public interface Index<K, D, E>
      *                                  the object being mapped.
      * @throws IndexUnknownKeyException When the key is not already in the index, or has been removed from it.
      */
-    public void update(K key, D fullRecord, E indexEntry) throws IndexMappingException, IndexUnknownKeyException;
+    void update(K key, D fullRecord, E indexEntry) throws IndexMappingException, IndexUnknownKeyException;
 
     /**
      * Updates a record in the index without re-indexing it. Only the key of the record to index an the entry to be
@@ -169,7 +169,7 @@ public interface Index<K, D, E>
      *                                  the object being mapped.
      * @throws IndexUnknownKeyException When the key is not already in the index, or has been removed from it.
      */
-    public void update(K key, E indexEntry) throws IndexMappingException, IndexUnknownKeyException;
+    void update(K key, E indexEntry) throws IndexMappingException, IndexUnknownKeyException;
 
     /**
      * Removes a record from the search index.
@@ -178,7 +178,7 @@ public interface Index<K, D, E>
      *
      * @throws IndexUnknownKeyException When the key is not already in the index, or has been removed from it.
      */
-    public void remove(K key) throws IndexUnknownKeyException;
+    void remove(K key) throws IndexUnknownKeyException;
 
     /**
      * Performs a string matching query over the index. The query string should have any punctuation characters removed
@@ -189,15 +189,15 @@ public interface Index<K, D, E>
      *
      * @return A list of matching data records in order of relevance.
      */
-    public Map<K, E> search(String query);
+    Map<K, E> search(String query);
 
     /** Removes all records from the index to produce a completely empty index. */
-    public void clear();
+    void clear();
 
     /**
      * This is an optional method that implementations may make use of to perform deffered clean-up operations after
      * modifications to an index have left it in a less than optimal state. The possibility of an external index manager
      * scheduling periodic execution of this method is the reason that it is exposed in this interface.
      */
-    public void cleanup();
+    void cleanup();
 }
