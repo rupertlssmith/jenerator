@@ -77,13 +77,13 @@ public class Configurator implements Serializable, ConfigBeanContext
     private static final String RESOURCE_NAME = "configbeans.xml";
 
     /** Holds a reference to the JNDI context to place configured beans under. */
-    private static Context jndiContext = null;
+    private static Context jndiContext;
 
     /** Holds resource name to use to load the config beans definition file from. */
     private String resourceName = RESOURCE_NAME;
 
     /** Holds the loaded beans that are awaiting configuration. */
-    private Map<String, ConfigBean> loadedBeans = null;
+    private Map<String, ConfigBean> loadedBeans;
 
     /** Creates a new configurator that loads the config beans definition from the default resource location. */
     public Configurator()

@@ -49,7 +49,7 @@ public class ModeConfigBean implements ConfigBean, Serializable
     private boolean devMode;
 
     /** Flag used to indicate that this config bean has been succesfully run. */
-    private boolean configured = false;
+    private boolean configured;
 
     /**
      * Tells the bean to perform whatever configuration it is intended to do.

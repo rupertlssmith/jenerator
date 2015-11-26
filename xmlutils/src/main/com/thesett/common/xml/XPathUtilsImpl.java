@@ -50,7 +50,7 @@ public class XPathUtilsImpl implements XPathUtils, XPathVariableResolver
     private static final Logger log = Logger.getLogger(XPathUtils.class);
 
     /** The current root to query from. */
-    private Node node = null;
+    private Node node;
 
     /** Holds the variables. */
     private final Properties variables = new Properties();
@@ -59,10 +59,10 @@ public class XPathUtilsImpl implements XPathUtils, XPathVariableResolver
     XPathFactory xpFactory = XPathFactory.newInstance();
 
     /** Holds a reference to the namespace context. */
-    NamespaceContext namespaceContext = null;
+    NamespaceContext namespaceContext;
 
     /** Holds a reference to the function library. */
-    XPathFunctionResolver functionResolver = null;
+    XPathFunctionResolver functionResolver;
 
     /** Create a new XPath context. */
     public XPathUtilsImpl()

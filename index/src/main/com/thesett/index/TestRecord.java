@@ -34,13 +34,13 @@ public class TestRecord
     private final String text;
 
     /** A flag used to indicate that the text field has been accessed. */
-    public boolean textFieldAccessed = false;
+    public boolean textFieldAccessed;
 
     /** Holds a text field for the summary record. */
     private final String title;
 
     /** A flag used to indicate that the title field has been accessed. */
-    public boolean titleFieldAccessed = false;
+    public boolean titleFieldAccessed;
 
     /** Holds the records rating. */
     private final float rating;

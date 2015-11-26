@@ -41,10 +41,10 @@ public class Log4JConfigBean implements ConfigBean
     private String resourceName = RESOURCE_NAME;
 
     /** Holds the verbose flag, which determines whether System.out gets spammed with the log4j config details. */
-    private boolean verbose = false;
+    private boolean verbose;
 
     /** Flag to represent configuration status of this configure bean. */
-    private boolean configured = false;
+    private boolean configured;
 
     /** Creates a new Log4JConfigBean object. */
     public Log4JConfigBean()

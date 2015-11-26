@@ -56,7 +56,7 @@ import com.thesett.common.parsing.SourceCodeException;
 public class ModelLoaderConfigBean implements ConfigBean, Serializable
 {
     /** Flag used to indicate that this config bean has been succesfully run. */
-    private boolean configured = false;
+    private boolean configured;
 
     /** Holds the name of the file to load the catalogue model from. */
     private String modelFile;

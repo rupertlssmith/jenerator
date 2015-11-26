@@ -62,7 +62,7 @@ public class DataSourceConfigBean implements ConfigBean
     //private String databaseName;
 
     /** Flag to represent configuration status of this configure bean. */
-    private boolean configured = false;
+    private boolean configured;
 
     /**
      * Checks whether or not the config bean has been succesfully run and is in a configured state.

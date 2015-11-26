@@ -234,7 +234,7 @@ public class XmlUtils
     private static class ValidationErrorHandler implements ErrorHandler
     {
         /** Flag used to indicate that errors have been found. */
-        protected boolean errorFound = false;
+        protected boolean errorFound;
 
         /** Used to accumulate the errors. */
         Collection<ParsingError> errors = new ArrayList<ParsingError>();

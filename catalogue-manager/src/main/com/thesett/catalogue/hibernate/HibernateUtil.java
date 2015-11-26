@@ -34,7 +34,7 @@ import com.thesett.common.config.Configurator;
 public class HibernateUtil
 {
     /** Holds a reference to the hibernate config bean that supplies the sessions. */
-    private static HibernateConfigBean hibernateBean = null;
+    private static HibernateConfigBean hibernateBean;
 
     /**
      * Gets a hibernate session associated with the current thread, creating a new one if necessary.

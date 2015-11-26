@@ -54,7 +54,7 @@ public class HibernateConfigBean implements ConfigBean, Serializable
     private SessionFactory secondaryFactory;
 
     /** Flag used to indicate that this config bean has been succesfully run. */
-    private boolean configured = false;
+    private boolean configured;
 
     /** Holds the resource name of the hibernate mapping to use for the catalogue. */
     private String mappingResource;

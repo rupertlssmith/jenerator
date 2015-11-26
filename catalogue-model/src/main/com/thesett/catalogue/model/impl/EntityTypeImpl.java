@@ -40,7 +40,7 @@ import com.thesett.catalogue.model.EntityTypeVisitor;
 public class EntityTypeImpl extends ComponentTypeImpl implements EntityType
 {
     /** Flag to indicate when true, that this entity type supports external ids. */
-    protected boolean externalIdFlag = false;
+    protected boolean externalIdFlag;
 
     /** Describes relationships roots on fields of this entity. */
     private final Map<String, Relationship> relationships = new LinkedHashMap<String, Relationship>();

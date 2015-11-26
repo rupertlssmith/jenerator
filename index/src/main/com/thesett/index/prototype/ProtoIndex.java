@@ -107,7 +107,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
     Condition globalWriteLockFree = globalLock.writeLock().newCondition();
 
     /** Holds the transaction id of the only transaction that is allowed to use the global write lock. */
-    IndexTxId globalWriteLockTxId = null;
+    IndexTxId globalWriteLockTxId;
 
     /** Holds the write-behind cache of changes made by transactions. */
     private Map<IndexTxId, List<RecordAlteration>> txWrites = new HashMap<IndexTxId, List<RecordAlteration>>();
@@ -1124,7 +1124,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
         public K key;
 
         /** Marks whether or not the key has been invalidated. */
-        boolean invalidated = false;
+        boolean invalidated;
 
         /**
          * Creates an invalidateable key from an underlying key.

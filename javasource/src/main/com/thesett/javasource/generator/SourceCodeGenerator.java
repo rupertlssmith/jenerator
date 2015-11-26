@@ -121,7 +121,7 @@ public class SourceCodeGenerator
     private static final Logger log = Logger.getLogger(SourceCodeGenerator.class);
 
     /** Flag used to signal that a for loop over the model is on its last iteration. */
-    private boolean lastInFor = false;
+    private boolean lastInFor;
 
     /**
      * Entry point. Specfy the command line options:
@@ -579,7 +579,7 @@ public class SourceCodeGenerator
         public List<Node> modelNodes;
 
         /** Holds the current position in the model context. */
-        public int modelPos = 0;
+        public int modelPos;
 
         /**
          * The current list of template nodes being generated. This is the inner generation loop and holds the context
@@ -588,7 +588,7 @@ public class SourceCodeGenerator
         public List<Serializable> templateNodes;
 
         /** Holds the current position in the template context. */
-        public int templatePos = 0;
+        public int templatePos;
 
         /**
          * Creates a code generation context for a list of model nodes and template nodes.
