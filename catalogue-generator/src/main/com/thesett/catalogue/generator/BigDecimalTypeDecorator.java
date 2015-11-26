@@ -18,7 +18,6 @@ package com.thesett.catalogue.generator;
 import java.math.BigDecimal;
 
 import com.thesett.aima.attribute.impl.BigDecimalType;
-import com.thesett.aima.state.Type;
 
 /**
  * BigDecimalTypeDecorator is a {@link TypeDecorator} for {@link BigDecimalType}s. It provides the scale and precision
@@ -38,7 +37,7 @@ public class BigDecimalTypeDecorator extends TypeDecorator<BigDecimal> implement
      *
      * @param type The big decimal type to decorate.
      */
-    public BigDecimalTypeDecorator(Type type)
+    public BigDecimalTypeDecorator(BigDecimalType type)
     {
         super(type);
     }

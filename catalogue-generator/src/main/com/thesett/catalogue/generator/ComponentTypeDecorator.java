@@ -44,7 +44,7 @@ public class ComponentTypeDecorator extends TypeDecorator implements ComponentTy
      *
      * @param type The component type to decorate.
      */
-    public ComponentTypeDecorator(Type type)
+    public ComponentTypeDecorator(ComponentType type)
     {
         super(type);
     }

@@ -16,7 +16,6 @@
 package com.thesett.catalogue.generator;
 
 import com.thesett.aima.attribute.impl.TimeRangeType;
-import com.thesett.aima.state.Type;
 
 /**
  * TimeRangeTypeDecorator decorates a time range type.
@@ -35,7 +34,7 @@ public class TimeRangeTypeDecorator extends TypeDecorator
      *
      * @param type The time range type to decorate.
      */
-    public TimeRangeTypeDecorator(Type type)
+    public TimeRangeTypeDecorator(TimeRangeType type)
     {
         super(type);
     }

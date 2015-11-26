@@ -17,7 +17,6 @@ package com.thesett.catalogue.generator;
 
 import java.util.Map;
 
-import com.thesett.aima.state.ComponentType;
 import com.thesett.catalogue.model.EntityType;
 import com.thesett.catalogue.model.impl.Relationship;
 
@@ -42,7 +41,7 @@ public class EntityTypeDecorator extends ComponentTypeDecorator implements Entit
      *
      * @param type The entity type to decorate.
      */
-    public EntityTypeDecorator(ComponentType type)
+    public EntityTypeDecorator(EntityType type)
     {
         super(type);
     }
