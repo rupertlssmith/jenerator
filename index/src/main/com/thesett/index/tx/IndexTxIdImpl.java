@@ -35,7 +35,7 @@ public class IndexTxIdImpl implements IndexTxId
     private static long currentTxId = 1L;
 
     /** Holds the current set of valid transaction identifiers. These all correspond to 'live' transactions. */
-    private static Set<IndexTxId> liveTransactions = new HashSet<IndexTxId>();
+    private static final Set<IndexTxId> liveTransactions = new HashSet<IndexTxId>();
 
     /** Holds the transaction id number of this transaction id. */
     private long txId;

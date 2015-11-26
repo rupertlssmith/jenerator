@@ -59,13 +59,13 @@ public class IndexTxManager
     //private static final Logger log = Logger.getLogger(IndexTxManager.class);
 
     /** Forward mapping of Xid to IndexTxId. */
-    private static Map<Xid, IndexTxId> xidToIndexTxIdMapping = new HashMap<Xid, IndexTxId>();
+    private static final Map<Xid, IndexTxId> xidToIndexTxIdMapping = new HashMap<Xid, IndexTxId>();
 
     /** Reverse mapping of IndexTxId to Xid. */
-    private static Map<IndexTxId, Xid> indexTxIdToXidMapping = new HashMap<IndexTxId, Xid>();
+    private static final Map<IndexTxId, Xid> indexTxIdToXidMapping = new HashMap<IndexTxId, Xid>();
 
     /** Provides thread local variable assignment of index transaction ids. */
-    private static ThreadLocal<IndexTxId> threadLocalTxId =
+    private static final ThreadLocal<IndexTxId> threadLocalTxId =
         new ThreadLocal<IndexTxId>()
         {
             /**

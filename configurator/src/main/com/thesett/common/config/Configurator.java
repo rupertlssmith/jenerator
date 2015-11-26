@@ -65,7 +65,7 @@ import com.thesett.common.util.TypeConverter;
 public class Configurator implements Serializable, ConfigBeanContext
 {
     /** Used for debuggin purposes. */
-    private static Logger log = Logger.getLogger(Configurator.class);
+    private static final Logger log = Logger.getLogger(Configurator.class);
 
     /** Defines the root context under which to store configured beans in the JNDI context. */
     private static final String CONFIG_BEAN_ROOT = "java:configbeans";

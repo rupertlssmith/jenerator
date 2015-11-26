@@ -37,7 +37,7 @@ public class ProtoIndexStore implements IndexStore, Serializable
     //private static ProtoIndexStore singleton;
 
     /** Holds references to the named indexes. */
-    private static Map<String, ProtoIndex> indexStore = new HashMap<String, ProtoIndex>();
+    private static final Map<String, ProtoIndex> indexStore = new HashMap<String, ProtoIndex>();
 
     /** Private constructor to ensure that only singleton is ever created. */
     public ProtoIndexStore()
