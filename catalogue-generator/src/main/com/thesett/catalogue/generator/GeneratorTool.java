@@ -108,7 +108,7 @@ public class GeneratorTool
             configurator.configureAll();
 
             // Get the loaded catalogue model from its config bean.
-            final Catalogue model = modelBean.getCatalogue();
+            Catalogue model = modelBean.getCatalogue();
 
             generate(model, outDirName, outDirName, outDirName, hibernateMappingFileName, null);
         }

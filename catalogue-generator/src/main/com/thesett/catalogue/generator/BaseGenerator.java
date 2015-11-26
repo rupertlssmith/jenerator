@@ -289,7 +289,7 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
         // Work out the full path to the location to write to.
         String packagePath = packageName.replace('.', '/');
 
-        final String fullOutputDirName = rootDirName + File.separator + packagePath;
+        String fullOutputDirName = rootDirName + File.separator + packagePath;
 
         // Ensure that the output directory exists for the location, if it has not already been created.
         if (!createdOutputDirectories.contains(fullOutputDirName))

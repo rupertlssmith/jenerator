@@ -360,7 +360,7 @@ public class CatalogueModelFactory
             ", class, _MP), member(fields(_FS), _MP), member(F, _FS).";
         Iterable<Map<String, Variable>> fieldBindingsIterable = runQuery(queryString);
 
-        final Map<String, FieldProperties> results = new LinkedHashMap<String, FieldProperties>();
+        Map<String, FieldProperties> results = new LinkedHashMap<String, FieldProperties>();
 
         for (Map<String, Variable> variables : fieldBindingsIterable)
         {
@@ -482,7 +482,7 @@ public class CatalogueModelFactory
             ", class, _MP), member(unique_fields(key, _FS), _MP), member(F, _FS).";
         Iterable<Map<String, Variable>> uniqueFieldsIterable = runQuery(queryString);
 
-        final Set<String> results = new LinkedHashSet<String>();
+        Set<String> results = new LinkedHashSet<String>();
 
         for (Map<String, Variable> variables : uniqueFieldsIterable)
         {
@@ -511,7 +511,7 @@ public class CatalogueModelFactory
             "?-product_type(_PT), normal_type(_PT, " + name + ", class, _MP), member(views(_VS), _MP), member(V, _VS).";
         Iterable<Map<String, Variable>> viewBindingsIterable = runQuery(queryString);
 
-        final Set<ComponentType> results = new LinkedHashSet<ComponentType>();
+        Set<ComponentType> results = new LinkedHashSet<ComponentType>();
 
         for (Map<String, Variable> variables : viewBindingsIterable)
         {

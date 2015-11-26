@@ -130,7 +130,7 @@ public class ExternalId implements Serializable
             return false;
         }
 
-        final ExternalId externalId = (ExternalId) o;
+        ExternalId externalId = (ExternalId) o;
 
         if ((id != null) ? (!id.equals(externalId.id)) : (externalId.id != null))
         {

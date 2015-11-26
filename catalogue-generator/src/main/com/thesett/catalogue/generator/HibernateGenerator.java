@@ -215,7 +215,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
      */
     public void visit(final HierarchyType type)
     {
-        final TypeDecorator decoratedType = TypeDecoratorFactory.decorateType(type);
+        TypeDecorator decoratedType = TypeDecoratorFactory.decorateType(type);
 
         STGroup[] templates =
             { hibernateOnlineTemplates, hibernateUserTypeConfigTemplates, hibernateUserTypeTemplates };
@@ -264,7 +264,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
      */
     public void visit(DateRangeType type)
     {
-        final TypeDecorator decoratedType = TypeDecoratorFactory.decorateType(type);
+        TypeDecorator decoratedType = TypeDecoratorFactory.decorateType(type);
 
         STGroup[] templates = { hibernateOnlineTemplates, hibernateUserTypeConfigTemplates };
         String[] names =
@@ -291,7 +291,7 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
      */
     public void visit(TimeRangeType type)
     {
-        final TypeDecorator decoratedType = TypeDecoratorFactory.decorateType(type);
+        TypeDecorator decoratedType = TypeDecoratorFactory.decorateType(type);
 
         STGroup[] templates = { hibernateOnlineTemplates, hibernateUserTypeConfigTemplates };
         String[] names =

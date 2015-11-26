@@ -275,7 +275,7 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
             return false;
         }
 
-        final ComponentTypeImpl component = (ComponentTypeImpl) o;
+        ComponentTypeImpl component = (ComponentTypeImpl) o;
 
         return !((name != null) ? (!name.equals(component.name)) : (component.name != null));
     }

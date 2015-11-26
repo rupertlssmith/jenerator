@@ -1155,7 +1155,7 @@ public class ProtoIndex<K, D, E> implements TransactionalIndex<K, D, E>, IndexSe
                 return false;
             }
 
-            final InvalidateableKey invalidateableKey = (InvalidateableKey) o;
+            InvalidateableKey invalidateableKey = (InvalidateableKey) o;
 
             if ((key != null) ? (!key.equals(invalidateableKey.key)) : (invalidateableKey.key != null))
             {
