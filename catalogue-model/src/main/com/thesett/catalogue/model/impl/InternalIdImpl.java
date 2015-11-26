@@ -32,7 +32,7 @@ import com.thesett.catalogue.model.InternalId;
 public class InternalIdImpl implements InternalId, Serializable
 {
     /** The actual id. */
-    private long id;
+    private final long id;
 
     /**
      * Creates an internal id for the specified value.

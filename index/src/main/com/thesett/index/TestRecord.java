@@ -28,22 +28,22 @@ package com.thesett.index;
 public class TestRecord
 {
     /** Holds the key of the record. */
-    private Long key;
+    private final Long key;
 
     /** Holds a text field for indexing. */
-    private String text;
+    private final String text;
 
     /** A flag used to indicate that the text field has been accessed. */
     public boolean textFieldAccessed = false;
 
     /** Holds a text field for the summary record. */
-    private String title;
+    private final String title;
 
     /** A flag used to indicate that the title field has been accessed. */
     public boolean titleFieldAccessed = false;
 
     /** Holds the records rating. */
-    private float rating;
+    private final float rating;
 
     /**
      * Creates a test record from a text.

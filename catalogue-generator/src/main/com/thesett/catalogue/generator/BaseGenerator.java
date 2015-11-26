@@ -417,7 +417,7 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
     protected class FileOutputRenderTemplateHandler implements RenderTemplateHandler
     {
         /** Flag used to indicate if the output file should be appended to. */
-        private boolean append;
+        private final boolean append;
 
         /**
          * Creates a file output handler, that appends or overwrites files.

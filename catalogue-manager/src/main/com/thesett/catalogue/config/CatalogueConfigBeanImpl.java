@@ -84,7 +84,7 @@ public class CatalogueConfigBeanImpl implements Serializable, CatalogueConfigBea
     private static final Logger log = Logger.getLogger(CatalogueConfigBeanImpl.class);
 
     /** Flag used to indicate that this config bean has been succesfully run. */
-    private boolean configured = false;
+    private final boolean configured = false;
 
     /** Used to hold the package name under which the model has been generated. */
     private String modelPackage;

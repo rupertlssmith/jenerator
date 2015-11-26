@@ -58,7 +58,7 @@ import com.thesett.xmlbeans.types.StringType;
 public class XmlBeanMemento implements Memento
 {
     /** Holds the properties of the object that this memento has captured. */
-    private Map<String, Object> values = new HashMap<String, Object>();
+    private final Map<String, Object> values = new HashMap<String, Object>();
 
     /** The object that this is a memento for. */
     BeanType beanType;

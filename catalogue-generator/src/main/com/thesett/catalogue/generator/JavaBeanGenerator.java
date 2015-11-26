@@ -50,10 +50,10 @@ public class JavaBeanGenerator extends BaseGenerator implements ComponentTypeVis
     private static final String JAVA_INTERFACE_TEMPLATES_GROUP = "JavaInterface";
 
     /** Holds the string template group to generate Java beans from. */
-    private STGroup javaBeanTemplates;
+    private final STGroup javaBeanTemplates;
 
     /** Holds the string template group to generate Java interfaces from. */
-    private STGroup javaInterfaceTemplates;
+    private final STGroup javaInterfaceTemplates;
 
     /** Holds a file output handler that overwrites files. */
     protected FileOutputRenderTemplateHandler fileOutputProcessedTemplateHandler =

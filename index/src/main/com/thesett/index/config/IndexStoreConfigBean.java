@@ -81,7 +81,7 @@ public class IndexStoreConfigBean implements ConfigBean, Serializable
     private IndexStore indexStore;
 
     /** Flag to represent configuration status of this configure bean. */
-    private boolean configured = false;
+    private final boolean configured = false;
 
     /**
      * Tells the bean to perform whatever configuration it is intended to do.

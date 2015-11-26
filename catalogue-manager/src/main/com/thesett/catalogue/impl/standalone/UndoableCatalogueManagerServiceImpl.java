@@ -70,10 +70,10 @@ public class UndoableCatalogueManagerServiceImpl extends UndoStackBase implement
     public static final Logger log = Logger.getLogger(UndoableCatalogueManagerServiceImpl.class);
 
     /** Used to track shifts in assigned ids for types with assigned ids. */
-    private Map<Type, Map<InternalId, InternalId>> idsByType = new HashMap<Type, Map<InternalId, InternalId>>();
+    private final Map<Type, Map<InternalId, InternalId>> idsByType = new HashMap<Type, Map<InternalId, InternalId>>();
 
     /** Holds the catalogue manager service that is wrapped as an undo stack. */
-    private CatalogueManagerService catalogueManagerService;
+    private final CatalogueManagerService catalogueManagerService;
 
     /**
      * Wraps a catalogue manager service implementation as an undo stack.
@@ -271,10 +271,10 @@ public class UndoableCatalogueManagerServiceImpl extends UndoStackBase implement
     private class UndoCreateHierarchy implements Undoable
     {
         /** Holds the original id of the database entity. */
-        private InternalId originalId;
+        private final InternalId originalId;
 
         /** Holds the created hierarchy to be deleted by the undo operation. */
-        private HierarchyInstance hierarchyInstance;
+        private final HierarchyInstance hierarchyInstance;
 
         /**
          * Creates an undo operation that deletes the specified hierarchy element.
@@ -303,10 +303,10 @@ public class UndoableCatalogueManagerServiceImpl extends UndoStackBase implement
     private class UndoCreateEntity implements Undoable
     {
         /** Holds the original id of the database entity. */
-        private InternalId originalId;
+        private final InternalId originalId;
 
         /** Holds the created entity to be deleted by the undo operation. */
-        private EntityInstance entityInstance;
+        private final EntityInstance entityInstance;
 
         /**
          * Creates an undo operation that deletes the specified entity.
@@ -340,10 +340,10 @@ public class UndoableCatalogueManagerServiceImpl extends UndoStackBase implement
     private class UndoDeleteEntity implements Undoable
     {
         /** Holds the original id of the database entity. */
-        private InternalId originalId;
+        private final InternalId originalId;
 
         /** Holds the deleted entity to be re-created by the undo operation. */
-        private EntityInstance entityInstance;
+        private final EntityInstance entityInstance;
 
         /**
          * Creates an undo operation that creates the specified entity.
@@ -377,10 +377,10 @@ public class UndoableCatalogueManagerServiceImpl extends UndoStackBase implement
     private class UndoModifyEntity implements Undoable
     {
         /** Holds the original id of the database entity. */
-        private InternalId originalId;
+        private final InternalId originalId;
 
         /** Holds the modified entity to be restored by the undo operation. */
-        private EntityInstance entityInstance;
+        private final EntityInstance entityInstance;
 
         /**
          * Creates an undo operation that restores a modified entity upon undo.

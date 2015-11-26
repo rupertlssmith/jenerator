@@ -70,16 +70,16 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     private static final String HIBERNATE_USERTYPE_TEMPLATES_GROUP = "HibernateUserType";
 
     /** Holds the string template group to generate Hibernate online configurations from. */
-    private STGroup hibernateOnlineTemplates;
+    private final STGroup hibernateOnlineTemplates;
 
     /** Holds the string template group to generate Hibernate user type configurations from. */
-    private STGroup hibernateUserTypeConfigTemplates;
+    private final STGroup hibernateUserTypeConfigTemplates;
 
     /** Holds the string template group to generate Hibernate warehouse configurations from. */
-    private STGroup hibernateWarehouseTemplates;
+    private final STGroup hibernateWarehouseTemplates;
 
     /** Holds the string template group to generate user types from. */
-    private STGroup hibernateUserTypeTemplates;
+    private final STGroup hibernateUserTypeTemplates;
 
     /** The name of the directory to output hibernate mappings to. */
     private String mappingDirName;
@@ -88,16 +88,16 @@ public class HibernateGenerator extends BaseGenerator implements HierarchyTypeVi
     private String mappingFileName;
 
     /** Output handler used to build up custom user type def configurations in. */
-    private RenderTemplateHandler userTypeDefHandler = new BufferingTemplateHandler();
+    private final RenderTemplateHandler userTypeDefHandler = new BufferingTemplateHandler();
 
     /** Output handler used to build up class mappings for normalized custom type definitions. */
-    private RenderTemplateHandler normalizedTypeDefHandler = new BufferingTemplateHandler();
+    private final RenderTemplateHandler normalizedTypeDefHandler = new BufferingTemplateHandler();
 
     /** Output handler used to build up the online database mapping configuration in. */
-    private RenderTemplateHandler onlineMappingHandler = new BufferingTemplateHandler();
+    private final RenderTemplateHandler onlineMappingHandler = new BufferingTemplateHandler();
 
     /** Output handler used to build up the warehouse database mapping configuration in. */
-    private RenderTemplateHandler warehouseMappingHandler = new BufferingTemplateHandler();
+    private final RenderTemplateHandler warehouseMappingHandler = new BufferingTemplateHandler();
 
     /**
      * Creates a generator for hibernate configuration XML and custom user types to output to the specified directory

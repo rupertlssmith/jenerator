@@ -48,12 +48,12 @@ public class BeanValidationGenerator extends BaseGenerator implements ComponentT
     private static final String BEAN_VALIDATION_TEMPLATES_GROUP = "BeanValidation";
 
     /** Holds the string template group to generate Java Bean Validation configurations from. */
-    private STGroup beanValidationTemplates;
+    private final STGroup beanValidationTemplates;
 
     /** Output handler used to build up bean validation mappings. */
-    private RenderTemplateHandler beanValidationHandler = new BufferingTemplateHandler();
+    private final RenderTemplateHandler beanValidationHandler = new BufferingTemplateHandler();
 
-    private String validationFileName = "constraints.xml";
+    private final String validationFileName = "constraints.xml";
 
     /**
      * Creates a generator for Java Bean Validation configuration XML.

@@ -629,7 +629,7 @@ public class SourceCodeGenerator
         public static final String PREFIX = "gen";
 
         /** Holds the function library by name. */
-        private Map<String, XPathFunction> functions = new HashMap<String, XPathFunction>();
+        private final Map<String, XPathFunction> functions = new HashMap<String, XPathFunction>();
 
         /** Builds the library of generator functions. */
         public GenerationFunctions()

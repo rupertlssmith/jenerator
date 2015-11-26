@@ -50,19 +50,19 @@ import com.thesett.common.util.StringUtils;
 public class ComponentTypeImpl extends BaseType implements ComponentType, Serializable, RandomInstanceFactory
 {
     /** The name of the component type. */
-    private String name;
+    private final String name;
 
     /** The fully qualified name of the operational level implementation class of the component type. */
-    private String operationalClassName;
+    private final String operationalClassName;
 
     /** Holds a map from names to the property types of the component type. */
-    private Map<String, Type> properties;
+    private final Map<String, Type> properties;
 
     /** Holds a map from names to externally presented names, if defined. */
-    private Map<String, String> presentAsAliases;
+    private final Map<String, String> presentAsAliases;
 
     /** Holds the names of the fields forming the natural key of the component. */
-    private Set<String> naturalKeyFields;
+    private final Set<String> naturalKeyFields;
 
     /** Holds the ancestor types of this component. */
     private Set<ComponentType> immediateAncestors;

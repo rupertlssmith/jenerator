@@ -64,7 +64,7 @@ import com.thesett.catalogue.setup.UniqueType;
 public class FlatComponentPartHandler implements FieldHandler
 {
     /** Holds the interner to use to transform the basic field types into atoms. */
-    private VariableAndFunctorInterner interner;
+    private final VariableAndFunctorInterner interner;
 
     /**
      * Creates a component field handler. The specified interner is required to transform basic field types into atoms.

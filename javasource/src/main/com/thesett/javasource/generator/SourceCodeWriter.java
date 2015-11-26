@@ -38,7 +38,7 @@ public class SourceCodeWriter extends Writer
     private Writer w;
 
     /** The root directory for the source writer. */
-    private String rootDir;
+    private final String rootDir;
 
     /**
      * Creates a source code writer taking the specified directory as the root to write packages to, under

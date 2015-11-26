@@ -44,10 +44,10 @@ public class CollectionTypeImpl<T> extends BaseType implements CollectionType<T>
     private Type<T> elementType;
 
     /** Holds the underlying class that implements the collection. */
-    private Class<Collection<T>> collectionImplClass;
+    private final Class<Collection<T>> collectionImplClass;
 
     /** Holds the basic kind of collection that this is. */
-    private CollectionKind kind;
+    private final CollectionKind kind;
 
     /**
      * Creates a collection type over the specified element type, using the given collection implementation class.

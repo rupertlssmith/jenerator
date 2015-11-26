@@ -43,7 +43,7 @@ public class EntityTypeImpl extends ComponentTypeImpl implements EntityType
     protected boolean externalIdFlag = false;
 
     /** Describes relationships roots on fields of this entity. */
-    private Map<String, Relationship> relationships = new LinkedHashMap<String, Relationship>();
+    private final Map<String, Relationship> relationships = new LinkedHashMap<String, Relationship>();
 
     /**
      * Creates an entity type with the specified name, fields and implementing class.

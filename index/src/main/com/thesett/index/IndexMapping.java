@@ -35,10 +35,10 @@ import java.io.Serializable;
 public class IndexMapping implements Serializable
 {
     /** Holds the names of the fields to extract for indexing. */
-    private String[] fieldNames;
+    private final String[] fieldNames;
 
     /** Holds the name of the field to extract the rating from. */
-    private String ratingFieldName;
+    private final String ratingFieldName;
 
     /**
      * Creates an index mapping for the specifeid class, the names of the fields that are to be extracted and indexed

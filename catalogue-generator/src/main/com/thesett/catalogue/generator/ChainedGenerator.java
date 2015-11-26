@@ -32,7 +32,7 @@ import com.thesett.catalogue.model.Catalogue;
 public class ChainedGenerator implements Generator
 {
     /** Holds the sequence of generators to apply. */
-    private List<Generator> generators;
+    private final List<Generator> generators;
 
     /**
      * Creates a chained generator from the specified sequence of generators.

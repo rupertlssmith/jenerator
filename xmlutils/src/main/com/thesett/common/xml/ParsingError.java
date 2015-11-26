@@ -28,13 +28,13 @@ package com.thesett.common.xml;
 public class ParsingError
 {
     /** Holds the error column location. */
-    private int column;
+    private final int column;
 
     /** Holds the error line location. */
-    private int line;
+    private final int line;
 
     /** Holds the error message. */
-    private String message;
+    private final String message;
 
     /**
      * Creates a new parsing error for a given location.

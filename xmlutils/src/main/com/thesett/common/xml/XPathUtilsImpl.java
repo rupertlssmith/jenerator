@@ -53,7 +53,7 @@ public class XPathUtilsImpl implements XPathUtils, XPathVariableResolver
     private Node node = null;
 
     /** Holds the variables. */
-    private Properties variables = new Properties();
+    private final Properties variables = new Properties();
 
     /** Holds a reference to the XPath factory. */
     XPathFactory xpFactory = XPathFactory.newInstance();

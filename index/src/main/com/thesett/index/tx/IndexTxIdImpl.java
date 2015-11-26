@@ -38,7 +38,7 @@ public class IndexTxIdImpl implements IndexTxId
     private static final Set<IndexTxId> liveTransactions = new HashSet<IndexTxId>();
 
     /** Holds the transaction id number of this transaction id. */
-    private long txId;
+    private final long txId;
 
     /** Creates a new index transaction id. */
     private IndexTxIdImpl()
