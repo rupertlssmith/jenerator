@@ -104,6 +104,8 @@
         <pmd.ruleset.file>${topdir}/etc/pmd_rules.xml</pmd.ruleset.file>
 
         <platform>linux</platform>
+
+        <sonar.exclusions>target/generated-sources/xjc/**/*.java</sonar.exclusions>
     </properties>
 
     <modules>
