@@ -19,7 +19,6 @@ import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.stringtemplate.v4.ST;
@@ -94,10 +93,10 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
     protected String templateRootPath;
 
     /** Holds a file output handler that overwrites files. */
-    protected RenderTemplateHandler fileOutputHandlerOverwrite = new FileOutputRenderTemplateHandler(false);
+    protected RenderTemplateHandler fileOutputHandlerOverwrite = new FileOutputRenderTemplateHandler(false, true);
 
     /** Holds a file output handler that appends to files. */
-    protected RenderTemplateHandler fileOutputHandlerAppend = new FileOutputRenderTemplateHandler(true);
+    protected RenderTemplateHandler fileOutputHandlerAppend = new FileOutputRenderTemplateHandler(true, true);
 
     /** Creates a StringTemplate generator. */
     protected BaseGenerator(String templateDir)
@@ -343,7 +342,8 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
 
             if (!f.exists() || !f.isDirectory())
             {
-                throw new IllegalStateException("'templateDir' must be a valid path to a directory containing templates.");
+                throw new IllegalStateException(
+                    "'templateDir' must be a valid path to a directory containing templates.");
             }
 
             //loaderGroup = new STGroupDir(templateDir);
@@ -420,19 +420,35 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
         /** Flag used to indicate if the output file should be appended to. */
         private final boolean append;
 
+        /** Flag used to indicate if existing files should be replaced. */
+        private final boolean replace;
+
         /**
          * Creates a file output handler, that appends or overwrites files.
          *
-         * @param append <tt>true</tt> to append to files.
+         * @param append  <tt>true</tt> to append to files.
+         * @param replace <tt>true</tt> iff existing files should be replaced by default.
          */
-        public FileOutputRenderTemplateHandler(boolean append)
+        public FileOutputRenderTemplateHandler(boolean append, boolean replace)
         {
             this.append = append;
+            this.replace = replace;
         }
 
         /** {@inheritDoc} */
         public void render(ST template, String outputName)
         {
+            // Check if files should not be replaced, but the file already exists, in which case ignore it.
+            if (!replace)
+            {
+                File file = new File(outputName);
+
+                if (file.exists())
+                {
+                    return;
+                }
+            }
+
             FileUtils.writeObjectToFile(outputName, template.render(), append);
         }
     }
