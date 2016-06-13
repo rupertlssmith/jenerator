@@ -4,7 +4,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>javasource</artifactId>
     <name>javasource</name>
-    <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+    <version>0.9.60</version><!--jenerator.version-->
 
     <description>Java Source Code Model</description>
     <url>http://www.thesett.com/javasource</url>
@@ -18,7 +18,7 @@
     <parent>
         <groupId>com.thesett</groupId>
         <artifactId>jenerator_build</artifactId>
-        <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+        <version>0.9.60</version><!--jenerator.version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -26,13 +26,13 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>common</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--base.version-->
+            <version>0.9.74</version><!--base.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>xmlutils</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+            <version>0.9.60</version><!--jenerator.version-->
         </dependency>
 
         <!-- JAXB 2.0 RI libraries. Needed to run the XJC at build time, and at run time. Should be bundled in .ears -->
@@ -66,7 +66,7 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>base</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--base.version-->
+            <version>0.9.74</version><!--base.version-->
             <scope>test</scope>
         </dependency>
     </dependencies>
