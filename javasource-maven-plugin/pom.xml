@@ -7,7 +7,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>javasource-maven-plugin</artifactId>
     <name>javasource-maven-plugin</name>
-    <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+    <version>0.9.65</version><!--jenerator.version-->
 
     <description>Maven plugin for Javasource to generate source code from a model plus a template.</description>
     <url>http://www.thesett.com/projects/javasource-maven-plugin</url>
@@ -29,7 +29,7 @@
     <parent>
         <groupId>com.thesett</groupId>
         <artifactId>jenerator_build</artifactId>
-        <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+        <version>0.9.65</version><!--jenerator.version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -38,7 +38,7 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>javasource</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+            <version>0.9.65</version><!--jenerator.version-->
         </dependency>
 
         <dependency>
