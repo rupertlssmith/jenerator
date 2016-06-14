@@ -1,4 +1,4 @@
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
            xmlns:cat="http://thesett.com/catalogue-def-0.2" 
            targetNamespace="http://thesett.com/catalogue-def-0.2" 
            elementFormDefault="qualified">
@@ -121,6 +121,13 @@
         <xs:restriction base="xs:NMTOKEN">
             <xs:enumeration value="composition" />
             <xs:enumeration value="aggregation" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="docFormatType" final="restriction" >
+        <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="json" />
+            <xs:enumeration value="xml" />
+            <xs:enumeration value="java-serializer" />
         </xs:restriction>
     </xs:simpleType>
     <!--The root type of the catalogue. The catalogue knowledge level defines types.-->
@@ -391,6 +398,8 @@
             <xs:extension base="cat:FieldDeclrType">
                 <xs:attribute name="owner" type="xs:boolean" use="optional"/>
                 <xs:attribute name="rel" type="cat:relType" use="optional"/>
+                <xs:attribute name="doc-model" type="xs:boolean" use="optional"/>
+                <xs:attribute name="doc-format" type="cat:docFormatType" use="optional"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
