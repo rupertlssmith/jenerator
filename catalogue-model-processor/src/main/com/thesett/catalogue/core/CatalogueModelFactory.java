@@ -30,9 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.thesett.aima.search.SearchMethod;
-import org.apache.log4j.Logger;
-
 import com.thesett.aima.attribute.impl.BigDecimalTypeImpl;
 import com.thesett.aima.attribute.impl.DoubleRangeType;
 import com.thesett.aima.attribute.impl.EnumeratedStringAttribute;
@@ -56,7 +53,7 @@ import com.thesett.aima.logic.fol.isoprologparser.TokenSource;
 import com.thesett.aima.logic.fol.prolog.PrologCompiledClause;
 import com.thesett.aima.search.GoalState;
 import com.thesett.aima.search.Operator;
-import com.thesett.aima.search.QueueBasedSearchMethod;
+import com.thesett.aima.search.SearchMethod;
 import com.thesett.aima.search.Traversable;
 import com.thesett.aima.search.TraversableState;
 import com.thesett.aima.search.util.OperatorImpl;
@@ -102,6 +99,8 @@ import com.thesett.catalogue.setup.TimeRangeType;
 import com.thesett.common.parsing.SourceCodeException;
 import com.thesett.common.util.EmptyIterator;
 import com.thesett.common.util.StringUtils;
+
+import org.apache.log4j.Logger;
 
 /**
  * CatalogueModelFactory provides queries to type check the catalogue model, which requires greater sophistication than
@@ -1090,8 +1089,7 @@ public class CatalogueModelFactory
                 LabelState startState = new LabelState(labels);
 
                 // Create a depth first search over the label space, and extract all label paths from it.
-                SearchMethod labelSearch =
-                    new DepthFirstSearch<LabelState, LabelState>();
+                SearchMethod labelSearch = new DepthFirstSearch<LabelState, LabelState>();
                 labelSearch.reset();
                 labelSearch.addStartState(startState);
 
@@ -1607,6 +1605,12 @@ public class CatalogueModelFactory
     {
         public Type type;
         public String presentAsName;
+
+        /** Used to indicate that a field is a component serialized into a document model. */
+        public boolean isDocModelComponent;
+
+        /** Used to indicate the document model format to use when serializing the field. */
+        public DocModelFormat docModelFormat;
 
         private FieldProperties(Type type, String presentAsName)
         {
