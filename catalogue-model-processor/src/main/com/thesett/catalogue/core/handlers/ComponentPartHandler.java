@@ -104,8 +104,8 @@ public class ComponentPartHandler implements FieldHandler
                     ComponentType component = (ComponentType) componentPart;
                     String owner = ((component.isOwner() != null) && component.isOwner()) ? "true" : "false";
                     String relType = (component.getRel() == null) ? "_" : component.getRel().value();
-                    String docModel = ((component.isDocModel() != null) && component.isOwner()) ? "true" : "false";
-                    String docFormat = (component.getDocFormat() == null) ? "_" : component.getRel().value();
+                    String docModel = ((component.isDocModel() != null) && component.isDocModel()) ? "true" : "false";
+                    String docFormat = (component.getDocFormat() == null) ? "_" : component.getDocFormat().value();
                     String type = (component.getType() == null) ? "any" : component.getType();
 
                     result +=

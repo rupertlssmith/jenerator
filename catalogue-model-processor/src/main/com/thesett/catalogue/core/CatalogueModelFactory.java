@@ -411,18 +411,27 @@ public class CatalogueModelFactory
                 String fieldName = engine.getFunctorName((Functor) fieldFunctor.getArgument(0));
                 String fieldTypeName = engine.getFunctorName((Functor) fieldFunctor.getArgument(1));
 
+                String isDocModelString = engine.getFunctorName((Functor) fieldFunctor.getArgument(4));
+                boolean isDocModel = "true".equals(isDocModelString);
+                DocModelFormat docModelFormat = null;
+
+                if (isDocModel)
+                {
+                    String docModelFormatString = engine.getFunctorName((Functor) fieldFunctor.getArgument(5));
+                    docModelFormat = DocModelFormat.fromName(docModelFormatString);
+                }
+
                 // Check if the type of the field is recognized as a user defined top-level type.
+                // Otherwise, the type is assumed to refer to a yet to be processed user type.
                 if (catalogueTypes.containsKey(fieldTypeName))
                 {
                     Type fieldType = catalogueTypes.get(fieldTypeName);
-                    results.put(fieldName, new FieldProperties(fieldType, null));
+                    results.put(fieldName, new FieldProperties(fieldType, null, isDocModel, docModelFormat));
                 }
-
-                // Otherwise, the type is assumed to refer to a yet to be processed user type.
                 else
                 {
                     Type fieldType = new PendingComponentRefType(fieldTypeName);
-                    results.put(fieldName, new FieldProperties(fieldType, null));
+                    results.put(fieldName, new FieldProperties(fieldType, null, isDocModel, docModelFormat));
                 }
             }
             else if ("collection".equals(fieldKind))
@@ -1171,16 +1180,27 @@ public class CatalogueModelFactory
 
                 Map<String, Type> componentFields = new LinkedHashMap<String, Type>();
                 Map<String, String> presentAsAliases = new HashMap<String, String>();
+                Map<String, DocModelFormat> docModelFormats = new HashMap<String, DocModelFormat>();
 
                 for (Map.Entry<String, FieldProperties> entry : fieldProperties.entrySet())
                 {
-                    componentFields.put(entry.getKey(), entry.getValue().type);
+                    String fieldName = entry.getKey();
+                    FieldProperties fieldProperty = entry.getValue();
 
-                    String presentAsName = entry.getValue().presentAsName;
+                    componentFields.put(fieldName, fieldProperty.type);
+
+                    String presentAsName = fieldProperty.presentAsName;
 
                     if (presentAsName != null)
                     {
-                        presentAsAliases.put(entry.getKey(), presentAsName);
+                        presentAsAliases.put(fieldName, presentAsName);
+                    }
+
+                    DocModelFormat docModelFormat = fieldProperty.docModelFormat;
+
+                    if (fieldProperty.isDocModelComponent && (docModelFormat != null))
+                    {
+                        docModelFormats.put(fieldName, docModelFormat);
                     }
                 }
 
@@ -1616,6 +1636,15 @@ public class CatalogueModelFactory
         {
             this.type = type;
             this.presentAsName = presentAsName;
+        }
+
+        private FieldProperties(Type type, String presentAsName, boolean isDocModelComponent,
+            DocModelFormat docModelFormat)
+        {
+            this.type = type;
+            this.presentAsName = presentAsName;
+            this.isDocModelComponent = isDocModelComponent;
+            this.docModelFormat = docModelFormat;
         }
     }
 }
