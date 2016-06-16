@@ -125,4 +125,8 @@ public class Relationship
     {
         return name;
     }
+
+    public StorageType getStorageType() {
+        return storageType;
+    }
 }
