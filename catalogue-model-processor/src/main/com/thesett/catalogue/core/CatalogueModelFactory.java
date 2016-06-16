@@ -1,5 +1,5 @@
 /*
- * Copyright The Sett Ltd, 2005 to 2014.
+ * Copyright The Sett Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,13 @@ import com.thesett.aima.search.TraversableState;
 import com.thesett.aima.search.util.OperatorImpl;
 import com.thesett.aima.search.util.Searches;
 import com.thesett.aima.search.util.uninformed.DepthFirstSearch;
-import com.thesett.aima.state.*;
+import com.thesett.aima.state.BaseType;
+import com.thesett.aima.state.ComponentRelationStorage;
+import com.thesett.aima.state.ComponentType;
+import com.thesett.aima.state.InfiniteValuesException;
+import com.thesett.aima.state.State;
+import com.thesett.aima.state.StorageType;
+import com.thesett.aima.state.Type;
 import com.thesett.aima.state.impl.JavaType;
 import com.thesett.catalogue.core.flathandlers.FlatEnumLabelFieldHandler;
 import com.thesett.catalogue.core.flathandlers.FlatExternalIdHandler;
@@ -86,16 +92,7 @@ import com.thesett.catalogue.model.impl.Relationship;
 import static com.thesett.catalogue.model.impl.Relationship.Arity.Many;
 import static com.thesett.catalogue.model.impl.Relationship.Arity.One;
 import com.thesett.catalogue.model.impl.ViewTypeImpl;
-import com.thesett.catalogue.setup.CatalogueDefinition;
-import com.thesett.catalogue.setup.ComponentDefType;
-import com.thesett.catalogue.setup.DateRangeType;
-import com.thesett.catalogue.setup.DecimalType;
-import com.thesett.catalogue.setup.EnumerationDefType;
-import com.thesett.catalogue.setup.HierarchyDefType;
-import com.thesett.catalogue.setup.IntegerRangeType;
-import com.thesett.catalogue.setup.SetupModelHelper;
-import com.thesett.catalogue.setup.StringPatternType;
-import com.thesett.catalogue.setup.TimeRangeType;
+import com.thesett.catalogue.setup.*;
 import com.thesett.common.parsing.SourceCodeException;
 import com.thesett.common.util.EmptyIterator;
 import com.thesett.common.util.StringUtils;
@@ -158,6 +155,20 @@ public class CatalogueModelFactory
                 put("list", CollectionType.CollectionKind.List);
                 put("bag", CollectionType.CollectionKind.Bag);
                 put("map", CollectionType.CollectionKind.Map);
+            }
+        };
+
+    /** Holds a mapping from names to relation storage types. */
+    private Map<String, StorageType> nameToStorageType =
+        new HashMap<String, StorageType>()
+        {
+            {
+                put("xml", StorageType.DocJson);
+                put("json", StorageType.DocXml);
+                put("javaSerialization", StorageType.ObjectJavaSerialisation);
+                put("fk", StorageType.ForeignKey);
+                put("externalId", StorageType.ExternalId);
+                put("embedded", StorageType.EmbeddedInline);
             }
         };
 
@@ -411,14 +422,14 @@ public class CatalogueModelFactory
                 String fieldName = engine.getFunctorName((Functor) fieldFunctor.getArgument(0));
                 String fieldTypeName = engine.getFunctorName((Functor) fieldFunctor.getArgument(1));
 
-                String isDocModelString = engine.getFunctorName((Functor) fieldFunctor.getArgument(4));
-                boolean isDocModel = "true".equals(isDocModelString);
-                DocModelFormat docModelFormat = null;
+                Term storageFormatTerm = fieldFunctor.getArgument(5);
+                ComponentRelationStorage storageFormat = null;
 
-                if (isDocModel)
+                if (storageFormatTerm.isGround())
                 {
-                    String docModelFormatString = engine.getFunctorName((Functor) fieldFunctor.getArgument(5));
-                    docModelFormat = DocModelFormat.fromName(docModelFormatString);
+                    String storageFormatString = engine.getFunctorName((Functor) storageFormatTerm);
+                    StorageType storageType = nameToStorageType.get(storageFormatString);
+                    storageFormat = new ComponentRelationStorage(storageType);
                 }
 
                 // Check if the type of the field is recognized as a user defined top-level type.
@@ -426,12 +437,12 @@ public class CatalogueModelFactory
                 if (catalogueTypes.containsKey(fieldTypeName))
                 {
                     Type fieldType = catalogueTypes.get(fieldTypeName);
-                    results.put(fieldName, new FieldProperties(fieldType, null, isDocModel, docModelFormat));
+                    results.put(fieldName, new FieldProperties(fieldType, null, storageFormat));
                 }
                 else
                 {
                     Type fieldType = new PendingComponentRefType(fieldTypeName);
-                    results.put(fieldName, new FieldProperties(fieldType, null, isDocModel, docModelFormat));
+                    results.put(fieldName, new FieldProperties(fieldType, null, storageFormat));
                 }
             }
             else if ("collection".equals(fieldKind))
@@ -1180,7 +1191,8 @@ public class CatalogueModelFactory
 
                 Map<String, Type> componentFields = new LinkedHashMap<String, Type>();
                 Map<String, String> presentAsAliases = new HashMap<String, String>();
-                Map<String, DocModelFormat> docModelFormats = new HashMap<String, DocModelFormat>();
+                Map<String, ComponentRelationStorage> relationStorageMap =
+                    new HashMap<String, ComponentRelationStorage>();
 
                 for (Map.Entry<String, FieldProperties> entry : fieldProperties.entrySet())
                 {
@@ -1196,11 +1208,11 @@ public class CatalogueModelFactory
                         presentAsAliases.put(fieldName, presentAsName);
                     }
 
-                    DocModelFormat docModelFormat = fieldProperty.docModelFormat;
+                    ComponentRelationStorage relationStorage = fieldProperty.relationStorage;
 
-                    if (fieldProperty.isDocModelComponent && (docModelFormat != null))
+                    if (relationStorage != null)
                     {
-                        docModelFormats.put(fieldName, docModelFormat);
+                        relationStorageMap.put(fieldName, relationStorage);
                     }
                 }
 
@@ -1210,8 +1222,8 @@ public class CatalogueModelFactory
                 if ("component_type".equals(componentType))
                 {
                     catalogueTypes.put(componentName,
-                        new ComponentTypeImpl(componentFields, presentAsAliases, naturalKeyFields, componentName,
-                            packageName + "." + StringUtils.toCamelCaseUpper(componentName), ancestors));
+                        new ComponentTypeImpl(componentFields, presentAsAliases, naturalKeyFields, relationStorageMap,
+                            componentName, packageName + "." + StringUtils.toCamelCaseUpper(componentName), ancestors));
                 }
                 else if ("view_type".equals(componentType))
                 {
@@ -1223,7 +1235,8 @@ public class CatalogueModelFactory
                 {
                     EntityTypeImpl entityType =
                         new EntityTypeImpl(componentName, componentFields, presentAsAliases, naturalKeyFields,
-                            packageName + "." + StringUtils.toCamelCaseUpper(componentName), ancestors);
+                            relationStorageMap, packageName + "." + StringUtils.toCamelCaseUpper(componentName),
+                            ancestors);
 
                     if (supportsExternalId(componentName))
                     {
@@ -1616,6 +1629,12 @@ public class CatalogueModelFactory
         {
             return null;
         }
+
+        /** {@inheritDoc} */
+        public ComponentRelationStorage getRelationStorage(String name)
+        {
+            return null;
+        }
     }
 
     /**
@@ -1623,14 +1642,14 @@ public class CatalogueModelFactory
      */
     private static class FieldProperties
     {
+        /** The type of the field. */
         public Type type;
+
+        /** The fields alias name, if it has one. */
         public String presentAsName;
 
-        /** Used to indicate that a field is a component serialized into a document model. */
-        public boolean isDocModelComponent;
-
-        /** Used to indicate the document model format to use when serializing the field. */
-        public DocModelFormat docModelFormat;
+        /** Used to indicate the storage format to use for a relationship field. */
+        public ComponentRelationStorage relationStorage;
 
         private FieldProperties(Type type, String presentAsName)
         {
@@ -1638,13 +1657,11 @@ public class CatalogueModelFactory
             this.presentAsName = presentAsName;
         }
 
-        private FieldProperties(Type type, String presentAsName, boolean isDocModelComponent,
-            DocModelFormat docModelFormat)
+        private FieldProperties(Type type, String presentAsName, ComponentRelationStorage relationStorage)
         {
             this.type = type;
             this.presentAsName = presentAsName;
-            this.isDocModelComponent = isDocModelComponent;
-            this.docModelFormat = docModelFormat;
+            this.relationStorage = relationStorage;
         }
     }
 }

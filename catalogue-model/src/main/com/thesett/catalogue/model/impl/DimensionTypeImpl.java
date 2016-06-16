@@ -1,5 +1,5 @@
 /*
- * Copyright The Sett Ltd, 2005 to 2014.
+ * Copyright The Sett Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,6 +48,6 @@ public class DimensionTypeImpl extends EntityTypeImpl implements DimensionType
     public DimensionTypeImpl(String name, Map<String, Type> attributes, Map<String, String> presentAsAliases,
         Set<String> naturalKeyFields, String operationalClassName, Set<ComponentType> immediateAncestors)
     {
-        super(name, attributes, presentAsAliases, naturalKeyFields, operationalClassName, immediateAncestors);
+        super(name, attributes, presentAsAliases, naturalKeyFields, null, operationalClassName, immediateAncestors);
     }
 }

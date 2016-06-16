@@ -1,5 +1,5 @@
 /*
- * Copyright The Sett Ltd, 2005 to 2014.
+ * Copyright The Sett Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,6 +50,6 @@ public class ViewTypeImpl extends ComponentTypeImpl implements ViewType
     public ViewTypeImpl(String name, Map<String, Type> attributes, Map<String, String> presentAsAliases,
         Set<String> naturalKeyFields, String operationalClassName, Set<ComponentType> immediateAncestors)
     {
-        super(attributes, presentAsAliases, naturalKeyFields, name, operationalClassName, immediateAncestors);
+        super(attributes, presentAsAliases, naturalKeyFields, null, name, operationalClassName, immediateAncestors);
     }
 }
