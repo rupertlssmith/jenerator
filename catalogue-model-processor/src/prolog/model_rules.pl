@@ -596,41 +596,41 @@ properties_accum([P|PFS], [P|FS]) :-
  Describes one direction of the relationship between two entities, and the property on the first entity
  which holds the relationship.
  */
-related_uni(R, one, E1, E2, Prop, Owner) :-
+related_uni(R, one, E1, E2, Prop, Owner, Format) :-
     product_type(CT1),
     product_type(CT2),
     normal_type(CT1, E1, _, MP1),
     normal_type(CT2, E2, _, MP2),
     MP1 = [fields(FS1)|Props1],
-    member(component_ref(Prop, E2, Owner, _, _), FS1).
+    member(component_ref(Prop, E2, Owner, _, Format), FS1).
 
-related_uni(R, many, E1, E2, Prop, Owner) :-
+related_uni(R, many, E1, E2, Prop, Owner, Format) :-
     product_type(CT1),
     product_type(CT2),
     normal_type(CT1, E1, _, MP1),
     normal_type(CT2, E2, _, MP2),
     MP1 = [fields(FS1)|Props1],
-    member(collection(_, Prop, component_ref(_, E2, Owner, _, _)), FS1).
+    member(collection(_, Prop, component_ref(_, E2, Owner, _, Format)), FS1).
 
 /* ======== related/5
  Describes the relationship between two entities, its arity and its direction of navigability. The property
  on the first entity which holds the relationship also forms part of this relation.
  */
 /* This excludes reflexive relationships with E1 \= E2. */
-related(X, Y, bi, E1, E2, Prop, TProp, Owner) :-
-    related_uni(X, Y, E1, E2, Prop, Owner),
-    related_uni(Y, X, E2, E1, TProp, _),
+related(X, Y, bi, E1, E2, Prop, TProp, Owner, Format) :-
+    related_uni(X, Y, E1, E2, Prop, Owner, Format),
+    related_uni(Y, X, E2, E1, TProp, _, _),
     E1 \= E2.
 
 /* This makes reflexive relationships one-to-many. */
-related(many, Y, bi, E1, E2, Prop, TProp, Owner) :-
-    related_uni(X, Y, E1, E2, Prop, Owner),
-    related_uni(Y, X, E2, E1, TProp, _),
+related(many, Y, bi, E1, E2, Prop, TProp, Owner, Format) :-
+    related_uni(X, Y, E1, E2, Prop, Owner, Format),
+    related_uni(Y, X, E2, E1, TProp, _, _),
     E1 = E2.
 
-related(X, Y, uni, E1, E2, Prop, TProp, Owner) :-
-    related_uni(X, Y, E1, E2, Prop, Owner),
-    not(related_uni(Y, X, E2, E1, TProp, _)),
+related(X, Y, uni, E1, E2, Prop, TProp, Owner, Format) :-
+    related_uni(X, Y, E1, E2, Prop, Owner, Format),
+    not(related_uni(Y, X, E2, E1, TProp, _, _)),
     X = many.
 
 /* ======== top_level_entity/1
@@ -638,4 +638,4 @@ related(X, Y, uni, E1, E2, Prop, TProp, Owner) :-
  */
 top_level_entity(N) :-
     normal_type(entity_type, N, _, _),
-    not(related(_, _, uni, _, N, _, _, O)).
+    not(related(_, _, uni, _, N, _, _, O, _)).

@@ -580,7 +580,8 @@ public class CatalogueModelFactory
      */
     private void initializeAllRelationships(Map<String, Type> catalogueTypes)
     {
-        String queryString = "?-related(From, To, Direction, Component, OtherComponent, Field, TargetField, Owner).";
+        String queryString =
+            "?-related(From, To, Direction, Component, OtherComponent, Field, TargetField, Owner, Format).";
         Iterable<Map<String, Variable>> fieldBindingsIterable = runQuery(queryString);
 
         for (Map<String, Variable> variables : fieldBindingsIterable)
@@ -606,6 +607,15 @@ public class CatalogueModelFactory
             if (targetFieldTerm.isFunctor())
             {
                 targetFieldName = engine.getFunctorName((Functor) targetFieldTerm);
+            }
+
+            Term formatTerm = variables.get("Format").getValue();
+            String format = null;
+
+            if (formatTerm.isFunctor())
+            {
+                format = engine.getFunctorName((Functor) formatTerm);
+                System.out.println(format);
             }
 
             boolean alphaOrder = componentName.compareTo(target) < 0;
@@ -651,6 +661,9 @@ public class CatalogueModelFactory
             String firstComponent = (goesFirst) ? componentName : target;
             String secondComponent = (goesFirst) ? target : componentName;
             String relationName = firstComponent + "_" + secondComponent;
+
+            System.out.println("Relationship " + target + ", " + targetFieldName + ", " + biDirectional + ", " + from +
+                ", " + to + ", " + owner + ", " + relationName);
 
             Relationship relationship =
                 new Relationship(target, targetFieldName, biDirectional, from, to, owner, relationName);
