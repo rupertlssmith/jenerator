@@ -619,7 +619,16 @@ public class CatalogueModelFactory
             }
             else
             {
-                format = "fk";
+                Type targetType = catalogueTypes.get(target);
+
+                if (targetType instanceof EntityType)
+                {
+                    format = "fk";
+                }
+                else if (targetType instanceof ComponentType)
+                {
+                    format = "embedded";
+                }
             }
 
             StorageType storageType = nameToStorageType.get(format);
