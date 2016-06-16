@@ -612,11 +612,17 @@ public class CatalogueModelFactory
             Term formatTerm = variables.get("Format").getValue();
             String format = null;
 
+            // The defaulting of the relationship storage format should really be in the Prolog code.
             if (formatTerm.isFunctor())
             {
                 format = engine.getFunctorName((Functor) formatTerm);
-                System.out.println(format);
             }
+            else
+            {
+                format = "fk";
+            }
+
+            StorageType storageType = nameToStorageType.get(format);
 
             boolean alphaOrder = componentName.compareTo(target) < 0;
             Relationship.Arity from = "one".equals(arityFrom) ? One : Many;
@@ -663,10 +669,10 @@ public class CatalogueModelFactory
             String relationName = firstComponent + "_" + secondComponent;
 
             System.out.println("Relationship " + target + ", " + targetFieldName + ", " + biDirectional + ", " + from +
-                ", " + to + ", " + owner + ", " + relationName);
+                ", " + to + ", " + owner + ", " + relationName + ", " + storageType);
 
             Relationship relationship =
-                new Relationship(target, targetFieldName, biDirectional, from, to, owner, relationName);
+                new Relationship(target, targetFieldName, biDirectional, from, to, owner, relationName, storageType);
 
             Type type = catalogueTypes.get(componentName);
 

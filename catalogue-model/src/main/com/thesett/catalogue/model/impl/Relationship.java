@@ -55,11 +55,11 @@ public class Relationship
     /** A name for this relationship. */
     private final String name;
 
-    //private final StorageType storageType;
-    //private final String externalIdField;
+    /** The storage type for the relationship. */
+    private final StorageType storageType;
 
     public Relationship(String target, String targetFieldName, boolean biDirectional, Arity arityFrom, Arity arityTo,
-        boolean owner, String name)
+        boolean owner, String name, StorageType storageType)
     {
         this.target = target;
         this.targetFieldName = targetFieldName;
@@ -68,6 +68,7 @@ public class Relationship
         this.to = arityTo;
         this.owner = owner;
         this.name = name;
+        this.storageType = storageType;
     }
 
     public String getTarget()
