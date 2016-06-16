@@ -48,6 +48,6 @@ public class DimensionTypeImpl extends EntityTypeImpl implements DimensionType
     public DimensionTypeImpl(String name, Map<String, Type> attributes, Map<String, String> presentAsAliases,
         Set<String> naturalKeyFields, String operationalClassName, Set<ComponentType> immediateAncestors)
     {
-        super(name, attributes, presentAsAliases, naturalKeyFields, null, operationalClassName, immediateAncestors);
+        super(name, attributes, presentAsAliases, naturalKeyFields, operationalClassName, immediateAncestors);
     }
 }

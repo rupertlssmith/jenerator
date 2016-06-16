@@ -51,7 +51,6 @@ public class FactTypeImpl extends EntityTypeImpl implements FactType
     public FactTypeImpl(String name, Map<String, Type> attributes, Map<String, String> presentAsAliases,
         String operationalClassName, Set<ComponentType> immediateAncestors)
     {
-        super(name, attributes, presentAsAliases, new HashSet<String>(), null, operationalClassName,
-            immediateAncestors);
+        super(name, attributes, presentAsAliases, new HashSet<String>(), operationalClassName, immediateAncestors);
     }
 }

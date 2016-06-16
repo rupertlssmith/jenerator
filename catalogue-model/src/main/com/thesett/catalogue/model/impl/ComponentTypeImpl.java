@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.thesett.aima.state.BaseType;
-import com.thesett.aima.state.ComponentRelationStorage;
 import com.thesett.aima.state.ComponentType;
 import com.thesett.aima.state.InfiniteValuesException;
 import com.thesett.aima.state.RandomInstanceFactory;
@@ -65,9 +64,6 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
     /** Holds the names of the fields forming the natural key of the component. */
     private final Set<String> naturalKeyFields;
 
-    /** Describes how component-component relationships are stored for fields. */
-    private final Map<String, ComponentRelationStorage> relationStorage;
-
     /** Holds the ancestor types of this component. */
     private Set<ComponentType> immediateAncestors;
 
@@ -80,14 +76,12 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
      * @param attributes           The attributes of the component type.
      * @param presentAsAliases     A map from names to externally presented names, if defined.
      * @param naturalKeyFields     The set of fields forming the natural key of the component.
-     * @param relationStorage      Describes how component-component relationships are stored for fields.
      * @param name                 The name of the component type.
      * @param operationalClassName The fully qualified name of the class that this component type describes.
      * @param immediateAncestors   The immediate ancestors of this component type.
      */
     public ComponentTypeImpl(Map<String, Type> attributes, Map<String, String> presentAsAliases,
-        Set<String> naturalKeyFields, Map<String, ComponentRelationStorage> relationStorage, String name,
-        String operationalClassName, Set<ComponentType> immediateAncestors)
+        Set<String> naturalKeyFields, String name, String operationalClassName, Set<ComponentType> immediateAncestors)
     {
         this.properties = attributes;
         this.presentAsAliases = presentAsAliases;
@@ -95,7 +89,6 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
         this.name = name;
         this.operationalClassName = operationalClassName;
         this.immediateAncestors = immediateAncestors;
-        this.relationStorage = relationStorage;
     }
 
     /** {@inheritDoc} */
@@ -156,19 +149,6 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
     public Map<String, Type> getAllPropertyTypes()
     {
         return properties;
-    }
-
-    /** {@inheritDoc} */
-    public ComponentRelationStorage getRelationStorage(String name)
-    {
-        if (relationStorage != null)
-        {
-            return relationStorage.get(name);
-        }
-        else
-        {
-            return null;
-        }
     }
 
     /** {@inheritDoc} */

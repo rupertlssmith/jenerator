@@ -1,6 +1,5 @@
-/* Copyright Rupert Smith, 2005 to 2008, all rights reserved. */
 /*
- * Copyright The Sett Ltd, 2005 to 2014.
+ * Copyright The Sett Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -104,13 +103,12 @@ public class ComponentPartHandler implements FieldHandler
                     ComponentType component = (ComponentType) componentPart;
                     String owner = ((component.isOwner() != null) && component.isOwner()) ? "true" : "false";
                     String relType = (component.getRel() == null) ? "_" : component.getRel().value();
-                    String docModel = ((component.isDocModel() != null) && component.isDocModel()) ? "true" : "false";
-                    String docFormat = (component.getDocFormat() == null) ? "_" : component.getDocFormat().value();
+                    String storageFormat = (component.getFormat() == null) ? "_" : component.getFormat().value();
                     String type = (component.getType() == null) ? "any" : component.getType();
 
                     result +=
                         "component_ref(" + component.getName() + ", " + type + ", " + owner + ", " + relType + ", " +
-                        docModel + ", " + docFormat + ")";
+                        storageFormat + ")";
                 }
                 else if (componentPart instanceof FieldDeclrType)
                 {

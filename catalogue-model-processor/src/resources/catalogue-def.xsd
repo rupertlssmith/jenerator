@@ -123,7 +123,7 @@
             <xs:enumeration value="aggregation" />
         </xs:restriction>
     </xs:simpleType>
-    <xs:simpleType name="docFormatType" final="restriction" >
+    <xs:simpleType name="storageFormatType" final="restriction" >
         <xs:restriction base="xs:NMTOKEN">
             <xs:enumeration value="json" />
             <xs:enumeration value="xml" />
@@ -398,8 +398,7 @@
             <xs:extension base="cat:FieldDeclrType">
                 <xs:attribute name="owner" type="xs:boolean" use="optional"/>
                 <xs:attribute name="rel" type="cat:relType" use="optional"/>
-                <xs:attribute name="doc-model" type="xs:boolean" use="optional"/>
-                <xs:attribute name="doc-format" type="cat:docFormatType" use="optional"/>
+                <xs:attribute name="format" type="cat:storageFormatType" use="optional"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

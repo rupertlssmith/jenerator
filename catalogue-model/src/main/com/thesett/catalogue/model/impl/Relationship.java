@@ -1,5 +1,5 @@
 /*
- * Copyright The Sett Ltd, 2005 to 2014.
+ * Copyright The Sett Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.thesett.catalogue.model.impl;
+
+import com.thesett.aima.state.StorageType;
 
 /**
  * Relationship describes a relationship between components. This describes one direction of the relationship rooted on
@@ -52,6 +54,9 @@ public class Relationship
 
     /** A name for this relationship. */
     private final String name;
+
+    //private final StorageType storageType;
+    //private final String externalIdField;
 
     public Relationship(String target, String targetFieldName, boolean biDirectional, Arity arityFrom, Arity arityTo,
         boolean owner, String name)

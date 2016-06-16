@@ -60,7 +60,6 @@ import com.thesett.aima.search.util.OperatorImpl;
 import com.thesett.aima.search.util.Searches;
 import com.thesett.aima.search.util.uninformed.DepthFirstSearch;
 import com.thesett.aima.state.BaseType;
-import com.thesett.aima.state.ComponentRelationStorage;
 import com.thesett.aima.state.ComponentType;
 import com.thesett.aima.state.InfiniteValuesException;
 import com.thesett.aima.state.State;
@@ -163,8 +162,8 @@ public class CatalogueModelFactory
         new HashMap<String, StorageType>()
         {
             {
-                put("xml", StorageType.DocJson);
-                put("json", StorageType.DocXml);
+                put("json", StorageType.DocJson);
+                put("xml", StorageType.DocXml);
                 put("javaSerialization", StorageType.ObjectJavaSerialisation);
                 put("fk", StorageType.ForeignKey);
                 put("externalId", StorageType.ExternalId);
@@ -422,27 +421,17 @@ public class CatalogueModelFactory
                 String fieldName = engine.getFunctorName((Functor) fieldFunctor.getArgument(0));
                 String fieldTypeName = engine.getFunctorName((Functor) fieldFunctor.getArgument(1));
 
-                Term storageFormatTerm = fieldFunctor.getArgument(5);
-                ComponentRelationStorage storageFormat = null;
-
-                if (storageFormatTerm.isGround())
-                {
-                    String storageFormatString = engine.getFunctorName((Functor) storageFormatTerm);
-                    StorageType storageType = nameToStorageType.get(storageFormatString);
-                    storageFormat = new ComponentRelationStorage(storageType);
-                }
-
                 // Check if the type of the field is recognized as a user defined top-level type.
                 // Otherwise, the type is assumed to refer to a yet to be processed user type.
                 if (catalogueTypes.containsKey(fieldTypeName))
                 {
                     Type fieldType = catalogueTypes.get(fieldTypeName);
-                    results.put(fieldName, new FieldProperties(fieldType, null, storageFormat));
+                    results.put(fieldName, new FieldProperties(fieldType, null));
                 }
                 else
                 {
                     Type fieldType = new PendingComponentRefType(fieldTypeName);
-                    results.put(fieldName, new FieldProperties(fieldType, null, storageFormat));
+                    results.put(fieldName, new FieldProperties(fieldType, null));
                 }
             }
             else if ("collection".equals(fieldKind))
@@ -1191,8 +1180,6 @@ public class CatalogueModelFactory
 
                 Map<String, Type> componentFields = new LinkedHashMap<String, Type>();
                 Map<String, String> presentAsAliases = new HashMap<String, String>();
-                Map<String, ComponentRelationStorage> relationStorageMap =
-                    new HashMap<String, ComponentRelationStorage>();
 
                 for (Map.Entry<String, FieldProperties> entry : fieldProperties.entrySet())
                 {
@@ -1207,13 +1194,6 @@ public class CatalogueModelFactory
                     {
                         presentAsAliases.put(fieldName, presentAsName);
                     }
-
-                    ComponentRelationStorage relationStorage = fieldProperty.relationStorage;
-
-                    if (relationStorage != null)
-                    {
-                        relationStorageMap.put(fieldName, relationStorage);
-                    }
                 }
 
                 Set<String> naturalKeyFields = getNaturalKeyFields(componentName);
@@ -1222,8 +1202,8 @@ public class CatalogueModelFactory
                 if ("component_type".equals(componentType))
                 {
                     catalogueTypes.put(componentName,
-                        new ComponentTypeImpl(componentFields, presentAsAliases, naturalKeyFields, relationStorageMap,
-                            componentName, packageName + "." + StringUtils.toCamelCaseUpper(componentName), ancestors));
+                        new ComponentTypeImpl(componentFields, presentAsAliases, naturalKeyFields, componentName,
+                            packageName + "." + StringUtils.toCamelCaseUpper(componentName), ancestors));
                 }
                 else if ("view_type".equals(componentType))
                 {
@@ -1235,8 +1215,7 @@ public class CatalogueModelFactory
                 {
                     EntityTypeImpl entityType =
                         new EntityTypeImpl(componentName, componentFields, presentAsAliases, naturalKeyFields,
-                            relationStorageMap, packageName + "." + StringUtils.toCamelCaseUpper(componentName),
-                            ancestors);
+                            packageName + "." + StringUtils.toCamelCaseUpper(componentName), ancestors);
 
                     if (supportsExternalId(componentName))
                     {
@@ -1629,12 +1608,6 @@ public class CatalogueModelFactory
         {
             return null;
         }
-
-        /** {@inheritDoc} */
-        public ComponentRelationStorage getRelationStorage(String name)
-        {
-            return null;
-        }
     }
 
     /**
@@ -1648,20 +1621,10 @@ public class CatalogueModelFactory
         /** The fields alias name, if it has one. */
         public String presentAsName;
 
-        /** Used to indicate the storage format to use for a relationship field. */
-        public ComponentRelationStorage relationStorage;
-
         private FieldProperties(Type type, String presentAsName)
         {
             this.type = type;
             this.presentAsName = presentAsName;
-        }
-
-        private FieldProperties(Type type, String presentAsName, ComponentRelationStorage relationStorage)
-        {
-            this.type = type;
-            this.presentAsName = presentAsName;
-            this.relationStorage = relationStorage;
         }
     }
 }

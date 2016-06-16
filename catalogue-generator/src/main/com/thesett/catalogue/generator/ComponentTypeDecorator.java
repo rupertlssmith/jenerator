@@ -19,7 +19,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.thesett.aima.state.ComponentRelationStorage;
 import com.thesett.aima.state.ComponentType;
 import com.thesett.aima.state.State;
 import com.thesett.aima.state.Type;
@@ -165,12 +164,6 @@ public class ComponentTypeDecorator extends TypeDecorator implements ComponentTy
     public void setImmediateAncestors(Set<ComponentType> immediateAncestors)
     {
         ((ComponentType) type).setImmediateAncestors(immediateAncestors);
-    }
-
-    /** {@inheritDoc} */
-    public ComponentRelationStorage getRelationStorage(String name)
-    {
-        return ((ComponentType) type).getRelationStorage(name);
     }
 
     /** {@inheritDoc} */

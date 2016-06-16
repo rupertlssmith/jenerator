@@ -19,7 +19,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.thesett.aima.state.ComponentRelationStorage;
 import com.thesett.aima.state.ComponentType;
 import com.thesett.aima.state.Type;
 import com.thesett.aima.state.TypeVisitor;
@@ -53,16 +52,13 @@ public class EntityTypeImpl extends ComponentTypeImpl implements EntityType
      * @param attributes           The fields of the entity.
      * @param presentAsAliases     A map from names to externally presented names, if defined.
      * @param naturalKeyFields     The set of fields forming the natural key of the component.
-     * @param relationStorage      Describes how component-component relationships are stored for fields.
      * @param operationalClassName An implementing class.
      * @param immediateAncestors   The immediate ancestors of this type.
      */
     public EntityTypeImpl(String name, Map<String, Type> attributes, Map<String, String> presentAsAliases,
-        Set<String> naturalKeyFields, Map<String, ComponentRelationStorage> relationStorage,
-        String operationalClassName, Set<ComponentType> immediateAncestors)
+        Set<String> naturalKeyFields, String operationalClassName, Set<ComponentType> immediateAncestors)
     {
-        super(attributes, presentAsAliases, naturalKeyFields, relationStorage, name, operationalClassName,
-            immediateAncestors);
+        super(attributes, presentAsAliases, naturalKeyFields, name, operationalClassName, immediateAncestors);
     }
 
     /**

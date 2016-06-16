@@ -50,6 +50,6 @@ public class ViewTypeImpl extends ComponentTypeImpl implements ViewType
     public ViewTypeImpl(String name, Map<String, Type> attributes, Map<String, String> presentAsAliases,
         Set<String> naturalKeyFields, String operationalClassName, Set<ComponentType> immediateAncestors)
     {
-        super(attributes, presentAsAliases, naturalKeyFields, null, name, operationalClassName, immediateAncestors);
+        super(attributes, presentAsAliases, naturalKeyFields, name, operationalClassName, immediateAncestors);
     }
 }
