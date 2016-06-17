@@ -677,8 +677,9 @@ public class CatalogueModelFactory
             String secondComponent = (goesFirst) ? target : componentName;
             String relationName = firstComponent + "_" + secondComponent;
 
-            System.out.println("Relationship " + target + ", " + targetFieldName + ", " + biDirectional + ", " + from +
-                ", " + to + ", " + owner + ", " + relationName + ", " + storageType);
+            System.out.println("Relationship [ fieldName = " + fieldName + ", target = " + target +
+                ", targetFieldName =  " + targetFieldName + ", " + biDirectional + ", from = " + from + ", to = " + to +
+                ", owner = " + owner + ", relationName = " + relationName + ", storageType = " + storageType + "]");
 
             Relationship relationship =
                 new Relationship(target, targetFieldName, biDirectional, from, to, owner, relationName, storageType);
