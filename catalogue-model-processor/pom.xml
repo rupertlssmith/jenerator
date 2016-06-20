@@ -7,7 +7,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>catalogue-model-processor</artifactId>
     <name>catalogue-model-processor</name>
-    <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+    <version>0.9.73</version><!--jenerator.version-->
 
     <description>A catalogue which is confugurable at the knowledge level to catalogue and organise any type of data and to provide structured access to it, free text querying of it and automatic data warehousing of events relating to it.</description>
     <url>http://www.thesett.com/catalogue-model-processor</url>
@@ -21,7 +21,7 @@
     <parent>
         <groupId>com.thesett</groupId>
         <artifactId>jenerator_build</artifactId>
-        <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+        <version>0.9.73</version><!--jenerator.version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -29,37 +29,37 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>common</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--base.version-->
+            <version>0.9.84</version><!--base.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>configurator</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+            <version>0.9.73</version><!--jenerator.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>power_model</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--lojix.version-->
+            <version>0.9.84</version><!--lojix.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>catalogue-model</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+            <version>0.9.73</version><!--jenerator.version-->
         </dependency>
         
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>prolog</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--lojix.version-->
+            <version>0.9.84</version><!--lojix.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>index</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+            <version>0.9.73</version><!--jenerator.version-->
         </dependency>
 
         <dependency>
@@ -71,14 +71,14 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>junit-toolkit</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--junit_toolkit.version-->
+            <version>0.9.19</version><!--junit_toolkit.version-->
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>base</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--base.version-->
+            <version>0.9.84</version><!--base.version-->
             <scope>test</scope>
         </dependency>        
     </dependencies>
