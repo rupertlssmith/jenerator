@@ -5,7 +5,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>catalogue-maven-plugin</artifactId>
     <name>catalogue-maven-plugin</name>
-    <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+    <version>0.9.96</version><!--jenerator.version-->
 
     <description>Maven plugin for the Catalogue to generate code from a catalogue model.</description>
     <url>http://www.thesett.com/projects/catalogue-maven-plugin</url>
@@ -27,7 +27,7 @@
     <parent>
         <groupId>com.thesett</groupId>
         <artifactId>jenerator_build</artifactId>
-        <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+        <version>0.9.96</version><!--jenerator.version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -36,25 +36,25 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>common</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--base.version-->
+            <version>0.9.109</version><!--base.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>base</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--base.version-->
+            <version>0.9.109</version><!--base.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>catalogue-generator</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+            <version>0.9.96</version><!--jenerator.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>javasource-maven-plugin</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+            <version>0.9.96</version><!--jenerator.version-->
         </dependency>
 
         <dependency>
