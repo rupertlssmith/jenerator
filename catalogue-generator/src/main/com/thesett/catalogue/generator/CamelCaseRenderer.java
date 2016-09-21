@@ -61,6 +61,10 @@ public class CamelCaseRenderer implements AttributeRenderer
         {
             return StringUtils.toCamelCaseUpper(o.toString());
         }
+        else if ("ccl".equals(s))
+        {
+            return StringUtils.toCamelCaseLower(o.toString());
+        }
         else if ("u".equals(s))
         {
             return o.toString().toUpperCase();
