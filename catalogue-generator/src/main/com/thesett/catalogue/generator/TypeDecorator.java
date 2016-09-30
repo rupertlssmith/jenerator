@@ -298,6 +298,13 @@ public class TypeDecorator<T> implements Type<T>
     }
 
     /**
+     * Determines if the decorated type is a collection.
+     *
+     * @return <tt>true</tt> if the decorated type is a collection.
+     */
+    public boolean isCollection() { return Kind.Collection.equals(kind); }
+
+    /**
      * Determines if the decorated type is an entity or sub-type.
      *
      * @return <tt>true</tt> if the decorated type is an entity or sub-type.
