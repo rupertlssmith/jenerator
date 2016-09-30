@@ -7,7 +7,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>jenerator_build</artifactId>
     <name>Jenerator</name>
-    <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+    <version>0.9.99</version><!--jenerator.version-->
 
     <description>Jenerator is a code generator framework for Java.</description>
     <url>https://github.com/rupertlssmith/jenerator</url>
@@ -85,7 +85,7 @@
         <jalopy.maven.plugin.version>1.9.4-250</jalopy.maven.plugin.version>
         <maven.jaxb2.plugin.version>0.7.5</maven.jaxb2.plugin.version>
         <xdoclet.maven.plugin.version>1.0</xdoclet.maven.plugin.version>
-        <maven.run.plugin.version>${base.version}</maven.run.plugin.version>        
+        <maven.run.plugin.version>0.9.112</maven.run.plugin.version>        
         <maven.antrun.plugin.version>1.7</maven.antrun.plugin.version>
         <maven.idea.plugin.version>2.2</maven.idea.plugin.version>
         <maven.war.plugin.version>2.0</maven.war.plugin.version>
