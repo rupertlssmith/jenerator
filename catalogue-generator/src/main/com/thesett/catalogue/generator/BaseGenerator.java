@@ -286,6 +286,26 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
     protected String nameToJavaFileName(String rootDirName, String packageName, String prefix, String name,
         String postfix)
     {
+        return nameToFileName(rootDirName, packageName, prefix, name, postfix, ".java");
+    }
+
+    /**
+     * Converts a name to camel case and appends and prepends strings onto it, then calculates the directory for the
+     * model package relative to the generation output directory and returns the result as the full path name of the
+     * file to output to, for code generation.
+     *
+     * @param  rootDirName The root directory to output to, package directory will come under this.
+     * @param  packageName The package name, dot separated, will be converted to a directory.
+     * @param  prefix      The prefix to add to the java file name.
+     * @param  name        The name to convert to camel case as the main part of the java file name.
+     * @param  postfix     The postfix to add to the java file name.
+     * @param  extension   The file output extension.
+     *
+     * @return The full path to the java source file to output to.
+     */
+    protected String nameToFileName(String rootDirName, String packageName, String prefix, String name,
+                                    String postfix, String extension)
+    {
         // Work out the full path to the location to write to.
         String packagePath = packageName.replace('.', '/');
 
@@ -300,7 +320,7 @@ public abstract class BaseGenerator extends ExtendableBeanState implements Gener
         }
 
         // Build the full path to the output file.
-        return fullOutputDirName + File.separatorChar + prefix + StringUtils.toCamelCaseUpper(name) + postfix + ".java";
+        return fullOutputDirName + File.separatorChar + prefix + StringUtils.toCamelCaseUpper(name) + postfix + extension;
     }
 
     /**
