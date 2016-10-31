@@ -597,6 +597,16 @@ nat_key_field(CompName, Field) :-
     member(unique_fields(key, _FS), _MP),
     member(Field, _FS).
 
+member_at(X, [X|_], 0).
+member_at(X, [_|Tail], N) :- member_at(X, Tail, M), N is M + 1.
+
+unique_group_field(CompName, Group, Field) :-
+    product_type(_PT),
+    normal_type(_PT, CompName, class, _MP),
+    member_at(unique_fields(_, _FS), _MP, Nth),
+    Group is Nth + 1,
+    member(Field, _FS).
+
 /* === Entity relationships. === */
 
 /* ======== related_uni/4
