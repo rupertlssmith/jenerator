@@ -17,6 +17,7 @@ package com.thesett.catalogue.model.impl;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -149,6 +150,12 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
     public Map<String, Type> getAllPropertyTypes()
     {
         return properties;
+    }
+
+    /** {@inheritDoc} */
+    public Map<String, List<String>> getPropertiesByUniqueGrouping()
+    {
+        return null;
     }
 
     /** {@inheritDoc} */

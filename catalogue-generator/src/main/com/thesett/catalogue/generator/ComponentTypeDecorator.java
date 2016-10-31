@@ -16,6 +16,7 @@
 package com.thesett.catalogue.generator;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -61,6 +62,12 @@ public class ComponentTypeDecorator extends TypeDecorator implements ComponentTy
         }
 
         return fields;
+    }
+
+    /** {@inheritDoc} */
+    public Map<String, List<String>> getPropertiesByUniqueGrouping()
+    {
+        return ((ComponentType) type).getPropertiesByUniqueGrouping();
     }
 
     /**

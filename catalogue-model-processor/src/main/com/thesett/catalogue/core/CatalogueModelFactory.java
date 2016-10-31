@@ -1581,6 +1581,12 @@ public class CatalogueModelFactory
         }
 
         /** {@inheritDoc} */
+        public Map<String, List<String>> getPropertiesByUniqueGrouping()
+        {
+            return null;
+        }
+
+        /** {@inheritDoc} */
         public State getInstance()
         {
             return null;
