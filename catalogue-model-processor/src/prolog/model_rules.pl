@@ -590,6 +590,13 @@ properties_accum([P|PFS], [P|FS]) :-
     P = property(_, _, _),
     properties_accum(PFS, FS).
 
+/* === Feature Extraction. === */
+nat_key_field(CompName, Field) :-
+    product_type(_PT),
+    normal_type(_PT, CompName, class, _MP),
+    member(unique_fields(key, _FS), _MP),
+    member(Field, _FS).
+
 /* === Entity relationships. === */
 
 /* ======== related_uni/4

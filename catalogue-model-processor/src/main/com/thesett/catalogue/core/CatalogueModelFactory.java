@@ -486,9 +486,7 @@ public class CatalogueModelFactory
      */
     private Set<String> getNaturalKeyFields(String name)
     {
-        String queryString =
-            "?-product_type(_PT), normal_type(_PT, " + name +
-            ", class, _MP), member(unique_fields(key, _FS), _MP), member(F, _FS).";
+        String queryString = "?- nat_key_field(" + name + ", F).";
         Iterable<Map<String, Variable>> uniqueFieldsIterable = runQuery(queryString);
 
         Set<String> results = new LinkedHashSet<String>();
@@ -504,6 +502,33 @@ public class CatalogueModelFactory
         }
 
         return results;
+    }
+
+    /**
+     * @param  name The name of the component type to get the unique groupings of.
+     *
+     * @return The unique groupings of a named component type.
+     */
+    private Map<String, List<String>> getUniqueGroupings(String name)
+    {
+        String queryString =
+                "?-product_type(_PT), normal_type(_PT, " + name +
+                        ", class, _MP), member(unique_fields(key, _FS), _MP), member(F, _FS).";
+        Iterable<Map<String, Variable>> uniqueFieldsIterable = runQuery(queryString);
+
+        Set<String> results = new LinkedHashSet<String>();
+
+        for (Map<String, Variable> variables : uniqueFieldsIterable)
+        {
+            Variable var = variables.get("F");
+            Functor fieldFunctor = (Functor) var.getValue();
+
+            String fieldName = engine.getFunctorName(fieldFunctor);
+
+            results.add(fieldName);
+        }
+
+        return null;
     }
 
     /**
@@ -1227,7 +1252,7 @@ public class CatalogueModelFactory
 
                 Set<String> naturalKeyFields = getNaturalKeyFields(componentName);
                 Set<ComponentType> ancestors = getComponentAncestors(catalogueTypes, componentName);
-                Map<String, List<String>> uniqueGroupings = null;
+                Map<String, List<String>> uniqueGroupings = getUniqueGroupings(componentName);
 
                 if ("component_type".equals(componentType))
                 {
