@@ -16,6 +16,7 @@
 package com.thesett.catalogue.model.impl;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -52,13 +53,16 @@ public class EntityTypeImpl extends ComponentTypeImpl implements EntityType
      * @param attributes           The fields of the entity.
      * @param presentAsAliases     A map from names to externally presented names, if defined.
      * @param naturalKeyFields     The set of fields forming the natural key of the component.
+     * @param uniqueGroupings      The field names arranged into named unique groupings.
      * @param operationalClassName An implementing class.
      * @param immediateAncestors   The immediate ancestors of this type.
      */
     public EntityTypeImpl(String name, Map<String, Type> attributes, Map<String, String> presentAsAliases,
-        Set<String> naturalKeyFields, String operationalClassName, Set<ComponentType> immediateAncestors)
+        Set<String> naturalKeyFields, Map<String, List<String>> uniqueGroupings, String operationalClassName,
+        Set<ComponentType> immediateAncestors)
     {
-        super(attributes, presentAsAliases, naturalKeyFields, name, operationalClassName, immediateAncestors);
+        super(attributes, presentAsAliases, naturalKeyFields, uniqueGroupings, name, operationalClassName,
+            immediateAncestors);
     }
 
     /**

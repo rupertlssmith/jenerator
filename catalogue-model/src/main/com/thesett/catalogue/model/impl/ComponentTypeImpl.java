@@ -71,22 +71,28 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
     /** Holds the meta-model instance associated with this component. */
     private State metaModel;
 
+    /** The field names arranged into named unique groupings. */
+    private Map<String, List<String>> uniqueGroupings;
+
     /**
      * Creates a knowledge level description of a component type with the specified name for a set of attribute types.
      *
      * @param attributes           The attributes of the component type.
      * @param presentAsAliases     A map from names to externally presented names, if defined.
      * @param naturalKeyFields     The set of fields forming the natural key of the component.
+     * @param uniqueGroupings      The field names arranged into named unique groupings.
      * @param name                 The name of the component type.
      * @param operationalClassName The fully qualified name of the class that this component type describes.
      * @param immediateAncestors   The immediate ancestors of this component type.
      */
     public ComponentTypeImpl(Map<String, Type> attributes, Map<String, String> presentAsAliases,
-        Set<String> naturalKeyFields, String name, String operationalClassName, Set<ComponentType> immediateAncestors)
+        Set<String> naturalKeyFields, Map<String, List<String>> uniqueGroupings, String name,
+        String operationalClassName, Set<ComponentType> immediateAncestors)
     {
         this.properties = attributes;
         this.presentAsAliases = presentAsAliases;
         this.naturalKeyFields = naturalKeyFields;
+        this.uniqueGroupings = uniqueGroupings;
         this.name = name;
         this.operationalClassName = operationalClassName;
         this.immediateAncestors = immediateAncestors;
@@ -155,7 +161,7 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
     /** {@inheritDoc} */
     public Map<String, List<String>> getPropertiesByUniqueGrouping()
     {
-        return null;
+        return uniqueGroupings;
     }
 
     /** {@inheritDoc} */

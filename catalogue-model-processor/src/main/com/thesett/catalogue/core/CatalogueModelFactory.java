@@ -1227,12 +1227,13 @@ public class CatalogueModelFactory
 
                 Set<String> naturalKeyFields = getNaturalKeyFields(componentName);
                 Set<ComponentType> ancestors = getComponentAncestors(catalogueTypes, componentName);
+                Map<String, List<String>> uniqueGroupings = null;
 
                 if ("component_type".equals(componentType))
                 {
                     catalogueTypes.put(componentName,
-                        new ComponentTypeImpl(componentFields, presentAsAliases, naturalKeyFields, componentName,
-                            packageName + "." + StringUtils.toCamelCaseUpper(componentName), ancestors));
+                        new ComponentTypeImpl(componentFields, presentAsAliases, naturalKeyFields, uniqueGroupings,
+                            componentName, packageName + "." + StringUtils.toCamelCaseUpper(componentName), ancestors));
                 }
                 else if ("view_type".equals(componentType))
                 {
@@ -1244,7 +1245,8 @@ public class CatalogueModelFactory
                 {
                     EntityTypeImpl entityType =
                         new EntityTypeImpl(componentName, componentFields, presentAsAliases, naturalKeyFields,
-                            packageName + "." + StringUtils.toCamelCaseUpper(componentName), ancestors);
+                            uniqueGroupings, packageName + "." + StringUtils.toCamelCaseUpper(componentName),
+                            ancestors);
 
                     if (supportsExternalId(componentName))
                     {
