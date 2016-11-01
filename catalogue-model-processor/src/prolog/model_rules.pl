@@ -578,6 +578,7 @@ conforms_to_view([VF|VFS], Fields) :-
     conforms_to_view(VFS, Fields).
 
 /* Extracts all the properties from a product type. */
+/*
 properties(Properties, normal_type(_, _, _, TypeProps)) :-
     member(fields(Fields), TypeProps),
     properties_accum(Properties, Fields).
@@ -589,6 +590,7 @@ properties_accum(PFS, [F|FS]) :-
 properties_accum([P|PFS], [P|FS]) :-
     P = property(_, _, _),
     properties_accum(PFS, FS).
+*/
 
 /* === Feature Extraction. === */
 nat_key_field(CompName, Field) :-
@@ -600,12 +602,39 @@ nat_key_field(CompName, Field) :-
 member_at(X, [X|_], 0).
 member_at(X, [_|Tail], N) :- member_at(X, Tail, M), N is M + 1.
 
-unique_group_field(CompName, Group, Field) :-
+non_unique_field_groups(CompName, 0, Field) :-
+    product_type(_PT),
+    normal_type(_PT, CompName, class, _MP),
+    member(fields(_FS), _MP),
+    member(property(Field, _, _), _FS),
+    not(unique_field_groups(CompName, _, Field)).
+
+non_unique_field_groups(CompName, 0, Field) :-
+    product_type(_PT),
+    normal_type(_PT, CompName, class, _MP),
+    member(fields(_FS), _MP),
+    member(collection(_, Field, _), _FS),
+    not(unique_field_groups(CompName, _, Field)).
+
+non_unique_field_groups(CompName, 0, Field) :-
+    product_type(_PT),
+    normal_type(_PT, CompName, class, _MP),
+    member(fields(_FS), _MP),
+    member(component_ref(Field, _, _, _, _), _FS),
+    not(unique_field_groups(CompName, _, Field)).
+
+unique_field_groups(CompName, Group, Field) :-
     product_type(_PT),
     normal_type(_PT, CompName, class, _MP),
     member_at(unique_fields(_, _FS), _MP, Nth),
     Group is Nth + 1,
     member(Field, _FS).
+
+unique_group_field(CompName, 0, Field) :-
+    non_unique_field_groups(CompName, 0, Field).
+
+unique_group_field(CompName, Group, Field) :-
+    unique_field_groups(CompName, Group, Field).
 
 /* === Entity relationships. === */
 
