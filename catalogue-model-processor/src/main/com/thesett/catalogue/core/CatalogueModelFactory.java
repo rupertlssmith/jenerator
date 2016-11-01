@@ -514,7 +514,7 @@ public class CatalogueModelFactory
         String queryString = "?- unique_group_field(" + name + ", G, F).";
         Iterable<Map<String, Variable>> uniqueFieldsIterable = runQuery(queryString);
 
-        Set<String> results = new LinkedHashSet<String>();
+        Map<String, List<String>> results = new LinkedHashMap<String, List<String>>();
 
         for (Map<String, Variable> variables : uniqueFieldsIterable)
         {
@@ -523,15 +523,26 @@ public class CatalogueModelFactory
             String fieldName = engine.getFunctorName(fieldFunctor);
 
             var = variables.get("G");
+
             Term groupNoTerm = var.getValue();
             int groupNo = ((IntLiteral) groupNoTerm).intValue();
 
             System.out.println("UniqueGroups: " + groupNo + " : " + fieldName);
 
-            results.add(fieldName);
+            String group = (groupNo == 0) ? "" : Integer.toString(groupNo);
+
+            List<String> fieldList = results.get(group);
+
+            if (fieldList == null)
+            {
+                fieldList = new LinkedList<String>();
+                results.put(group, fieldList);
+            }
+
+            fieldList.add(fieldName);
         }
 
-        return null;
+        return results;
     }
 
     /**
