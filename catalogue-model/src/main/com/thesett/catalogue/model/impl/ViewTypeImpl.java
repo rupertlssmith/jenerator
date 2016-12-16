@@ -37,6 +37,9 @@ import com.thesett.catalogue.model.ViewType;
  */
 public class ViewTypeImpl extends ComponentTypeImpl implements ViewType
 {
+    /** Holds the ancestor types of this component. */
+    private Set<ComponentType> descendants;
+
     /**
      * Creates a named view with the specified set of fields and underlying implementation.
      *
@@ -46,10 +49,26 @@ public class ViewTypeImpl extends ComponentTypeImpl implements ViewType
      * @param naturalKeyFields     The set of fields forming the natural key of the component.
      * @param operationalClassName An implementing class.
      * @param immediateAncestors   The immediate ancestors of this type.
+     * @param descendants          The descendants of this type.
      */
     public ViewTypeImpl(String name, Map<String, Type> attributes, Map<String, String> presentAsAliases,
-        Set<String> naturalKeyFields, String operationalClassName, Set<ComponentType> immediateAncestors)
+        Set<String> naturalKeyFields, String operationalClassName, Set<ComponentType> immediateAncestors,
+        Set<ComponentType> descendants)
     {
         super(attributes, presentAsAliases, naturalKeyFields, null, name, operationalClassName, immediateAncestors);
+
+        this.descendants = descendants;
+    }
+
+    /** {@inheritDoc} */
+    public Set<ComponentType> getDescendants()
+    {
+        return descendants;
+    }
+
+    /** {@inheritDoc} */
+    public void setDescendants(Set<ComponentType> descendants)
+    {
+        this.descendants = descendants;
     }
 }

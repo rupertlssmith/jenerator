@@ -1,5 +1,5 @@
 /*
- * Copyright The Sett Ltd, 2005 to 2014.
+ * Copyright The Sett Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package com.thesett.catalogue.model;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import com.thesett.aima.state.ComponentType;
 
@@ -26,11 +27,25 @@ import com.thesett.aima.state.ComponentType;
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
- * <tr><td> Provide a subset of the types and names of fields that make up a component.
+ * <tr><td> Provide a subset of the types and names of fields that make up a component. </td></tr>
+ * <tr><td> Identify all components implementing the view. </td></tr>
  * </table></pre>
  *
  * @author Rupert Smith
  */
 public interface ViewType extends ComponentType, Serializable
 {
+    /**
+     * Provides the set of all components that implement this view.
+     *
+     * @return The set of all components that implement this view.
+     */
+    Set<ComponentType> getDescendants();
+
+    /**
+     * Establishes the set of all components that implement this view.
+     *
+     * @param descendants The set of all components that implement this view.
+     */
+    void setDescendants(Set<ComponentType> descendants);
 }

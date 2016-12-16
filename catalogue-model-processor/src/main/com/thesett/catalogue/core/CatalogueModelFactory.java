@@ -80,6 +80,7 @@ import com.thesett.catalogue.core.handlers.InQuotesFieldHandler;
 import com.thesett.catalogue.core.handlers.ViewHandler;
 import com.thesett.catalogue.model.CollectionType;
 import com.thesett.catalogue.model.EntityType;
+import com.thesett.catalogue.model.ViewType;
 import com.thesett.catalogue.model.impl.CatalogueModel;
 import com.thesett.catalogue.model.impl.CollectionTypeImpl;
 import com.thesett.catalogue.model.impl.ComponentTypeImpl;
@@ -578,6 +579,45 @@ public class CatalogueModelFactory
             {
                 ComponentType viewType = new PendingComponentType(viewTypeName);
                 results.add(viewType);
+            }
+        }
+
+        return results;
+    }
+
+    /**
+     * Extracts the ancestors types for a named component type in the catalogue model.
+     *
+     * @param  catalogueTypes The map to build up the catalogue types in.
+     * @param  name           The name of the component type to get the ancestors of.
+     *
+     * @return The ancestors of a named component type.
+     */
+    private Set<ComponentType> getDescendants(Map<String, Type> catalogueTypes, String name)
+    {
+        String queryString =
+            "?-product_type(_PT), normal_type(_PT, C, class, _MP), member(views(_VS), _MP), member(" + name + ", _VS).";
+        Iterable<Map<String, Variable>> componentBindingsIterable = runQuery(queryString);
+
+        Set<ComponentType> results = new LinkedHashSet<ComponentType>();
+
+        for (Map<String, Variable> variables : componentBindingsIterable)
+        {
+            Variable var = variables.get("C");
+            Functor componentFunctor = (Functor) var.getValue();
+
+            String componentTypeName = engine.getFunctorName(componentFunctor);
+
+            // Check if the type of the field is recognized as a user defined top-level type.
+            if (catalogueTypes.containsKey(componentTypeName))
+            {
+                Type componentType = catalogueTypes.get(componentTypeName);
+                results.add((ComponentType) componentType);
+            }
+            else // Otherwise, the type is assumed to refer to a yet to be processed user type.
+            {
+                ComponentType componentType = new PendingComponentType(componentTypeName);
+                results.add(componentType);
             }
         }
 
@@ -1276,9 +1316,12 @@ public class CatalogueModelFactory
                 }
                 else if ("view_type".equals(componentType))
                 {
+                    Set<ComponentType> descendants = getDescendants(catalogueTypes, componentName);
+
                     catalogueTypes.put(componentName,
                         new ViewTypeImpl(componentName, componentFields, presentAsAliases, naturalKeyFields,
-                            packageName + "." + StringUtils.toCamelCaseUpper(componentName) + "Impl", ancestors));
+                            packageName + "." + StringUtils.toCamelCaseUpper(componentName) + "Impl", ancestors,
+                            descendants));
                 }
                 else if ("entity_type".equals(componentType))
                 {
@@ -1362,7 +1405,7 @@ public class CatalogueModelFactory
                     }
                 }
 
-                // Replace all view forward references.
+                // Replace all view forward references in the ancestors relationship.
                 Set<ComponentType> replacementAncestors = new LinkedHashSet<ComponentType>();
 
                 for (ComponentType viewType : componentType.getImmediateAncestors())
@@ -1376,6 +1419,32 @@ public class CatalogueModelFactory
                 }
 
                 componentType.setImmediateAncestors(replacementAncestors);
+
+                if (componentType instanceof ViewType)
+                {
+                    // Replace all component forward references in the descendants relationship.
+                    ViewType viewType = (ViewType) componentType;
+                    Set<ComponentType> replacementDescendants = new LinkedHashSet<ComponentType>();
+
+                    for (ComponentType descendant : viewType.getDescendants())
+                    {
+                        if (descendant instanceof PendingComponentType)
+                        {
+                            descendant = (ComponentType) catalogueTypes.get(descendant.getName());
+                        }
+
+                        replacementDescendants.add(descendant);
+                    }
+
+                    viewType.setDescendants(replacementDescendants);
+
+                    System.out.println("Descendants of " + viewType.getName() + " are:");
+
+                    for (ComponentType component : viewType.getDescendants())
+                    {
+                        System.out.println(component.getName());
+                    }
+                }
             }
         }
 
