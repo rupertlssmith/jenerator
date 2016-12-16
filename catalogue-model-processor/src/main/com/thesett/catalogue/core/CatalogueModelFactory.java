@@ -528,7 +528,7 @@ public class CatalogueModelFactory
             Term groupNoTerm = var.getValue();
             int groupNo = ((IntLiteral) groupNoTerm).intValue();
 
-            System.out.println("UniqueGroups: " + groupNo + " : " + fieldName);
+            /*System.out.println("UniqueGroups: " + groupNo + " : " + fieldName);*/
 
             String group = (groupNo == 0) ? "" : Integer.toString(groupNo);
 
@@ -756,9 +756,9 @@ public class CatalogueModelFactory
             String secondComponent = (goesFirst) ? target : componentName;
             String relationName = firstComponent + "_" + secondComponent;
 
-            System.out.println("Relationship [ fieldName = " + fieldName + ", target = " + target +
+            /*System.out.println("Relationship [ fieldName = " + fieldName + ", target = " + target +
                 ", targetFieldName =  " + targetFieldName + ", " + biDirectional + ", from = " + from + ", to = " + to +
-                ", owner = " + owner + ", relationName = " + relationName + ", storageType = " + storageType + "]");
+                ", owner = " + owner + ", relationName = " + relationName + ", storageType = " + storageType + "]");*/
 
             Relationship relationship =
                 new Relationship(target, targetFieldName, biDirectional, from, to, owner, relationName, storageType);
