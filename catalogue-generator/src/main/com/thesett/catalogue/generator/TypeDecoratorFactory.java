@@ -1,5 +1,5 @@
 /*
- * Copyright The Sett Ltd, 2005 to 2014.
+ * Copyright The Sett Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,8 @@ import com.thesett.catalogue.model.EntityType;
 import com.thesett.catalogue.model.EntityTypeVisitor;
 import com.thesett.catalogue.model.MapType;
 import com.thesett.catalogue.model.MapTypeVisitor;
+import com.thesett.catalogue.model.ViewType;
+import com.thesett.catalogue.model.ViewTypeVisitor;
 
 /**
  * TypeDecoratorFactory is a {@link TypeVisitor}, that can visit a {@link com.thesett.aima.state.Type}, and based on the
@@ -52,7 +54,7 @@ import com.thesett.catalogue.model.MapTypeVisitor;
  */
 public class TypeDecoratorFactory implements TypeVisitor, ComponentTypeVisitor, EntityTypeVisitor,
     CollectionTypeVisitor, HierarchyTypeVisitor, MapTypeVisitor, EnumeratedStringTypeVisitor, BigDecimalTypeVisitor,
-    TimeRangeTypeVisitor, DateRangeTypeVisitor
+    TimeRangeTypeVisitor, DateRangeTypeVisitor, ViewTypeVisitor
 {
     /** Holds the type decorator for the most recently visited type. */
     protected TypeDecorator typeDecorator;
@@ -99,6 +101,12 @@ public class TypeDecoratorFactory implements TypeVisitor, ComponentTypeVisitor, 
     public void visit(ComponentType type)
     {
         typeDecorator = new ComponentTypeDecorator(type);
+    }
+
+    /** {@inheritDoc} */
+    public void visit(ViewType type)
+    {
+        typeDecorator = new ViewTypeDecorator(type);
     }
 
     /** {@inheritDoc} */
