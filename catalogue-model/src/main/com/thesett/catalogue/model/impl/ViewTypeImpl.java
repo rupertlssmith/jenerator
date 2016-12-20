@@ -20,7 +20,10 @@ import java.util.Set;
 
 import com.thesett.aima.state.ComponentType;
 import com.thesett.aima.state.Type;
+import com.thesett.aima.state.TypeVisitor;
+import com.thesett.catalogue.model.EntityTypeVisitor;
 import com.thesett.catalogue.model.ViewType;
+import com.thesett.catalogue.model.ViewTypeVisitor;
 
 /**
  * ViewTypeImpl is the type of view components. A view component is a sub-set of the fields of a component, with
@@ -58,6 +61,24 @@ public class ViewTypeImpl extends ComponentTypeImpl implements ViewType
         super(attributes, presentAsAliases, naturalKeyFields, null, name, operationalClassName, immediateAncestors);
 
         this.descendants = descendants;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p/>If the visitor is an {@link ViewTypeVisitor}, it is applied to this, otherwise it is chained up to the
+     * super visitor method.
+     */
+    public void acceptVisitor(TypeVisitor visitor)
+    {
+        if (visitor instanceof ViewTypeVisitor)
+        {
+            ((ViewTypeVisitor) visitor).visit(this);
+        }
+        else
+        {
+            super.acceptVisitor(visitor);
+        }
     }
 
     /** {@inheritDoc} */
