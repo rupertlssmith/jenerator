@@ -105,6 +105,7 @@ public class ComponentPartHandler implements FieldHandler
                     String relType = (component.getRel() == null) ? "_" : component.getRel().value();
                     String storageFormat = (component.getFormat() == null) ? "_" : component.getFormat().value();
                     String type = (component.getType() == null) ? "any" : component.getType();
+                    boolean notNull = component.isNotNull() == null ? false : component.isNotNull();
 
                     result +=
                         "component_ref(" + component.getName() + ", " + type + ", " + owner + ", " + relType + ", " +
@@ -117,6 +118,8 @@ public class ComponentPartHandler implements FieldHandler
                         (field.getType() == null) ? interner.getFunctorName(fieldDeclrToAtom(field)) : field.getType();
 
                     String presentAs = (field.getPresentAs() != null) ? field.getPresentAs() : field.getName();
+                    boolean notNull = field.isNotNull() == null ? false : field.isNotNull();
+
                     result += "property(" + field.getName() + ", " + fieldType + ", \"" + presentAs + "\")";
                 }
                 else if (componentPart instanceof UniqueType)
