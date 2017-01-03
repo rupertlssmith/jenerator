@@ -120,7 +120,8 @@ public class ComponentPartHandler implements FieldHandler
                     String presentAs = (field.getPresentAs() != null) ? field.getPresentAs() : field.getName();
                     boolean notNull = field.isNotNull() == null ? false : field.isNotNull();
 
-                    result += "property(" + field.getName() + ", " + fieldType + ", \"" + presentAs + "\")";
+                    result += "property(" + field.getName() + ", " + fieldType + ", \"" + presentAs + "\", " +
+                            notNull + ")";
                 }
                 else if (componentPart instanceof UniqueType)
                 {
