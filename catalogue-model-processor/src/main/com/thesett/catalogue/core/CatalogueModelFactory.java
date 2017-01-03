@@ -421,6 +421,12 @@ public class CatalogueModelFactory
             {
                 String fieldName = engine.getFunctorName((Functor) fieldFunctor.getArgument(0));
                 String fieldTypeName = engine.getFunctorName((Functor) fieldFunctor.getArgument(1));
+                String owner = engine.getFunctorName((Functor) fieldFunctor.getArgument(2));
+                //String relType = engine.getFunctorName((Functor) fieldFunctor.getArgument(3));
+                //String storageFormat = engine.getFunctorName((Functor) fieldFunctor.getArgument(4));
+                String notNull = engine.getFunctorName((Functor) fieldFunctor.getArgument(5));
+
+                System.out.println(fieldName+" "+fieldTypeName+" "+owner+" "+notNull);
 
                 // Check if the type of the field is recognized as a user defined top-level type.
                 // Otherwise, the type is assumed to refer to a yet to be processed user type.
