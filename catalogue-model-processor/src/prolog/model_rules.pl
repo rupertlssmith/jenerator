@@ -648,7 +648,7 @@ related_uni(R, one, E1, E2, Prop, Owner, Format) :-
     normal_type(CT1, E1, _, MP1),
     normal_type(CT2, E2, _, MP2),
     MP1 = [fields(FS1)|Props1],
-    member(component_ref(Prop, E2, Owner, _, Format), FS1).
+    member(component_ref(Prop, E2, Owner, _, Format, NotNull), FS1).
 
 related_uni(R, many, E1, E2, Prop, Owner, Format) :-
     product_type(CT1),
@@ -656,7 +656,7 @@ related_uni(R, many, E1, E2, Prop, Owner, Format) :-
     normal_type(CT1, E1, _, MP1),
     normal_type(CT2, E2, _, MP2),
     MP1 = [fields(FS1)|Props1],
-    member(collection(_, Prop, component_ref(_, E2, Owner, _, Format)), FS1).
+    member(collection(_, Prop, component_ref(_, E2, Owner, _, Format, NotNull)), FS1).
 
 /* ======== related/5
  Describes the relationship between two entities, its arity and its direction of navigability. The property
