@@ -109,7 +109,7 @@ public class ComponentPartHandler implements FieldHandler
 
                     result +=
                         "component_ref(" + component.getName() + ", " + type + ", " + owner + ", " + relType + ", " +
-                        storageFormat + ")";
+                        storageFormat + ", " + notNull + ")";
                 }
                 else if (componentPart instanceof FieldDeclrType)
                 {
