@@ -16,6 +16,7 @@
 package com.thesett.catalogue.model.impl;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,9 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
     /** Holds a map from names to externally presented names, if defined. */
     private final Map<String, String> presentAsAliases;
 
+    /** Holds a map from names to the optional status of a property. */
+    private final Map<String, Boolean> optionalProperties;
+
     /** Holds the names of the fields forming the natural key of the component. */
     private final Set<String> naturalKeyFields;
 
@@ -96,6 +100,7 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
         this.name = name;
         this.operationalClassName = operationalClassName;
         this.immediateAncestors = immediateAncestors;
+        this.optionalProperties = new HashMap<String, Boolean>();
     }
 
     /** {@inheritDoc} */
@@ -120,6 +125,12 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
     public String getPropertyPresentAsAlias(String name)
     {
         return presentAsAliases.get(name);
+    }
+
+    /** {@inheritDoc} */
+    public Map<String, Boolean> getOptionalProperties()
+    {
+        return optionalProperties;
     }
 
     /** {@inheritDoc} */

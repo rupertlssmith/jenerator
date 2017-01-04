@@ -144,6 +144,12 @@ public class ComponentTypeDecorator extends TypeDecorator implements ComponentTy
     }
 
     /** {@inheritDoc} */
+    public Map<String, Boolean> getOptionalProperties()
+    {
+        return ((ComponentType) type).getOptionalProperties();
+    }
+
+    /** {@inheritDoc} */
     public void setPropertyType(String name, Type type)
     {
         ((ComponentType) type).setPropertyType(name, type);
