@@ -83,6 +83,7 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
      *
      * @param attributes           The attributes of the component type.
      * @param presentAsAliases     A map from names to externally presented names, if defined.
+     * @param optionalProperties   A map from names to optional status of the named property.
      * @param naturalKeyFields     The set of fields forming the natural key of the component.
      * @param uniqueGroupings      The field names arranged into named unique groupings.
      * @param name                 The name of the component type.
@@ -90,8 +91,9 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
      * @param immediateAncestors   The immediate ancestors of this component type.
      */
     public ComponentTypeImpl(Map<String, Type> attributes, Map<String, String> presentAsAliases,
-        Set<String> naturalKeyFields, Map<String, List<String>> uniqueGroupings, String name,
-        String operationalClassName, Set<ComponentType> immediateAncestors)
+        Map<String, Boolean> optionalProperties, Set<String> naturalKeyFields,
+        Map<String, List<String>> uniqueGroupings, String name, String operationalClassName,
+        Set<ComponentType> immediateAncestors)
     {
         this.properties = attributes;
         this.presentAsAliases = presentAsAliases;
@@ -100,7 +102,7 @@ public class ComponentTypeImpl extends BaseType implements ComponentType, Serial
         this.name = name;
         this.operationalClassName = operationalClassName;
         this.immediateAncestors = immediateAncestors;
-        this.optionalProperties = new HashMap<String, Boolean>();
+        this.optionalProperties = optionalProperties;
     }
 
     /** {@inheritDoc} */

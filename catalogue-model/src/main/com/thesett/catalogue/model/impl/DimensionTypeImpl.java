@@ -41,13 +41,16 @@ public class DimensionTypeImpl extends EntityTypeImpl implements DimensionType
      * @param name                 The name of the entity.
      * @param attributes           The fields of the entity.
      * @param presentAsAliases     A map from names to externally presented names, if defined.
+     * @param optionalProperties   A map from names to optional status of the named property.
      * @param naturalKeyFields     The set of fields forming the natural key of the component.
      * @param operationalClassName An implementing class.
      * @param immediateAncestors   The immediate ancestors of this type.
      */
     public DimensionTypeImpl(String name, Map<String, Type> attributes, Map<String, String> presentAsAliases,
-        Set<String> naturalKeyFields, String operationalClassName, Set<ComponentType> immediateAncestors)
+        Map<String, Boolean> optionalProperties, Set<String> naturalKeyFields, String operationalClassName,
+        Set<ComponentType> immediateAncestors)
     {
-        super(name, attributes, presentAsAliases, naturalKeyFields, null, operationalClassName, immediateAncestors);
+        super(name, attributes, presentAsAliases, optionalProperties, naturalKeyFields, null, operationalClassName,
+            immediateAncestors);
     }
 }

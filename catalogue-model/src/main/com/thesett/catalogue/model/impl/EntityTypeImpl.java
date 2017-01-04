@@ -52,17 +52,18 @@ public class EntityTypeImpl extends ComponentTypeImpl implements EntityType
      * @param name                 The name of the entity.
      * @param attributes           The fields of the entity.
      * @param presentAsAliases     A map from names to externally presented names, if defined.
+     * @param optionalProperties   A map from names to optional status of the named property.
      * @param naturalKeyFields     The set of fields forming the natural key of the component.
      * @param uniqueGroupings      The field names arranged into named unique groupings.
      * @param operationalClassName An implementing class.
      * @param immediateAncestors   The immediate ancestors of this type.
      */
     public EntityTypeImpl(String name, Map<String, Type> attributes, Map<String, String> presentAsAliases,
-        Set<String> naturalKeyFields, Map<String, List<String>> uniqueGroupings, String operationalClassName,
-        Set<ComponentType> immediateAncestors)
+        Map<String, Boolean> optionalProperties, Set<String> naturalKeyFields,
+        Map<String, List<String>> uniqueGroupings, String operationalClassName, Set<ComponentType> immediateAncestors)
     {
-        super(attributes, presentAsAliases, naturalKeyFields, uniqueGroupings, name, operationalClassName,
-            immediateAncestors);
+        super(attributes, presentAsAliases, optionalProperties, naturalKeyFields, uniqueGroupings, name,
+            operationalClassName, immediateAncestors);
     }
 
     /**

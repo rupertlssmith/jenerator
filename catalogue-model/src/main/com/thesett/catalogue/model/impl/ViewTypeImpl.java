@@ -21,7 +21,6 @@ import java.util.Set;
 import com.thesett.aima.state.ComponentType;
 import com.thesett.aima.state.Type;
 import com.thesett.aima.state.TypeVisitor;
-import com.thesett.catalogue.model.EntityTypeVisitor;
 import com.thesett.catalogue.model.ViewType;
 import com.thesett.catalogue.model.ViewTypeVisitor;
 
@@ -49,16 +48,18 @@ public class ViewTypeImpl extends ComponentTypeImpl implements ViewType
      * @param name                 The name of the view.
      * @param attributes           The fields of the view.
      * @param presentAsAliases     A map from names to externally presented names, if defined.
+     * @param optionalProperties   A map from names to optional status of the named property.
      * @param naturalKeyFields     The set of fields forming the natural key of the component.
      * @param operationalClassName An implementing class.
      * @param immediateAncestors   The immediate ancestors of this type.
      * @param descendants          The descendants of this type.
      */
     public ViewTypeImpl(String name, Map<String, Type> attributes, Map<String, String> presentAsAliases,
-        Set<String> naturalKeyFields, String operationalClassName, Set<ComponentType> immediateAncestors,
-        Set<ComponentType> descendants)
+        Map<String, Boolean> optionalProperties, Set<String> naturalKeyFields, String operationalClassName,
+        Set<ComponentType> immediateAncestors, Set<ComponentType> descendants)
     {
-        super(attributes, presentAsAliases, naturalKeyFields, null, name, operationalClassName, immediateAncestors);
+        super(attributes, presentAsAliases, optionalProperties, naturalKeyFields, null, name, operationalClassName,
+            immediateAncestors);
 
         this.descendants = descendants;
     }
@@ -66,8 +67,8 @@ public class ViewTypeImpl extends ComponentTypeImpl implements ViewType
     /**
      * {@inheritDoc}
      *
-     * <p/>If the visitor is an {@link ViewTypeVisitor}, it is applied to this, otherwise it is chained up to the
-     * super visitor method.
+     * <p/>If the visitor is an {@link ViewTypeVisitor}, it is applied to this, otherwise it is chained up to the super
+     * visitor method.
      */
     public void acceptVisitor(TypeVisitor visitor)
     {

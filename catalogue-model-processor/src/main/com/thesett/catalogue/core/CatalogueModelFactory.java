@@ -497,7 +497,6 @@ public class CatalogueModelFactory
      *
      * @return <tt>true</tt> if the field is optional by default or explicitly, <tt>false</tt> iff the not_null flag was
      *         set.
-     *         set.
      */
     private boolean termToOptional(Term notNullTerm)
     {
@@ -1326,7 +1325,9 @@ public class CatalogueModelFactory
 
                 Map<String, Type> componentFields = new LinkedHashMap<String, Type>();
                 Map<String, String> presentAsAliases = new HashMap<String, String>();
+                Map<String, Boolean> optionalProperties = new HashMap<String, Boolean>();
 
+                // Extract maps of the presentAs aliases and optional property statues to set on the component.
                 for (Map.Entry<String, FieldProperties> entry : fieldProperties.entrySet())
                 {
                     String fieldName = entry.getKey();
@@ -1340,6 +1341,8 @@ public class CatalogueModelFactory
                     {
                         presentAsAliases.put(fieldName, presentAsName);
                     }
+
+                    optionalProperties.put(fieldName, fieldProperty.optional);
                 }
 
                 Set<String> naturalKeyFields = getNaturalKeyFields(componentName);
@@ -1349,24 +1352,25 @@ public class CatalogueModelFactory
                 if ("component_type".equals(componentType))
                 {
                     catalogueTypes.put(componentName,
-                        new ComponentTypeImpl(componentFields, presentAsAliases, naturalKeyFields, uniqueGroupings,
-                            componentName, packageName + "." + StringUtils.toCamelCaseUpper(componentName), ancestors));
+                        new ComponentTypeImpl(componentFields, presentAsAliases, optionalProperties, naturalKeyFields,
+                            uniqueGroupings, componentName,
+                            packageName + "." + StringUtils.toCamelCaseUpper(componentName), ancestors));
                 }
                 else if ("view_type".equals(componentType))
                 {
                     Set<ComponentType> descendants = getDescendants(catalogueTypes, componentName);
 
                     catalogueTypes.put(componentName,
-                        new ViewTypeImpl(componentName, componentFields, presentAsAliases, naturalKeyFields,
-                            packageName + "." + StringUtils.toCamelCaseUpper(componentName) + "Impl", ancestors,
-                            descendants));
+                        new ViewTypeImpl(componentName, componentFields, presentAsAliases, optionalProperties,
+                            naturalKeyFields, packageName + "." + StringUtils.toCamelCaseUpper(componentName) + "Impl",
+                            ancestors, descendants));
                 }
                 else if ("entity_type".equals(componentType))
                 {
                     EntityTypeImpl entityType =
-                        new EntityTypeImpl(componentName, componentFields, presentAsAliases, naturalKeyFields,
-                            uniqueGroupings, packageName + "." + StringUtils.toCamelCaseUpper(componentName),
-                            ancestors);
+                        new EntityTypeImpl(componentName, componentFields, presentAsAliases, optionalProperties,
+                            naturalKeyFields, uniqueGroupings,
+                            packageName + "." + StringUtils.toCamelCaseUpper(componentName), ancestors);
 
                     if (supportsExternalId(componentName))
                     {
@@ -1378,8 +1382,9 @@ public class CatalogueModelFactory
                 else if ("dimension_type".equals(componentType))
                 {
                     DimensionTypeImpl dimensionType =
-                        new DimensionTypeImpl(componentName, componentFields, presentAsAliases, naturalKeyFields,
-                            packageName + "." + StringUtils.toCamelCaseUpper(componentName), ancestors);
+                        new DimensionTypeImpl(componentName, componentFields, presentAsAliases, optionalProperties,
+                            naturalKeyFields, packageName + "." + StringUtils.toCamelCaseUpper(componentName),
+                            ancestors);
 
                     if (supportsExternalId(componentName))
                     {
@@ -1391,7 +1396,7 @@ public class CatalogueModelFactory
                 else if ("fact_type".equals(componentType))
                 {
                     catalogueTypes.put(componentName,
-                        new FactTypeImpl(componentName, componentFields, presentAsAliases,
+                        new FactTypeImpl(componentName, componentFields, presentAsAliases, optionalProperties,
                             packageName + "." + StringUtils.toCamelCaseUpper(componentName), ancestors));
                 }
             }
