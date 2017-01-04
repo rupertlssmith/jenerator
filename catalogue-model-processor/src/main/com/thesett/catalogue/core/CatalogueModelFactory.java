@@ -385,7 +385,9 @@ public class CatalogueModelFactory
                 String fieldName = engine.getFunctorName((Functor) fieldFunctor.getArgument(0));
                 String fieldTypeName = engine.getFunctorName((Functor) fieldFunctor.getArgument(1));
                 Term presentAsTerm = fieldFunctor.getArgument(2).getValue();
+                Term notNullTerm = fieldFunctor.getArgument(3).getValue();
 
+                // Get any presentAs alias for the property.
                 String presentAsName = null;
 
                 if (presentAsTerm instanceof StringLiteral)
@@ -398,18 +400,20 @@ public class CatalogueModelFactory
                     }
                 }
 
+                boolean optional = termToOptional(notNullTerm);
+
                 // Check if the type of the field is recognized as a basic type.
                 if (basicTypeNameToJavaTypeMap.containsKey(fieldTypeName))
                 {
                     Type fieldType = basicTypeNameToJavaTypeMap.get(fieldTypeName);
-                    results.put(fieldName, new FieldProperties(fieldType, presentAsName));
+                    results.put(fieldName, new FieldProperties(fieldType, presentAsName, optional));
                 }
 
                 // Check if the type of the field is recognized as a user defined top-level type.
                 else if (catalogueTypes.containsKey(fieldTypeName))
                 {
                     Type fieldType = catalogueTypes.get(fieldTypeName);
-                    results.put(fieldName, new FieldProperties(fieldType, presentAsName));
+                    results.put(fieldName, new FieldProperties(fieldType, presentAsName, optional));
                 }
                 else
                 {
@@ -425,21 +429,21 @@ public class CatalogueModelFactory
 
                 //String relType = engine.getFunctorName((Functor) fieldFunctor.getArgument(3));
                 //String storageFormat = engine.getFunctorName((Functor) fieldFunctor.getArgument(4));
-                String notNull = engine.getFunctorName((Functor) fieldFunctor.getArgument(5));
+                Term notNullTerm = fieldFunctor.getArgument(5).getValue();
 
-                System.out.println(fieldName + " " + fieldTypeName + " " + owner + " " + notNull);
+                boolean optional = termToOptional(notNullTerm);
 
                 // Check if the type of the field is recognized as a user defined top-level type.
                 // Otherwise, the type is assumed to refer to a yet to be processed user type.
                 if (catalogueTypes.containsKey(fieldTypeName))
                 {
                     Type fieldType = catalogueTypes.get(fieldTypeName);
-                    results.put(fieldName, new FieldProperties(fieldType, null));
+                    results.put(fieldName, new FieldProperties(fieldType, null, optional));
                 }
                 else
                 {
                     Type fieldType = new PendingComponentRefType(fieldTypeName);
-                    results.put(fieldName, new FieldProperties(fieldType, null));
+                    results.put(fieldName, new FieldProperties(fieldType, null, optional));
                 }
             }
             else if ("collection".equals(fieldKind))
@@ -469,19 +473,46 @@ public class CatalogueModelFactory
                     Type keyType = resolveTypeName(catalogueTypes, keyTypeName);
 
                     MapTypeImpl fieldType = new MapTypeImpl(keyType, elementType, ArrayList.class);
-                    results.put(fieldName, new FieldProperties(fieldType, null));
+                    results.put(fieldName, new FieldProperties(fieldType, null, true));
                 }
 
                 // Otherwise the field is a non-map collection type, so create a collection type for the field.
                 else
                 {
                     CollectionTypeImpl fieldType = new CollectionTypeImpl(elementType, ArrayList.class, collectionKind);
-                    results.put(fieldName, new FieldProperties(fieldType, null));
+                    results.put(fieldName, new FieldProperties(fieldType, null, true));
                 }
             }
         }
 
         return results;
+    }
+
+    /**
+     * Checks a term for containing the atom 'true' or 'false' for the not_null flag. Derive the optional status of a
+     * field from this by assuming that fields are optional by default, unless not_null is set to true, in which case
+     * they must take a value.
+     *
+     * @param  notNullTerm The not null term as a Functor, input ignored if not a Functor.
+     *
+     * @return <tt>true</tt> if the field is optional by default or explicitly, <tt>false</tt> iff the not_null flag was
+     *         set.
+     *         set.
+     */
+    private boolean termToOptional(Term notNullTerm)
+    {
+        // Get any not-null status and set the optional flag from it or from the default which
+        // is to allow optional fields.
+        boolean optional = true;
+
+        if (notNullTerm instanceof Functor)
+        {
+            String notNullString = engine.getFunctorName((Functor) notNullTerm);
+
+            optional = "false".equals(notNullString);
+        }
+
+        return optional;
     }
 
     /**
@@ -1779,10 +1810,14 @@ public class CatalogueModelFactory
         /** The fields alias name, if it has one. */
         public String presentAsName;
 
-        private FieldProperties(Type type, String presentAsName)
+        /** The field is optional and can be null. */
+        public boolean optional;
+
+        private FieldProperties(Type type, String presentAsName, boolean optional)
         {
             this.type = type;
             this.presentAsName = presentAsName;
+            this.optional = optional;
         }
     }
 }
