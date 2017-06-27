@@ -162,6 +162,13 @@ public interface Catalogue
     Collection<ComponentType> getAllComponentTypes();
 
     /**
+     * Lists all the view types in the catalogue.
+     *
+     * @return A list of all the view types in the catalogue.
+     */
+    Collection<ViewType> getAllViewTypes();
+
+    /**
      * Lists all the entity types in the catalogue.
      *
      * @return A list of all the entity types in the catalogue.

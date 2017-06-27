@@ -144,6 +144,13 @@ public class CatalogueModel implements Catalogue, Serializable
     }
 
     /** {@inheritDoc} */
+    public Collection<ViewType> getAllViewTypes()
+    {
+        return Filterators.collectIterator(new SubclassFilterator<Type, ViewType>(
+            catalogueTypes.values().iterator(), ViewType.class), new ArrayList<ViewType>());
+    }
+
+    /** {@inheritDoc} */
     public Collection<EntityType> getAllEntityTypes()
     {
         return Filterators.collectIterator(new SubclassFilterator<Type, EntityType>(catalogueTypes.values().iterator(),
