@@ -4,7 +4,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>index</artifactId>
     <name>index</name>
-    <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+    <version>0.9.137</version><!--jenerator.version-->
 
     <description>An indexing and free text search module with some advanced features.</description>
     <url>http://www.thesett.com/index</url>
@@ -18,7 +18,7 @@
     <parent>
         <groupId>com.thesett</groupId>
         <artifactId>jenerator_build</artifactId>
-        <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+        <version>0.9.137</version><!--jenerator.version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -26,13 +26,13 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>common</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--base.version-->
+            <version>0.9.151</version><!--base.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>configurator</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+            <version>0.9.137</version><!--jenerator.version-->
         </dependency>
 
         <dependency>
@@ -60,14 +60,14 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>junit-toolkit</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--junit_toolkit.version-->
+            <version>0.9.86</version><!--junit_toolkit.version-->
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>base</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--base.version-->
+            <version>0.9.151</version><!--base.version-->
             <scope>test</scope>
         </dependency>
 
