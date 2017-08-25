@@ -4,7 +4,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>xmlbeans</artifactId>
     <name>xmlbeans</name>
-    <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+    <version>0.9.144</version><!--jenerator.version-->
 
     <description>Library for easy mapping between Java Beans and XML.</description>
     <url>http://www.thesett.com/</url>
@@ -18,7 +18,7 @@
     <parent>
         <groupId>com.thesett</groupId>
         <artifactId>jenerator_build</artifactId>
-        <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+        <version>0.9.144</version><!--jenerator.version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -26,25 +26,25 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>common</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--base.version-->
+            <version>0.9.160</version><!--base.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>power_model</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--lojix.version-->
+            <version>0.9.160</version><!--lojix.version-->
         </dependency>
         
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>configurator</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--jenerator.version-->
+            <version>0.9.144</version><!--jenerator.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>junit-toolkit</artifactId>
-            <version>0.9.0-SNAPSHOT</version><!--junit_toolkit.version-->
+            <version>0.9.97</version><!--junit_toolkit.version-->
         </dependency>
 
         <dependency>
