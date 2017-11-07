@@ -65,6 +65,22 @@ public class CamelCaseRenderer implements AttributeRenderer
         {
             return StringUtils.toCamelCaseLower(o.toString());
         }
+        else if ("scu".equals(s))
+        {
+            return StringUtils.toSnakeCaseUpper(o.toString());
+        }
+        else if ("scl".equals(s))
+        {
+            return StringUtils.toSnakeCaseLower(o.toString());
+        }
+        else if ("kcu".equals(s))
+        {
+            return StringUtils.toKebabCaseUpper(o.toString());
+        }
+        else if ("kcl".equals(s))
+        {
+            return StringUtils.toKebabCaseLower(o.toString());
+        }
         else if ("u".equals(s))
         {
             return o.toString().toUpperCase();
